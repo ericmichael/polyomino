@@ -3,8 +3,7 @@ Tile system is meant to be the container where all different types of polytiles 
  should be able to create polytiles and keep a list of all polytiles in the system.
  Glue function is also called from here.
  */
-import java.awt.*;
-import java.util.ArrayList;
+
 import java.util.Set;
 import java.util.HashSet;
 import javafx.util.Pair;
@@ -46,10 +45,11 @@ public class TileSystem {
         tileTypes.add(p);
     }
 
-//    public void removePolyTile(int id){
-//        for (PolyTile tile : tileTypes){
-//            if ( tile.);
-//            }
-//        }
-//    }
+    public int getTemperature(){
+        return temperature;
+    }
+    public void setTemperature(int s){
+        temperature = s;
+    }
+
 }
