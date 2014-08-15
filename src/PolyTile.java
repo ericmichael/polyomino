@@ -6,6 +6,7 @@
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class PolyTile {
@@ -21,6 +22,10 @@ public class PolyTile {
     //          (delete one, that number is lost forever)
     private static int tileID = 0;
 
+    public HashMap<Point, String> northGlues = new HashMap();
+    public HashMap<Point, String> eastGlues = new HashMap();
+    public HashMap<Point, String> southGlues = new HashMap();
+    public HashMap<Point, String> westGlues = new HashMap();
 
     public PolyTile() {
         System.out.println("polytile with no name and infinite counts");
@@ -85,4 +90,26 @@ public class PolyTile {
         polyName = n;
     }
 
+    //Grabs glue edges from polytile and stores them in 4 lists for each direction (because ALEX did it that way)
+    public void getGlues(){
+        northGlues.clear();
+        eastGlues.clear();
+        southGlues.clear();
+        westGlues.clear();
+        for (Tile t : tiles) {
+            String[] glueLabels = t.getGlueLabels();
+            if (!glueLabels[0].equals("")) {
+                northGlues.put(t.getLocation(), glueLabels[0]);
+            }
+            if (!glueLabels[1].equals("")) {
+                eastGlues.put(t.getLocation(), glueLabels[1]);
+            }
+            if (!glueLabels[2].equals("")) {
+                southGlues.put(t.getLocation(), glueLabels[2]);
+            }
+            if (!glueLabels[3].equals("")) {
+                westGlues.put(t.getLocation(), glueLabels[3]);
+            }
+        }
+    }
 }
