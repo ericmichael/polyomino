@@ -20,4 +20,24 @@ public class Tile {
     public Point getLocation(){
         return tileLocation;
     }
+
+    public String[] getGlueLabels() {
+        return glueLabels;
+    }
+
+    public String getGlueN() {
+        return glueLabels[0];
+    }
+
+    public String getGlueE() {
+        return glueLabels[1];
+    }
+
+    public String getGlueS() {
+        return glueLabels[2];
+    }
+
+    public String getGlueW() {
+        return glueLabels[3];
+    }
 }
