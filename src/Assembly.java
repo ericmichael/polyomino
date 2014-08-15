@@ -25,7 +25,7 @@ public class Assembly {
         System.out.print("in assembly,");
         tileSystem = new TileSystem(2);
 
-        tileSystem.addPolyTile();
+        //tileSystem.addPolyTile();
     }
 
     //Finds open glues on assembly grid and puts them in 4 maps.

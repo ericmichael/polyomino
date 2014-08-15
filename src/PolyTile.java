@@ -1,5 +1,7 @@
 /* polytile class
     polytile with shape, glues, concentration, & label are defined.
+    TODO:
+    Check connected tiles in the polytile and change their strength to infinite
 */
 
 import java.awt.*;
@@ -15,7 +17,7 @@ public class PolyTile {
     // polytiles can be labeled and can have a unique name/id. (id might be useless)
     private String polyName;
     private int polyID;
-    // tileID increases everytime a new tile is created, changes are not accounted for.
+    // tileID increases every time a new tile is created, changes are not accounted for.
     //          (delete one, that number is lost forever)
     private static int tileID = 0;
 
@@ -68,23 +70,17 @@ public class PolyTile {
         return null;
     }
 
-    // returns true if the given tileID exists in the polytile
-    //public boolean hasTileID(int id){
-
-   //}
 
     public void changeConcentration(double c){
         concentration = c;
         count = 0;
         System.out.println("concentration changed to "+c);
     }
-
     public void changeCount(int c){
         concentration = 0;
         count = c;
         System.out.println("concentration changed to "+c);
     }
-
     public void changeName(String n){
         polyName = n;
     }
