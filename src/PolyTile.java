@@ -40,7 +40,7 @@ public class PolyTile {
 
     // add tile, increases the size the polytile by creating a tile with the given data
     public void addTile(int x, int y, String[] gl) {
-        Tile tile = new Tile(x, y, gl, tileID++);
+        Tile tile = new Tile(x, y, gl, this);
         tiles.add(tile);
     }
 

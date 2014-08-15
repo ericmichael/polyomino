@@ -9,19 +9,15 @@ public class Tile {
     private Point tileLocation = new Point();
     private String[] glueLabels = new String[4];
     // tiles have an id that references the polyTile they belong to.
-    private int tileID;
+    private PolyTile polyTile;
 
-    public Tile( int x, int y, String[] gl, int id ) {
+    public Tile( int x, int y, String[] gl, PolyTile parent) {
         tileLocation.setLocation(x, y);
         glueLabels = gl;
-        tileID = id;
+        polyTile = parent;
     }
 
     public Point getLocation(){
         return tileLocation;
-    }
-
-    public int getID(){
-        return tileID;
     }
 }

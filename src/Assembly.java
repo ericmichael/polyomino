@@ -14,13 +14,10 @@ public class Assembly {
 
     public Assembly(){
         System.out.print("in assembly,");
-        tileSystem = new TileSystem(2);
-
-        tileSystem.addPolyTile();
     }
 
-    private void getOpenGlues() {
-        for(PolyTile p : )
+    public Assembly(TileSystem ts){
+        tileSystem = ts;
     }
 
     // calculate frontier
