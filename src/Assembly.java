@@ -41,6 +41,8 @@ public class Assembly {
                 openWestGlues.put(t.getKey(), glueLabels[3]);
             }
         }
+    public Assembly(TileSystem ts){
+        tileSystem = ts;
     }
 
     // calculate frontier

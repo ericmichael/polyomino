@@ -5,16 +5,18 @@ Tile system is meant to be the container where all different types of polytiles 
  */
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 import javafx.util.Pair;
+import java.util.HashMap;
 
 public class TileSystem {
     // temperature of the system, bonds must be of at least this value or they break.
     private int temperature;
     // placeholder for the gluefunction
-    private Map<Pair<String, String>, Integer> glueFunction = new HashMap();
+    private HashMap<Pair<String, String>, Integer> glueFunction = new HashMap();
     // list of polytiles: data structure should be changed to something that would be of better performance
-    private List<PolyTile> tileTypes = new ArrayList<PolyTile>();
+    private Set<PolyTile> tileTypes = new HashSet<PolyTile>();
 
     public TileSystem(int temp){
         System.out.print(" in tilesystem with temp: "+temp+"\n");
@@ -40,26 +42,8 @@ public class TileSystem {
     }
 
     // add polytile to tiletypes
-    public void addPolyTile(){
-
-        PolyTile poly = new PolyTile();
-        String[] label = new String[4];
-        label[0] = "glueN";
-        label[1] = "glueE";
-        label[2] = "glueS";
-        label[3] = "glueW";
-        String[] label2 = {"N", "E", "S", "W"};
-
-        poly.addTile(2,3,label);
-        poly.addTile(1,2, label2);
-
-        PolyTile poly2 = new PolyTile("tetris piece1", 100);
-
-        poly2.addTile(23,23, label2);
-
-        Tile t1 = poly2.getTile(23, 23);
-        System.out.println(t1.getID());
-        poly.removeTile(2,3);
+    public void addPolyTile(PolyTile p){
+        tileTypes.add(p);
     }
 
 //    public void removePolyTile(int id){
