@@ -26,21 +26,22 @@ public class Assembly {
 
     private void getOpenGlues() {
         openNorthGlues.clear();
-        for(Map.Entry<String, Tile> t : Grid.entrySet()) {
+        for (Map.Entry<String, Tile> t : Grid.entrySet()) {
             String[] glueLabels = t.getValue().getGlueLabels();
-            if(!glueLabels[0].equals("")) {
+            if (!glueLabels[0].equals("")) {
                 openNorthGlues.put(t.getKey(), glueLabels[0]);
             }
-            if(!glueLabels[1].equals("")) {
+            if (!glueLabels[1].equals("")) {
                 openEastGlues.put(t.getKey(), glueLabels[1]);
             }
-            if(!glueLabels[2].equals("")) {
+            if (!glueLabels[2].equals("")) {
                 openSouthGlues.put(t.getKey(), glueLabels[2]);
             }
-            if(!glueLabels[3].equals("")) {
+            if (!glueLabels[3].equals("")) {
                 openWestGlues.put(t.getKey(), glueLabels[3]);
             }
         }
+    }
     public Assembly(TileSystem ts){
         tileSystem = ts;
     }
