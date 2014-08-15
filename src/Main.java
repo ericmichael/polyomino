@@ -1,27 +1,61 @@
 
 public class Main {
+    public String[] blankGlues(){
+        String label[] = new String[4];
+        label[0] = null;
+        label[1] = null;
+        label[2] = null;
+        label[3] = null;
+    }
+
+    public PolyTile tetrisU(){
+        String blank[] = blankGlues();
+        String glue[] = {"e", null, null, null};
+
+        PolyTile poly = new PolyTile();
+
+        poly.addTile(0,0, glue);
+        poly.addTile(-1,0, blank);
+        poly.addTile(-1,1, blank);
+        poly.addTile(1,0, blank);
+        poly.addTile(1,1, blank);
+
+        return poly;
+    }
+
+    public PolyTile tetrisV(){
+        String blank[] = blankGlues();
+        String glue[] = {null, null, null, "a"};
+
+        PolyTile poly = new PolyTile();
+        poly.addTile(0,0, blank);
+        poly.addTile(-1,0, blank);
+        poly.addTile(-1,1, blank);
+        poly.addTile(-1,2, glue);
+        poly.addTile(1,0, blank);
+
+        return poly;
+    }
+
+    public PolyTile tetrisX(){
+        String blank[] = blankGlues();
+        String glue[] = {null, null, "e", null};
+
+        PolyTile poly = new PolyTile();
+        poly.addTile(0,0, label);
+        poly.addTile(-1,0, label);
+        poly.addTile(1,0, label);
+        poly.addTile(0,1, label);
+        poly.addTile(0,-1, glue);
+
+        return poly;
+    }
+
     public static void main(String args[]) {
         TileSystem ts = new TileSystem(2);
-        PolyTile poly = new PolyTile();
+
         String[] label = new String[4];
-        label[0] = "glueN";
-        label[1] = "glueE";
-        label[2] = "glueS";
-        label[3] = "glueW";
-        String[] label2 = {"N", "E", "S", "W"};
 
-        poly.addTile(2,3,label);
-        poly.addTile(1,2, label2);
-
-        ts.addPolyTile(poly);
-
-        PolyTile poly2 = new PolyTile("tetris piece1", 100);
-
-        poly2.addTile(23,23, label2);
-
-        Tile t1 = poly2.getTile(23, 23);
-        //System.out.println(t1.getID());
-        poly.removeTile(2,3);
 
         ts.addPolyTile(poly2);
 
