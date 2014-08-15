@@ -24,8 +24,12 @@ public class Assembly {
         tileSystem.addPolyTile();
     }
 
+    //Finds open glues on assembly grid and puts them in 4 maps.
     private void getOpenGlues() {
         openNorthGlues.clear();
+        openEastGlues.clear();
+        openSouthGlues.clear();
+        openWestGlues.clear();
         for (Map.Entry<String, Tile> t : Grid.entrySet()) {
             String[] glueLabels = t.getValue().getGlueLabels();
             if (!glueLabels[0].equals("")) {
@@ -42,6 +46,7 @@ public class Assembly {
             }
         }
     }
+
     public Assembly(TileSystem ts){
         tileSystem = ts;
     }
