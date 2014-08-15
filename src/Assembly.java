@@ -19,6 +19,10 @@ public class Assembly {
         tileSystem.addPolyTile();
     }
 
+    private void getOpenGlues() {
+        for(PolyTile p : )
+    }
+
     // calculate frontier
 
     // delete from frontier

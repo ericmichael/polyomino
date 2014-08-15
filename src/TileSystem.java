@@ -6,18 +6,37 @@ Tile system is meant to be the container where all different types of polytiles 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.util.Pair;
 
 public class TileSystem {
     // temperature of the system, bonds must be of at least this value or they break.
     private int temperature;
     // placeholder for the gluefunction
-    private Object glueFunction;
+    private Map<Pair<String, String>, Integer> glueFunction = new HashMap();
     // list of polytiles: data structure should be changed to something that would be of better performance
     private List<PolyTile> tileTypes = new ArrayList<PolyTile>();
 
     public TileSystem(int temp){
         System.out.print(" in tilesystem with temp: "+temp+"\n");
         temperature = temp;
+    }
+
+    public void addGlueFunction(String label1, String label2, int temp) {
+        glueFunction.put(new Pair(label1, label2), temp);
+        if(!label1.equals(label2)) {
+            glueFunction.put(new Pair(label2, label1), temp);
+        }
+    }
+
+    public void removeGlueFunction(String label1, String label2) {
+        glueFunction.remove(new Pair(label1, label2));
+        if(!label1.equals(label2)) {
+            glueFunction.remove(new Pair(label2, label1));
+        }
+    }
+
+    public int getStrength(String label1, String label2) {
+        return glueFunction.get(new Pair(label1, label2));
     }
 
     // add polytile to tiletypes
