@@ -52,4 +52,8 @@ public class TileSystem {
         temperature = s;
     }
 
+    public Set<PolyTile> getTileTypes() {
+        return tileTypes;
+    }
+
 }
