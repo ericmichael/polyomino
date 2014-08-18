@@ -44,10 +44,10 @@ public class Main {
         String glue[] = {null, null, "e", null};
 
         PolyTile poly = new PolyTile();
-        poly.addTile(0, 0, label);
-        poly.addTile(-1, 0, label);
-        poly.addTile(1, 0, label);
-        poly.addTile(0, 1, label);
+        poly.addTile(0, 0, blankGlues());
+        poly.addTile(-1, 0, blankGlues());
+        poly.addTile(1, 0, blankGlues());
+        poly.addTile(0, 1, blankGlues());
         poly.addTile(0, -1, glue);
 
         return poly;
@@ -57,9 +57,9 @@ public class Main {
         String[] gleft = {null, null, null, "b"};
         String[] gright = {null, "d", null, null};
         PolyTile tetrisF = new PolyTile();
-        tetrisF.addTile(0, 0, blankGlues);
-        tetrisF.addTile(0, -1, blankGlues);
-        tetrisF.addTile(-1, 0, blankGlues);
+        tetrisF.addTile(0, 0, blankGlues());
+        tetrisF.addTile(0, -1, blankGlues());
+        tetrisF.addTile(-1, 0, blankGlues());
         tetrisF.addTile(0, 1, gleft);
         tetrisF.addTile(1, 1, gright);
         return tetrisF;
@@ -69,9 +69,9 @@ public class Main {
         String[] gtop = {null, "a", null, null};
         String[] gbottom = {null, "b", null, null};
         PolyTile tetris = new PolyTile();
-        tetris.addTile(0, 0, blankGlues);
-        tetris.addTile(0, 1, blankGlues);
-        tetris.addTile(0, -1, blankGlues);
+        tetris.addTile(0, 0, blankGlues());
+        tetris.addTile(0, 1, blankGlues());
+        tetris.addTile(0, -1, blankGlues());
         tetris.addTile(0, 2, gtop);
         tetris.addTile(0, -2, gbottom);
         return tetris;
@@ -80,11 +80,11 @@ public class Main {
     public static PolyTile tetrisL() {
         String[] gtop = {null, "c", null, "a"};
         PolyTile tetris = new PolyTile();
-        tetris.addTile(0, 0, blankGlues);
-        tetris.addTile(0, 1, blankGlues);
-        tetris.addTile(0, 2, blankGlues);
+        tetris.addTile(0, 0, blankGlues());
+        tetris.addTile(0, 1, blankGlues());
+        tetris.addTile(0, 2, blankGlues());
         tetris.addTile(0, 3, gtop);
-        tetris.addTile(1, 0, blankGlues);
+        tetris.addTile(1, 0, blankGlues());
         return tetris;
     }
 

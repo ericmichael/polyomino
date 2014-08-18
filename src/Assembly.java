@@ -28,6 +28,12 @@ public class Assembly {
         //tileSystem.addPolyTile();
     }
 
+    //change tile system stub
+    public void changeTileSystem(TileSystem newTS){
+        System.out.println("WARNING: CHANGING THE TILE SYSTEM, PREPARE FOR ERRORS!");
+        tileSystem = newTS;
+    }
+
     public Assembly(TileSystem ts){
         tileSystem = ts;
     }
