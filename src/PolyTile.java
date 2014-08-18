@@ -90,7 +90,7 @@ public class PolyTile {
         polyName = n;
     }
 
-    //Grabs glue edges from polytile and stores them in 4 lists for each direction (because ALEX did it that way)
+    //Grabs glue edges from polytile and stores them in 4 lists, one for each direction
     public void getGlues(){
         northGlues.clear();
         eastGlues.clear();

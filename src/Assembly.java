@@ -1,6 +1,7 @@
 /*
 "execution" place. takes care of the tile system, its changes, the grid, the frontier, and the open glue list.
  */
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ public class Assembly {
     HashMap<Point, String> openEastGlues = new HashMap();
     HashMap<Point, String> openSouthGlues = new HashMap();
     HashMap<Point, String> openWestGlues = new HashMap();
+    HashMap<Point, PolyTile> possibleAttach = new HashMap();
 
     public Assembly(){
         System.out.print("in assembly,");
@@ -62,9 +64,50 @@ public class Assembly {
         tileSystem = ts;
     }
 
+    //Adds coordinate of placement of certain polytile to a grid location iff the polytile has a matching glue with assembly
+    public void checkMatchingGlues( PolyTile t ) {
+        for (Point ptPoint : t.southGlues.keySet()) {
+            for (Point aPoint : openNorthGlues.keySet()) {
+                if (t.southGlues.get(ptPoint) == openNorthGlues.get(aPoint)) {
+                    Point tmp = new Point();
+                    tmp.setLocation(aPoint.getX() - ptPoint.getX(), aPoint.getY() + 1 - ptPoint.getY());
+                    possibleAttach.put(tmp, t);
+                }
+            }
+        }
+        for (Point ptPoint : t.westGlues.keySet()) {
+            for (Point aPoint : openEastGlues.keySet()) {
+                if (t.westGlues.get(ptPoint) == openEastGlues.get(aPoint)) {
+                    Point tmp = new Point();
+                    tmp.setLocation(aPoint.getX() + 1 - ptPoint.getX(), aPoint.getY() - ptPoint.getY());
+                    possibleAttach.put(tmp, t);
+                }
+            }
+        }
+        for (Point ptPoint : t.northGlues.keySet()) {
+            for (Point aPoint : openSouthGlues.keySet()) {
+                if (t.northGlues.get(ptPoint) == openSouthGlues.get(aPoint)) {
+                    Point tmp = new Point();
+                    tmp.setLocation(aPoint.getX() - ptPoint.getX(), aPoint.getY() - 1 - ptPoint.getY());
+                    possibleAttach.put(tmp, t);
+                }
+            }
+        }
+        for (Point ptPoint : t.eastGlues.keySet()) {
+            for (Point aPoint : openWestGlues.keySet()) {
+                if (t.eastGlues.get(ptPoint) == openWestGlues.get(aPoint)) {
+                    Point tmp = new Point();
+                    tmp.setLocation(aPoint.getX() - 1 - ptPoint.getX(), aPoint.getY() - ptPoint.getY());
+                    possibleAttach.put(tmp, t);
+                }
+            }
+        }
+    }
     // calculate frontier
 
+
     // delete from frontier
+
 
     // add to frontier
 
