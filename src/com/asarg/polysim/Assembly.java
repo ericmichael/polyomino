@@ -201,7 +201,8 @@ public class Assembly {
             checkMatchingGlues(t);
         }
         calculateFrontier();
-        addFromFrontier();
+        if(frontier.size() > 0)
+            addFromFrontier();
         cleanUp();
     }
 
