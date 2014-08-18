@@ -78,6 +78,51 @@ public class Assembly {
 
     // calculate frontier
 
+    private boolean checkStability(PolyTile p, int x, int y) {
+        int totalStrength = 0;
+        //For all tiles and their edges, check the tile they would possibly bond with for the strength
+        //Example: a tile's north glue needs to see the above tile's south glue
+        for(Tile t : p.tiles) {
+            String nPolytileGlue = t.getGlueN();
+            if(!nPolytileGlue.equals("")) {
+                Tile nAssemblyTile = Grid.get(new Point(x, y+1));
+                if(nAssemblyTile != null)
+                    totalStrength += tileSystem.getStrength(nPolytileGlue, nAssemblyTile.getGlueS());
+                if(totalStrength >= tileSystem.getTemperature())
+                    return true;
+            }
+
+            String ePolytileGlue = t.getGlueE();
+            if(!ePolytileGlue.equals("")) {
+                Tile eAssemblyTile = Grid.get(new Point(x+1, y));
+                if(eAssemblyTile != null)
+                    totalStrength += tileSystem.getStrength(ePolytileGlue, eAssemblyTile.getGlueW());
+                if(totalStrength >= tileSystem.getTemperature())
+                    return true;
+            }
+
+            String sPolytileGlue = t.getGlueS();
+            if(!sPolytileGlue.equals("")) {
+                Tile sAssemblyTile = Grid.get(new Point(x, y-1));
+                if(sAssemblyTile != null)
+                    totalStrength += tileSystem.getStrength(sPolytileGlue, sAssemblyTile.getGlueN());
+                if(totalStrength >= tileSystem.getTemperature())
+                    return true;
+            }
+
+            String wPolytileGlue = t.getGlueW();
+            if(!wPolytileGlue.equals("")) {
+                Tile wAssemblyTile = Grid.get(new Point(x-1, y));
+                if(wAssemblyTile != null)
+                    totalStrength += tileSystem.getStrength(wPolytileGlue, wAssemblyTile.getGlueE());
+                if(totalStrength >= tileSystem.getTemperature())
+                    return true;
+            }
+        }
+        //Should the total strength never reach the temperature of the system
+        return false;
+    }
+
     // delete from frontier
 
     // add to frontier
