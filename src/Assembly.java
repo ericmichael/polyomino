@@ -27,9 +27,6 @@ public class Assembly {
 
         //tileSystem.addPolyTile();
     }
-    public Assembly(TileSystem ts){
-        tileSystem = ts;
-    }
 
     //change tile system stub
     public void changeTileSystem(TileSystem newTS){
@@ -37,6 +34,9 @@ public class Assembly {
         tileSystem = newTS;
     }
 
+    public Assembly(TileSystem ts){
+        tileSystem = ts;
+    }
     //Finds open glues on assembly grid and puts them in 4 maps.
     private void getOpenGlues() {
         openNorthGlues.clear();
@@ -67,9 +67,13 @@ public class Assembly {
         }
     }
 
-
-    public HashMap<Point, Tile> getGrid(){
-        return Grid;
+    private boolean geometryCheckSuccess(PolyTile p, int x, int y){
+        for(Tile t : p.tiles) {
+            if(Grid.containsKey(new Point(x+t.getLocation().x,  y+t.getLocation().y))){
+                return false;
+            }
+        }
+        return true;
     }
 
     // calculate frontier
