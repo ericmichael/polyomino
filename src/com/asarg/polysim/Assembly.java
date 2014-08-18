@@ -244,11 +244,20 @@ public class Assembly {
         maximumX += (-1)*minimumX;
         maximumY += (-1)*minimumY;
 
-        int[][] assemblyMatrix = new int[maximumY][maximumX];
+        int[][] assemblyMatrix = new int[maximumY + 1][maximumX + 1];
         for(Point p : tiles) {
             assemblyMatrix[maximumY - p.y][p.x]++;
         }
 
-        return assemblyMatrix.toString();
+        StringBuilder matrixString = new StringBuilder();
+
+        for(int i = 0; i < assemblyMatrix.length; i++) {
+            for(int j = 0; j < assemblyMatrix[i].length; j++) {
+                matrixString.append(assemblyMatrix[i][j] + " ");
+            }
+            matrixString.append("\n");
+        }
+
+        return matrixString.toString();
     }
 }
