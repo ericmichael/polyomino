@@ -82,7 +82,7 @@ public class Assembly {
     public void checkMatchingGlues( PolyTile t ) {
         for (Point ptPoint : t.southGlues.keySet()) {
             for (Point aPoint : openNorthGlues.keySet()) {
-                if (t.southGlues.get(ptPoint) == openNorthGlues.get(aPoint)) {
+                if (t.southGlues.get(ptPoint).equals(openNorthGlues.get(aPoint))){
                     Point tmp = new Point();
                     tmp.setLocation(aPoint.getX() - ptPoint.getX(), aPoint.getY() + 1 - ptPoint.getY());
                     Pair<Point, PolyTile> x = new Pair<Point, PolyTile>(tmp, t);
@@ -92,7 +92,7 @@ public class Assembly {
         }
         for (Point ptPoint : t.westGlues.keySet()) {
             for (Point aPoint : openEastGlues.keySet()) {
-                if (t.westGlues.get(ptPoint) == openEastGlues.get(aPoint)) {
+                if (t.westGlues.get(ptPoint).equals(openEastGlues.get(aPoint))){
                     Point tmp = new Point();
                     tmp.setLocation(aPoint.getX() + 1 - ptPoint.getX(), aPoint.getY() - ptPoint.getY());
                     Pair<Point, PolyTile> x = new Pair<Point, PolyTile>(tmp, t);
@@ -102,7 +102,7 @@ public class Assembly {
         }
         for (Point ptPoint : t.northGlues.keySet()) {
             for (Point aPoint : openSouthGlues.keySet()) {
-                if (t.northGlues.get(ptPoint) == openSouthGlues.get(aPoint)) {
+                if (t.northGlues.get(ptPoint).equals(openSouthGlues.get(aPoint))){
                     Point tmp = new Point();
                     tmp.setLocation(aPoint.getX() - ptPoint.getX(), aPoint.getY() - 1 - ptPoint.getY());
                     Pair<Point, PolyTile> x = new Pair<Point, PolyTile>(tmp, t);
@@ -112,7 +112,7 @@ public class Assembly {
         }
         for (Point ptPoint : t.eastGlues.keySet()) {
             for (Point aPoint : openWestGlues.keySet()) {
-                if (t.eastGlues.get(ptPoint) == openWestGlues.get(aPoint)) {
+                if (t.eastGlues.get(ptPoint).equals(openWestGlues.get(aPoint))){
                     Point tmp = new Point();
                     tmp.setLocation(aPoint.getX() - 1 - ptPoint.getX(), aPoint.getY() - ptPoint.getY());
                     Pair<Point, PolyTile> x = new Pair<Point, PolyTile>(tmp, t);
