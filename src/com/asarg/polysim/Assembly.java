@@ -1,6 +1,7 @@
 /*
 "execution" place. takes care of the tile system, its changes, the grid, the frontier, and the open glue list.
  */
+package com.asarg.polysim;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
