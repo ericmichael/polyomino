@@ -30,8 +30,6 @@ public void testAddTile() throws Exception {
     String[] blankGlues = {null,"I'm a glue",null,null};
 
     this.pt.addTile(0,0,blankGlues);
-    //assertSame(this.pt.getTile(0,0),)
-
 } 
 
 /** 

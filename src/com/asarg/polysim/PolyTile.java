@@ -46,8 +46,12 @@ public class PolyTile {
 
     // add tile, increases the size the polytile by creating a tile with the given data
     public void addTile(int x, int y, String[] gl) {
-        Tile tile = new Tile(x, y, gl, this);
-        tiles.add(tile);
+        if(getTile(x, y) != null){
+            Tile tile = new Tile(x, y, gl, this);
+            tiles.add(tile);
+        }else{
+            System.out.println("Tile already exists at this relative coordinate");
+        }
     }
 
     // deletes tile at the specified location
