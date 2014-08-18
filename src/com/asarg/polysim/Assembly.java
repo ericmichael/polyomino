@@ -10,16 +10,16 @@ public class Assembly {
     // tile system, it can be changed so it needs its own class
     private TileSystem tileSystem;
     // placeholder for the grid
-    private HashMap<Point, Tile> Grid = new HashMap();
+    private HashMap<Point, Tile> Grid = new HashMap<Point, Tile>();
     // frontier list: calculated, increased, decreased, and changed here.
     private HashMap<Point, PolyTile> frontier = new HashMap<Point, PolyTile>();
 
     //Open glue ends stored by their coordinate
-    HashMap<Point, String> openNorthGlues = new HashMap();
-    HashMap<Point, String> openEastGlues = new HashMap();
-    HashMap<Point, String> openSouthGlues = new HashMap();
-    HashMap<Point, String> openWestGlues = new HashMap();
-    HashMap<Point, PolyTile> possibleAttach = new HashMap();
+    HashMap<Point, String> openNorthGlues = new HashMap<Point, String>();
+    HashMap<Point, String> openEastGlues = new HashMap<Point, String>();
+    HashMap<Point, String> openSouthGlues = new HashMap<Point, String>();
+    HashMap<Point, String> openWestGlues = new HashMap<Point, String>();
+    HashMap<Point, PolyTile> possibleAttach = new HashMap<Point, PolyTile>();
 
     public Assembly(){
         System.out.print("in assembly,");
