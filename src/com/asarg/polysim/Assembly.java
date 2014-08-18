@@ -117,7 +117,7 @@ public class Assembly {
     }
     // calculate frontier
 
-    private void calculateFrontier() {
+    public void calculateFrontier() {
         for(Map.Entry e : possibleAttach.entrySet()) {
             if(checkStability((PolyTile)e.getValue(), ((Point)e.getKey()).x, ((Point)e.getKey()).y) &&
                     geometryCheckSuccess((PolyTile)e.getValue(), ((Point)e.getKey()).x, ((Point)e.getKey()).y))
@@ -171,5 +171,12 @@ public class Assembly {
     // delete from frontier
 
     // add to frontier
-
+    public void cleanUp() {
+        frontier.clear();
+        possibleAttach.clear();
+        openNorthGlues.clear();
+        openEastGlues.clear();
+        openSouthGlues.clear();
+        openWestGlues.clear();
+    }
 }
