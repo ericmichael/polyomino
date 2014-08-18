@@ -45,4 +45,12 @@ public class Tile {
         return glueLabels[3];
     }
 
+    public boolean isEqual(Tile toCompare){
+        if (tileLocation != toCompare.getLocation())
+            return false;
+        if (!glueLabels.equals(toCompare.getGlueLabels()))
+            return false;
+
+        return true;
+    }
 }
