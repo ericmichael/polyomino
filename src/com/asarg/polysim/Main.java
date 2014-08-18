@@ -92,7 +92,7 @@ public class Main {
 
     public static void main(String args[]) {
 
-    TileSystem ts = new TileSystem(2);
+        TileSystem ts = new TileSystem(2);
 
         ts.addPolyTile(tetrisF());
         ts.addPolyTile(tetrisI());
