@@ -92,16 +92,16 @@ public class Main {
 
     public static void main(String args[]) {
 
-        TileSystem ts = new TileSystem(2);
+    TileSystem ts = new TileSystem(2);
 
-        ts.addPolyTile(tetrisF());
-        ts.addPolyTile(tetrisI());
-        ts.addPolyTile(tetrisL());
-        ts.addPolyTile(tetrisU());
-        ts.addPolyTile(tetrisV());
-        ts.addPolyTile(tetrisX());
+    ts.addPolyTile(tetrisF());
+    ts.addPolyTile(tetrisI());
+    ts.addPolyTile(tetrisL());
+    ts.addPolyTile(tetrisU());
+    ts.addPolyTile(tetrisV());
+    ts.addPolyTile(tetrisX());
 
-        Assembly assembly = new Assembly(ts);
+    Assembly assembly = new Assembly(ts);
 
     }
 }
