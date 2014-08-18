@@ -21,7 +21,7 @@ public class Assembly {
     HashMap<Point, String> openEastGlues = new HashMap<Point, String>();
     HashMap<Point, String> openSouthGlues = new HashMap<Point, String>();
     HashMap<Point, String> openWestGlues = new HashMap<Point, String>();
-    HashMap<Point, PolyTile> possibleAttach = new HashMap<Point, PolyTile>();
+    List<Pair<Point, PolyTile>> possibleAttach = new ArrayList<Pair<Point, PolyTile>>();
 
     public Assembly(){
         System.out.print("in assembly,");
@@ -85,7 +85,8 @@ public class Assembly {
                 if (t.southGlues.get(ptPoint) == openNorthGlues.get(aPoint)) {
                     Point tmp = new Point();
                     tmp.setLocation(aPoint.getX() - ptPoint.getX(), aPoint.getY() + 1 - ptPoint.getY());
-                    possibleAttach.put(tmp, t);
+                    Pair<Point, PolyTile> x = new Pair<Point, PolyTile>(tmp, t);
+                    possibleAttach.add(x);
                 }
             }
         }
@@ -94,7 +95,8 @@ public class Assembly {
                 if (t.westGlues.get(ptPoint) == openEastGlues.get(aPoint)) {
                     Point tmp = new Point();
                     tmp.setLocation(aPoint.getX() + 1 - ptPoint.getX(), aPoint.getY() - ptPoint.getY());
-                    possibleAttach.put(tmp, t);
+                    Pair<Point, PolyTile> x = new Pair<Point, PolyTile>(tmp, t);
+                    possibleAttach.add(x);
                 }
             }
         }
@@ -103,7 +105,8 @@ public class Assembly {
                 if (t.northGlues.get(ptPoint) == openSouthGlues.get(aPoint)) {
                     Point tmp = new Point();
                     tmp.setLocation(aPoint.getX() - ptPoint.getX(), aPoint.getY() - 1 - ptPoint.getY());
-                    possibleAttach.put(tmp, t);
+                    Pair<Point, PolyTile> x = new Pair<Point, PolyTile>(tmp, t);
+                    possibleAttach.add(x);
                 }
             }
         }
@@ -112,7 +115,8 @@ public class Assembly {
                 if (t.eastGlues.get(ptPoint) == openWestGlues.get(aPoint)) {
                     Point tmp = new Point();
                     tmp.setLocation(aPoint.getX() - 1 - ptPoint.getX(), aPoint.getY() - ptPoint.getY());
-                    possibleAttach.put(tmp, t);
+                    Pair<Point, PolyTile> x = new Pair<Point, PolyTile>(tmp, t);
+                    possibleAttach.add(x);
                 }
             }
         }
@@ -123,7 +127,7 @@ public class Assembly {
         for(Pair<Point, PolyTile> e : possibleAttach) {
             if(checkStability((PolyTile)e.getValue(), ((Point)e.getKey()).x, ((Point)e.getKey()).y) &&
                     geometryCheckSuccess((PolyTile)e.getValue(), ((Point)e.getKey()).x, ((Point)e.getKey()).y))
-                frontier.add(new Pair<Point, PolyTile>((Point)e.getKey(), (PolyTile)e.getValue()));
+                frontier.add(new Pair<Point, PolyTile>((Point) e.getKey(), (PolyTile) e.getValue()));
         }
     }
 
@@ -173,6 +177,14 @@ public class Assembly {
     // delete from frontier
 
     // add to frontier
+
+    //Place "random" polytile from frontier
+    public void addFromFrontier(){
+        Random rn = new Random();
+        Pair<Point, PolyTile> x = frontier.get(rn.nextInt(frontier.size()));
+        placePolytile(x.getValue(), x.getKey().x, x.getKey().y );
+    }
+
     public void cleanUp() {
         frontier.clear();
         possibleAttach.clear();
