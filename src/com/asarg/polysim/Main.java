@@ -69,7 +69,7 @@ public class Main {
 
     public static PolyTile tetrisI() {
         String[] gtop = {null, "a", null, null};
-        String[] gbottom = {null, "b", null, null};
+        String[] gbottom = {null, null, null, null};
 
         PolyTile tetris = new PolyTile("I");
         tetris.addTile(0, 0, blankGlues());
@@ -104,10 +104,17 @@ public class Main {
         ts.addPolyTile(tetrisV());
         ts.addPolyTile(tetrisX());
 
+        ts.addGlueFunction("a","a",2);
+        ts.addGlueFunction("b","b",2);
+        ts.addGlueFunction("c","c",2);
+        ts.addGlueFunction("d","d",2);
+        ts.addGlueFunction("e","e",2);
+        ts.addGlueFunction("f","f",2);
+
         Assembly assembly = new Assembly(ts);
         assembly.placeSeed(tetrisI());
 
-        for (int i =0; i < 4; i++){
+        for (int i =0; i < 1; i++){
             // Dom stuff here:
             assembly.attach();
         }
