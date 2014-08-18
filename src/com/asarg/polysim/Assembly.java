@@ -2,6 +2,8 @@
 "execution" place. takes care of the tile system, its changes, the grid, the frontier, and the open glue list.
  */
 package com.asarg.polysim;
+import javafx.util.Pair;
+
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -12,7 +14,7 @@ public class Assembly {
     // placeholder for the grid
     private HashMap<Point, Tile> Grid = new HashMap<Point, Tile>();
     // frontier list: calculated, increased, decreased, and changed here.
-    private HashMap<Point, PolyTile> frontier = new HashMap<Point, PolyTile>();
+    private List<Pair<Point, PolyTile>> frontier = new ArrayList<Pair<Point, PolyTile>>();
 
     //Open glue ends stored by their coordinate
     HashMap<Point, String> openNorthGlues = new HashMap<Point, String>();
@@ -121,7 +123,7 @@ public class Assembly {
         for(Map.Entry e : possibleAttach.entrySet()) {
             if(checkStability((PolyTile)e.getValue(), ((Point)e.getKey()).x, ((Point)e.getKey()).y) &&
                     geometryCheckSuccess((PolyTile)e.getValue(), ((Point)e.getKey()).x, ((Point)e.getKey()).y))
-                frontier.put((Point)e.getKey(), (PolyTile)e.getValue());
+                frontier.add(new Pair<Point, PolyTile>((Point)e.getKey(), (PolyTile)e.getValue()));
         }
     }
 
