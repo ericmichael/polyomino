@@ -47,7 +47,7 @@ public class PolyTile {
 
     // add tile, increases the size the polytile by creating a tile with the given data
     public void addTile(int x, int y, String[] gl) {
-        if(getTile(x, y) == null){
+        if(getTile(x, y) != null){
             Tile tile = new Tile(x, y, gl, this);
             tiles.add(tile);
         }else{
@@ -71,9 +71,11 @@ public class PolyTile {
     public Tile getTile(int x,int y) {
         for (Tile tile : tiles){
             if (tile.getLocation().equals(new Point(x, y))) {
+                System.out.println("Tile found in polyTile!");
                 return tile;
             }
         }
+        System.out.println("Tile not found.");
         return null;
     }
     public double getConcentration(){return concentration;}
@@ -115,14 +117,6 @@ public class PolyTile {
             if (!glueLabels[3].equals("")) {
                 westGlues.put(t.getLocation(), glueLabels[3]);
             }
-        }
-    }
-
-    public String toString(){
-        if(polyName!=null){
-            return "PolyTile: " + polyName;
-        }else{
-            return super.toString();
         }
     }
 
