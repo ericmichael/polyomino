@@ -1,4 +1,5 @@
-package com.asarg.polysim;/* polytile class
+package com.asarg.polysim;
+/* polytile class
     polytile with shape, glues, concentration, & label are defined.
     TODO: Check connected tiles in the polytile and change their strength to infinite
 */
@@ -46,8 +47,12 @@ public class PolyTile {
 
     // add tile, increases the size the polytile by creating a tile with the given data
     public void addTile(int x, int y, String[] gl) {
-        Tile tile = new Tile(x, y, gl, this);
-        tiles.add(tile);
+        if(getTile(x, y) != null){
+            Tile tile = new Tile(x, y, gl, this);
+            tiles.add(tile);
+        }else{
+            System.out.println("Tile already exists at this relative coordinate");
+        }
     }
 
     // deletes tile at the specified location
@@ -73,6 +78,9 @@ public class PolyTile {
         System.out.println("Tile not found.");
         return null;
     }
+    public double getConcentration(){return concentration;}
+    public int getCount(){return count;}
+    public String getPolyName(){return polyName;}
 
 
     public void changeConcentration(double c){
@@ -111,4 +119,20 @@ public class PolyTile {
             }
         }
     }
+
+//    public boolean isEqual(PolyTile toCompare){
+//        // check if the polytile data is the same
+//        if (concentration != toCompare.getConcentration())
+//            return false;
+//        if (!polyName.equals(toCompare.getPolyName()))
+//            return false;
+//        if (count != toCompare.getCount())
+//            return false;
+//
+//        // check if all tiles in the polytile are equal
+//        for (Tile t : tiles){
+//
+//        }
+//        return false;
+//    }
 }

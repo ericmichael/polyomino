@@ -102,6 +102,11 @@ public class Main {
         ts.addPolyTile(tetrisX());
 
         Assembly assembly = new Assembly(ts);
+        assembly.placeSeed(tetrisI());
 
+        for (int i =0; i < 4; i++){
+            // Dom stuff here:
+            assembly.attach();
+        }
     }
 }
