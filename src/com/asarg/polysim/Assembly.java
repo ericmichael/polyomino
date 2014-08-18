@@ -181,10 +181,8 @@ public class Assembly {
     //Place "random" polytile from frontier
     private void addFromFrontier(){
         Random rn = new Random();
-        int x = frontier.size();
-        int y = rn.nextInt(x);
-        Pair<Point, PolyTile> z = frontier.get(y);
-        placePolytile(z.getValue(), z.getKey().x, z.getKey().y );
+        Pair<Point, PolyTile> x = frontier.get(rn.nextInt(frontier.size()));
+        placePolytile(x.getValue(), x.getKey().x, x.getKey().y );
     }
 
     private void cleanUp() {

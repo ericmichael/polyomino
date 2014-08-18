@@ -120,19 +120,22 @@ public class PolyTile {
         }
     }
 
-//    public boolean isEqual(PolyTile toCompare){
-//        // check if the polytile data is the same
-//        if (concentration != toCompare.getConcentration())
-//            return false;
-//        if (!polyName.equals(toCompare.getPolyName()))
-//            return false;
-//        if (count != toCompare.getCount())
-//            return false;
-//
-//        // check if all tiles in the polytile are equal
-//        for (Tile t : tiles){
-//
-//        }
-//        return false;
-//    }
+    public boolean isEqual(PolyTile toCompare){
+        // check if the polytile data is the same
+        if (concentration != toCompare.getConcentration())
+            return false;
+        if (!polyName.equals(toCompare.getPolyName()))
+            return false;
+        if (count != toCompare.getCount())
+            return false;
+
+        // check if all tiles in the polytile are equal, by looking through their coordinates
+        for (Tile t : tiles){
+            Point tLoc = t.getLocation();
+            Tile t2 = toCompare.getTile((int)tLoc.getX(), (int)tLoc.getY());
+            if (!t.isEqual(t2))
+                return false;
+        }
+        return true;
+    }
 }
