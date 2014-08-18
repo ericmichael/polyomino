@@ -193,4 +193,13 @@ public class Assembly {
         openSouthGlues.clear();
         openWestGlues.clear();
     }
+
+    public void attach(){
+        for(PolyTile t : tileSystem.getTileTypes()){
+            checkMatchingGlues(t);
+        }
+        calculateFrontier();
+        addFromFrontier();
+        cleanUp();
+    }
 }
