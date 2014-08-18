@@ -2,6 +2,8 @@
 "execution" place. takes care of the tile system, its changes, the grid, the frontier, and the open glue list.
  */
 package com.asarg.polysim;
+import javafx.util.Pair;
+
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -10,16 +12,16 @@ public class Assembly {
     // tile system, it can be changed so it needs its own class
     private TileSystem tileSystem;
     // placeholder for the grid
-    private HashMap<Point, Tile> Grid = new HashMap();
+    private HashMap<Point, Tile> Grid = new HashMap<Point, Tile>();
     // frontier list: calculated, increased, decreased, and changed here.
-    private HashMap<Point, PolyTile> frontier = new HashMap<Point, PolyTile>();
+    private List<Pair<Point, PolyTile>> frontier = new ArrayList<Pair<Point, PolyTile>>();
 
     //Open glue ends stored by their coordinate
-    HashMap<Point, String> openNorthGlues = new HashMap();
-    HashMap<Point, String> openEastGlues = new HashMap();
-    HashMap<Point, String> openSouthGlues = new HashMap();
-    HashMap<Point, String> openWestGlues = new HashMap();
-    HashMap<Point, PolyTile> possibleAttach = new HashMap();
+    HashMap<Point, String> openNorthGlues = new HashMap<Point, String>();
+    HashMap<Point, String> openEastGlues = new HashMap<Point, String>();
+    HashMap<Point, String> openSouthGlues = new HashMap<Point, String>();
+    HashMap<Point, String> openWestGlues = new HashMap<Point, String>();
+    List<Pair<Point, PolyTile>> possibleAttach = new ArrayList<Pair<Point, PolyTile>>();
 
     public Assembly(){
         System.out.print("in assembly,");
@@ -80,48 +82,52 @@ public class Assembly {
     public void checkMatchingGlues( PolyTile t ) {
         for (Point ptPoint : t.southGlues.keySet()) {
             for (Point aPoint : openNorthGlues.keySet()) {
-                if (t.southGlues.get(ptPoint) == openNorthGlues.get(aPoint)) {
+                if (t.southGlues.get(ptPoint).equals(openNorthGlues.get(aPoint))){
                     Point tmp = new Point();
                     tmp.setLocation(aPoint.getX() - ptPoint.getX(), aPoint.getY() + 1 - ptPoint.getY());
-                    possibleAttach.put(tmp, t);
+                    Pair<Point, PolyTile> x = new Pair<Point, PolyTile>(tmp, t);
+                    possibleAttach.add(x);
                 }
             }
         }
         for (Point ptPoint : t.westGlues.keySet()) {
             for (Point aPoint : openEastGlues.keySet()) {
-                if (t.westGlues.get(ptPoint) == openEastGlues.get(aPoint)) {
+                if (t.westGlues.get(ptPoint).equals(openEastGlues.get(aPoint))){
                     Point tmp = new Point();
                     tmp.setLocation(aPoint.getX() + 1 - ptPoint.getX(), aPoint.getY() - ptPoint.getY());
-                    possibleAttach.put(tmp, t);
+                    Pair<Point, PolyTile> x = new Pair<Point, PolyTile>(tmp, t);
+                    possibleAttach.add(x);
                 }
             }
         }
         for (Point ptPoint : t.northGlues.keySet()) {
             for (Point aPoint : openSouthGlues.keySet()) {
-                if (t.northGlues.get(ptPoint) == openSouthGlues.get(aPoint)) {
+                if (t.northGlues.get(ptPoint).equals(openSouthGlues.get(aPoint))){
                     Point tmp = new Point();
                     tmp.setLocation(aPoint.getX() - ptPoint.getX(), aPoint.getY() - 1 - ptPoint.getY());
-                    possibleAttach.put(tmp, t);
+                    Pair<Point, PolyTile> x = new Pair<Point, PolyTile>(tmp, t);
+                    possibleAttach.add(x);
                 }
             }
         }
         for (Point ptPoint : t.eastGlues.keySet()) {
             for (Point aPoint : openWestGlues.keySet()) {
-                if (t.eastGlues.get(ptPoint) == openWestGlues.get(aPoint)) {
+                if (t.eastGlues.get(ptPoint).equals(openWestGlues.get(aPoint))){
                     Point tmp = new Point();
                     tmp.setLocation(aPoint.getX() - 1 - ptPoint.getX(), aPoint.getY() - ptPoint.getY());
-                    possibleAttach.put(tmp, t);
+                    Pair<Point, PolyTile> x = new Pair<Point, PolyTile>(tmp, t);
+                    possibleAttach.add(x);
                 }
             }
         }
     }
     // calculate frontier
 
-    private void calculateFrontier() {
-        for(Map.Entry e : possibleAttach.entrySet()) {
-            if(checkStability((PolyTile)e.getValue(), ((Point)e.getKey()).x, ((Point)e.getKey()).y) &&
-                    geometryCheckSuccess((PolyTile)e.getValue(), ((Point)e.getKey()).x, ((Point)e.getKey()).y))
-                frontier.put((Point)e.getKey(), (PolyTile)e.getValue());
+    public void calculateFrontier() {
+        for(Pair<Point, PolyTile> e : possibleAttach) {
+            if(checkStability(e.getValue(), (e.getKey()).x, (e.getKey()).y) &&
+                    geometryCheckSuccess(e.getValue(), (e.getKey()).x, (e.getKey()).y))
+                frontier.add(new Pair<Point, PolyTile>(e.getKey(), e.getValue()));
         }
     }
 
@@ -172,4 +178,19 @@ public class Assembly {
 
     // add to frontier
 
+    //Place "random" polytile from frontier
+    public void addFromFrontier(){
+        Random rn = new Random();
+        Pair<Point, PolyTile> x = frontier.get(rn.nextInt(frontier.size()));
+        placePolytile(x.getValue(), x.getKey().x, x.getKey().y );
+    }
+
+    public void cleanUp() {
+        frontier.clear();
+        possibleAttach.clear();
+        openNorthGlues.clear();
+        openEastGlues.clear();
+        openSouthGlues.clear();
+        openWestGlues.clear();
+    }
 }
