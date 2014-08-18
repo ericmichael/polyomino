@@ -1,11 +1,10 @@
 /*
 "execution" place. takes care of the tile system, its changes, the grid, the frontier, and the open glue list.
  */
+package com.asarg.polysim;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class Assembly {
     // tile system, it can be changed so it needs its own class
@@ -13,13 +12,14 @@ public class Assembly {
     // placeholder for the grid
     private HashMap<Point, Tile> Grid = new HashMap();
     // frontier list: calculated, increased, decreased, and changed here.
-    private List<PolyTile> frontier = new ArrayList<PolyTile>();
+    private HashMap<Point, PolyTile> frontier = new HashMap<Point, PolyTile>();
 
     //Open glue ends stored by their coordinate
     HashMap<Point, String> openNorthGlues = new HashMap();
     HashMap<Point, String> openEastGlues = new HashMap();
     HashMap<Point, String> openSouthGlues = new HashMap();
     HashMap<Point, String> openWestGlues = new HashMap();
+    HashMap<Point, PolyTile> possibleAttach = new HashMap();
 
     public Assembly(){
         System.out.print("in assembly,");
@@ -76,7 +76,54 @@ public class Assembly {
         return true;
     }
 
+    //Adds coordinate of placement of certain polytile to a grid location iff the polytile has a matching glue with assembly
+    public void checkMatchingGlues( PolyTile t ) {
+        for (Point ptPoint : t.southGlues.keySet()) {
+            for (Point aPoint : openNorthGlues.keySet()) {
+                if (t.southGlues.get(ptPoint) == openNorthGlues.get(aPoint)) {
+                    Point tmp = new Point();
+                    tmp.setLocation(aPoint.getX() - ptPoint.getX(), aPoint.getY() + 1 - ptPoint.getY());
+                    possibleAttach.put(tmp, t);
+                }
+            }
+        }
+        for (Point ptPoint : t.westGlues.keySet()) {
+            for (Point aPoint : openEastGlues.keySet()) {
+                if (t.westGlues.get(ptPoint) == openEastGlues.get(aPoint)) {
+                    Point tmp = new Point();
+                    tmp.setLocation(aPoint.getX() + 1 - ptPoint.getX(), aPoint.getY() - ptPoint.getY());
+                    possibleAttach.put(tmp, t);
+                }
+            }
+        }
+        for (Point ptPoint : t.northGlues.keySet()) {
+            for (Point aPoint : openSouthGlues.keySet()) {
+                if (t.northGlues.get(ptPoint) == openSouthGlues.get(aPoint)) {
+                    Point tmp = new Point();
+                    tmp.setLocation(aPoint.getX() - ptPoint.getX(), aPoint.getY() - 1 - ptPoint.getY());
+                    possibleAttach.put(tmp, t);
+                }
+            }
+        }
+        for (Point ptPoint : t.eastGlues.keySet()) {
+            for (Point aPoint : openWestGlues.keySet()) {
+                if (t.eastGlues.get(ptPoint) == openWestGlues.get(aPoint)) {
+                    Point tmp = new Point();
+                    tmp.setLocation(aPoint.getX() - 1 - ptPoint.getX(), aPoint.getY() - ptPoint.getY());
+                    possibleAttach.put(tmp, t);
+                }
+            }
+        }
+    }
     // calculate frontier
+
+    private void calculateFrontier() {
+        for(Map.Entry e : possibleAttach.entrySet()) {
+            if(checkStability((PolyTile)e.getValue(), ((Point)e.getKey()).x, ((Point)e.getKey()).y) &&
+                    geometryCheckSuccess((PolyTile)e.getValue(), ((Point)e.getKey()).x, ((Point)e.getKey()).y))
+                frontier.put((Point)e.getKey(), (PolyTile)e.getValue());
+        }
+    }
 
     private boolean checkStability(PolyTile p, int x, int y) {
         int totalStrength = 0;
@@ -88,8 +135,7 @@ public class Assembly {
                 Tile nAssemblyTile = Grid.get(new Point(x, y+1));
                 if(nAssemblyTile != null)
                     totalStrength += tileSystem.getStrength(nPolytileGlue, nAssemblyTile.getGlueS());
-                if(totalStrength >= tileSystem.getTemperature())
-                    return true;
+
             }
 
             String ePolytileGlue = t.getGlueE();
@@ -97,8 +143,7 @@ public class Assembly {
                 Tile eAssemblyTile = Grid.get(new Point(x+1, y));
                 if(eAssemblyTile != null)
                     totalStrength += tileSystem.getStrength(ePolytileGlue, eAssemblyTile.getGlueW());
-                if(totalStrength >= tileSystem.getTemperature())
-                    return true;
+
             }
 
             String sPolytileGlue = t.getGlueS();
@@ -106,8 +151,7 @@ public class Assembly {
                 Tile sAssemblyTile = Grid.get(new Point(x, y-1));
                 if(sAssemblyTile != null)
                     totalStrength += tileSystem.getStrength(sPolytileGlue, sAssemblyTile.getGlueN());
-                if(totalStrength >= tileSystem.getTemperature())
-                    return true;
+
             }
 
             String wPolytileGlue = t.getGlueW();
@@ -115,12 +159,13 @@ public class Assembly {
                 Tile wAssemblyTile = Grid.get(new Point(x-1, y));
                 if(wAssemblyTile != null)
                     totalStrength += tileSystem.getStrength(wPolytileGlue, wAssemblyTile.getGlueE());
-                if(totalStrength >= tileSystem.getTemperature())
-                    return true;
+
             }
         }
-        //Should the total strength never reach the temperature of the system
-        return false;
+        if(totalStrength >= tileSystem.getTemperature())
+            return true;
+        else
+            return false;
     }
 
     // delete from frontier

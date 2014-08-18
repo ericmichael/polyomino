@@ -1,4 +1,4 @@
-/* polytile class
+package com.asarg.polysim;/* polytile class
     polytile with shape, glues, concentration, & label are defined.
     TODO:
     Check connected tiles in the polytile and change their strength to infinite
@@ -90,7 +90,7 @@ public class PolyTile {
         polyName = n;
     }
 
-    //Grabs glue edges from polytile and stores them in 4 lists for each direction (because ALEX did it that way)
+    //Grabs glue edges from polytile and stores them in 4 lists, one for each direction
     public void getGlues(){
         northGlues.clear();
         eastGlues.clear();
