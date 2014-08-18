@@ -2,10 +2,8 @@
 "execution" place. takes care of the tile system, its changes, the grid, the frontier, and the open glue list.
  */
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class Assembly {
     // tile system, it can be changed so it needs its own class
@@ -13,7 +11,7 @@ public class Assembly {
     // placeholder for the grid
     private HashMap<Point, Tile> Grid = new HashMap();
     // frontier list: calculated, increased, decreased, and changed here.
-    private List<PolyTile> frontier = new ArrayList<PolyTile>();
+    private HashMap<Point, PolyTile> frontier = new HashMap<Point, PolyTile>();
 
     //Open glue ends stored by their coordinate
     HashMap<Point, String> openNorthGlues = new HashMap();
@@ -119,13 +117,11 @@ public class Assembly {
     // calculate frontier
 
     private void calculateFrontier() {
-        //Check for all possible attachments and their locations
-
-        //Loop through the candidates and their locations
-            //Check stability
-            //Check geometry
-            //Add to frontier
-
+        for(Map.Entry e : possibleAttach.entrySet()) {
+            if(checkStability((PolyTile)e.getValue(), ((Point)e.getKey()).x, ((Point)e.getKey()).y) &&
+                    geometryCheckSuccess((PolyTile)e.getValue(), ((Point)e.getKey()).x, ((Point)e.getKey()).y))
+                frontier.put((Point)e.getKey(), (PolyTile)e.getValue());
+        }
     }
 
     private boolean checkStability(PolyTile p, int x, int y) {
