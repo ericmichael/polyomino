@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class TileSystem {
     // temperature of the system, bonds must be of at least this value or they break.
     private int temperature;
-    // placeholder for the gluefunction
+    // glue function to determine strength between two labels
     private HashMap<Pair<String, String>, Integer> glueFunction = new HashMap();
     // list of polytiles: data structure should be changed to something that would be of better performance
     private Set<PolyTile> tileTypes = new HashSet<PolyTile>();
