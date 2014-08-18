@@ -39,6 +39,7 @@ public class Assembly {
     public Assembly(TileSystem ts){
         tileSystem = ts;
     }
+
     //Finds open glues on assembly grid and puts them in 4 maps.
     private void getOpenGlues() {
         openNorthGlues.clear();
@@ -79,7 +80,7 @@ public class Assembly {
     }
 
     //Adds coordinate of placement of certain polytile to a grid location iff the polytile has a matching glue with assembly
-    private void checkMatchingGlues( PolyTile t ) {
+    public void checkMatchingGlues( PolyTile t ) {
         for (Point ptPoint : t.southGlues.keySet()) {
             for (Point aPoint : openNorthGlues.keySet()) {
                 if (t.southGlues.get(ptPoint).equals(openNorthGlues.get(aPoint))){
@@ -123,7 +124,7 @@ public class Assembly {
     }
     // calculate frontier
 
-    private void calculateFrontier() {
+    public void calculateFrontier() {
         for(Pair<Point, PolyTile> e : possibleAttach) {
             if(checkStability(e.getValue(), (e.getKey()).x, (e.getKey()).y) &&
                     geometryCheckSuccess(e.getValue(), (e.getKey()).x, (e.getKey()).y))
@@ -174,18 +175,14 @@ public class Assembly {
             return false;
     }
 
-    // delete from frontier
-
-    // add to frontier
-
     //Place "random" polytile from frontier
-    private void addFromFrontier(){
+    public void addFromFrontier(){
         Random rn = new Random();
         Pair<Point, PolyTile> x = frontier.get(rn.nextInt(frontier.size()));
         placePolytile(x.getValue(), x.getKey().x, x.getKey().y );
     }
 
-    private void cleanUp() {
+    public void cleanUp() {
         frontier.clear();
         possibleAttach.clear();
         openNorthGlues.clear();
@@ -194,19 +191,8 @@ public class Assembly {
         openWestGlues.clear();
     }
 
-    public void attach(){
-        for(PolyTile t : tileSystem.getTileTypes()){
-            checkMatchingGlues(t);
-        }
-        calculateFrontier();
-        addFromFrontier();
-        cleanUp();
-    }
-
-    public void placeSeed(PolyTile t){
-        if(Grid.size() == 0)
-            placePolytile(t, 0, 0);
-        else
-            System.out.println("Grid not empty");
+    // for Dom's tests. see if it can be changed to return a deep copy or similar instead.
+    public HashMap<Point, Tile> getGrid(){
+        return Grid;
     }
 }
