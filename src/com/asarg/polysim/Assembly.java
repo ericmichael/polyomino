@@ -125,9 +125,9 @@ public class Assembly {
 
     public void calculateFrontier() {
         for(Pair<Point, PolyTile> e : possibleAttach) {
-            if(checkStability((PolyTile)e.getValue(), ((Point)e.getKey()).x, ((Point)e.getKey()).y) &&
-                    geometryCheckSuccess((PolyTile)e.getValue(), ((Point)e.getKey()).x, ((Point)e.getKey()).y))
-                frontier.add(new Pair<Point, PolyTile>((Point) e.getKey(), (PolyTile) e.getValue()));
+            if(checkStability(e.getValue(), (e.getKey()).x, (e.getKey()).y) &&
+                    geometryCheckSuccess(e.getValue(), (e.getKey()).x, (e.getKey()).y))
+                frontier.add(new Pair<Point, PolyTile>(e.getKey(), e.getValue()));
         }
     }
 

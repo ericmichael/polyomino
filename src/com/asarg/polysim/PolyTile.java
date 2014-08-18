@@ -1,7 +1,6 @@
 package com.asarg.polysim;/* polytile class
     polytile with shape, glues, concentration, & label are defined.
-    TODO:
-    Check connected tiles in the polytile and change their strength to infinite
+    TODO: Check connected tiles in the polytile and change their strength to infinite
 */
 
 import java.awt.*;
