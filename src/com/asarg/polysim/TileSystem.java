@@ -18,7 +18,6 @@ public class TileSystem {
     private Set<PolyTile> tileTypes = new HashSet<PolyTile>();
 
     public TileSystem(int temp){
-        System.out.print(" in tilesystem with temp: "+temp+"\n");
         temperature = temp;
     }
 
@@ -37,7 +36,12 @@ public class TileSystem {
     }
 
     public int getStrength(String label1, String label2) {
-        return glueFunction.get(new Pair(label1, label2));
+        Pair key = new Pair(label1, label2);
+
+        if(glueFunction.containsKey(key)){
+            return glueFunction.get(key);
+        }
+        else return 0;
     }
 
     // add polytile to tiletypes
