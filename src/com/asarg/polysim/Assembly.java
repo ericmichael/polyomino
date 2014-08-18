@@ -193,4 +193,44 @@ public class Assembly {
         openSouthGlues.clear();
         openWestGlues.clear();
     }
+
+    //Prints assembly as grid, with the number being the number of tiles in a spot
+    //For debugging purposes
+    @Override
+    public String toString() {
+        int minimumX, maximumX, minimumY, maximumY;
+        Point[] tiles = Grid.keySet().toArray(new Point[Grid.keySet().size()]);
+        minimumX = tiles[0].x;
+        maximumX = tiles[0].x;
+        minimumY = tiles[0].y;
+        maximumY = tiles[0].y;
+
+        //Find minimum and maximum of assembly coordinates
+        for(Point p : tiles) {
+            if(p.x < minimumX)
+                minimumX = p.x;
+            else if(p.x > maximumX)
+                maximumX = p.x;
+
+            if(p.y < minimumY)
+                minimumY = p.y;
+            else if(p.y > maximumY)
+                maximumY = p.y;
+        }
+
+        //Shift everything to 0,0 as bottom left
+        for(int i = 0; i < tiles.length; i++) {
+            tiles[i].x += (-1)*minimumX;
+            tiles[i].y += (-1)*minimumY;
+        }
+        maximumX += (-1)*minimumX;
+        maximumY += (-1)*minimumY;
+
+        int[][] assemblyMatrix = new int[maximumY][maximumX];
+        for(Point p : tiles) {
+            assemblyMatrix[maximumY - p.y][p.x]++;
+        }
+
+        return assemblyMatrix.toString();
+    }
 }
