@@ -67,6 +67,15 @@ public class Assembly {
         }
     }
 
+    private boolean geometryCheckSuccess(PolyTile p, int x, int y){
+        for(Tile t : p.tiles) {
+            if(Grid.containsKey(new Point(x+t.getLocation().x,  y+t.getLocation().y))){
+                return false;
+            }
+        }
+        return true;
+    }
+
     // calculate frontier
 
     private void calculateFrontier() {
