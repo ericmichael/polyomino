@@ -94,14 +94,19 @@ public class Main {
 
     TileSystem ts = new TileSystem(2);
 
-    ts.addPolyTile(tetrisF());
-    ts.addPolyTile(tetrisI());
-    ts.addPolyTile(tetrisL());
-    ts.addPolyTile(tetrisU());
-    ts.addPolyTile(tetrisV());
-    ts.addPolyTile(tetrisX());
+        ts.addPolyTile(tetrisF());
+        ts.addPolyTile(tetrisI());
+        ts.addPolyTile(tetrisL());
+        ts.addPolyTile(tetrisU());
+        ts.addPolyTile(tetrisV());
+        ts.addPolyTile(tetrisX());
 
-    Assembly assembly = new Assembly(ts);
+        Assembly assembly = new Assembly(ts);
+        assembly.placeSeed(tetrisI());
 
+        for (int i =0; i < 4; i++){
+            // Dom stuff here:
+            assembly.attach();
+        }
     }
 }
