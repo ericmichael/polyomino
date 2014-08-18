@@ -120,7 +120,7 @@ public class Assembly {
     // calculate frontier
 
     public void calculateFrontier() {
-        for(Map.Entry e : possibleAttach.entrySet()) {
+        for(Pair<Point, PolyTile> e : possibleAttach) {
             if(checkStability((PolyTile)e.getValue(), ((Point)e.getKey()).x, ((Point)e.getKey()).y) &&
                     geometryCheckSuccess((PolyTile)e.getValue(), ((Point)e.getKey()).x, ((Point)e.getKey()).y))
                 frontier.add(new Pair<Point, PolyTile>((Point)e.getKey(), (PolyTile)e.getValue()));
