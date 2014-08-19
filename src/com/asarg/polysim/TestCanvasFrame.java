@@ -30,7 +30,7 @@ public class TestCanvasFrame extends JFrame {
                 return new Dimension(1280,200);
             }
         };
-        add(frontierCanvas, BorderLayout.NORTH);
+      //  add(frontierCanvas, BorderLayout.NORTH);
         add(tc, BorderLayout.CENTER);
       //  JButton stepForwards = new JButton("Step >");
       // add(stepForwards);

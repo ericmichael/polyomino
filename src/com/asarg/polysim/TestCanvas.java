@@ -29,7 +29,7 @@ public class TestCanvas extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         g.drawImage(canvasBFI, 0, 0, null);
 
-    g.drawRect(100,100,100,100);
+
 
     }
  /*   public void drawTiles(Set<Point> tiles)
