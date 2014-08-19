@@ -245,6 +245,7 @@ public class Assembly {
         getOpenGlues();
     }
 
+    //Add "random" polytile from frontier based on Polytile's concentrations
     public void weightedAddFromFrontier(){
         //generate polytile list and cumulative density list
         ArrayList<PolyTile> ptList = new ArrayList();
