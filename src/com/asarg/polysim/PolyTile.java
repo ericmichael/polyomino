@@ -22,10 +22,10 @@ public class PolyTile {
     //          (delete one, that number is lost forever)
     private static int tileID = 0;
 
-    public HashMap<Point, String> northGlues = new HashMap();
-    public HashMap<Point, String> eastGlues = new HashMap();
-    public HashMap<Point, String> southGlues = new HashMap();
-    public HashMap<Point, String> westGlues = new HashMap();
+    public HashMap<Point, String> northGlues = new HashMap<Point, String>();
+    public HashMap<Point, String> eastGlues = new HashMap<Point, String>();
+    public HashMap<Point, String> southGlues = new HashMap<Point, String>();
+    public HashMap<Point, String> westGlues = new HashMap<Point, String>();
 
     public PolyTile() {
         System.out.println("polytile with no name and infinite counts");
@@ -50,6 +50,7 @@ public class PolyTile {
         if(getTile(x, y) == null){
             Tile tile = new Tile(x, y, gl, this);
             tiles.add(tile);
+            setGlues();
         }else{
             System.out.println("Tile already exists at this relative coordinate");
         }
@@ -95,24 +96,24 @@ public class PolyTile {
         polyName = n;
     }
 
-    //Grabs glue edges from polytile and stores them in 4 lists, one for each direction
-    public void getGlues(){
+    //Sets glue edges from polytile and stores them in 4 lists, one for each direction
+    public void setGlues(){
         northGlues.clear();
         eastGlues.clear();
         southGlues.clear();
         westGlues.clear();
         for (Tile t : tiles) {
             String[] glueLabels = t.getGlueLabels();
-            if (!glueLabels[0].equals("")) {
+            if (glueLabels[0]!=null && !glueLabels[0].equals("")) {
                 northGlues.put(t.getLocation(), glueLabels[0]);
             }
-            if (!glueLabels[1].equals("")) {
+            if (glueLabels[1]!=null && !glueLabels[1].equals("")) {
                 eastGlues.put(t.getLocation(), glueLabels[1]);
             }
-            if (!glueLabels[2].equals("")) {
+            if (glueLabels[2]!=null && !glueLabels[2].equals("")) {
                 southGlues.put(t.getLocation(), glueLabels[2]);
             }
-            if (!glueLabels[3].equals("")) {
+            if (glueLabels[3]!=null && !glueLabels[3].equals("")) {
                 westGlues.put(t.getLocation(), glueLabels[3]);
             }
         }

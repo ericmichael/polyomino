@@ -1,5 +1,10 @@
 package com.asarg.polysim;
 
+import javafx.util.Pair;
+
+import java.awt.*;
+import java.util.*;
+
 public class Main {
 
     public static String[] blankGlues() {
@@ -43,12 +48,13 @@ public class Main {
     public static PolyTile tetrisX() {
         String blank[] = blankGlues();
         String glue[] = {null, null, "e", null};
+        String glue2[] = {null, null, null, "d"};
 
         PolyTile poly = new PolyTile("X");
         poly.addTile(0, 0, blankGlues());
         poly.addTile(-1, 0, blankGlues());
         poly.addTile(1, 0, blankGlues());
-        poly.addTile(0, 1, blankGlues());
+        poly.addTile(0, 1, glue2);
         poly.addTile(0, -1, glue);
 
         return poly;
@@ -104,12 +110,45 @@ public class Main {
         ts.addPolyTile(tetrisV());
         ts.addPolyTile(tetrisX());
 
-        Assembly assembly = new Assembly(ts);
-        assembly.placeSeed(tetrisI());
+        ts.addGlueFunction("a","a",2);
+        ts.addGlueFunction("b","b",2);
+        ts.addGlueFunction("c","c",2);
+        ts.addGlueFunction("d","d",2);
+        ts.addGlueFunction("e","e",2);
+        ts.addGlueFunction("f","f",2);
 
-        for (int i =0; i < 4; i++){
-            // Dom stuff here:
-            assembly.attach();
+        Assembly assembly = new Assembly(ts);
+        assembly.placeSeed(tetrisF());
+
+        java.util.List<Pair<Point, PolyTile>> frontier = assembly.calculateFrontier();
+
+        TestCanvasFrame tcf = new TestCanvasFrame();
+        tcf.setVisible(true);
+        tcf.drawGrid(assembly.Grid);
+        while(!frontier.isEmpty()){
+            System.out.println("Frontier: " + frontier + "\n");
+
+            //TODO: Dominic - Visualize frontier
+
+
+
+            //TODO: Dominic - Visualize attachment
+
+            System.out.println(assembly);
+
+            try{
+                Thread.sleep(2000);
+                assembly.attach();
+                tcf.drawGrid(assembly.Grid);
+
+            }
+            catch(Exception e)
+            {
+
+
+            }
+
+            assembly.calculateFrontier();
         }
     }
 }
