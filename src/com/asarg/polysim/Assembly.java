@@ -154,7 +154,7 @@ public class Assembly {
         fillPossibleList(t, EAST);
         fillPossibleList(t, SOUTH);
         fillPossibleList(t, WEST);
-        System.out.println(possibleAttach);
+       // System.out.println(possibleAttach);
     }
     // calculate frontier
 
