@@ -247,13 +247,11 @@ public class Assembly {
 
     //Add "random" polytile from frontier based on Polytile's concentrations
     public void weightedAddFromFrontier(){
-        //generate polytile list and cumulative density list
-        ArrayList<PolyTile> ptList = new ArrayList();
+        //generate cumulative density list
         ArrayList<Double> cdList = new ArrayList();
         double totalConcentration = 0.0;
         for(Pair<Point, PolyTile> p : frontier) {
             PolyTile pt = p.getValue();
-            ptList.add(pt);
             totalConcentration += pt.getConcentration();
             cdList.add(totalConcentration);
         }
