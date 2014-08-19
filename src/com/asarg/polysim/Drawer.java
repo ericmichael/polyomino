@@ -4,9 +4,6 @@ import java.awt.*;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Created by Dom on 8/19/2014.
- */
 public class Drawer {
 
     //clears given graphics object, clip must have been set

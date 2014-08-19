@@ -11,9 +11,6 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
-/**
- * Created by Dom on 8/15/2014.
- */
 public class TestCanvasFrame extends JFrame {
 
     TestCanvas tc;
