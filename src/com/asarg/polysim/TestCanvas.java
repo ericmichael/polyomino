@@ -94,7 +94,7 @@ public class TestCanvas extends JPanel {
 
         }
 
-       // repaint();
+       repaint();
 
     }
 

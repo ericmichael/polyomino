@@ -106,7 +106,7 @@ public class Main {
         PolyTile tetris = new PolyTile("L");
 
         tetris.setColor("D24726");
-        
+
         tetris.addTile(0, 0, blankGlues());
         tetris.addTile(0, 1, blankGlues());
         tetris.addTile(0, 2, blankGlues());
