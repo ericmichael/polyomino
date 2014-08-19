@@ -22,6 +22,8 @@ public class Main {
 
         PolyTile poly = new PolyTile("U");
 
+        poly.setColor("008299");
+
         poly.addTile(0, 0, glue);
         poly.addTile(-1, 0, blank);
         poly.addTile(-1, 1, blank);
@@ -36,6 +38,9 @@ public class Main {
         String glue[] = {null, null, null, "a"};
 
         PolyTile poly = new PolyTile("V");
+
+        poly.setColor("2672EC");
+
         poly.addTile(0, 0, blank);
         poly.addTile(-1, 0, blank);
         poly.addTile(-1, 1, blank);
@@ -51,6 +56,9 @@ public class Main {
         String glue2[] = {null, null, null, "d"};
 
         PolyTile poly = new PolyTile("X");
+
+        poly.setColor("8C0095");
+
         poly.addTile(0, 0, blankGlues());
         poly.addTile(-1, 0, blankGlues());
         poly.addTile(1, 0, blankGlues());
@@ -65,6 +73,9 @@ public class Main {
         String[] gright = {null, "d", null, null};
 
         PolyTile tetrisF = new PolyTile("F");
+
+        tetrisF.setColor("5133AB");
+
         tetrisF.addTile(0, 0, blankGlues());
         tetrisF.addTile(0, -1, blankGlues());
         tetrisF.addTile(-1, 0, blankGlues());
@@ -78,6 +89,9 @@ public class Main {
         String[] gbottom = {null, "b", null, null};
 
         PolyTile tetris = new PolyTile("I");
+
+        tetris.setColor("AC193D");
+
         tetris.addTile(0, 0, blankGlues());
         tetris.addTile(0, 1, blankGlues());
         tetris.addTile(0, -1, blankGlues());
@@ -90,6 +104,9 @@ public class Main {
         String[] gtop = {null, "c", null, "a"};
 
         PolyTile tetris = new PolyTile("L");
+
+        tetris.setColor("D24726");
+
         tetris.addTile(0, 0, blankGlues());
         tetris.addTile(0, 1, blankGlues());
         tetris.addTile(0, 2, blankGlues());
@@ -122,7 +139,7 @@ public class Main {
 
         java.util.List<Pair<Point, PolyTile>> frontier = assembly.calculateFrontier();
 
-        TestCanvasFrame tcf = new TestCanvasFrame();
+        TestCanvasFrame tcf = new TestCanvasFrame(800,600);
         tcf.setVisible(true);
         tcf.drawGrid(assembly.Grid);
         while(!frontier.isEmpty()){
