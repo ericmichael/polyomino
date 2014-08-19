@@ -22,6 +22,10 @@ public class Tile {
         return polyTile.getPolyName();
     }
 
+    public String getColor(){
+        return polyTile.getColor();
+    }
+
     public void changeTileGlue(String[] gl){
         glueLabels = gl;
     }
