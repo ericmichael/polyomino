@@ -47,14 +47,13 @@ public class Main {
 
     public static PolyTile tetrisX() {
         String blank[] = blankGlues();
-        String glue[] = {"x", "x", "e", "x"};
-        String glue2[] = {"x", "x", "x", "d"};
-        String gluex[] = {"x", "x", "x","x"};
+        String glue[] = {null, null, "e", null};
+        String glue2[] = {null, null, null, "d"};
 
         PolyTile poly = new PolyTile("X");
-        poly.addTile(0, 0, gluex);
-        poly.addTile(-1, 0, gluex);
-        poly.addTile(1, 0, gluex);
+        poly.addTile(0, 0, blankGlues());
+        poly.addTile(-1, 0, blankGlues());
+        poly.addTile(1, 0, blankGlues());
         poly.addTile(0, 1, glue2);
         poly.addTile(0, -1, glue);
 
@@ -117,7 +116,6 @@ public class Main {
         ts.addGlueFunction("d","d",2);
         ts.addGlueFunction("e","e",2);
         ts.addGlueFunction("f","f",2);
-        ts.addGlueFunction("x","x",2);
 
         Assembly assembly = new Assembly(ts);
         assembly.placeSeed(tetrisF());
@@ -131,17 +129,23 @@ public class Main {
             System.out.println("Frontier: " + frontier + "\n");
 
             //TODO: Dominic - Visualize frontier
+
+
+
             //TODO: Dominic - Visualize attachment
 
             System.out.println(assembly);
 
             try{
-                Thread.sleep(1);
+                Thread.sleep(2000);
                 assembly.attach();
                 tcf.drawGrid(assembly.Grid);
+
             }
             catch(Exception e)
             {
+
+
             }
 
             assembly.calculateFrontier();

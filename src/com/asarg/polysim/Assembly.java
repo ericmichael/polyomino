@@ -86,7 +86,7 @@ public class Assembly {
             for (Point aPoint : openNorthGlues.keySet()) {
                 if (t.southGlues.get(ptPoint).equals(openNorthGlues.get(aPoint))){
                     Point tmp = new Point(aPoint);
-                    tmp.translate(0,1);
+                    tmp.translate(0, 1);
                     //System.out.println("placePoint: " + tmp);
                     int xOffset = (int)(tmp.getX() - ptPoint.getX());
                     int yOffset = (int)(tmp.getY() - ptPoint.getY());
@@ -102,7 +102,7 @@ public class Assembly {
             for (Point aPoint : openEastGlues.keySet()) {
                 if (t.westGlues.get(ptPoint).equals(openEastGlues.get(aPoint))){
                     Point tmp = new Point(aPoint);
-                    tmp.translate(1,0);
+                    tmp.translate(1, 0);
                     //System.out.println("placePoint: " + tmp);
                     int xOffset = (int)(tmp.getX() - ptPoint.getX());
                     int yOffset = (int)(tmp.getY() - ptPoint.getY());
@@ -118,7 +118,7 @@ public class Assembly {
             for (Point aPoint : openSouthGlues.keySet()) {
                 if (t.northGlues.get(ptPoint).equals(openSouthGlues.get(aPoint))){
                     Point tmp = new Point(aPoint);
-                    tmp.translate(0,-1);
+                    tmp.translate(0, -1);
                     //System.out.println("placePoint: " + tmp);
                     int xOffset = (int)(tmp.getX() - ptPoint.getX());
                     int yOffset = (int)(tmp.getY() - ptPoint.getY());
@@ -134,7 +134,7 @@ public class Assembly {
             for (Point aPoint : openWestGlues.keySet()) {
                 if (t.eastGlues.get(ptPoint).equals(openWestGlues.get(aPoint))){
                     Point tmp = new Point(aPoint);
-                    tmp.translate(-1,0);
+                    tmp.translate(-1, 0);
                     //System.out.println("placePoint: " + tmp);
                     int xOffset = (int)(tmp.getX() - ptPoint.getX());
                     int yOffset = (int)(tmp.getY() - ptPoint.getY());
@@ -221,10 +221,6 @@ public class Assembly {
             return false;
     }
 
-    // delete from frontier
-
-    // add to frontier
-
     //Place "random" polytile from frontier
     private void addFromFrontier(){
         Random rn = new Random();
@@ -247,6 +243,37 @@ public class Assembly {
         addFromFrontier();
         cleanUp();
         getOpenGlues();
+    }
+
+    //Add "random" polytile from frontier based on Polytile's concentrations
+    public void weightedAddFromFrontier(){
+        //generate polytile list and cumulative density list
+        ArrayList<PolyTile> ptList = new ArrayList();
+        ArrayList<Double> cdList = new ArrayList();
+        double totalConcentration = 0.0;
+        for(Pair<Point, PolyTile> p : frontier) {
+            PolyTile pt = p.getValue();
+            ptList.add(pt);
+            totalConcentration += pt.getConcentration();
+            cdList.add(totalConcentration);
+        }
+        Random rn = new Random();
+        double x = rn.nextDouble() * totalConcentration;
+        //Binary search for random number in cdList
+        int index = weightedAddBinarySearchHelper(cdList, x, cdList.size()/2);
+        Pair<Point, PolyTile> pt = frontier.get(index);
+        placePolytile(pt.getValue(), pt.getKey().x, pt.getKey().y );
+        frontier.remove(x);
+    }
+
+    private int weightedAddBinarySearchHelper(ArrayList<Double> cdList, double x, int mid){
+        if(cdList.get(mid-1) <= x && cdList.get(mid) > x)
+            return mid;
+        else if(cdList.get(mid) > x)
+            mid = mid/2;
+        else if(cdList.get(mid) < x)
+            mid = (cdList.size()+mid)/2;
+        return weightedAddBinarySearchHelper(cdList, x, mid);
     }
 
     public void placeSeed(PolyTile t){

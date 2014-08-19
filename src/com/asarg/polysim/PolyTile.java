@@ -22,6 +22,8 @@ public class PolyTile {
     //          (delete one, that number is lost forever)
     private static int tileID = 0;
 
+    private String color;
+
     public HashMap<Point, String> northGlues = new HashMap<Point, String>();
     public HashMap<Point, String> eastGlues = new HashMap<Point, String>();
     public HashMap<Point, String> southGlues = new HashMap<Point, String>();
@@ -43,6 +45,14 @@ public class PolyTile {
         polyName = n;
         count = c;
         System.out.println("polytile "+polyName+" created");
+    }
+
+    public void setColor(String color){
+        this.color = color;
+    }
+
+    public String getColor(){
+        return color;
     }
 
     // add tile, increases the size the polytile by creating a tile with the given data

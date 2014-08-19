@@ -15,6 +15,7 @@ public class TestCanvasFrame extends JFrame {
     {
         setLayout(new BorderLayout());
         tc = new TestCanvas();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel frontierCanvas = new JPanel()
         {
             @Override
