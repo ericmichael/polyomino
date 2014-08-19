@@ -139,6 +139,7 @@ public class Main {
 
         java.util.List<Pair<Point, PolyTile>> frontier = assembly.calculateFrontier();
 
+        TestCanvasFrame tcf = new TestCanvasFrame(1900, 1080);
         TestCanvasFrame tcf = new TestCanvasFrame(800,600);
         tcf.setVisible(true);
         tcf.drawGrid(assembly.Grid);
