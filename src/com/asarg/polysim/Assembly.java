@@ -9,6 +9,11 @@ import java.util.*;
 import java.util.List;
 
 public class Assembly {
+    private static final int NORTH = 0;
+    private static final int EAST = 1;
+    private static final int SOUTH = 2;
+    private static final int WEST = 3;
+
     // tile system, it can be changed so it needs its own class
     private TileSystem tileSystem;
     // placeholder for the grid
@@ -21,7 +26,7 @@ public class Assembly {
     HashMap<Point, String> openEastGlues = new HashMap<Point, String>();
     HashMap<Point, String> openSouthGlues = new HashMap<Point, String>();
     HashMap<Point, String> openWestGlues = new HashMap<Point, String>();
-    List<Pair<Point, PolyTile>> possibleAttach = new ArrayList<Pair<Point, PolyTile>>();
+    ArrayList<ArrayList<Object>> possibleAttach = new ArrayList<ArrayList<Object>>();
 
     public Assembly(){
         System.out.print("in assembly,");
@@ -80,91 +85,100 @@ public class Assembly {
         return true;
     }
 
-    //Adds coordinate of placement of certain polytile to a grid location iff the polytile has a matching glue with assembly
-    private void checkMatchingGlues( PolyTile t ) {
-        for (Point ptPoint : t.southGlues.keySet()) {
-            for (Point aPoint : openNorthGlues.keySet()) {
-                if (t.southGlues.get(ptPoint).equals(openNorthGlues.get(aPoint))){
-                    Point tmp = new Point(aPoint);
-                    tmp.translate(0,1);
-                    //System.out.println("placePoint: " + tmp);
-                    int xOffset = (int)(tmp.getX() - ptPoint.getX());
-                    int yOffset = (int)(tmp.getY() - ptPoint.getY());
-                    tmp.setLocation(xOffset, yOffset);
-                    Pair<Point, PolyTile> x = new Pair<Point, PolyTile>(tmp, t);
-                    //System.out.println("aPoint: " + aPoint);
-                    //System.out.println("ptPoint: " + ptPoint);
-                    possibleAttach.add(x);
-                }
-            }
+    private Pair<Point,Point> getOffset(Point aPoint, Point ptPoint, int offsetX, int offsetY){
+        Point tmp = new Point(aPoint);
+        tmp.translate(offsetX,offsetY);
+        Point placement = new Point(tmp);
+        int xOffset = (int)(tmp.getX() - ptPoint.getX());
+        int yOffset = (int)(tmp.getY() - ptPoint.getY());
+        tmp.setLocation(xOffset, yOffset);
+        return new Pair<Point,Point>(placement, tmp);
+    }
+
+    private void fillPossibleList(PolyTile pt, int direction){
+        HashMap<Point, String> ptGlues;
+        HashMap<Point, String> glues;
+        int offsetX;
+        int offsetY;
+
+        switch(direction){
+            case NORTH:
+                ptGlues = pt.southGlues;
+                glues = openNorthGlues;
+                offsetX = 0;
+                offsetY = 1;
+                break;
+            case EAST:
+                ptGlues = pt.westGlues;
+                glues = openEastGlues;
+                offsetX = 1;
+                offsetY = 0;
+                break;
+            case SOUTH:
+                ptGlues = pt.northGlues;
+                glues = openSouthGlues;
+                offsetX = 0;
+                offsetY = -1;
+                break;
+            default:
+                ptGlues = pt.eastGlues;
+                glues = openWestGlues;
+                offsetX = -1;
+                offsetY = 0;
+                break;
         }
-        for (Point ptPoint : t.westGlues.keySet()) {
-            for (Point aPoint : openEastGlues.keySet()) {
-                if (t.westGlues.get(ptPoint).equals(openEastGlues.get(aPoint))){
-                    Point tmp = new Point(aPoint);
-                    tmp.translate(1,0);
-                    //System.out.println("placePoint: " + tmp);
-                    int xOffset = (int)(tmp.getX() - ptPoint.getX());
-                    int yOffset = (int)(tmp.getY() - ptPoint.getY());
-                    tmp.setLocation(xOffset, yOffset);
-                    Pair<Point, PolyTile> x = new Pair<Point, PolyTile>(tmp, t);
-                    //System.out.println("aPoint: " + aPoint);
-                    //System.out.println("ptPoint: " + ptPoint);
-                    possibleAttach.add(x);
-                }
-            }
-        }
-        for (Point ptPoint : t.northGlues.keySet()) {
-            for (Point aPoint : openSouthGlues.keySet()) {
-                if (t.northGlues.get(ptPoint).equals(openSouthGlues.get(aPoint))){
-                    Point tmp = new Point(aPoint);
-                    tmp.translate(0,-1);
-                    //System.out.println("placePoint: " + tmp);
-                    int xOffset = (int)(tmp.getX() - ptPoint.getX());
-                    int yOffset = (int)(tmp.getY() - ptPoint.getY());
-                    tmp.setLocation(xOffset, yOffset);
-                    Pair<Point, PolyTile> x = new Pair<Point, PolyTile>(tmp, t);
-                    //System.out.println("aPoint: " + aPoint);
-                    //System.out.println("ptPoint: " + ptPoint);
-                    possibleAttach.add(x);
-                }
-            }
-        }
-        for (Point ptPoint : t.eastGlues.keySet()) {
-            for (Point aPoint : openWestGlues.keySet()) {
-                if (t.eastGlues.get(ptPoint).equals(openWestGlues.get(aPoint))){
-                    Point tmp = new Point(aPoint);
-                    tmp.translate(-1,0);
-                    //System.out.println("placePoint: " + tmp);
-                    int xOffset = (int)(tmp.getX() - ptPoint.getX());
-                    int yOffset = (int)(tmp.getY() - ptPoint.getY());
-                    tmp.setLocation(xOffset, yOffset);
-                    Pair<Point, PolyTile> x = new Pair<Point, PolyTile>(tmp, t);
-                    //System.out.println("aPoint: " + aPoint);
-                    //System.out.println("ptPoint: " + ptPoint);
-                    possibleAttach.add(x);
+
+        String glue1;
+        String glue2;
+        for (Point ptPoint : ptGlues.keySet()) {
+            for (Point aPoint : glues.keySet()) {
+                glue1 = ptGlues.get(ptPoint);
+                glue2 = glues.get(aPoint);
+                if (tileSystem.getStrength(glue1, glue2) >= tileSystem.getTemperature()) {
+                    Pair<Point, Point> locAndOffset = getOffset(aPoint, ptPoint, offsetX, offsetY);
+                    Pair<Pair<Point, Point>, PolyTile> x = new Pair<Pair<Point, Point>, PolyTile>(locAndOffset, pt);
+                    ArrayList attachment = new ArrayList();
+                    attachment.add(locAndOffset.getKey());
+                    attachment.add(locAndOffset.getValue());
+                    attachment.add(new Integer(direction));
+                    attachment.add(pt);
+                    possibleAttach.add(attachment);
                 }
             }
         }
     }
+
+    //Adds coordinate of placement of certain polytile to a grid location iff the polytile has a matching glue with assembly
+    private void checkMatchingGlues( PolyTile t ) {
+        fillPossibleList(t, NORTH);
+        fillPossibleList(t, EAST);
+        fillPossibleList(t, SOUTH);
+        fillPossibleList(t, WEST);
+        System.out.println(possibleAttach);
+    }
     // calculate frontier
 
     public List<Pair<Point, PolyTile>> calculateFrontier() {
-        List<Pair<Point, PolyTile>> toRemove = new ArrayList<Pair<Point, PolyTile>>();
+        ArrayList toRemove = new ArrayList();
         for(PolyTile t : tileSystem.getTileTypes()){
             checkMatchingGlues(t);
         }
-        for(Pair<Point, PolyTile> e : possibleAttach) {
-            if(checkStability(e.getValue(), (e.getKey()).x, (e.getKey()).y) &&
-                    geometryCheckSuccess(e.getValue(), (e.getKey()).x, (e.getKey()).y)) {
-                Pair<Point, PolyTile> candidate = new Pair<Point, PolyTile>(e.getKey(), e.getValue());
+        for(ArrayList e : possibleAttach) {
+            Point location = (Point) e.get(0);
+            Point offset = (Point) e.get(1);
+            int direction = ((Integer) e.get(2)).intValue();
+            PolyTile pt = (PolyTile) e.get(3);
+
+            if(checkStability(pt, offset.x, offset.y) &&
+                    geometryCheckSuccess(pt, offset.x, offset.y)) {
+                Pair<Point, PolyTile> candidate = new Pair<Point, PolyTile>(offset, pt);
                 if(!frontier.contains(candidate)){
                     frontier.add(candidate);
                 }
                 toRemove.add(e);
             }
         }
-        for(Pair<Point, PolyTile> e : toRemove){
+        for(Object e : toRemove){
             possibleAttach.remove(e);
         }
         return frontier;
@@ -226,11 +240,12 @@ public class Assembly {
     // add to frontier
 
     //Place "random" polytile from frontier
-    private void addFromFrontier(){
+    private double addFromFrontier(){
         Random rn = new Random();
         Pair<Point, PolyTile> x = frontier.get(rn.nextInt(frontier.size()));
         placePolytile(x.getValue(), x.getKey().x, x.getKey().y );
         frontier.remove(x);
+        return x.getValue().getConcentration();
     }
 
     private void cleanUp() {
@@ -243,10 +258,11 @@ public class Assembly {
     }
 
 
-    public void attach(){
-        addFromFrontier();
+    public double attach(){
+        double r = addFromFrontier();
         cleanUp();
         getOpenGlues();
+        return r;
     }
 
     public void placeSeed(PolyTile t){

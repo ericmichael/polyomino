@@ -7,6 +7,9 @@ import java.util.*;
 
 public class Main {
 
+    public static double calculateExpDistribution(Random r, double p) {
+        return -(Math.log(r.nextDouble()) / p);
+    }
     public static String[] blankGlues() {
         String label[] = new String[4];
         label[0] = null;
@@ -92,6 +95,7 @@ public class Main {
 
         tetris.setColor("AC193D");
 
+
         tetris.addTile(0, 0, blankGlues());
         tetris.addTile(0, 1, blankGlues());
         tetris.addTile(0, -1, blankGlues());
@@ -142,6 +146,8 @@ public class Main {
         TestCanvasFrame tcf = new TestCanvasFrame();
         tcf.setVisible(true);
         tcf.drawGrid(assembly.Grid);
+
+        double rate;
         while(!frontier.isEmpty()){
             System.out.println("Frontier: " + frontier + "\n");
 
@@ -154,8 +160,12 @@ public class Main {
             System.out.println(assembly);
 
             try{
-                Thread.sleep(2000);
                 assembly.attach();
+//                System.out.println(rate);
+//                int timestep=100;
+//                long wait = (long)(timestep * calculateExpDistribution(new Random(), rate));
+//                System.out.println(wait);
+                Thread.sleep(100);
                 tcf.drawGrid(assembly.Grid);
 
             }
