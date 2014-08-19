@@ -86,12 +86,15 @@ public class TestCanvas extends JPanel {
         {
             Point pt = mep.getKey();
             Tile ti = mep.getValue();
-            cg2d.setColor(Color.black);
-            cg2d.drawRect(pt.x*tileDiameter + center.width - tileDiameter/2 , -pt.y*tileDiameter + center.height - tileDiameter/2, tileDiameter,tileDiameter);
+
+            int colorInt = Integer.parseInt(ti.getColor(), 16);
+            cg2d.setColor(new Color(colorInt>>16,(colorInt&0x00FF00)>>8,colorInt & 0x0000FF));
+            
+            cg2d.fillRect(pt.x * tileDiameter + center.width - tileDiameter / 2, -pt.y * tileDiameter + center.height - tileDiameter / 2, tileDiameter, tileDiameter);
 
         }
 
-        repaint();
+       // repaint();
 
     }
 
