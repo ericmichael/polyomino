@@ -1,8 +1,5 @@
 package com.asarg.polysim;
 
-
-
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -10,9 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 
-/**
- * Created by Dom on 8/15/2014.
- */
 public class TestCanvasFrame extends JFrame {
 
     TestCanvas tc;
@@ -26,13 +20,12 @@ public class TestCanvasFrame extends JFrame {
             @Override
             public Dimension getPreferredSize()
             {
-
                 return new Dimension(1280,200);
             }
         };
       //  add(frontierCanvas, BorderLayout.NORTH);
         add(tc, BorderLayout.CENTER);
-      //  JButton stepForwards = new JButton("Step >");
+      // JButton stepForwards = new JButton("Step >");
       // add(stepForwards);
 
         ActionListener al = new ActionListener() {

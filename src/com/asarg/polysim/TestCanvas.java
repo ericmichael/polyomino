@@ -1,15 +1,11 @@
 package  com.asarg.polysim;
 
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
 
-/**
- * Created by Dom on 8/15/2014.
- */
 public class TestCanvas extends JPanel {
 
 
@@ -29,19 +25,7 @@ public class TestCanvas extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         g.drawImage(canvasBFI, 0, 0, null);
 
-
-
     }
- /*   public void drawTiles(Set<Point> tiles)
-    {
-        for(Point p : tiles)
-        {
-            cg2d.drawRect(p.x*tileDiameter + center.width - tileDiameter/2 , -p.y*tileDiameter + center.height - tileDiameter/2, tileDiameter,tileDiameter);
-        }
-        repaint();
-    }
-    */
-
 
     public void drawPolyTile(PolyTile pt)
     {
@@ -49,7 +33,7 @@ public class TestCanvas extends JPanel {
         cg2d.fillRect(0,0,canvasBFI.getWidth(), canvasBFI.getHeight());
         cg2d.setComposite(AlphaComposite.SrcOver);
         List<Tile> lt = pt.tiles;
-        if(lt.isEmpty())System.out.println("SDFSA");
+        if(lt.isEmpty())System.out.println("List empty in draw polytile");
         for(Tile t : lt)
         {
 
@@ -94,12 +78,9 @@ public class TestCanvas extends JPanel {
         repaint();
 
     }
-
     @Override
     public Dimension getPreferredSize()
     {
         return new Dimension(1280,800);
     }
-
-
 }
