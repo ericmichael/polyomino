@@ -39,7 +39,7 @@ public class Main {
         poly.addTile(0, 0, blank);
         poly.addTile(-1, 0, blank);
         poly.addTile(-1, 1, blank);
-        poly.addTile(-1, 2, blank);
+        poly.addTile(-1, 2, glue);
         poly.addTile(1, 0, blank);
 
         return poly;
@@ -48,12 +48,13 @@ public class Main {
     public static PolyTile tetrisX() {
         String blank[] = blankGlues();
         String glue[] = {null, null, "e", null};
+        String glue2[] = {null, null, null, "d"};
 
         PolyTile poly = new PolyTile("X");
         poly.addTile(0, 0, blankGlues());
         poly.addTile(-1, 0, blankGlues());
         poly.addTile(1, 0, blankGlues());
-        poly.addTile(0, 1, blankGlues());
+        poly.addTile(0, 1, glue2);
         poly.addTile(0, -1, glue);
 
         return poly;
