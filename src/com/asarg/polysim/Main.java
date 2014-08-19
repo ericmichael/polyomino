@@ -1,5 +1,10 @@
 package com.asarg.polysim;
 
+import javafx.util.Pair;
+
+import java.awt.*;
+import java.util.*;
+
 public class Main {
 
     public static String[] blankGlues() {
@@ -34,7 +39,7 @@ public class Main {
         poly.addTile(0, 0, blank);
         poly.addTile(-1, 0, blank);
         poly.addTile(-1, 1, blank);
-        poly.addTile(-1, 2, glue);
+        poly.addTile(-1, 2, blank);
         poly.addTile(1, 0, blank);
 
         return poly;
@@ -115,8 +120,17 @@ public class Main {
         assembly.placeSeed(tetrisI());
 
         for (int i =0; i < 1; i++){
-            // Dom stuff here:
-            assembly.attach();
+            java.util.List<Pair<Point, PolyTile>> frontier = assembly.calculateFrontier();
+
+            if(!frontier.isEmpty()){
+                //TODO: Dominic - Visualize frontier
+
+                assembly.attach();
+
+                //TODO: Dominic - Visualize attachment
+
+                System.out.println(assembly);
+            }
         }
     }
 }

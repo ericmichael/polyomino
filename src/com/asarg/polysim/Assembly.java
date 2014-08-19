@@ -48,16 +48,16 @@ public class Assembly {
         for (Map.Entry<Point, Tile> t : Grid.entrySet()) {
             String[] glueLabels = t.getValue().getGlueLabels();
             //Check if glues are open by checking if their corresponding adjacent point is open
-            if (!glueLabels[0].equals("") && Grid.get(new Point(t.getKey().x, t.getKey().y + 1)) == null) {
+            if (glueLabels[0] != null && Grid.get(new Point(t.getKey().x, t.getKey().y + 1)) == null) {
                 openNorthGlues.put(t.getKey(), glueLabels[0]);
             }
-            if (!glueLabels[1].equals("") && Grid.get(new Point(t.getKey().x + 1, t.getKey().y)) == null) {
+            if (glueLabels[1] != null && Grid.get(new Point(t.getKey().x + 1, t.getKey().y)) == null) {
                 openEastGlues.put(t.getKey(), glueLabels[1]);
             }
-            if (!glueLabels[2].equals("") && Grid.get(new Point(t.getKey().x, t.getKey().y - 1)) == null) {
+            if (glueLabels[2] !=null && Grid.get(new Point(t.getKey().x, t.getKey().y - 1)) == null) {
                 openSouthGlues.put(t.getKey(), glueLabels[2]);
             }
-            if (!glueLabels[3].equals("") && Grid.get(new Point(t.getKey().x - 1, t.getKey().y)) == null) {
+            if (glueLabels[3] !=null && Grid.get(new Point(t.getKey().x - 1, t.getKey().y)) == null) {
                 openWestGlues.put(t.getKey(), glueLabels[3]);
             }
         }
@@ -123,12 +123,16 @@ public class Assembly {
     }
     // calculate frontier
 
-    private void calculateFrontier() {
+    public List<Pair<Point, PolyTile>> calculateFrontier() {
+        for(PolyTile t : tileSystem.getTileTypes()){
+            checkMatchingGlues(t);
+        }
         for(Pair<Point, PolyTile> e : possibleAttach) {
             if(checkStability(e.getValue(), (e.getKey()).x, (e.getKey()).y) &&
                     geometryCheckSuccess(e.getValue(), (e.getKey()).x, (e.getKey()).y))
                 frontier.add(new Pair<Point, PolyTile>(e.getKey(), e.getValue()));
         }
+        return frontier;
     }
 
     private boolean checkStability(PolyTile p, int x, int y) {
@@ -137,32 +141,40 @@ public class Assembly {
         //Example: a tile's north glue needs to see the above tile's south glue
         for(Tile t : p.tiles) {
             String nPolytileGlue = t.getGlueN();
-            if(!nPolytileGlue.equals("")) {
-                Tile nAssemblyTile = Grid.get(new Point(x, y+1));
+            if(nPolytileGlue != null) {
+                Point pt = new Point(t.getLocation());
+                pt.translate(x, y+1);
+                Tile nAssemblyTile = Grid.get(pt);
                 if(nAssemblyTile != null)
                     totalStrength += tileSystem.getStrength(nPolytileGlue, nAssemblyTile.getGlueS());
 
             }
 
             String ePolytileGlue = t.getGlueE();
-            if(!ePolytileGlue.equals("")) {
-                Tile eAssemblyTile = Grid.get(new Point(x+1, y));
+            if(ePolytileGlue != null) {
+                Point pt = new Point(t.getLocation());
+                pt.translate(x+1, y);
+                Tile eAssemblyTile = Grid.get(pt);
                 if(eAssemblyTile != null)
                     totalStrength += tileSystem.getStrength(ePolytileGlue, eAssemblyTile.getGlueW());
 
             }
 
             String sPolytileGlue = t.getGlueS();
-            if(!sPolytileGlue.equals("")) {
-                Tile sAssemblyTile = Grid.get(new Point(x, y-1));
+            if(sPolytileGlue != null) {
+                Point pt = new Point(t.getLocation());
+                pt.translate(x, y-1);
+                Tile sAssemblyTile = Grid.get(pt);
                 if(sAssemblyTile != null)
                     totalStrength += tileSystem.getStrength(sPolytileGlue, sAssemblyTile.getGlueN());
 
             }
 
             String wPolytileGlue = t.getGlueW();
-            if(!wPolytileGlue.equals("")) {
-                Tile wAssemblyTile = Grid.get(new Point(x-1, y));
+            if(wPolytileGlue != null) {
+                Point pt = new Point(t.getLocation());
+                pt.translate(x-1, y);
+                Tile wAssemblyTile = Grid.get(pt);
                 if(wAssemblyTile != null)
                     totalStrength += tileSystem.getStrength(wPolytileGlue, wAssemblyTile.getGlueE());
 
@@ -194,11 +206,8 @@ public class Assembly {
         openWestGlues.clear();
     }
 
+
     public void attach(){
-        for(PolyTile t : tileSystem.getTileTypes()){
-            checkMatchingGlues(t);
-        }
-        calculateFrontier();
         addFromFrontier();
         cleanUp();
     }
@@ -208,6 +217,8 @@ public class Assembly {
             placePolytile(t, 0, 0);
         else
             System.out.println("Grid not empty");
+
+        getOpenGlues();
     }
 
     //Prints assembly as grid, with the number being the number of tiles in a spot
