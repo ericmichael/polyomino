@@ -55,16 +55,17 @@ public class Main {
 
     public static PolyTile tetrisX() {
         String blank[] = blankGlues();
-        String glue[] = {null, null, "e", null};
-        String glue2[] = {null, null, null, "d"};
+        String glue[] = {"x", "x", "e", "x"};
+        String glue2[] = {"x", "x", "x", "d"};
+        String allx[] = {"x","x","x","x"};
 
         PolyTile poly = new PolyTile("X");
 
         poly.setColor("8C0095");
 
-        poly.addTile(0, 0, blankGlues());
-        poly.addTile(-1, 0, blankGlues());
-        poly.addTile(1, 0, blankGlues());
+        poly.addTile(0, 0, allx);
+        poly.addTile(-1, 0, allx);
+        poly.addTile(1, 0, allx);
         poly.addTile(0, 1, glue2);
         poly.addTile(0, -1, glue);
 
@@ -137,6 +138,7 @@ public class Main {
         ts.addGlueFunction("d","d",2);
         ts.addGlueFunction("e","e",2);
         ts.addGlueFunction("f","f",2);
+        ts.addGlueFunction("x","x", 2);
 
         Assembly assembly = new Assembly(ts);
         assembly.placeSeed(tetrisF());
@@ -165,7 +167,7 @@ public class Main {
 //                int timestep=100;
 //                long wait = (long)(timestep * calculateExpDistribution(new Random(), rate));
 //                System.out.println(wait);
-                Thread.sleep(100);
+                Thread.sleep(10);
                 tcf.drawGrid(assembly.Grid);
 
             }
