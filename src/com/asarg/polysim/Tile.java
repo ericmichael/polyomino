@@ -18,6 +18,10 @@ public class Tile {
         polyTile = parent;
     }
 
+    public String getLabel(){
+        return polyTile.getPolyName();
+    }
+
     public void changeTileGlue(String[] gl){
         glueLabels = gl;
     }
