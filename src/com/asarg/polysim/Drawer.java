@@ -23,6 +23,7 @@ public class Drawer {
         int stringBoundHeight = (int) stringBounds.getHeight();
         final BufferedImage tBFI = new BufferedImage(stringBoundWidth, stringBoundHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D tGFX = tBFI.createGraphics();
+        tGFX.setFont(gContext.getFont());
         tGFX.setColor(Color.WHITE);
         tGFX.fillRect(0, 0, stringBoundWidth, stringBoundHeight);
         tGFX.setColor(Color.BLACK);
@@ -112,10 +113,10 @@ public class Drawer {
             String southGlue = tile.getGlueS();
             String westGLue = tile.getGlueW();
 
-            g.setFont(new Font("Courer", Font.BOLD, 30));
+            g.setFont(new Font("Courier", Font.BOLD, 40));
             Dimension labelBounds = getStringPixelDimension(g,tileLabel );
 
-            System.out.println(labelBounds + "              " + g.getFontMetrics().getStringBounds(tileLabel, g));
+            System.out.println("Label: " + tileLabel + " Dimensions: "  + labelBounds + "              " + g.getFontMetrics().getStringBounds(tileLabel, g));
 
             int colorInt = Integer.parseInt(tile.getColor(), 16);
             g.setColor(new Color(colorInt >> 16, (colorInt & 0x00FF00) >> 8, colorInt & 0x0000FF, 100));

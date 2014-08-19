@@ -146,7 +146,7 @@ public class Main {
 
         TestCanvasFrame tcf = new TestCanvasFrame(800,600);
         tcf.setVisible(true);
-      //  tcf.drawGrid(assembly.Grid);
+        tcf.drawGrid(assembly.Grid);
 
         double rate;
         while(!frontier.isEmpty()){
@@ -167,7 +167,7 @@ public class Main {
 //                long wait = (long)(timestep * calculateExpDistribution(new Random(), rate));
 //                System.out.println(wait);
                 Thread.sleep(100);
-           //     tcf.drawGrid(assembly.Grid);
+                tcf.drawGrid(assembly.Grid);
 
             }
             catch(Exception e)
@@ -181,8 +181,6 @@ public class Main {
 
 
         }
-        BufferedImage testBFI = new BufferedImage(300,100, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = testBFI.createGraphics();
-        System.out.println(Drawer.getStringPixelDimension(g2, "supman"));
+
     }
 }
