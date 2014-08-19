@@ -74,7 +74,7 @@ public class Main {
 
     public static PolyTile tetrisI() {
         String[] gtop = {null, "a", null, null};
-        String[] gbottom = {null, null, null, null};
+        String[] gbottom = {null, "b", null, null};
 
         PolyTile tetris = new PolyTile("I");
         tetris.addTile(0, 0, blankGlues());
@@ -119,18 +119,21 @@ public class Main {
         Assembly assembly = new Assembly(ts);
         assembly.placeSeed(tetrisI());
 
-        for (int i =0; i < 1; i++){
-            java.util.List<Pair<Point, PolyTile>> frontier = assembly.calculateFrontier();
+        java.util.List<Pair<Point, PolyTile>> frontier = assembly.calculateFrontier();
 
-            if(!frontier.isEmpty()){
-                //TODO: Dominic - Visualize frontier
 
-                assembly.attach();
+        while(!frontier.isEmpty()){
+            System.out.println("Frontier: " + frontier + "\n");
 
-                //TODO: Dominic - Visualize attachment
+            //TODO: Dominic - Visualize frontier
 
-                System.out.println(assembly);
-            }
+            assembly.attach();
+
+            //TODO: Dominic - Visualize attachment
+
+            System.out.println(assembly);
+
+            assembly.calculateFrontier();
         }
     }
 }

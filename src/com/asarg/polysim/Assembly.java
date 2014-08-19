@@ -65,7 +65,9 @@ public class Assembly {
 
     private void placePolytile(PolyTile p, int x, int y) {
         for(Tile t : p.tiles) {
-            Grid.put(new Point(x+t.getLocation().x,  y+t.getLocation().y), t);
+            Point tmp = new Point(t.getLocation());
+            tmp.translate(x, y);
+            Grid.put(tmp, t);
         }
     }
 
@@ -83,9 +85,15 @@ public class Assembly {
         for (Point ptPoint : t.southGlues.keySet()) {
             for (Point aPoint : openNorthGlues.keySet()) {
                 if (t.southGlues.get(ptPoint).equals(openNorthGlues.get(aPoint))){
-                    Point tmp = new Point();
-                    tmp.setLocation(aPoint.getX() - ptPoint.getX(), aPoint.getY() + 1 - ptPoint.getY());
+                    Point tmp = new Point(aPoint);
+                    tmp.translate(0,1);
+                    //System.out.println("placePoint: " + tmp);
+                    int xOffset = (int)(tmp.getX() - ptPoint.getX());
+                    int yOffset = (int)(tmp.getY() - ptPoint.getY());
+                    tmp.setLocation(xOffset, yOffset);
                     Pair<Point, PolyTile> x = new Pair<Point, PolyTile>(tmp, t);
+                    //System.out.println("aPoint: " + aPoint);
+                    //System.out.println("ptPoint: " + ptPoint);
                     possibleAttach.add(x);
                 }
             }
@@ -93,9 +101,15 @@ public class Assembly {
         for (Point ptPoint : t.westGlues.keySet()) {
             for (Point aPoint : openEastGlues.keySet()) {
                 if (t.westGlues.get(ptPoint).equals(openEastGlues.get(aPoint))){
-                    Point tmp = new Point();
-                    tmp.setLocation(aPoint.getX() + 1 - ptPoint.getX(), aPoint.getY() - ptPoint.getY());
+                    Point tmp = new Point(aPoint);
+                    tmp.translate(1,0);
+                    //System.out.println("placePoint: " + tmp);
+                    int xOffset = (int)(tmp.getX() - ptPoint.getX());
+                    int yOffset = (int)(tmp.getY() - ptPoint.getY());
+                    tmp.setLocation(xOffset, yOffset);
                     Pair<Point, PolyTile> x = new Pair<Point, PolyTile>(tmp, t);
+                    //System.out.println("aPoint: " + aPoint);
+                    //System.out.println("ptPoint: " + ptPoint);
                     possibleAttach.add(x);
                 }
             }
@@ -103,9 +117,15 @@ public class Assembly {
         for (Point ptPoint : t.northGlues.keySet()) {
             for (Point aPoint : openSouthGlues.keySet()) {
                 if (t.northGlues.get(ptPoint).equals(openSouthGlues.get(aPoint))){
-                    Point tmp = new Point();
-                    tmp.setLocation(aPoint.getX() - ptPoint.getX(), aPoint.getY() - 1 - ptPoint.getY());
+                    Point tmp = new Point(aPoint);
+                    tmp.translate(0,-1);
+                    //System.out.println("placePoint: " + tmp);
+                    int xOffset = (int)(tmp.getX() - ptPoint.getX());
+                    int yOffset = (int)(tmp.getY() - ptPoint.getY());
+                    tmp.setLocation(xOffset, yOffset);
                     Pair<Point, PolyTile> x = new Pair<Point, PolyTile>(tmp, t);
+                    //System.out.println("aPoint: " + aPoint);
+                    //System.out.println("ptPoint: " + ptPoint);
                     possibleAttach.add(x);
                 }
             }
@@ -113,9 +133,15 @@ public class Assembly {
         for (Point ptPoint : t.eastGlues.keySet()) {
             for (Point aPoint : openWestGlues.keySet()) {
                 if (t.eastGlues.get(ptPoint).equals(openWestGlues.get(aPoint))){
-                    Point tmp = new Point();
-                    tmp.setLocation(aPoint.getX() - 1 - ptPoint.getX(), aPoint.getY() - ptPoint.getY());
+                    Point tmp = new Point(aPoint);
+                    tmp.translate(-1,0);
+                    //System.out.println("placePoint: " + tmp);
+                    int xOffset = (int)(tmp.getX() - ptPoint.getX());
+                    int yOffset = (int)(tmp.getY() - ptPoint.getY());
+                    tmp.setLocation(xOffset, yOffset);
                     Pair<Point, PolyTile> x = new Pair<Point, PolyTile>(tmp, t);
+                    //System.out.println("aPoint: " + aPoint);
+                    //System.out.println("ptPoint: " + ptPoint);
                     possibleAttach.add(x);
                 }
             }
@@ -124,13 +150,22 @@ public class Assembly {
     // calculate frontier
 
     public List<Pair<Point, PolyTile>> calculateFrontier() {
+        List<Pair<Point, PolyTile>> toRemove = new ArrayList<Pair<Point, PolyTile>>();
         for(PolyTile t : tileSystem.getTileTypes()){
             checkMatchingGlues(t);
         }
         for(Pair<Point, PolyTile> e : possibleAttach) {
             if(checkStability(e.getValue(), (e.getKey()).x, (e.getKey()).y) &&
-                    geometryCheckSuccess(e.getValue(), (e.getKey()).x, (e.getKey()).y))
-                frontier.add(new Pair<Point, PolyTile>(e.getKey(), e.getValue()));
+                    geometryCheckSuccess(e.getValue(), (e.getKey()).x, (e.getKey()).y)) {
+                Pair<Point, PolyTile> candidate = new Pair<Point, PolyTile>(e.getKey(), e.getValue());
+                if(!frontier.contains(candidate)){
+                    frontier.add(candidate);
+                }
+                toRemove.add(e);
+            }
+        }
+        for(Pair<Point, PolyTile> e : toRemove){
+            possibleAttach.remove(e);
         }
         return frontier;
     }
@@ -195,10 +230,11 @@ public class Assembly {
         Random rn = new Random();
         Pair<Point, PolyTile> x = frontier.get(rn.nextInt(frontier.size()));
         placePolytile(x.getValue(), x.getKey().x, x.getKey().y );
+        frontier.remove(x);
     }
 
     private void cleanUp() {
-        frontier.clear();
+        //frontier.clear();
         possibleAttach.clear();
         openNorthGlues.clear();
         openEastGlues.clear();
@@ -210,6 +246,7 @@ public class Assembly {
     public void attach(){
         addFromFrontier();
         cleanUp();
+        getOpenGlues();
     }
 
     public void placeSeed(PolyTile t){
@@ -221,19 +258,26 @@ public class Assembly {
         getOpenGlues();
     }
 
+    public Set<Point> pointsInGrid(){
+        return Grid.keySet();
+    }
+
     //Prints assembly as grid, with the number being the number of tiles in a spot
     //For debugging purposes
     @Override
     public String toString() {
         int minimumX, maximumX, minimumY, maximumY;
         Point[] tiles = Grid.keySet().toArray(new Point[Grid.keySet().size()]);
-        minimumX = tiles[0].x;
-        maximumX = tiles[0].x;
-        minimumY = tiles[0].y;
-        maximumY = tiles[0].y;
+        Point[] tiles2 = new Point[Grid.keySet().size()];
+        for(int i = 0; i<tiles.length; i++)
+            tiles2[i] = new Point(tiles[i]);
+        minimumX = tiles2[0].x;
+        maximumX = tiles2[0].x;
+        minimumY = tiles2[0].y;
+        maximumY = tiles2[0].y;
 
         //Find minimum and maximum of assembly coordinates
-        for(Point p : tiles) {
+        for(Point p : tiles2) {
             if(p.x < minimumX)
                 minimumX = p.x;
             else if(p.x > maximumX)
@@ -246,15 +290,15 @@ public class Assembly {
         }
 
         //Shift everything to 0,0 as bottom left
-        for(int i = 0; i < tiles.length; i++) {
-            tiles[i].x += (-1)*minimumX;
-            tiles[i].y += (-1)*minimumY;
+        for(int i = 0; i < tiles2.length; i++) {
+            tiles2[i].x += (-1)*minimumX;
+            tiles2[i].y += (-1)*minimumY;
         }
         maximumX += (-1)*minimumX;
         maximumY += (-1)*minimumY;
 
         int[][] assemblyMatrix = new int[maximumY + 1][maximumX + 1];
-        for(Point p : tiles) {
+        for(Point p : tiles2) {
             assemblyMatrix[maximumY - p.y][p.x]++;
         }
 
