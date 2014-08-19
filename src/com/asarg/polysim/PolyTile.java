@@ -4,13 +4,18 @@ package com.asarg.polysim;
     TODO: Check connected tiles in the polytile and change their strength to infinite
 */
 
+import javax.xml.bind.annotation.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
+@XmlRootElement
+@XmlType(propOrder = {"polyName", "color", "tiles", "concentration", "count"})
 public class PolyTile {
     // tiles that make up the shape of the polytile.
+    @XmlElement(name = "Tile")
     List<Tile> tiles = new ArrayList<Tile>();
     // polytiles have a concentration or a count.
     private double concentration;
@@ -24,9 +29,13 @@ public class PolyTile {
 
     private String color;
 
+    @XmlTransient
     public HashMap<Point, String> northGlues = new HashMap<Point, String>();
+    @XmlTransient
     public HashMap<Point, String> eastGlues = new HashMap<Point, String>();
+    @XmlTransient
     public HashMap<Point, String> southGlues = new HashMap<Point, String>();
+    @XmlTransient
     public HashMap<Point, String> westGlues = new HashMap<Point, String>();
 
     public PolyTile() {
@@ -51,6 +60,7 @@ public class PolyTile {
         this.color = color;
     }
 
+    @XmlAttribute(name = "Color")
     public String getColor(){
         return color;
     }
@@ -87,8 +97,11 @@ public class PolyTile {
         }
         return null;
     }
+    @XmlElement(name = "Concentration")
     public double getConcentration(){return concentration;}
+    @XmlElement(name = "Count")
     public int getCount(){return count;}
+    @XmlAttribute(name = "Label")
     public String getPolyName(){return polyName;}
 
 

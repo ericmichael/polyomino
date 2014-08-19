@@ -2,7 +2,14 @@ package com.asarg.polysim;
 
 import javafx.util.Pair;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import java.awt.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 public class Main {
@@ -116,8 +123,8 @@ public class Main {
     }
 
 
-    public static void main(String args[]) {
-
+    public static void main(String args[]) throws JAXBException, IOException {
+/*
         TileSystem ts = new TileSystem(2);
 
         ts.addPolyTile(tetrisF());
@@ -133,6 +140,14 @@ public class Main {
         ts.addGlueFunction("d","d",2);
         ts.addGlueFunction("e","e",2);
         ts.addGlueFunction("f","f",2);
+*/
+        JAXBContext context = JAXBContext.newInstance(TileSystem.class);
+        Marshaller m = context.createMarshaller();
+        Unmarshaller um = context.createUnmarshaller();
+        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        TileSystem ts = (TileSystem) um.unmarshal(new FileReader("example01.xml"));
+
+        //m.marshal(ts, new File("./tilesystem.xml"));
 
         Assembly assembly = new Assembly(ts);
         assembly.placeSeed(tetrisF());
