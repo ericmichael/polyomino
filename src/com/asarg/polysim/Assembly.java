@@ -12,7 +12,7 @@ public class Assembly {
     // tile system, it can be changed so it needs its own class
     private TileSystem tileSystem;
     // placeholder for the grid
-    private HashMap<Point, Tile> Grid = new HashMap<Point, Tile>();
+    public HashMap<Point, Tile> Grid = new HashMap<Point, Tile>();
     // frontier list: calculated, increased, decreased, and changed here.
     private List<Pair<Point, PolyTile>> frontier = new ArrayList<Pair<Point, PolyTile>>();
 
@@ -234,7 +234,7 @@ public class Assembly {
     }
 
     private void cleanUp() {
-        //frontier.clear();
+        frontier.clear();
         possibleAttach.clear();
         openNorthGlues.clear();
         openEastGlues.clear();
