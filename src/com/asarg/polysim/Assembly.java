@@ -265,6 +265,35 @@ public class Assembly {
         return r;
     }
 
+    //Add "random" polytile from frontier based on Polytile's concentrations
+    public void weightedAddFromFrontier(){
+        //generate cumulative density list
+        ArrayList<Double> cdList = new ArrayList();
+        double totalConcentration = 0.0;
+        for(Pair<Point, PolyTile> p : frontier) {
+            PolyTile pt = p.getValue();
+            totalConcentration += pt.getConcentration();
+            cdList.add(totalConcentration);
+        }
+        Random rn = new Random();
+        double x = rn.nextDouble() * totalConcentration;
+        //Binary search for random number in cdList
+        int index = weightedAddBinarySearchHelper(cdList, x, cdList.size()/2);
+        Pair<Point, PolyTile> pt = frontier.get(index);
+        placePolytile(pt.getValue(), pt.getKey().x, pt.getKey().y );
+        frontier.remove(x);
+    }
+
+    private int weightedAddBinarySearchHelper(ArrayList<Double> cdList, double x, int mid){
+        if(cdList.get(mid-1) <= x && cdList.get(mid) > x)
+            return mid;
+        else if(cdList.get(mid) > x)
+            mid = mid/2;
+        else if(cdList.get(mid) < x)
+            mid = (cdList.size()+mid)/2;
+        return weightedAddBinarySearchHelper(cdList, x, mid);
+    }
+
     public void placeSeed(PolyTile t){
         if(Grid.size() == 0)
             placePolytile(t, 0, 0);

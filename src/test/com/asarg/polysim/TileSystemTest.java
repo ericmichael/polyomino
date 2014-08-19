@@ -1,26 +1,23 @@
 package test.com.asarg.polysim; 
 
-import org.junit.Test; 
+import com.asarg.polysim.PolyTile;
+import org.junit.Test;
 import org.junit.Before; 
 import org.junit.After;
 import static org.junit.Assert.*;
 import com.asarg.polysim.TileSystem;
+import java.util.Set;
+import java.util.HashSet;
 
-/** 
-* TileSystem Tester. 
-* 
-* @author <Authors name> 
-* @since <pre>Aug 18, 2014</pre> 
-* @version 1.0 
-*/ 
 public class TileSystemTest {
     private TileSystem ts;
     private int temperature;
 
 @Before
 public void before() throws Exception {
-    this.ts = new TileSystem(this.temperature);
-    this.ts.addGlueFunction("a","a", 2);
+    ts = new TileSystem(temperature);
+    ts.addGlueFunction("a","a", 2);
+    ts.addGlueFunction("t","e", 10);
 } 
 
 @After
@@ -34,11 +31,24 @@ public void after() throws Exception {
 */ 
 @Test
 public void testAddGlueFunction() throws Exception {
-    this.ts.addGlueFunction("b","b", 2);
-    assertEquals("Strength of b-b glue should be " + 2, 2, this.ts.getStrength("b", "b"));
+    ts.addGlueFunction("b", "b", 2);
+    assertEquals("Strength of b-b glue should be " + 2, 2, ts.getStrength("b", "b"));
 
-    this.ts.addGlueFunction("a","a", 5);
-    assertEquals("Strength of a-a glue should be " + 5, 5, this.ts.getStrength("a", "a"));
+    ts.addGlueFunction("a","a", 5);
+    assertEquals("Strength of a-a glue should be " + 5, 5, ts.getStrength("a", "a"));
+
+    // a-a is now 5.
+    assertNotEquals("Adding the same labels with different strength should overwrite it", 2, ts.getStrength("a", "a"));
+
+    ts.addGlueFunction("a","b",2);
+    assertEquals("Labels need not be equal to have >0 strength. ", 2, ts.getStrength("a", "b"));
+    assertEquals("Label order should not matter", 2, ts.getStrength("b","a"));
+
+    ts.addGlueFunction("b","a", 5);
+    assertEquals("Label order does not matter, same labels should be overwritten", 5, ts.getStrength("b","a"));
+    assertEquals("Label order does not matter, same labels should be overwritten", 5, ts.getStrength("a", "b"));
+    assertNotEquals("Label order does not matter, same labels should be overwritten", 2, ts.getStrength("a","b"));
+
 } 
 
 /** 
@@ -48,9 +58,10 @@ public void testAddGlueFunction() throws Exception {
 */ 
 @Test
 public void testRemoveGlueFunction() throws Exception { 
-    this.ts.removeGlueFunction("a", "a");
+    ts.removeGlueFunction("a", "a");
 
-    assertEquals("Strength should be 0 after removal", 0, this.ts.getStrength("a", "a"));
+    assertEquals("Strength should be 0 after removal", 0, ts.getStrength("a", "a"));
+    assertNotNull("Strength is 0, never null", ts.getStrength("a","a"));
 }
 
 /** 
@@ -60,7 +71,12 @@ public void testRemoveGlueFunction() throws Exception {
 */ 
 @Test
 public void testGetStrength() throws Exception { 
-    assertEquals("Strength should be 2", 2, this.ts.getStrength("a","a"));
+    assertEquals("Strength should be 2", 2, ts.getStrength("a","a"));
+    assertEquals("Strength returned should match what's given", 10, ts.getStrength("t","e"));
+
+    assertNotNull("Strength of nonexistent glues should not be null", ts.getStrength("fake","fake"));
+
+    assertEquals("Strength of nonexistent glues is 0",0,ts.getStrength("fake","fake"));
 } 
 
 /** 
@@ -70,7 +86,17 @@ public void testGetStrength() throws Exception {
 */ 
 @Test
 public void testAddPolyTile() throws Exception { 
-//TODO: Test goes here... 
+//TODO: Test goes here...
+    PolyTile p = new PolyTile();
+    String[] emptyGlues = {null, null, null, null};
+    p.addTile(0,0, emptyGlues);
+    ts.addPolyTile(p);
+
+    Set<PolyTile> testPolyTileList = ts.getTileTypes();
+    assertTrue("Polytile list should contain the added polytile",testPolyTileList.contains(p));
+    //TODO: figure out if we want to return a reference to the object or a deep copy of the object (tile type list)
+    assertSame("Polytile list is the same object as the one returned.", testPolyTileList, ts.getTileTypes());
+
 } 
 
 /** 
@@ -80,7 +106,7 @@ public void testAddPolyTile() throws Exception {
 */ 
 @Test
 public void testGetTemperature() throws Exception { 
-    assertEquals("Temperature should equal " + this.temperature, this.temperature, this.ts.getTemperature());
+    assertEquals("Temperature should equal " + temperature, temperature, ts.getTemperature());
 } 
 
 /** 
@@ -90,8 +116,8 @@ public void testGetTemperature() throws Exception {
 */ 
 @Test
 public void testSetTemperature() throws Exception {
-    this.ts.setTemperature(5);
-    assertEquals("Temperature after setting should equal " + 5, 5, this.ts.getTemperature());
+    ts.setTemperature(5);
+    assertEquals("Temperature after setting should equal " + 5, 5, ts.getTemperature());
 }
 
 /** 
@@ -101,8 +127,8 @@ public void testSetTemperature() throws Exception {
 */ 
 @Test
 public void testGetTileTypes() throws Exception { 
-//TODO: Test goes here... 
-} 
-
+//TODO: Test goes here...
+    assertNotNull("function should not return null", ts.getTileTypes());
+}
 
 } 
