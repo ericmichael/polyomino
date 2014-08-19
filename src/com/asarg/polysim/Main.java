@@ -117,21 +117,35 @@ public class Main {
         ts.addGlueFunction("f","f",2);
 
         Assembly assembly = new Assembly(ts);
-        assembly.placeSeed(tetrisI());
+        assembly.placeSeed(tetrisF());
 
         java.util.List<Pair<Point, PolyTile>> frontier = assembly.calculateFrontier();
 
-
+        TestCanvasFrame tcf = new TestCanvasFrame();
+        tcf.setVisible(true);
+        tcf.drawGrid(assembly.Grid);
         while(!frontier.isEmpty()){
             System.out.println("Frontier: " + frontier + "\n");
 
             //TODO: Dominic - Visualize frontier
 
-            assembly.attach();
+
 
             //TODO: Dominic - Visualize attachment
 
             System.out.println(assembly);
+
+            try{
+                Thread.sleep(2000);
+                assembly.attach();
+                tcf.drawGrid(assembly.Grid);
+
+            }
+            catch(Exception e)
+            {
+
+
+            }
 
             assembly.calculateFrontier();
         }
