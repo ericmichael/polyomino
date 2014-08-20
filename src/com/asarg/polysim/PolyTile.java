@@ -40,20 +40,28 @@ public class PolyTile {
 
     public PolyTile() {
         System.out.println("polytile with no name and infinite counts");
+        setColor("FFFFF");
     }
     public PolyTile(String n) {
         polyName = n;
         System.out.println("polytile "+polyName+" with infinite counts");
+        setColor("FFFFF");
     }
     public PolyTile(String n, double conc){
         polyName = n;
         concentration = conc;
         System.out.println("polytile "+polyName+" created");
+        setColor("FFFFF");
     }
     public PolyTile(String n, int c){
         polyName = n;
         count = c;
         System.out.println("polytile "+polyName+" created");
+        setColor("FFFFF");
+    }
+
+    public List<Tile> getTiles(){
+        return tiles;
     }
 
     public void setColor(String color){
@@ -142,20 +150,30 @@ public class PolyTile {
         }
     }
 
-    public boolean isEqual(PolyTile toCompare){
-        // check if the polytile data is the same
-        if (concentration != toCompare.getConcentration())
-            return false;
-        if (!polyName.equals(toCompare.getPolyName()))
-            return false;
-        if (count != toCompare.getCount())
-            return false;
+    public boolean equals(PolyTile toCompare){
+        // check if the simple polytile data is the same
+        if (polyName != null && toCompare.getPolyName() != null) {
+            if (concentration != toCompare.getConcentration())
+                return false;
+            if (!polyName.equals(toCompare.getPolyName()))
+                return false;
+            if (count != toCompare.getCount())
+                return false;
+        }
 
         // check if all tiles in the polytile are equal, by looking through their coordinates
         for (Tile t : tiles){
             Point tLoc = t.getLocation();
             Tile t2 = toCompare.getTile((int)tLoc.getX(), (int)tLoc.getY());
-            if (!t.isEqual(t2))
+            if (!t.equals(t2))
+                return false;
+        }
+
+        // the coordinates of both polytiles need to be checked: do the same for the points in the other polytile
+        for (Tile t : toCompare.tiles){
+            Point tLoc = t.getLocation();
+            Tile t2 = this.getTile((int)tLoc.getX(), (int)tLoc.getY());
+            if (!t.equals(t2))
                 return false;
         }
         return true;

@@ -18,9 +18,23 @@ public class TestCanvas extends JPanel {
     BufferedImage canvasBFI;
     Graphics2D cg2d;
     Dimension res = new Dimension();
+    private int w;
+    private int h;
 
     TestCanvas(int w, int h)
     {
+        center = new Point(w/2, h/2);
+        canvasBFI = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        cg2d = canvasBFI.createGraphics();
+        cg2d.setComposite(  AlphaComposite.Src);
+        cg2d.setColor(Color.black);
+        res.setSize(w,h);
+        cg2d.setClip(0,0,w,h);
+        this.w = w;
+        this.h = h;
+    }
+
+    public void reset(){
         center = new Point(w/2, h/2);
         canvasBFI = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         cg2d = canvasBFI.createGraphics();
