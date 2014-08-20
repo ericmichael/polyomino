@@ -269,6 +269,9 @@ public class Assembly {
         openWestGlues.clear();
     }
 
+    private void negGlueDetach(){
+
+    }
 
     public double attach(){
         if(tileSystem.getWeightOption() == 1)
