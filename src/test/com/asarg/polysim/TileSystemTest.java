@@ -19,7 +19,7 @@ public void before() throws Exception {
     ts = new TileSystem(temperature);
     ts.addGlueFunction("a","a", 2);
     ts.addGlueFunction("t","e", 10);
-} 
+}
 
 @After
 public void after() throws Exception { 
