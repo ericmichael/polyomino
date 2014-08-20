@@ -1,9 +1,5 @@
 package com.asarg.polysim;
 
-import javafx.util.Pair;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class Main {
@@ -142,45 +138,7 @@ public class Main {
         Assembly assembly = new Assembly(ts);
         assembly.placeSeed(tetrisF());
 
-        java.util.List<Pair<Point, PolyTile>> frontier = assembly.calculateFrontier();
-
-        TestCanvasFrame tcf = new TestCanvasFrame(800,600);
-        tcf.setVisible(true);
-        tcf.drawGrid(assembly.Grid);
-
-        double rate;
-        while(!frontier.isEmpty()){
-           // System.out.println("Frontier: " + frontier + "\n");
-
-            //TODO: Dominic - Visualize frontier
-
-
-
-            //TODO: Dominic - Visualize attachment
-
-            //System.out.println(assembly);
-
-            try{
-                assembly.attach();
-//                System.out.println(rate);
-//                int timestep=100;
-//                long wait = (long)(timestep * calculateExpDistribution(new Random(), rate));
-//                System.out.println(wait);
-                Thread.sleep(100);
-                tcf.drawGrid(assembly.Grid);
-
-            }
-            catch(Exception e)
-            {
-
-
-            }
-
-            assembly.calculateFrontier();
-
-
-
-        }
+        TestCanvasFrame tcf = new TestCanvasFrame(800,600,assembly);
 
     }
 }
