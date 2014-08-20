@@ -1,10 +1,12 @@
 package com.asarg.polysim;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Map;
 import java.util.Set;
+
 
 public class Drawer {
 
@@ -43,7 +45,6 @@ public class Drawer {
                 if (tBFI.getRGB(i, j) == Color.BLACK.getRGB()) {
 
                     minX = i;
-                    System.out.println(i + "minX");
                     break outerXLoop1;
                 }
 
@@ -58,7 +59,6 @@ public class Drawer {
                 if (tBFI.getRGB(i, j)== Color.BLACK.getRGB()) {
 
                     maxX = i;
-                    System.out.println(i + "maxX");
                     break outerXLoop2;
                 }
 
@@ -74,7 +74,6 @@ public class Drawer {
                  {
 
                      minY = i;
-                     System.out.println(i + "minY");
                      break outerYLoop1;
                  }
              }
@@ -90,7 +89,6 @@ public class Drawer {
                 {
 
                     maxY = i;
-                    System.out.println(i + "maxY");
                     break outerYLoop2;
                 }
             }
@@ -106,6 +104,7 @@ public class Drawer {
         public static void drawTile(Graphics2D g, Tile tile, int x, int y, int diameter) {
 
 
+            AffineTransform gOriginalATransform = g.getTransform();
 
             String tileLabel = tile.getLabel();
             String northGlue = tile.getGlueN();
@@ -113,7 +112,7 @@ public class Drawer {
             String southGlue = tile.getGlueS();
             String westGLue = tile.getGlueW();
 
-            g.setFont(new Font("Courier", Font.BOLD, 20));
+            g.setFont(new Font("Courier", Font.BOLD, 13));
             Dimension labelBounds = getStringPixelDimension(g,tileLabel );
             Rectangle2D stringBounds = g.getFontMetrics().getStringBounds(tileLabel, g);
 
@@ -123,9 +122,15 @@ public class Drawer {
 
             System.out.println("Label: " + tileLabel + " Dimensions: "  + labelBounds + "              " + g.getFontMetrics().getStringBounds(tileLabel, g));
 
+
+            //get hex color string to int, then create new color out of the rgb
             int colorInt = Integer.parseInt(tile.getColor(), 16);
             g.setColor(new Color(colorInt >> 16, (colorInt & 0x00FF00) >> 8, colorInt & 0x0000FF, 100));
+
+            // the tiles fill color
             g.fillRect(x, y, diameter, diameter);
+
+            //now a black border with thickness based on diameter
             g.setColor(Color.black);
             g.setStroke(new BasicStroke(diameter / 20));
             g.drawRect(x, y, diameter, diameter);
@@ -135,11 +140,23 @@ public class Drawer {
 
             //glue drawing
             if (northGlue != null && northGlue.isEmpty()) {
+                g.setFont(new Font("Courier", Font.BOLD, 10));
+                Dimension northGluePixelDim = getStringPixelDimension(g,northGlue);
+
 
             }
 
 
+
+
+
         }
+      /*  public String getGlueLabelString(String gluelabel)
+        {
+            String vert = new String();
+            char[] chars = new char[gluelabel.length()];
+            gluelabel.getChars(0,gluelabel.length(), chars, );
+        }*/
 
         public static void drawTiles(Graphics2D g, Set<Map.Entry<Point, Tile>> tiles, int diameter, Point offset) {
 
