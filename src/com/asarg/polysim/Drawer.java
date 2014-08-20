@@ -113,8 +113,13 @@ public class Drawer {
             String southGlue = tile.getGlueS();
             String westGLue = tile.getGlueW();
 
-            g.setFont(new Font("Courier", Font.BOLD, 40));
+            g.setFont(new Font("Courier", Font.BOLD, 20));
             Dimension labelBounds = getStringPixelDimension(g,tileLabel );
+            Rectangle2D stringBounds = g.getFontMetrics().getStringBounds(tileLabel, g);
+
+            // consider the blank space between the render lines and the start of the first baseline pixel of the string
+            int labelXShift =(int) Math.ceil(((int)Math.ceil(stringBounds.getWidth()) - labelBounds.width) /2);
+
 
             System.out.println("Label: " + tileLabel + " Dimensions: "  + labelBounds + "              " + g.getFontMetrics().getStringBounds(tileLabel, g));
 
@@ -126,7 +131,7 @@ public class Drawer {
             g.drawRect(x, y, diameter, diameter);
 
             //draw tile label
-            g.drawString(tileLabel, x + (diameter / 2) - (labelBounds.width/ 2), y + (diameter / 2) + (labelBounds.height / 2));
+            g.drawString(tileLabel, x + (diameter / 2) - (labelBounds.width/ 2) - labelXShift, y + (diameter / 2) + (labelBounds.height / 2) );
 
             //glue drawing
             if (northGlue != null && northGlue.isEmpty()) {
