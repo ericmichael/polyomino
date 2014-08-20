@@ -107,14 +107,14 @@ public class Drawer {
 
             AffineTransform gOriginalATransform = g.getTransform();
 
-            String tileLabel = "x121x1";
+            String tileLabel = tile.getLabel();
             String northGlue = tile.getGlueN();
             String eastGlue = tile.getGlueE();
             String southGlue = tile.getGlueS();
             String westGLue = tile.getGlueW();
 
 
-            g.setFont(g.getFont().deriveFont((float)(diameter/6)));
+            g.setFont(g.getFont().deriveFont((float)(diameter/5)));
             Dimension labelBounds = getStringPixelDimension(g,tileLabel );
 
 
