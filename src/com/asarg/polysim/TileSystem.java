@@ -21,7 +21,7 @@ public class TileSystem {
     // total count of all tiles in tile system; used for count-based attachment
     private int totalCount = 0;
 
-    public TileSystem(int temp){ temperature = temp; }
+    public TileSystem(int temp){ temperature = temp; weightOption = 0; }
 
     public TileSystem(int temp, int wO){ temperature = temp; weightOption = wO; }
 
