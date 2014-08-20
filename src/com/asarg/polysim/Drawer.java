@@ -15,8 +15,9 @@ public class Drawer {
     public static void clearGraphics(Graphics2D g) {
         Rectangle bounds = g.getClipBounds();
         g.setComposite(AlphaComposite.Clear);
-        g.drawRect(0, 0, bounds.width, bounds.height);
+        g.fillRect(0, 0, bounds.width, bounds.height);
         g.setComposite(AlphaComposite.Src);
+
     }
 
     public static Dimension getStringPixelDimension(Graphics2D gContext, String string) {
@@ -106,21 +107,22 @@ public class Drawer {
 
             AffineTransform gOriginalATransform = g.getTransform();
 
-            String tileLabel = tile.getLabel();
+            String tileLabel = "x121x1";
             String northGlue = tile.getGlueN();
             String eastGlue = tile.getGlueE();
             String southGlue = tile.getGlueS();
             String westGLue = tile.getGlueW();
 
-            g.setFont(new Font("Courier", Font.BOLD, 13));
+
+            g.setFont(g.getFont().deriveFont((float)(diameter/6)));
             Dimension labelBounds = getStringPixelDimension(g,tileLabel );
+
+
             Rectangle2D stringBounds = g.getFontMetrics().getStringBounds(tileLabel, g);
 
             // consider the blank space between the render lines and the start of the first baseline pixel of the string
             int labelXShift =(int) Math.ceil(((int)Math.ceil(stringBounds.getWidth()) - labelBounds.width) /2);
 
-
-            System.out.println("Label: " + tileLabel + " Dimensions: "  + labelBounds + "              " + g.getFontMetrics().getStringBounds(tileLabel, g));
 
 
             //get hex color string to int, then create new color out of the rgb
@@ -151,14 +153,11 @@ public class Drawer {
 
 
         }
-      /*  public String getGlueLabelString(String gluelabel)
-        {
-            String vert = new String();
-            char[] chars = new char[gluelabel.length()];
-            gluelabel.getChars(0,gluelabel.length(), chars, );
-        }*/
+
 
         public static void drawTiles(Graphics2D g, Set<Map.Entry<Point, Tile>> tiles, int diameter, Point offset) {
+
+
 
             for (Map.Entry<Point, Tile> mep : tiles) {
                 Point pt = mep.getKey();
