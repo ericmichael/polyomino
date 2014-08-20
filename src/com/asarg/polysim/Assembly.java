@@ -20,6 +20,8 @@ public class Assembly {
     public HashMap<Point, Tile> Grid = new HashMap<Point, Tile>();
     // frontier list: calculated, increased, decreased, and changed here.
     private List<Pair<Point, PolyTile>> frontier = new ArrayList<Pair<Point, PolyTile>>();
+    private List<Pair<Point, PolyTile>> attached = new ArrayList<Pair<Point, PolyTile>>();
+
 
     //Open glue ends stored by their coordinate
     HashMap<Point, String> openNorthGlues = new HashMap<Point, String>();
@@ -73,6 +75,17 @@ public class Assembly {
             Point tmp = new Point(t.getLocation());
             tmp.translate(x, y);
             Grid.put(tmp, t);
+        }
+    }
+
+    private void removePolytile(PolyTile p, int x, int y) {
+        for(Tile t : p.tiles) {
+            Point tmp = new Point(t.getLocation());
+            tmp.translate(x, y);
+            Tile existing = Grid.get(tmp);
+            if(existing.samePolyTile(p)) {
+                Grid.remove(tmp);
+            }else System.out.println("not removing polytile");
         }
     }
 
@@ -134,7 +147,7 @@ public class Assembly {
             for (Point aPoint : glues.keySet()) {
                 glue1 = ptGlues.get(ptPoint);
                 glue2 = glues.get(aPoint);
-                if (tileSystem.getStrength(glue1, glue2) >= tileSystem.getTemperature()) {
+                if (tileSystem.getStrength(glue1, glue2) > 0) {
                     Pair<Point, Point> locAndOffset = getOffset(aPoint, ptPoint, offsetX, offsetY);
                     Pair<Pair<Point, Point>, PolyTile> x = new Pair<Pair<Point, Point>, PolyTile>(locAndOffset, pt);
                     ArrayList attachment = new ArrayList();
@@ -154,7 +167,6 @@ public class Assembly {
         fillPossibleList(t, EAST);
         fillPossibleList(t, SOUTH);
         fillPossibleList(t, WEST);
-        System.out.println(possibleAttach);
     }
     // calculate frontier
 
@@ -245,6 +257,7 @@ public class Assembly {
         Pair<Point, PolyTile> x = frontier.get(rn.nextInt(frontier.size()));
         placePolytile(x.getValue(), x.getKey().x, x.getKey().y );
         frontier.remove(x);
+        attached.add(x);
         return x.getValue().getConcentration();
     }
 
@@ -263,6 +276,15 @@ public class Assembly {
         cleanUp();
         getOpenGlues();
         return r;
+    }
+
+    public void detach(){
+        if(!attached.isEmpty()) {
+            Pair<Point, PolyTile> last = attached.remove(attached.size() - 1);
+            removePolytile(last.getValue(), last.getKey().x, last.getKey().y);
+            cleanUp();
+            getOpenGlues();
+        }
     }
 
     //Add "random" polytile from frontier based on Polytile's concentrations
