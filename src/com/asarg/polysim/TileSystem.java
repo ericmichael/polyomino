@@ -21,6 +21,8 @@ public class TileSystem {
     // total count of all tiles in tile system; used for count-based attachment
     private int totalCount = 0;
 
+    public TileSystem(int temp){ temperature = temp; weightOption = 0; }
+
     public TileSystem(int temp, int wO){ temperature = temp; weightOption = wO; }
 
     public void addGlueFunction(String label1, String label2, int temp) {
@@ -67,5 +69,4 @@ public class TileSystem {
     public Set<PolyTile> getTileTypes() {
         return tileTypes;
     }
-
 }
