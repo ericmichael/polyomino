@@ -14,29 +14,24 @@ public class ATAMTile extends PolyTile {
     public ATAMTile(String n) {
         super(n);
         setGlues(null, null, null, null);
-        setColor("FFFFF");
     }
     public ATAMTile(String n, double conc){
         super(n, conc);
         setGlues(null, null, null, null);
-        setColor("FFFFF");
     }
     public ATAMTile(String n, int c){
         super(n, c);
         setGlues(null, null, null, null);
-        setColor("FFFFF");
     }
 
     public ATAMTile(String name, String n, String e, String s, String w, double conc){
         super(n, conc);
         setGlues(n, e, s ,w);
-        setColor("FFFFF");
     }
 
     public ATAMTile(String name, String n, String e, String s, String w, int c){
         super(n, c);
         setGlues(n, e, s ,w);
-        setColor("FFFFF");
     }
 
 

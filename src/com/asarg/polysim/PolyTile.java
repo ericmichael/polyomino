@@ -31,20 +31,24 @@ public class PolyTile {
 
     public PolyTile() {
         System.out.println("polytile with no name and infinite counts");
+        setColor("FFFFF");
     }
     public PolyTile(String n) {
         polyName = n;
         System.out.println("polytile "+polyName+" with infinite counts");
+        setColor("FFFFF");
     }
     public PolyTile(String n, double conc){
         polyName = n;
         concentration = conc;
         System.out.println("polytile "+polyName+" created");
+        setColor("FFFFF");
     }
     public PolyTile(String n, int c){
         polyName = n;
         count = c;
         System.out.println("polytile "+polyName+" created");
+        setColor("FFFFF");
     }
 
     public List<Tile> getTiles(){
