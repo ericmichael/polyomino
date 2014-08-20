@@ -121,7 +121,7 @@ public class TetrisSimulation {
     public Assembly assembly;
 
     public TetrisSimulation(int temperature){
-        ts = new TileSystem(temperature);
+        ts = new TileSystem(temperature, 0);
 
         ts.addPolyTile(tetrisF());
         ts.addPolyTile(tetrisI());
