@@ -6,20 +6,42 @@ Tile system is meant to be the container where all different types of polytiles 
 
 import java.util.Set;
 import java.util.HashSet;
+
+import com.asarg.polysim.xml.GlueXmlAdapter;
 import javafx.util.Pair;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.HashMap;
 
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class TileSystem {
     // temperature of the system, bonds must be of at least this value or they break.
+    @XmlElement(name = "Temperature")
     private int temperature;
     // glue function to determine strength between two labels
-    private HashMap<Pair<String, String>, Integer> glueFunction = new HashMap();
+    @XmlElement(name = "GlueFunction")
+    @XmlJavaTypeAdapter(GlueXmlAdapter.class)
+    private HashMap<Pair<String, String>, Integer> glueFunction = new HashMap<Pair<String, String>, Integer>();
     // list of polytiles: data structure should be changed to something that would be of better performance
+    @XmlElement(name = "TileTypes")
     private Set<PolyTile> tileTypes = new HashSet<PolyTile>();
+    // used to set weight option: 0 = none (assumed equal concentrations), 1 = concentration, 2 = tile count
+    @XmlElement(name = "Weighting")
+    private int weightOption;
+    // total count of all tiles in tile system; used for count-based attachment
+    @XmlElement(name = "TotalCount")
+    private int totalCount = 0;
 
-    public TileSystem(int temp){
-        temperature = temp;
-    }
+    public TileSystem() { }
+
+    public TileSystem(int temp){ temperature = temp; weightOption = 0; }
+
+    public TileSystem(int temp, int wO){ temperature = temp; weightOption = wO; }
 
     public void addGlueFunction(String label1, String label2, int temp) {
         glueFunction.put(new Pair(label1, label2), temp);
@@ -56,8 +78,13 @@ public class TileSystem {
         temperature = s;
     }
 
+    public int getWeightOption() { return weightOption; }
+    public void setWeightOption(int x) { weightOption = x; }
+
+    public int getTotalCount() { return totalCount; }
+    public void setTotalCount( int x ) { totalCount = x; }
+
     public Set<PolyTile> getTileTypes() {
         return tileTypes;
     }
-
 }

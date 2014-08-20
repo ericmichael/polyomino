@@ -6,14 +6,10 @@ package com.asarg.polysim;
 import javafx.util.Pair;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.util.HashMap;
+import java.awt.event.*;
 
-public class TestCanvasFrame extends JFrame {
+public class TestCanvasFrame extends JFrame implements MouseWheelListener, MouseMotionListener, MouseListener,KeyListener{
 
     TestCanvas tc;
     JMenuBar tcfBar = new JMenuBar();
@@ -22,6 +18,9 @@ public class TestCanvasFrame extends JFrame {
 
     int width;
     int height;
+
+    Point lastMouseXY = new Point(width,height);
+    int dragCount = 0;
 
     Assembly assembly;
     java.util.List<Pair<Point, PolyTile>> frontier;
@@ -36,9 +35,12 @@ public class TestCanvasFrame extends JFrame {
         setLayout(new BorderLayout());
         tc = new TestCanvas(width, height);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addMouseWheelListener(this);
+        addMouseListener(this);
+        addMouseMotionListener(this);
+        addKeyListener(this);
 
-        FrontierCanvas frontierCanvas = new FrontierCanvas(w,h);
-        add(frontierCanvas, BorderLayout.NORTH);
+
         add(tc, BorderLayout.SOUTH);
 
         ActionListener al = new ActionListener() {
@@ -84,52 +86,113 @@ public class TestCanvasFrame extends JFrame {
         repaint();
 
     }
-
-
-
-    class FrontierCanvas extends JPanel
+    public void zoomInDraw()
     {
-        Dimension frameRes = new Dimension();
-        Dimension myRes = new Dimension();
-        BufferedImage frontierBFI;
-        Graphics2D frontierGFX;
-        FrontierCanvas(int w, int h)
-        {
-            myRes.setSize(w, h/5);
-            frontierBFI = new BufferedImage(myRes.width, myRes.height, BufferedImage.TYPE_INT_ARGB);
-            frontierGFX = frontierBFI.createGraphics();
-            frontierGFX.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        int tileDiameter = tc.getTileDiameter();
+        if(tileDiameter< width/2)
+            tc.setTileDiameter((int)(tileDiameter*1.25));
+        else return;
 
+
+
+
+
+
+        tc.reset();
+        drawGrid();
+        repaint();
+    }
+    public void zoomOutDraw()
+    {
+        int tileDiameter = tc.getTileDiameter();
+        if(tileDiameter > 10)
+            tc.setTileDiameter((int) (tileDiameter * .75));
+        else return;
+
+        tc.reset();
+        drawGrid();
+        repaint();
+    }
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+
+
+        if(e.getWheelRotation() == 1)
+        {
+           zoomOutDraw();
+        }
+        if(e.getWheelRotation() == -1)
+        {
+           zoomInDraw();
         }
 
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        tc.translateOffset(e.getX() - lastMouseXY.x, e.getY() - lastMouseXY.y);
+        lastMouseXY=e.getPoint();
+        tc.reset();
+        drawGrid();
+        repaint();
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        lastMouseXY = e.getPoint();
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        dragCount = 0;
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
 
 
 
-        @Override
-        public Dimension getPreferredSize()
+
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if(e.getKeyCode() == KeyEvent.VK_PAGE_UP)
         {
-            return new Dimension(myRes.width, myRes.height);
-        }
-        @Override
-        public void paintComponent(Graphics g)
+            zoomInDraw();
+        }else if(e.getKeyCode() == KeyEvent.VK_PAGE_DOWN)
         {
-            Graphics2D g2 = (Graphics2D)g;
-            g2.drawImage(frontierBFI,0,0,null);
-
-
+            zoomOutDraw();
         }
+    }
 
-        public void drawFrontier()
-        {
-
-            frontierGFX.setComposite(AlphaComposite.Clear);
-            frontierGFX.fillRect(0,0, myRes.width, myRes.height);
-            frontierGFX.setComposite(AlphaComposite.SrcOver);
-
-
-
-        }
-
+    @Override
+    public void keyReleased(KeyEvent e) {
 
     }
 
