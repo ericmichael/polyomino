@@ -1,11 +1,15 @@
 package  com.asarg.polysim;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Created by Dom on 8/15/2014.
+ */
 public class TestCanvas extends JPanel {
 
 
@@ -20,6 +24,7 @@ public class TestCanvas extends JPanel {
         center = new Point(w/2, h/2);
         canvasBFI = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         cg2d = canvasBFI.createGraphics();
+        cg2d.setComposite(  AlphaComposite.Src);
         cg2d.setColor(Color.black);
         res.setSize(w,h);
         cg2d.setClip(0,0,w,h);
@@ -31,13 +36,14 @@ public class TestCanvas extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         g.drawImage(canvasBFI, 0, 0, null);
 
+
+
     }
 
     public void drawPolyTile(PolyTile pt)
     {
         Drawer.clearGraphics(cg2d);
         List<Tile> lt = pt.tiles;
-        if(lt.isEmpty())System.out.println("List empty in draw polytile");
         for(Tile t : lt)
         {
 
@@ -76,9 +82,12 @@ public class TestCanvas extends JPanel {
        repaint();
 
     }
+
     @Override
     public Dimension getPreferredSize()
     {
         return new Dimension(res.width,res.height);
     }
+
+
 }
