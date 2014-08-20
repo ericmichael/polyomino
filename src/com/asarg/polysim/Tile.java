@@ -4,6 +4,7 @@ Should store a location and an id.
 */
 import com.asarg.polysim.xml.PointXmlAdapter;
 
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -57,6 +58,9 @@ public class Tile {
     public Point getLocation(){
         return tileLocation;
     }
+    public void setLocation(Point p) {
+        tileLocation = p;
+    }
 
     public String[] getGlueLabels() {
         return glueLabels;
@@ -65,17 +69,29 @@ public class Tile {
     public String getGlueN() {
         return glueLabels[0];
     }
+    public void setGlueN(String g) {
+        glueLabels[0] = g;
+    }
     @XmlElement(name = "EastGlue")
     public String getGlueE() {
         return glueLabels[1];
+    }
+    public void setGlueE(String g) {
+        glueLabels[1] = g;
     }
     @XmlElement(name = "SouthGlue")
     public String getGlueS() {
         return glueLabels[2];
     }
+    public void setGlueS(String g) {
+        glueLabels[2] = g;
+    }
     @XmlElement(name = "WestGlue")
     public String getGlueW() {
         return glueLabels[3];
+    }
+    public void setGlueW(String g) {
+        glueLabels[3] = g;
     }
 
     public boolean equals(Tile toCompare){
@@ -87,5 +103,9 @@ public class Tile {
             return false;
 
         return true;
+    }
+
+    public void afterUnmarshal(Unmarshaller u, Object parent) {
+        this.polyTile = (PolyTile) parent;
     }
 }

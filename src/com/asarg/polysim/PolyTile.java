@@ -21,6 +21,7 @@ public class PolyTile {
     private double concentration;
     private int count;
     // polytiles can be labeled and can have a unique name/id. (id might be useless)
+    @XmlAttribute(name = "Label")
     private String polyName;
     private int polyID;
     // tileID increases every time a new tile is created, changes are not accounted for.
@@ -109,8 +110,9 @@ public class PolyTile {
     public double getConcentration(){return concentration;}
     @XmlElement(name = "Count")
     public int getCount(){return count;}
-    @XmlAttribute(name = "Label")
+
     public String getPolyName(){return polyName;}
+    public void setPolyname(String n) { polyName = n; }
 
 
     public void changeConcentration(double c){
