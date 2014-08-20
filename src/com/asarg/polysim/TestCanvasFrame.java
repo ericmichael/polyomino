@@ -27,7 +27,7 @@ public class TestCanvasFrame extends JFrame {
     java.util.List<Pair<Point, PolyTile>> frontier;
 
 
-    TestCanvasFrame(int w, int h, final Assembly assembly)
+    public TestCanvasFrame(int w, int h, final Assembly assembly)
     {
         this.assembly = assembly;
         width = w;

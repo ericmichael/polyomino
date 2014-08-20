@@ -1,4 +1,9 @@
-package com.asarg.polysim;
+package com.asarg.polysim.examples;
+
+import com.asarg.polysim.Assembly;
+import com.asarg.polysim.PolyTile;
+import com.asarg.polysim.TestCanvasFrame;
+import com.asarg.polysim.TileSystem;
 
 import java.util.Random;
 
@@ -134,5 +139,11 @@ public class TetrisSimulation {
 
         assembly = new Assembly(ts);
         assembly.placeSeed(tetrisF());
+    }
+
+    public static void main(String args[]) {
+
+        TetrisSimulation tetris = new TetrisSimulation(2);
+        TestCanvasFrame tcf = new TestCanvasFrame(800,600, tetris.assembly);
     }
 }

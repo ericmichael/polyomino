@@ -147,7 +147,7 @@ public class Assembly {
             for (Point aPoint : glues.keySet()) {
                 glue1 = ptGlues.get(ptPoint);
                 glue2 = glues.get(aPoint);
-                if (tileSystem.getStrength(glue1, glue2) >= tileSystem.getTemperature()) {
+                if (tileSystem.getStrength(glue1, glue2) > 0) {
                     Pair<Point, Point> locAndOffset = getOffset(aPoint, ptPoint, offsetX, offsetY);
                     Pair<Pair<Point, Point>, PolyTile> x = new Pair<Pair<Point, Point>, PolyTile>(locAndOffset, pt);
                     ArrayList attachment = new ArrayList();
