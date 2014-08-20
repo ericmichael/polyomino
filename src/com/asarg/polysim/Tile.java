@@ -3,6 +3,7 @@ information for single tiles (not to be confused with polytiles).
 Should store a location and an id.
 */
 import java.awt.*;
+import java.util.Arrays;
 
 public class Tile {
     // each point in coordinates has 4 edges with a label and a direction
@@ -24,6 +25,10 @@ public class Tile {
 
     public String getColor(){
         return polyTile.getColor();
+    }
+
+    public boolean samePolyTile(PolyTile p){
+        return p == polyTile;
     }
 
     public void changeTileGlue(String[] gl){
@@ -53,10 +58,12 @@ public class Tile {
         return glueLabels[3];
     }
 
-    public boolean isEqual(Tile toCompare){
-        if (tileLocation != toCompare.getLocation())
+    public boolean equals(Tile toCompare){
+        // check if coordinates are the same.
+        if (!tileLocation.equals(toCompare.getLocation()))
             return false;
-        if (!glueLabels.equals(toCompare.getGlueLabels()))
+        //if (!glueLabels.equals(toCompare.getGlueLabels()))
+        if (!Arrays.deepEquals(toCompare.getGlueLabels(), glueLabels))
             return false;
 
         return true;
