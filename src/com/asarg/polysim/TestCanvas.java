@@ -25,8 +25,6 @@ public class TestCanvas extends JPanel {
         center = new Point(w / 2, h / 2);
         canvasBFI = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         cg2d = canvasBFI.createGraphics();
-        cg2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        cg2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_DEFAULT);
         cg2d.setComposite(AlphaComposite.Src);
         cg2d.setColor(Color.black);
         res.setSize(w, h);
