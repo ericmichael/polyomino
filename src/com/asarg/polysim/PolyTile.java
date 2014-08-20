@@ -11,7 +11,7 @@ import java.util.List;
 
 public class PolyTile {
     // tiles that make up the shape of the polytile.
-    List<Tile> tiles = new ArrayList<Tile>();
+    protected List<Tile> tiles = new ArrayList<Tile>();
     // polytiles have a concentration or a count.
     private double concentration;
     private int count;
@@ -80,6 +80,7 @@ public class PolyTile {
             if (tile.getLocation().equals(new Point(x,y))) {
                 System.out.println("Tile found in polyTile! Removing...");
                 tiles.remove(tile);
+                setGlues();
                 return;
             }
         }
