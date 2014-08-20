@@ -5,9 +5,10 @@ import org.junit.Test;
 import org.junit.Before; 
 import org.junit.After;
 import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
 import com.asarg.polysim.TileSystem;
 import java.util.Set;
-import static org.hamcrest.CoreMatchers.*;
+import java.util.HashSet;
 
 public class TileSystemTest {
     private TileSystem ts;
@@ -18,7 +19,7 @@ public void before() throws Exception {
     ts = new TileSystem(temperature);
     ts.addGlueFunction("a","a", 2);
     ts.addGlueFunction("t","e", 10);
-} 
+}
 
 @After
 public void after() throws Exception { 
@@ -38,8 +39,7 @@ public void testAddGlueFunction() throws Exception {
     assertEquals("Strength of a-a glue should be " + 5, 5, ts.getStrength("a", "a"));
 
     // a-a is now 5.
-    //, 2, ts.getStrength("a", "a")
-    assertThat("Adding the same labels with different strength should overwrite it",ts.getStrength("a","a"),not(equalTo(2)));
+    assertThat("Adding the same labels with different strength should overwrite it", ts.getStrength("a", "a"), not(equalTo(2)));
 
     ts.addGlueFunction("a","b",2);
     assertEquals("Labels need not be equal to have >0 strength. ", 2, ts.getStrength("a", "b"));
@@ -48,7 +48,7 @@ public void testAddGlueFunction() throws Exception {
     ts.addGlueFunction("b","a", 5);
     assertEquals("Label order does not matter, same labels should be overwritten", 5, ts.getStrength("b","a"));
     assertEquals("Label order does not matter, same labels should be overwritten", 5, ts.getStrength("a", "b"));
-    assertThat("Label order does not matter, same labels should be overwritten", ts.getStrength("a","b"),not(equalTo(2)));
+    assertThat("Label order does not matter, same labels should be overwritten", ts.getStrength("a","b"), not(equalTo(2)));
 
 } 
 

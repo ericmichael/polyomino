@@ -3,6 +3,8 @@ package com.asarg.polysim;
 
 
 
+import javafx.util.Pair;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -16,11 +18,23 @@ public class TestCanvasFrame extends JFrame {
     TestCanvas tc;
     JMenuBar tcfBar = new JMenuBar();
     JMenuItem nextStepMI = new JMenuItem("Step >");
+    JMenuItem previousStepMI = new JMenuItem("< Previous");
 
-    TestCanvasFrame(int w, int h)
+    int width;
+    int height;
+
+    Assembly assembly;
+    java.util.List<Pair<Point, PolyTile>> frontier;
+
+
+    public TestCanvasFrame(int w, int h, final Assembly assembly)
     {
+        this.assembly = assembly;
+        width = w;
+        height = h;
+        frontier = this.assembly.calculateFrontier();
         setLayout(new BorderLayout());
-        tc = new TestCanvas(w,h);
+        tc = new TestCanvas(width, height);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         FrontierCanvas frontierCanvas = new FrontierCanvas(w,h);
@@ -32,17 +46,30 @@ public class TestCanvasFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if(e.getSource().equals(nextStepMI))
                 {
-
-                    System.out.println("yo");
+                    if(!frontier.isEmpty()) {
+                        assembly.attach();
+                        drawGrid();
+                        frontier = assembly.calculateFrontier();
+                    }
+                }else if(e.getSource().equals(previousStepMI))
+                {
+                    assembly.detach();
+                    tc.reset();
+                    drawGrid();
+                    frontier = assembly.calculateFrontier();
                 }
 
             }
         };
 
         nextStepMI.addActionListener(al);
+        previousStepMI.addActionListener(al);
+        tcfBar.add(previousStepMI);
         tcfBar.add(nextStepMI);
         setJMenuBar(tcfBar);
         pack();
+        setVisible(true);
+        drawGrid();
     }
 
     public void drawPolyTile(PolyTile pt)
@@ -51,9 +78,9 @@ public class TestCanvasFrame extends JFrame {
 
 
     }
-    public void drawGrid(HashMap<Point, Tile> hmpt)
+    public void drawGrid()
     {
-        tc.drawGrid(hmpt);
+        tc.drawGrid(assembly.Grid);
         repaint();
 
     }

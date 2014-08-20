@@ -27,6 +27,10 @@ public class Tile {
         return polyTile.getColor();
     }
 
+    public boolean samePolyTile(PolyTile p){
+        return p == polyTile;
+    }
+
     public void changeTileGlue(String[] gl){
         glueLabels = gl;
     }

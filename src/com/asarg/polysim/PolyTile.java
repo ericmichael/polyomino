@@ -47,6 +47,10 @@ public class PolyTile {
         System.out.println("polytile "+polyName+" created");
     }
 
+    public List<Tile> getTiles(){
+        return tiles;
+    }
+
     public void setColor(String color){
         this.color = color;
     }
