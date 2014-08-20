@@ -30,8 +30,16 @@ public class FrontierElement {
     public PolyTile getPolyTile(){return polyTile;}
     public int getDirection(){return direction;}
 
-    public boolean isEqual(FrontierElement ele2){
+    public boolean equals(FrontierElement ele2){
+        // check offset to see if they are the same.
+        if ( !ele2.getOffset().equals(polytileOffset))
+            return false;
 
+        // check polytile to see if they are the same.
+        if ( !ele2.getPolyTile().equals(polyTile))
+            return false;
+
+        // if both the offset and polytile match, it's the same placement.
         return true;
     }
 

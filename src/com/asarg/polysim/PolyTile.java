@@ -129,20 +129,30 @@ public class PolyTile {
         }
     }
 
-    public boolean isEqual(PolyTile toCompare){
-        // check if the polytile data is the same
-        if (concentration != toCompare.getConcentration())
-            return false;
-        if (!polyName.equals(toCompare.getPolyName()))
-            return false;
-        if (count != toCompare.getCount())
-            return false;
+    public boolean equals(PolyTile toCompare){
+        // check if the simple polytile data is the same
+        if (polyName != null && toCompare.getPolyName() != null) {
+            if (concentration != toCompare.getConcentration())
+                return false;
+            if (!polyName.equals(toCompare.getPolyName()))
+                return false;
+            if (count != toCompare.getCount())
+                return false;
+        }
 
         // check if all tiles in the polytile are equal, by looking through their coordinates
         for (Tile t : tiles){
             Point tLoc = t.getLocation();
             Tile t2 = toCompare.getTile((int)tLoc.getX(), (int)tLoc.getY());
-            if (!t.isEqual(t2))
+            if (!t.equals(t2))
+                return false;
+        }
+
+        // the coordinates of both polytiles need to be checked: do the same for the points in the other polytile
+        for (Tile t : toCompare.tiles){
+            Point tLoc = t.getLocation();
+            Tile t2 = this.getTile((int)tLoc.getX(), (int)tLoc.getY());
+            if (!t.equals(t2))
                 return false;
         }
         return true;
