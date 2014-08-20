@@ -32,7 +32,7 @@ public class Assembly {
 
     public Assembly(){
         System.out.print("in assembly,");
-        tileSystem = new TileSystem(2);
+        tileSystem = new TileSystem(2, 0);
 
         //tileSystem.addPolyTile();
     }
@@ -252,13 +252,12 @@ public class Assembly {
     // add to frontier
 
     //Place "random" polytile from frontier
-    private double addFromFrontier(){
+    private void addFromFrontier(){
         Random rn = new Random();
         Pair<Point, PolyTile> x = frontier.get(rn.nextInt(frontier.size()));
         placePolytile(x.getValue(), x.getKey().x, x.getKey().y );
         frontier.remove(x);
         attached.add(x);
-        return x.getValue().getConcentration();
     }
 
     private void cleanUp() {
@@ -272,10 +271,15 @@ public class Assembly {
 
 
     public double attach(){
-        double r = addFromFrontier();
+        if(tileSystem.getWeightOption() == 1)
+            weightedAddFromFrontier();
+        else if(tileSystem.getWeightOption() == 2)
+            countWeightedAddFromFrontier();
+        else
+            addFromFrontier();
         cleanUp();
         getOpenGlues();
-        return r;
+        return 0.0;
     }
 
     public void detach(){
@@ -285,6 +289,25 @@ public class Assembly {
             cleanUp();
             getOpenGlues();
         }
+    }
+
+    //Add "random" polytile from frontier based on Polytile's counts
+    private void countWeightedAddFromFrontier(){
+        //generate cumulative density list
+        ArrayList<Double> cdList = new ArrayList();
+        double totalConcentration = 0.0;
+        for (Pair<Point, PolyTile> p : frontier) {
+            PolyTile pt = p.getValue();
+            totalConcentration += pt.getCount()/tileSystem.getTotalCount();
+            cdList.add(totalConcentration);
+        }
+        Random rn = new Random();
+        double x = rn.nextDouble() * totalConcentration;
+        //Binary search for random number in cdList
+        int index = weightedAddBinarySearchHelper(cdList, x);
+        Pair<Point, PolyTile> pt = frontier.get(index);
+        placePolytile(pt.getValue(), pt.getKey().x, pt.getKey().y);
+        frontier.remove(x);
     }
 
     //Add "random" polytile from frontier based on Polytile's concentrations

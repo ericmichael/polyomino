@@ -16,10 +16,12 @@ public class TileSystem {
     private HashMap<Pair<String, String>, Integer> glueFunction = new HashMap();
     // list of polytiles: data structure should be changed to something that would be of better performance
     private Set<PolyTile> tileTypes = new HashSet<PolyTile>();
+    // used to set weight option: 0 = none (assumed equal concentrations), 1 = concentration, 2 = tile count
+    private int weightOption;
+    // total count of all tiles in tile system; used for count-based attachment
+    private int totalCount = 0;
 
-    public TileSystem(int temp){
-        temperature = temp;
-    }
+    public TileSystem(int temp, int wO){ temperature = temp; weightOption = wO; }
 
     public void addGlueFunction(String label1, String label2, int temp) {
         glueFunction.put(new Pair(label1, label2), temp);
@@ -55,6 +57,12 @@ public class TileSystem {
     public void setTemperature(int s){
         temperature = s;
     }
+
+    public int getWeightOption() { return weightOption; }
+    public void setWeightOption(int x) { weightOption = x; }
+
+    public int getTotalCount() { return totalCount; }
+    public void setTotalCount( int x ) { totalCount = x; }
 
     public Set<PolyTile> getTileTypes() {
         return tileTypes;

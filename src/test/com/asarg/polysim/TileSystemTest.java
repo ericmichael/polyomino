@@ -16,7 +16,7 @@ public class TileSystemTest {
 
 @Before
 public void before() throws Exception {
-    ts = new TileSystem(temperature);
+    ts = new TileSystem(temperature, 0);
     ts.addGlueFunction("a","a", 2);
     ts.addGlueFunction("t","e", 10);
 }
