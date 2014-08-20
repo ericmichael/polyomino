@@ -131,7 +131,7 @@ public class TetrisSimulation {
 //        Marshaller marshaller = jaxbContext.createMarshaller();
 //        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        ts = (TileSystem) unmarshaller.unmarshal(new File("./output.xml"));
+        ts = (TileSystem) unmarshaller.unmarshal(new File("./tetris_example.xml"));
         for(PolyTile p : ts.getTileTypes()) {
             p.setGlues();
         }
