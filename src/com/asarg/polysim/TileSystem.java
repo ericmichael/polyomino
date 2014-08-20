@@ -50,6 +50,11 @@ public class TileSystem {
 
     // add polytile to tiletypes
     public void addPolyTile(PolyTile p){
+        // check that the polytile to be added fits in with the weight model.
+            // if equal concentration, nothing needs to be done, as all tiles will be assumed to be of equal
+            // concentration.
+        if ( weightOption == 1)
+
         tileTypes.add(p);
     }
 
@@ -61,7 +66,12 @@ public class TileSystem {
     }
 
     public int getWeightOption() { return weightOption; }
-    public void setWeightOption(int x) { weightOption = x; }
+    public void setWeightOption(int x) {
+        // when the weight option is changed, a check should be made on all polytiles and see that they all
+        //  have the required variable set. Otherwise, pop up an error telling the user to fix their variables.
+
+        weightOption = x;
+    }
 
     public int getTotalCount() { return totalCount; }
     public void setTotalCount( int x ) { totalCount = x; }

@@ -12,12 +12,11 @@ import java.util.List;
 public class PolyTile {
     // tiles that make up the shape of the polytile.
     List<Tile> tiles = new ArrayList<Tile>();
-    // polytiles have a concentration or a count.
-    private double concentration;
-    private int count;
+    // polytiles have a concentration or a count. Initialized to -1 to use as "not set" exception.
+    private double concentration = -1;
+    private int count = -1;
     // polytiles can be labeled and can have a unique name/id. (id might be useless)
     private String polyName;
-    private int polyID;
     // tileID increases every time a new tile is created, changes are not accounted for.
     //          (delete one, that number is lost forever)
     private static int tileID = 0;
@@ -33,21 +32,34 @@ public class PolyTile {
         System.out.println("polytile with no name and infinite counts");
         setColor("FFFFF");
     }
+    public PolyTile(int c, double con){
+        count = c;
+        concentration = con;
+        System.out.println("polytile with no name created with count "+c+" and concentration "+con);
+        setColor("FFFFF");
+    }
     public PolyTile(String n) {
         polyName = n;
-        System.out.println("polytile "+polyName+" with infinite counts");
+        System.out.println("polytile "+polyName+" with no count or concentration");
         setColor("FFFFF");
     }
     public PolyTile(String n, double conc){
         polyName = n;
         concentration = conc;
-        System.out.println("polytile "+polyName+" created");
+        System.out.println("polytile "+polyName+" created with no count and concentration "+conc);
         setColor("FFFFF");
     }
     public PolyTile(String n, int c){
         polyName = n;
         count = c;
-        System.out.println("polytile "+polyName+" created");
+        System.out.println("polytile "+polyName+" created with count "+c+" and no concentration.");
+        setColor("FFFFF");
+    }
+    public PolyTile(String n, int c, double con){
+        polyName = n;
+        count = c;
+        concentration = con;
+        System.out.println("polytile "+polyName+" created with count "+c+" and concentration "+con);
         setColor("FFFFF");
     }
 
@@ -100,17 +112,15 @@ public class PolyTile {
     public String getPolyName(){return polyName;}
 
 
-    public void changeConcentration(double c){
+    public void setConcentration(double c){
         concentration = c;
-        count = 0;
         System.out.println("concentration changed to "+c);
     }
-    public void changeCount(int c){
-        concentration = 0;
+    public void setCount(int c){
         count = c;
         System.out.println("concentration changed to "+c);
     }
-    public void changeName(String n){
+    public void setName(String n){
         polyName = n;
     }
 
