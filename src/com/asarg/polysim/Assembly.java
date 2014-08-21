@@ -31,10 +31,7 @@ public class Assembly {
     ArrayList<ArrayList<Object>> possibleAttach = new ArrayList<ArrayList<Object>>();
 
     public Assembly(){
-        System.out.print("in assembly,");
-        tileSystem = new TileSystem(2, 0);
-
-        //tileSystem.addPolyTile();
+        tileSystem = new TileSystem(2, TileSystem.UNIFORMDISTRIBUTION);
     }
 
     //change tile system stub
@@ -246,10 +243,6 @@ public class Assembly {
         else
             return false;
     }
-
-    // delete from frontier
-
-    // add to frontier
 
     //Place "random" polytile from frontier
     private void addFromFrontier(){

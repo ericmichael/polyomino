@@ -1,6 +1,6 @@
 package com.asarg.polysim;
 
-/* Frontier Elemnt
+/* Frontier Element
     Will be used for the frontier list of polytiles.
      It should contain the coordinates of the tile with the glue that the polytile is being matched to,
      the the offset of the polytile to be moved to the correct position, the polytile itself,

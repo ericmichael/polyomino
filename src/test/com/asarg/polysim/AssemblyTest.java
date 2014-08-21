@@ -17,7 +17,15 @@ public class AssemblyTest {
 @Before
 public void before() throws Exception {
     Assembly assembly = new Assembly();
-} 
+    TileSystem ts = new TileSystem(2, 0);
+    PolyTile a = new PolyTile("a");
+    PolyTile b = new PolyTile("b");
+
+    a.addTile(0,0,new String[] {"a","a","a","a"});
+    b.addTile(0,1, new String[] {"a","a","a","a"});
+    ts.addPolyTile(a);
+    ts.addPolyTile(b);
+}
 
 @After
 public void after() throws Exception { 
@@ -30,8 +38,8 @@ public void after() throws Exception {
 */ 
 @Test
 public void testChangeTileSystem() throws Exception { 
-//TODO: Test goes here... 
-} 
+//TODO: Test goes here...
+}
 
 /** 
 * 
@@ -40,7 +48,8 @@ public void testChangeTileSystem() throws Exception {
 */ 
 @Test
 public void testCalculateFrontier() throws Exception { 
-//TODO: Test goes here... 
+//TODO: Test goes here...
+
 } 
 
 /** 
