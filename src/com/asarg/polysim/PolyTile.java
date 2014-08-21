@@ -119,24 +119,22 @@ public class PolyTile {
         }
         return null;
     }
-    @XmlElement(name = "Concentration")
     public double getConcentration(){return concentration;}
-    @XmlElement(name = "Count")
     public int getCount(){return count;}
-
     public String getPolyName(){return polyName;}
-    public void setPolyname(String n) { polyName = n; }
 
 
     public void setConcentration(double c){
         concentration = c;
+        count = 0;
         System.out.println("concentration changed to "+c);
     }
     public void setCount(int c){
         count = c;
         System.out.println("concentration changed to "+c);
     }
-    public void setName(String n){
+
+    public void changeName(String n){
         polyName = n;
     }
 

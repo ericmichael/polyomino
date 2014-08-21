@@ -1,5 +1,7 @@
 package com.asarg.polysim.examples;
 
+import com.asarg.polysim.TestCanvasFrame;
+import com.asarg.polysim.TileSystem;
 import com.asarg.polysim.*;
 import com.asarg.polysim.models.atam.*;
 
@@ -143,23 +145,23 @@ public class RNGUnboundedSimulation {
     private TileSystem ts;
     private Assembly assembly;
 
-    public RNGUnboundedSimulation(int temperature) throws JAXBException {
+    public RNGUnboundedSimulation(int temperature){
         ts = new TileSystem(temperature, 0);
         TileConfiguration tc = new TileConfiguration();
 
-        JAXBContext jaxbContext = JAXBContext.newInstance(TileConfiguration.class);
+        JAXBContext jaxbContext = JAXBContext.newInstance(TileSystem.class);
+        Marshaller marshaller = jaxbContext.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        //marshaller.marshal(ts, new File("RNG_ATAM_tileset.xml"));
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        tc = (TileConfiguration) unmarshaller.unmarshal(new File("./Examples/RNG_ATAM/tileconfig.xml"));
-        jaxbContext = JAXBContext.newInstance(Assembly.class);
-        unmarshaller = jaxbContext.createUnmarshaller();
-        assembly = (Assembly) unmarshaller.unmarshal(new File("./Examples/RNG_ATAM/assembly.xml"));
-
-        ts.loadTileConfiguration(tc);
-        assembly.changeTileSystem(ts);
-
+        ts = (TileSystem) unmarshaller.unmarshal(new File("./RNG_ATAM_tileset.xml"));
         for(PolyTile p : ts.getTileTypes()) {
             p.setGlues();
         }
+        System.out.println();
+
+        assembly = new ATAMAssembly(ts);
+        assembly.placeSeed(rngWL());
     }
 
     public static void main(String args[]) throws JAXBException {

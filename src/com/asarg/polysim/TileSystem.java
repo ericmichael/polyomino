@@ -69,6 +69,7 @@ public class TileSystem {
         // check that the polytile to be added fits in with the weight model.
             // if equal concentration, nothing needs to be done, as all tiles will be assumed to be of equal
             // concentration.
+  
         if ( weightOption == CONCENTRATION ){
             if ( p.getConcentration() > -1)
                 tileTypes.add(p);
@@ -78,8 +79,10 @@ public class TileSystem {
             }
         }
         else if (weightOption == COUNT){
-            if (p.getCount() > -1)
+            if (p.getCount() > -1) {
                 tileTypes.add(p);
+                totalCount += p.getCount();
+            }
             else {
                 throw new IllegalStateException("polytile does not fit weight model, " +
                         "You must set a concentration for it.");
