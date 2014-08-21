@@ -5,10 +5,7 @@ Should store a location and an id.
 import com.asarg.polysim.xml.PointXmlAdapter;
 
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.awt.*;
 import java.util.Arrays;
@@ -35,6 +32,14 @@ public class Tile {
 
     public String getLabel(){
         return polyTile.getPolyName();
+    }
+
+    @XmlTransient
+    public PolyTile getParent() {
+        return polyTile;
+    }
+    public void setParent(PolyTile p) {
+        polyTile = p;
     }
 
     @XmlElement(name = "Color")
@@ -106,6 +111,8 @@ public class Tile {
     }
 
     public void afterUnmarshal(Unmarshaller u, Object parent) {
-        this.polyTile = (PolyTile) parent;
+
+        try { this.polyTile = (PolyTile) parent; }
+        catch(Exception e) { }
     }
 }

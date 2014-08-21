@@ -136,8 +136,17 @@ public class TetrisSimulation {
             p.setGlues();
         }
 
-        assembly = new Assembly(ts);
-        assembly.placeSeed(tetrisF());
+//        assembly = new Assembly(ts);
+//        assembly.placeSeed(tetrisF());
+
+        JAXBContext jaxbContext2 = JAXBContext.newInstance(Assembly.class);
+//        Marshaller marshaller = jaxbContext2.createMarshaller();
+//        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+//        marshaller.marshal(assembly, new File("./tetris_seed_assembly.xml"));
+        Unmarshaller unmarshaller2 = jaxbContext2.createUnmarshaller();
+        assembly = (Assembly) unmarshaller2.unmarshal(new File("./tetris_seed_assembly.xml"));
+        assembly.changeTileSystem(ts);
+        System.out.println();
     }
 
     public static void main(String args[]) throws JAXBException {
