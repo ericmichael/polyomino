@@ -22,10 +22,18 @@ public class TileConfiguration {
     private HashMap<Pair<String, String>, Integer> glueFunction = new HashMap<Pair<String, String>, Integer>();
 
     //Tile Types is the list of PolyTiles
-    @XmlElement(name = "TileTypes")
+    @XmlElement(name = "TileType")
     private Set<PolyTile> tileTypes = new HashSet<PolyTile>();
 
     public TileConfiguration() { }
+
+    public void addGlueFunction(String l1, String l2, Integer s) {
+        glueFunction.put(new Pair<String, String>(l1, l2), s);
+    }
+
+    public void addTileType(PolyTile p) {
+        tileTypes.add(p);
+    }
 
     public HashMap<Pair<String, String>, Integer> getGlueFunction() { return glueFunction; }
     public Set<PolyTile> getTiletypes() { return tileTypes; }
