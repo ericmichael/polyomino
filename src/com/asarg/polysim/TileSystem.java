@@ -88,9 +88,10 @@ public class TileSystem {
             }
         }
         else if (weightOption == COUNT){
-            if (p.getCount() > -1)
+            if (p.getCount() > -1) {
                 tileTypes.add(p);
                 totalCount += p.getCount();
+            }
             else {
                 throw new IllegalStateException("polytile does not fit weight model, " +
                         "You must set a concentration for it.");

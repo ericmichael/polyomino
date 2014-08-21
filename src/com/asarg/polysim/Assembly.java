@@ -28,8 +28,8 @@ public class Assembly {
     @XmlJavaTypeAdapter(GridXmlAdapter.class)
     public HashMap<Point, Tile> Grid = new HashMap<Point, Tile>();
     // frontier list: calculated, increased, decreased, and changed here.
-    Frontier frontier;
-    ArrayList<FrontierElement> attached = new ArrayList<FrontierElement>();
+    private Frontier frontier;
+    private ArrayList<FrontierElement> attached = new ArrayList<FrontierElement>();
 
 
     //Open glue ends stored by their coordinate
