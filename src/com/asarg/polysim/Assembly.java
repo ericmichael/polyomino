@@ -4,10 +4,13 @@
 package com.asarg.polysim;
 import javafx.util.Pair;
 
+import javax.xml.bind.annotation.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Assembly {
     private static final int NORTH = 0;
     private static final int EAST = 1;
@@ -15,8 +18,10 @@ public class Assembly {
     private static final int WEST = 3;
 
     // tile system, it can be changed so it needs its own class
+    @XmlTransient
     private TileSystem tileSystem;
     // placeholder for the grid
+    @XmlElement(name = "AssemblyGrid")
     public HashMap<Point, Tile> Grid = new HashMap<Point, Tile>();
     // frontier list: calculated, increased, decreased, and changed here.
     private List<Pair<Point, PolyTile>> frontier = new ArrayList<Pair<Point, PolyTile>>();
@@ -24,9 +29,13 @@ public class Assembly {
 
 
     //Open glue ends stored by their coordinate
+    @XmlElement
     HashMap<Point, String> openNorthGlues = new HashMap<Point, String>();
+    @XmlElement
     HashMap<Point, String> openEastGlues = new HashMap<Point, String>();
+    @XmlElement
     HashMap<Point, String> openSouthGlues = new HashMap<Point, String>();
+    @XmlElement
     HashMap<Point, String> openWestGlues = new HashMap<Point, String>();
     ArrayList<ArrayList<Object>> possibleAttach = new ArrayList<ArrayList<Object>>();
 
