@@ -5,7 +5,11 @@ import com.asarg.polysim.PolyTile;
 import com.asarg.polysim.TestCanvasFrame;
 import com.asarg.polysim.TileSystem;
 
-import java.util.Random;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
 
 public class TetrisSimulation {
 
@@ -120,28 +124,23 @@ public class TetrisSimulation {
     public TileSystem ts;
     public Assembly assembly;
 
-    public TetrisSimulation(int temperature){
+    public TetrisSimulation(int temperature) throws JAXBException {
         ts = new TileSystem(temperature, 0);
 
-        ts.addPolyTile(tetrisF());
-        ts.addPolyTile(tetrisI());
-        ts.addPolyTile(tetrisL());
-        ts.addPolyTile(tetrisU());
-        ts.addPolyTile(tetrisV());
-        ts.addPolyTile(tetrisX());
-
-        ts.addGlueFunction("a","a",2);
-        ts.addGlueFunction("b","b",2);
-        ts.addGlueFunction("c","c",2);
-        ts.addGlueFunction("d","d",2);
-        ts.addGlueFunction("e","e",2);
-        ts.addGlueFunction("f","f",2);
+        JAXBContext jaxbContext = JAXBContext.newInstance(TileSystem.class);
+//        Marshaller marshaller = jaxbContext.createMarshaller();
+//        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+        ts = (TileSystem) unmarshaller.unmarshal(new File("./tetris_example.xml"));
+        for(PolyTile p : ts.getTileTypes()) {
+            p.setGlues();
+        }
 
         assembly = new Assembly(ts);
         assembly.placeSeed(tetrisF());
     }
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws JAXBException {
 
         TetrisSimulation tetris = new TetrisSimulation(2);
         TestCanvasFrame tcf = new TestCanvasFrame(800,600, tetris.assembly);

@@ -1,5 +1,7 @@
 package com.asarg.polysim;
 
+import javax.xml.bind.*;
+import java.io.File;
 import java.util.Random;
 
 public class Main {
@@ -117,7 +119,7 @@ public class Main {
     }
 
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws JAXBException {
 
         TileSystem ts = new TileSystem(2);
 
@@ -140,6 +142,14 @@ public class Main {
         assembly.placeSeed(tetrisF());
 
         TestCanvasFrame tcf = new TestCanvasFrame(800,600,assembly);
+
+        JAXBContext jaxbContext = JAXBContext.newInstance(TileSystem.class);
+        Marshaller marshaller = jaxbContext.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
+        marshaller.marshal(ts, new File("./output.xml"));
+
 
     }
 }
