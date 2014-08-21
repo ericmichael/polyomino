@@ -17,7 +17,7 @@ public class OpenGlueXmlAdapter extends XmlAdapter<OpenGlueXmlAdapter.HashMapXml
     @Override
     public HashMap<Point, String> unmarshal(HashMapXml v) throws Exception {
         HashMap<Point, String> hashMap = new HashMap<Point, String>();
-        for(EntryXml entry : v.entries) {
+        for(EntryXml entry : v.Glue) {
             hashMap.put(entry.point, entry.glue);
         }
         return hashMap;
@@ -30,22 +30,22 @@ public class OpenGlueXmlAdapter extends XmlAdapter<OpenGlueXmlAdapter.HashMapXml
             EntryXml entryXml = new EntryXml();
             entryXml.point = entry.getKey();
             entryXml.glue = entry.getValue();
-            hashMapXml.entries.add(entryXml);
+            hashMapXml.Glue.add(entryXml);
         }
         return hashMapXml;
     }
 
     @XmlType(name = "OpenGlueHashMapXml")
     public static class HashMapXml {
-        public List<EntryXml> entries = new ArrayList<EntryXml>();
+        public List<EntryXml> Glue = new ArrayList<EntryXml>();
     }
 
     @XmlType(name = "OpenGlueEntryXml")
     public static class EntryXml {
-        @XmlElement
+        @XmlElement(name = "Location")
         @XmlJavaTypeAdapter(PointXmlAdapter.class)
         public Point point;
-        @XmlElement
+        @XmlElement(name = "GlueLabel")
         public String glue;
     }
 }

@@ -117,7 +117,7 @@ public void testAddPolyTile() throws Exception {
         System.out.println("IllegalStateException caught when adding polytile");
     }
     assertTrue("polytile added should have been caught in an exception (no concentration" +
-            " in a concentration based tliesystem.", exceptionCaught);
+            " in a concentration based tilesystem.", exceptionCaught);
 } 
 
 /** 

@@ -1,9 +1,6 @@
 package com.asarg.polysim.examples;
 
-import com.asarg.polysim.Assembly;
-import com.asarg.polysim.PolyTile;
-import com.asarg.polysim.TestCanvasFrame;
-import com.asarg.polysim.TileSystem;
+import com.asarg.polysim.*;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -124,16 +121,57 @@ public class TetrisSimulation {
     public Assembly loadAssembly() throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(Assembly.class);
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        Assembly a = (Assembly) unmarshaller.unmarshal(new File("./tetris_seed_assembly.xml"));
-
-        jaxbContext = JAXBContext.newInstance(TileSystem.class);
+        Assembly a = (Assembly) unmarshaller.unmarshal(new File("./tetris_assembly.xml"));
+        jaxbContext = JAXBContext.newInstance(TileConfiguration.class);
         unmarshaller = jaxbContext.createUnmarshaller();
-        TileSystem t = (TileSystem) unmarshaller.unmarshal(new File("./tetris_example.xml"));
+        TileConfiguration tc = (TileConfiguration) unmarshaller.unmarshal(new File("tetris_tileconfig.xml"));
 
-        for(PolyTile p : t.getTileTypes())
+        TileSystem ts = new TileSystem(2);
+        ts.loadTileConfiguration(tc);
+
+//        jaxbContext = JAXBContext.newInstance(TileConfiguration.class);
+//        Marshaller marshaller;
+//        marshaller = jaxbContext.createMarshaller();
+//        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+//        unmarshaller = jaxbContext.createUnmarshaller();
+//        TileSystem t = new TileSystem(2);
+//        t.addPolyTile(tetrisF());
+//        t.addPolyTile(tetrisI());
+//        t.addPolyTile(tetrisL());
+//        t.addPolyTile(tetrisU());
+//        t.addPolyTile(tetrisV());
+//        t.addPolyTile(tetrisX());
+//        a.placeSeed(tetrisF());
+//
+//        TileConfiguration tc = new TileConfiguration();
+//        tc.addTileType(tetrisF());
+//        tc.addTileType(tetrisI());
+//        tc.addTileType(tetrisL());
+//        tc.addTileType(tetrisU());
+//        tc.addTileType(tetrisV());
+//        tc.addTileType(tetrisX());
+//        tc.addGlueFunction("a", "a", 2);
+//        tc.addGlueFunction("b", "b", 2);
+//        tc.addGlueFunction("c", "c", 2);
+//        tc.addGlueFunction("d", "d", 2);
+//        tc.addGlueFunction("e", "e", 2);
+//        tc.addGlueFunction("f", "f", 2);
+//
+//        marshaller.marshal(tc, new File("tetris_tileconfig.xml"));
+//
+//        t.addGlueFunction("a", "a", 2);
+//        t.addGlueFunction("b", "b", 2);
+//        t.addGlueFunction("c", "c", 2);
+//        t.addGlueFunction("d", "d", 2);
+//        t.addGlueFunction("e", "e", 2);
+//        t.addGlueFunction("f", "f", 2);
+//        //unmarshaller.unmarshal(new File("./tetris_example.xml"));
+//        //t.loadTileConfiguration((TileConfiguration) unmarshaller.unmarshal(new File("./tetris_example.xml")));
+
+        for(PolyTile p : ts.getTileTypes())
             p.setGlues();
 
-        a.changeTileSystem(t);
+        a.changeTileSystem(ts);
 
         return a;
     }
@@ -166,6 +204,16 @@ public class TetrisSimulation {
 //        System.out.println();
 
         assembly = loadAssembly();
+//
+//        JAXBContext jaxbContext = JAXBContext.newInstance(Assembly.class);
+//        Marshaller marshaller = jaxbContext.createMarshaller();
+//        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+//        marshaller.marshal(assembly, new File("./tetris_assembly.xml"));
+//
+//        jaxbContext = JAXBContext.newInstance(TileConfiguration.class);
+//        marshaller = jaxbContext.createMarshaller();
+//        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
     }
 
     public static void main(String args[]) throws JAXBException {

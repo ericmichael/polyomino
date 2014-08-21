@@ -7,20 +7,11 @@ Tile system is meant to be the container where all different types of polytiles 
 import java.io.InvalidObjectException;
 import java.util.Set;
 import java.util.HashSet;
-
-import com.sun.javaws.exceptions.MissingFieldException;
-
-import com.asarg.polysim.xml.GlueXmlAdapter;
 import javafx.util.Pair;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import javax.xml.bind.annotation.*;
 import java.util.HashMap;
 
-@XmlRootElement
+@XmlRootElement(name = "TileSystem")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TileSystem {
     public static final int UNIFORMDISTRIBUTION = 0;
@@ -28,20 +19,20 @@ public class TileSystem {
     public static final int COUNT = 2;
 
     // temperature of the system, bonds must be of at least this value or they break.
-    @XmlElement(name = "Temperature")
+    //@XmlElement(name = "Temperature")
+    @XmlAttribute(name = "Temperature")
     private int temperature;
     // glue function to determine strength between two labels
-    @XmlElement(name = "GlueFunction")
-    @XmlJavaTypeAdapter(GlueXmlAdapter.class)
+    @XmlTransient
     private HashMap<Pair<String, String>, Integer> glueFunction = new HashMap<Pair<String, String>, Integer>();
     // list of polytiles: data structure should be changed to something that would be of better performance
-    @XmlElement(name = "TileTypes")
+    @XmlTransient
     private Set<PolyTile> tileTypes = new HashSet<PolyTile>();
     // used to set weight option: 0 = none (assumed equal concentrations), 1 = concentration, 2 = tile count
-    @XmlElement(name = "Weighting")
+    @XmlAttribute(name = "WeightingOption")
     private int weightOption;
     // total count of all tiles in tile system; used for count-based attachment
-    @XmlElement(name = "TotalCount")
+    @XmlTransient
     private int totalCount = 0;
 
     public TileSystem() { }
@@ -51,21 +42,21 @@ public class TileSystem {
     public TileSystem(int temp, int wO){ temperature = temp; weightOption = wO; }
 
     public void addGlueFunction(String label1, String label2, int temp) {
-        glueFunction.put(new Pair(label1, label2), temp);
+        glueFunction.put(new Pair<String, String>(label1, label2), temp);
         if(!label1.equals(label2)) {
-            glueFunction.put(new Pair(label2, label1), temp);
+            glueFunction.put(new Pair<String, String>(label2, label1), temp);
         }
     }
 
     public void removeGlueFunction(String label1, String label2) {
-        glueFunction.remove(new Pair(label1, label2));
+        glueFunction.remove(new Pair<String, String>(label1, label2));
         if(!label1.equals(label2)) {
-            glueFunction.remove(new Pair(label2, label1));
+            glueFunction.remove(new Pair<String, String>(label2, label1));
         }
     }
 
     public int getStrength(String label1, String label2) {
-        Pair key = new Pair(label1, label2);
+        Pair key = new Pair<String, String>(label1, label2);
 
         if(glueFunction.containsKey(key)){
             return glueFunction.get(key);
@@ -139,5 +130,16 @@ public class TileSystem {
 
     public Set<PolyTile> getTileTypes() {
         return tileTypes;
+    }
+
+    public boolean loadTileConfiguration(TileConfiguration t) {
+        if(t == null)
+            return false;
+        else if(t.getGlueFunction() == null || t.getTiletypes() == null)
+            return false;
+
+        glueFunction = t.getGlueFunction();
+        tileTypes = t.getTiletypes();
+        return true;
     }
 }
