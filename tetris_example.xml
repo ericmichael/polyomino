@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<tileSystem>
+    <Temperature>2</Temperature>
+    <GlueFunction>
+        <entries>
+            <labels>
+                <label1>f</label1>
+                <label2>f</label2>
+            </labels>
+            <strength>2</strength>
+        </entries>
+        <entries>
+            <labels>
+                <label1>e</label1>
+                <label2>e</label2>
+            </labels>
+            <strength>2</strength>
+        </entries>
+        <entries>
+            <labels>
+                <label1>d</label1>
+                <label2>d</label2>
+            </labels>
+            <strength>2</strength>
+        </entries>
+        <entries>
+            <labels>
+                <label1>c</label1>
+                <label2>c</label2>
+            </labels>
+            <strength>2</strength>
+        </entries>
+        <entries>
+            <labels>
+                <label1>b</label1>
+                <label2>b</label2>
+            </labels>
+            <strength>2</strength>
+        </entries>
+        <entries>
+            <labels>
+                <label1>a</label1>
+                <label2>a</label2>
+            </labels>
+            <strength>2</strength>
+        </entries>
+    </GlueFunction>
+    <TileTypes Label="V" Color="2672EC">
+        <Tile>
+            <Location x="0" y="0"/>
+            <Color>2672EC</Color>
+        </Tile>
+        <Tile>
+            <Location x="-1" y="0"/>
+            <Color>2672EC</Color>
+        </Tile>
+        <Tile>
+            <Location x="-1" y="1"/>
+            <Color>2672EC</Color>
+        </Tile>
+        <Tile>
+            <Location x="-1" y="2"/>
+            <Color>2672EC</Color>
+            <WestGlue>a</WestGlue>
+        </Tile>
+        <Tile>
+            <Location x="1" y="0"/>
+            <Color>2672EC</Color>
+        </Tile>
+        <Concentration>0.0</Concentration>
+        <Count>0</Count>
+    </TileTypes>
+    <TileTypes Label="I" Color="AC193D">
+        <Tile>
+            <Location x="0" y="0"/>
+            <Color>AC193D</Color>
+        </Tile>
+        <Tile>
+            <Location x="0" y="1"/>
+            <Color>AC193D</Color>
+        </Tile>
+        <Tile>
+            <Location x="0" y="-1"/>
+            <Color>AC193D</Color>
+        </Tile>
+        <Tile>
+            <Location x="0" y="2"/>
+            <Color>AC193D</Color>
+            <EastGlue>a</EastGlue>
+        </Tile>
+        <Tile>
+            <Location x="0" y="-2"/>
+            <Color>AC193D</Color>
+            <EastGlue>b</EastGlue>
+        </Tile>
+        <Concentration>0.0</Concentration>
+        <Count>0</Count>
+    </TileTypes>
+    <TileTypes Label="L" Color="D24726">
+        <Tile>
+            <Location x="0" y="0"/>
+            <Color>D24726</Color>
+        </Tile>
+        <Tile>
+            <Location x="0" y="1"/>
+            <Color>D24726</Color>
+        </Tile>
+        <Tile>
+            <Location x="0" y="2"/>
+            <Color>D24726</Color>
+        </Tile>
+        <Tile>
+            <Location x="0" y="3"/>
+            <Color>D24726</Color>
+            <EastGlue>c</EastGlue>
+            <WestGlue>a</WestGlue>
+        </Tile>
+        <Tile>
+            <Location x="1" y="0"/>
+            <Color>D24726</Color>
+        </Tile>
+        <Concentration>0.0</Concentration>
+        <Count>0</Count>
+    </TileTypes>
+    <TileTypes Label="F" Color="5133AB">
+        <Tile>
+            <Location x="0" y="0"/>
+            <Color>5133AB</Color>
+        </Tile>
+        <Tile>
+            <Location x="0" y="-1"/>
+            <Color>5133AB</Color>
+        </Tile>
+        <Tile>
+            <Location x="-1" y="0"/>
+            <Color>5133AB</Color>
+        </Tile>
+        <Tile>
+            <Location x="0" y="1"/>
+            <Color>5133AB</Color>
+            <WestGlue>b</WestGlue>
+        </Tile>
+        <Tile>
+            <Location x="1" y="1"/>
+            <Color>5133AB</Color>
+            <EastGlue>d</EastGlue>
+        </Tile>
+        <Concentration>0.0</Concentration>
+        <Count>0</Count>
+    </TileTypes>
+    <TileTypes Label="X" Color="8C0095">
+        <Tile>
+            <Location x="0" y="0"/>
+            <Color>8C0095</Color>
+        </Tile>
+        <Tile>
+            <Location x="-1" y="0"/>
+            <Color>8C0095</Color>
+        </Tile>
+        <Tile>
+            <Location x="1" y="0"/>
+            <Color>8C0095</Color>
+        </Tile>
+        <Tile>
+            <Location x="0" y="1"/>
+            <Color>8C0095</Color>
+            <WestGlue>d</WestGlue>
+        </Tile>
+        <Tile>
+            <Location x="0" y="-1"/>
+            <Color>8C0095</Color>
+            <SouthGlue>e</SouthGlue>
+        </Tile>
+        <Concentration>0.0</Concentration>
+        <Count>0</Count>
+    </TileTypes>
+    <TileTypes Label="U" Color="008299">
+        <Tile>
+            <Location x="0" y="0"/>
+            <Color>008299</Color>
+            <NorthGlue>e</NorthGlue>
+        </Tile>
+        <Tile>
+            <Location x="-1" y="0"/>
+            <Color>008299</Color>
+        </Tile>
+        <Tile>
+            <Location x="-1" y="1"/>
+            <Color>008299</Color>
+        </Tile>
+        <Tile>
+            <Location x="1" y="0"/>
+            <Color>008299</Color>
+        </Tile>
+        <Tile>
+            <Location x="1" y="1"/>
+            <Color>008299</Color>
+        </Tile>
+        <Concentration>0.0</Concentration>
+        <Count>0</Count>
+    </TileTypes>
+    <Weighting>0</Weighting>
+    <TotalCount>0</TotalCount>
+</tileSystem>
