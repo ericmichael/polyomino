@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class TestCanvasFrame extends JFrame implements MouseWheelListener, MouseMotionListener, MouseListener,KeyListener{
+public class TestCanvasFrame extends JFrame implements MouseWheelListener, MouseMotionListener, MouseListener,KeyListener, ComponentListener{
 
     TestCanvas tc;
     JMenuBar tcfBar = new JMenuBar();
@@ -33,15 +33,17 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         height = h;
         frontier = this.assembly.calculateFrontier();
         setLayout(new BorderLayout());
-        tc = new TestCanvas(width, height);
+        tc = new TestCanvas();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addMouseWheelListener(this);
         addMouseListener(this);
         addMouseMotionListener(this);
         addKeyListener(this);
+        addComponentListener(this);
 
 
         add(tc, BorderLayout.SOUTH);
+        tc.setSize(w,h);
 
         ActionListener al = new ActionListener() {
             @Override
@@ -74,12 +76,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         drawGrid();
     }
 
-    public void drawPolyTile(PolyTile pt)
-    {
-        tc.drawPolyTile(pt);
 
-
-    }
     public void drawGrid()
     {
         tc.drawGrid(assembly.Grid);
@@ -93,11 +90,6 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
             tc.setTileDiameter((int)(tileDiameter*1.25));
         else return;
 
-
-
-
-
-
         tc.reset();
         drawGrid();
         repaint();
@@ -105,8 +97,9 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
     public void zoomOutDraw()
     {
         int tileDiameter = tc.getTileDiameter();
-        if(tileDiameter > 10)
+        if(tileDiameter > 10) {
             tc.setTileDiameter((int) (tileDiameter * .75));
+        }
         else return;
 
         tc.reset();
@@ -197,4 +190,26 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
     }
 
 
+    @Override
+    public void componentResized(ComponentEvent e) {
+
+
+        remove(tc);
+        add(tc);
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentShown(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {
+
+    }
 }

@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,89 +20,149 @@ public class Drawer {
         g.setComposite(AlphaComposite.Src);
 
     }
+    public static Point calculateGridDimension(List<Point> gridPoints)
+    {
+        int maxX = Integer.MIN_VALUE;
+        int maxY = Integer.MIN_VALUE;
+        int minX = Integer.MAX_VALUE;
+        int minY = Integer.MAX_VALUE;
+
+          for(Point p : gridPoints)
+          {
+              if(p.x > maxX)
+              {
+                  maxX = p.x;
+              }
+              if(p.x < minX)
+              {
+                  minX = p.x;
+              }
+              if(p.y > maxY)
+              {
+                  maxY = p.y;
+              }
+              if(p.y < minY)
+              {
+                  minY = p.y;
+              }
+          }
+
+        return new Point(1+maxX - minX,1+maxY -minY);
+
+    }
+
 
     public static Dimension getStringPixelDimension(Graphics2D gContext, String string) {
         Rectangle2D stringBounds = gContext.getFontMetrics().getStringBounds(string, gContext);
         int stringBoundWidth = (int) stringBounds.getWidth();
         int stringBoundHeight = (int) stringBounds.getHeight();
-        final BufferedImage tBFI = new BufferedImage(stringBoundWidth, stringBoundHeight, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D tGFX = tBFI.createGraphics();
-        tGFX.setFont(gContext.getFont());
-        tGFX.setColor(Color.WHITE);
-        tGFX.fillRect(0, 0, stringBoundWidth, stringBoundHeight);
-        tGFX.setColor(Color.BLACK);
-        tGFX.drawString(string, 0, stringBoundHeight);
+        if(stringBoundWidth > 2 && stringBoundWidth > 2) {
+            final BufferedImage tBFI = new BufferedImage(stringBoundWidth, stringBoundHeight, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D tGFX = tBFI.createGraphics();
+            tGFX.setFont(gContext.getFont());
+            tGFX.setColor(Color.WHITE);
+            tGFX.fillRect(0, 0, stringBoundWidth, stringBoundHeight);
+            tGFX.setColor(Color.BLACK);
+            tGFX.drawString(string, 0, stringBoundHeight);
 
 
-        int maxX = 0;
-        int minX = 0;
-        int maxY = 0;
-        int minY = 0;
+            int maxX = 0;
+            int minX = 0;
+            int maxY = 0;
+            int minY = 0;
 
-        //minX scan
-        outerXLoop1:
-        for (int i = 0; i < stringBoundWidth; i++) {
-            for (int j = 0; j < stringBoundHeight; j++) {
+            //minX scan
+            outerXLoop1:
+            for (int i = 0; i < stringBoundWidth; i++) {
+                for (int j = 0; j < stringBoundHeight; j++) {
 
-                if (tBFI.getRGB(i, j) == Color.BLACK.getRGB()) {
+                    if (tBFI.getRGB(i, j) == Color.BLACK.getRGB()) {
 
-                    minX = i;
-                    break outerXLoop1;
-                }
+                        minX = i;
+                        break outerXLoop1;
+                    }
 
 
-
-            }
-        }
-        //maxX scan
-        outerXLoop2:
-        for (int i = stringBoundWidth - 1; i > 0; i--) {
-            for (int j = 0; j < stringBoundHeight; j++) {
-                if (tBFI.getRGB(i, j)== Color.BLACK.getRGB()) {
-
-                    maxX = i;
-                    break outerXLoop2;
-                }
-
-            }
-        }
-        //minY scan
-        outerYLoop1:
-         for(int i = 0; i < stringBoundHeight; i++ )
-         {
-             for(int j = 0; j < stringBoundWidth; j++)
-             {
-                 if(tBFI.getRGB(j,i)== Color.BLACK.getRGB())
-                 {
-
-                     minY = i;
-                     break outerYLoop1;
-                 }
-             }
-         }
-
-        //maxY scan
-        outerYLoop2:
-        for(int i = stringBoundHeight -1; i > 0; i-- )
-        {
-            for(int j = 0; j < stringBoundWidth; j++)
-            {
-                if(tBFI.getRGB(j,i) == Color.BLACK.getRGB())
-                {
-
-                    maxY = i;
-                    break outerYLoop2;
                 }
             }
+            //maxX scan
+            outerXLoop2:
+            for (int i = stringBoundWidth - 1; i > 0; i--) {
+                for (int j = 0; j < stringBoundHeight; j++) {
+                    if (tBFI.getRGB(i, j) == Color.BLACK.getRGB()) {
+
+                        maxX = i;
+                        break outerXLoop2;
+                    }
+
+                }
+            }
+            //minY scan
+            outerYLoop1:
+            for (int i = 0; i < stringBoundHeight; i++) {
+                for (int j = 0; j < stringBoundWidth; j++) {
+                    if (tBFI.getRGB(j, i) == Color.BLACK.getRGB()) {
+
+                        minY = i;
+                        break outerYLoop1;
+                    }
+                }
+            }
+
+            //maxY scan
+            outerYLoop2:
+            for (int i = stringBoundHeight - 1; i > 0; i--) {
+                for (int j = 0; j < stringBoundWidth; j++) {
+                    if (tBFI.getRGB(j, i) == Color.BLACK.getRGB()) {
+
+                        maxY = i;
+                        break outerYLoop2;
+                    }
+                }
+            }
+            return  new Dimension(maxX - minX, maxY - minY);
         }
+        else return new Dimension(1,1);
 
 
-        return  new Dimension(maxX - minX, maxY - minY);
+
     }
 
 
     public static class TileDrawer {
 
+        public static Point calculatePolyTileDimension(PolyTile polyt)
+        {
+
+            int maxX = Integer.MIN_VALUE;
+            int maxY = Integer.MIN_VALUE;
+            int minX = Integer.MAX_VALUE;
+            int minY = Integer.MAX_VALUE;
+            List<Tile> tiles = polyt.getTiles();
+            for(Tile t :tiles )
+            {
+                Point pt = t.getLocation();
+                if(pt.x > maxX)
+                {
+                    maxX = pt.x;
+                }
+                if(pt.x < minX)
+                {
+                    minX = pt.x;
+                }
+                if(pt.y > maxY)
+                {
+                    maxY = pt.y;
+                }
+                if(pt.y < minY)
+                {
+                    minY = pt.y;
+                }
+            }
+
+            return new Point(1+maxX - minX,1+maxY -minY);
+
+        }
         public static void drawTile(Graphics2D g, Tile tile, int x, int y, int diameter) {
 
 
@@ -141,7 +202,7 @@ public class Drawer {
             g.drawString(tileLabel, x + (diameter / 2) - (labelBounds.width/ 2) - labelXShift, y + (diameter / 2) + (labelBounds.height / 2) );
 
             //glue drawing
-            if (westGlue != null && !westGlue.isEmpty()) {
+           /* if (westGlue != null && !westGlue.isEmpty()) {
                 g.setFont(g.getFont().deriveFont((float)(diameter/4)));
                 Dimension westGluePixelDim = getStringPixelDimension(g,westGlue);
                 Rectangle2D r2d = g.getFontMetrics().getStringBounds(westGlue, g);
@@ -156,16 +217,15 @@ public class Drawer {
                 g.drawString(  westGlue,  x+westGluePixelDim.height,  y- westGluePixelDim.width/2 + diameter/2);
                 g.setTransform(gOriginalATransform);
                 System.out.println("SDFS");
-            }
+            }*/
             if (eastGlue != null && !eastGlue.isEmpty()) {
-                g.setFont(g.getFont().deriveFont((float)(diameter/4)));
+                g.setFont(g.getFont().deriveFont((float)(diameter/6)));
                 Dimension eastGluePixelDim = getStringPixelDimension(g,eastGlue);
                 AffineTransform negNinety = new AffineTransform();
                 negNinety.setToRotation(Math.toRadians(-90),x+ diameter - eastGluePixelDim.height, y+ eastGluePixelDim.width/2 + diameter/2 );
                 g.setTransform(negNinety);
                 g.drawString(eastGlue, x+ diameter - eastGluePixelDim.height, y +eastGluePixelDim.width/2 + diameter/2);
                 g.setTransform(gOriginalATransform);
-                System.out.println("SDFS");
             }
 
 
@@ -177,14 +237,40 @@ public class Drawer {
 
         public static void drawTiles(Graphics2D g, Set<Map.Entry<Point, Tile>> tiles, int diameter, Point offset) {
 
-
-
             for (Map.Entry<Point, Tile> mep : tiles) {
                 Point pt = mep.getKey();
                 Tile tile = mep.getValue();
                 drawTile(g, tile, pt.x * diameter + offset.x - diameter / 2, -pt.y * diameter + offset.y - diameter / 2, diameter);
             }
         }
+
+
+        public static void drawPolyTile(Graphics2D g, PolyTile pt, int diameter, Point offset) {
+            Drawer.clearGraphics(g);
+            java.util.List<Tile> lt = pt.tiles;
+            for (Tile t : lt) {
+
+                g.setColor(Color.black);
+
+                drawTile(g, t, t.getLocation().x * diameter + offset.x - diameter / 2, -t.getLocation().y * diameter + offset.y - diameter / 2, diameter);
+            }
+            
+        }
+        public static void drawCenteredPolyTile(Graphics2D g, PolyTile pt)
+        {
+            Point polyDim = calculatePolyTileDimension(pt);
+            System.out.println(polyDim);
+            Rectangle graphicsDim = g.getClipBounds();
+
+            int diameter =  (int)  (Math.min(graphicsDim.getWidth(), graphicsDim.getHeight()) /Math.max(polyDim.x, polyDim.y));
+            Point offset = new Point((diameter * polyDim.x)/2, (diameter * polyDim.y)/2);
+
+            drawPolyTile(g, pt, diameter, offset);
+
+
+
+        }
+
     }
 
 }
