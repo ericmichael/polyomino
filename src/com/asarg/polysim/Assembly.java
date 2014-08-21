@@ -21,7 +21,7 @@ public class Assembly {
     private static final int WEST = 3;
 
     // tile system, it can be changed so it needs its own class
-    @XmlTransient
+    @XmlElement(name = "TileSystem")
     private TileSystem tileSystem;
     // placeholder for the grid
     @XmlElement(name = "AssemblyGrid")

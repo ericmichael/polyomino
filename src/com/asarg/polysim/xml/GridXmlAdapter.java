@@ -2,10 +2,7 @@ package com.asarg.polysim.xml;
 
 import com.asarg.polysim.PolyTile;
 import com.asarg.polysim.Tile;
-import javafx.util.Pair;
-
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -20,7 +17,7 @@ public class GridXmlAdapter extends XmlAdapter<GridXmlAdapter.HashMapXml, HashMa
     @Override
     public HashMap<Point, Tile> unmarshal(HashMapXml v) throws Exception {
         HashMap<Point, Tile> hashMap = new HashMap<Point, Tile>();
-        for(EntryXml entry : v.entries) {
+        for(EntryXml entry : v.GridTile) {
             entry.tile.setParent(entry.parent);
             hashMap.put(entry.point, entry.tile);
         }
@@ -35,24 +32,24 @@ public class GridXmlAdapter extends XmlAdapter<GridXmlAdapter.HashMapXml, HashMa
             entryXml.point = entry.getKey();
             entryXml.tile = entry.getValue();
             entryXml.parent = entry.getValue().getParent();
-            hashMapXml.entries.add(entryXml);
+            hashMapXml.GridTile.add(entryXml);
         }
         return hashMapXml;
     }
 
     @XmlType(name = "GridHashMapXml")
     public static class HashMapXml {
-        public List<EntryXml> entries = new ArrayList<EntryXml>();
+        public List<EntryXml> GridTile = new ArrayList<EntryXml>();
     }
 
     @XmlType(name = "GridEntryXml")
     public static class EntryXml {
-        @XmlElement
+        @XmlElement(name = "GridLocation")
         @XmlJavaTypeAdapter(PointXmlAdapter.class)
         public Point point;
-        @XmlElement
+        @XmlElement(name = "Tile")
         public Tile tile;
-        @XmlElement
+        @XmlElement(name = "ParentPolyTile")
         public PolyTile parent;
     }
 }
