@@ -13,14 +13,11 @@ import com.sun.javaws.exceptions.MissingFieldException;
 import com.asarg.polysim.xml.GlueXmlAdapter;
 import javafx.util.Pair;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.HashMap;
 
-@XmlRootElement
+@XmlRootElement(name = "TileConfiguration")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TileSystem {
     public static final int UNIFORMDISTRIBUTION = 0;
@@ -28,7 +25,8 @@ public class TileSystem {
     public static final int COUNT = 2;
 
     // temperature of the system, bonds must be of at least this value or they break.
-    @XmlElement(name = "Temperature")
+    //@XmlElement(name = "Temperature")
+    @XmlTransient
     private int temperature;
     // glue function to determine strength between two labels
     @XmlElement(name = "GlueFunction")

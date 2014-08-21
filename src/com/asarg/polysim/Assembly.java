@@ -28,9 +28,9 @@ public class Assembly {
     @XmlJavaTypeAdapter(GridXmlAdapter.class)
     public HashMap<Point, Tile> Grid = new HashMap<Point, Tile>();
     // frontier list: calculated, increased, decreased, and changed here.
-    @XmlElement(name = "Frontier")
+    @XmlTransient
     private List<Pair<Point, PolyTile>> frontier = new ArrayList<Pair<Point, PolyTile>>();
-    @XmlElement(name = "AttachedPolytiles")
+    @XmlTransient
     private List<Pair<Point, PolyTile>> attached = new ArrayList<Pair<Point, PolyTile>>();
 
 
