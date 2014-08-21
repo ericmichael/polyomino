@@ -9,9 +9,6 @@ package com.asarg.polysim;
 
 import java.awt.*;
 
-/**
- * Created by Mario M on 8/19/2014.
- */
 public class FrontierElement {
     private Point tileWithGlue;
     private Point polytileOffset;

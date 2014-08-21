@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class TestCanvasFrame extends JFrame implements MouseWheelListener, MouseMotionListener, MouseListener{
+public class TestCanvasFrame extends JFrame implements MouseWheelListener, MouseMotionListener, MouseListener,KeyListener{
 
     TestCanvas tc;
     JMenuBar tcfBar = new JMenuBar();
@@ -38,6 +38,8 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         addMouseWheelListener(this);
         addMouseListener(this);
         addMouseMotionListener(this);
+        addKeyListener(this);
+
 
         add(tc, BorderLayout.SOUTH);
 
@@ -84,27 +86,51 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         repaint();
 
     }
+    public void zoomInDraw()
+    {
+        int tileDiameter = tc.getTileDiameter();
+        if(tileDiameter< width/2)
+            tc.setTileDiameter((int)(tileDiameter*1.25));
+        else return;
 
 
-    @Override
-    public void mouseWheelMoved(MouseWheelEvent e) {
 
-        if(e.getWheelRotation() == 1)
-        {
-            tc.setTileDiameter(tc.getTileDiameter()-10);
-        }
-        if(e.getWheelRotation() == -1)
-        {
-            tc.setTileDiameter(tc.getTileDiameter()+10);
-        }
+
+
+
+        tc.reset();
+        drawGrid();
+        repaint();
+    }
+    public void zoomOutDraw()
+    {
+        int tileDiameter = tc.getTileDiameter();
+        if(tileDiameter > 10)
+            tc.setTileDiameter((int) (tileDiameter * .75));
+        else return;
+
         tc.reset();
         drawGrid();
         repaint();
     }
 
     @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+
+
+        if(e.getWheelRotation() == 1)
+        {
+           zoomOutDraw();
+        }
+        if(e.getWheelRotation() == -1)
+        {
+           zoomInDraw();
+        }
+
+    }
+
+    @Override
     public void mouseDragged(MouseEvent e) {
-        System.out.println("SDSDF");
         tc.translateOffset(e.getX() - lastMouseXY.x, e.getY() - lastMouseXY.y);
         lastMouseXY=e.getPoint();
         tc.reset();
@@ -144,4 +170,31 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
     public void mouseExited(MouseEvent e) {
 
     }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+
+
+
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if(e.getKeyCode() == KeyEvent.VK_PAGE_UP)
+        {
+            zoomInDraw();
+        }else if(e.getKeyCode() == KeyEvent.VK_PAGE_DOWN)
+        {
+            zoomOutDraw();
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
+
+
 }

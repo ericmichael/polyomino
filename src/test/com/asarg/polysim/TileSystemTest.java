@@ -8,7 +8,6 @@ import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import com.asarg.polysim.TileSystem;
 import java.util.Set;
-import java.util.HashSet;
 
 public class TileSystemTest {
     private TileSystem ts;
@@ -98,6 +97,27 @@ public void testAddPolyTile() throws Exception {
     //TODO: figure out if we want to return a reference to the object or a deep copy of the object (tile type list)
     assertSame("Polytile list is the same object as the one returned.", testPolyTileList, ts.getTileTypes());
 
+    // tests for incorrect weight option polytile.
+    boolean exceptionCaught = false;
+    TileSystem ts2 = new TileSystem(3, TileSystem.CONCENTRATION);
+    PolyTile pCon = new PolyTile("polyWithConcentration and no count", 10.2);
+    try {
+        ts2.addPolyTile(pCon);
+    } catch (IllegalStateException e){
+        exceptionCaught = true;
+        System.out.println("Illegal state exception caught when adding polytile");
+    }
+    assertFalse("polytile added should not have been caught in an exception", exceptionCaught);
+
+    PolyTile pCou = new PolyTile("polyWithCount and no concentration", 200);
+    try{
+        ts2.addPolyTile(pCou);
+    } catch (IllegalStateException e) {
+        exceptionCaught = true;
+        System.out.println("IllegalStateException caught when adding polytile");
+    }
+    assertTrue("polytile added should have been caught in an exception (no concentration" +
+            " in a concentration based tliesystem.", exceptionCaught);
 } 
 
 /** 
@@ -132,4 +152,15 @@ public void testGetTileTypes() throws Exception {
     assertNotNull("function should not return null", ts.getTileTypes());
 }
 
-} 
+/**
+ *
+ * Method: setWeightOption()
+ *
+ */
+@Test
+public void testSetWeightOption() throws Exception {
+    //TODO: Test goes here...
+
+}
+
+}
