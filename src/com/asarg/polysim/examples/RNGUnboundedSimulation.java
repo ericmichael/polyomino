@@ -145,23 +145,24 @@ public class RNGUnboundedSimulation {
     private TileSystem ts;
     private Assembly assembly;
 
-    public RNGUnboundedSimulation(int temperature){
+    public RNGUnboundedSimulation(int temperature) throws JAXBException {
         ts = new TileSystem(temperature, 0);
-        TileConfiguration tc = new TileConfiguration();
+        TileConfiguration tc;
 
-        JAXBContext jaxbContext = JAXBContext.newInstance(TileSystem.class);
-        Marshaller marshaller = jaxbContext.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        //marshaller.marshal(ts, new File("RNG_ATAM_tileset.xml"));
+        JAXBContext jaxbContext = JAXBContext.newInstance(TileConfiguration.class);
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        ts = (TileSystem) unmarshaller.unmarshal(new File("./RNG_ATAM_tileset.xml"));
+        tc = (TileConfiguration) unmarshaller.unmarshal(new File("./Examples/RNG_ATAM/tileconfig.xml"));
+        ts.loadTileConfiguration(tc);
+
         for(PolyTile p : ts.getTileTypes()) {
             p.setGlues();
         }
         System.out.println();
 
-        assembly = new ATAMAssembly(ts);
-        assembly.placeSeed(rngWL());
+        jaxbContext = JAXBContext.newInstance(Assembly.class);
+        unmarshaller = jaxbContext.createUnmarshaller();
+        assembly = (Assembly) unmarshaller.unmarshal(new File("./Examples/RNG_ATAM/assembly.xml"));
+        assembly.changeTileSystem(ts);
     }
 
     public static void main(String args[]) throws JAXBException {
