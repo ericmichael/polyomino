@@ -1,5 +1,7 @@
 package com.asarg.polysim;
 
+import javax.xml.bind.*;
+import java.io.File;
 import java.util.Random;
 
 public class Main {
@@ -53,7 +55,7 @@ public class Main {
     public static PolyTile tetrisX() {
         String blank[] = blankGlues();
         String glue[] = {null, null, "e", null};
-        String glue2[] = {null, null, null, "d"};
+        String glue2[] = {null, null, null, "ddeFE"};
 
         PolyTile poly = new PolyTile("X");
 
@@ -70,7 +72,7 @@ public class Main {
 
     public static PolyTile tetrisF() {
         String[] gleft = {null, null, null, "b"};
-        String[] gright = {null, "d", null, null};
+        String[] gright = {null, "ddeFE", null, null};
 
         PolyTile tetrisF = new PolyTile("F");
 
@@ -117,7 +119,7 @@ public class Main {
     }
 
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws JAXBException {
 
         TileSystem ts = new TileSystem(2);
 
@@ -134,11 +136,20 @@ public class Main {
         ts.addGlueFunction("d","d",2);
         ts.addGlueFunction("e","e",2);
         ts.addGlueFunction("f","f",2);
+        ts.addGlueFunction("ddeFE","ddeFE",2);
 
         Assembly assembly = new Assembly(ts);
         assembly.placeSeed(tetrisF());
 
         TestCanvasFrame tcf = new TestCanvasFrame(800,600,assembly);
+
+        JAXBContext jaxbContext = JAXBContext.newInstance(TileSystem.class);
+        Marshaller marshaller = jaxbContext.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
+        marshaller.marshal(ts, new File("./output.xml"));
+
 
     }
 }
