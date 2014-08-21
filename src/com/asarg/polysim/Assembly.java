@@ -19,9 +19,8 @@ public class Assembly {
     // placeholder for the grid
     public HashMap<Point, Tile> Grid = new HashMap<Point, Tile>();
     // frontier list: calculated, increased, decreased, and changed here.
-    private List<Pair<Point, PolyTile>> frontier = new ArrayList<Pair<Point, PolyTile>>();
-    private List<Pair<Point, PolyTile>> attached = new ArrayList<Pair<Point, PolyTile>>();
-
+    Frontier frontier = new Frontier( tileSystem );
+    ArrayList<FrontierElement> attached = new ArrayList<FrontierElement>();
 
     //Open glue ends stored by their coordinate
     HashMap<Point, String> openNorthGlues = new HashMap<Point, String>();
@@ -170,7 +169,7 @@ public class Assembly {
     }
     // calculate frontier
 
-    public List<Pair<Point, PolyTile>> calculateFrontier() {
+    public Frontier calculateFrontier() {
         ArrayList toRemove = new ArrayList();
         for(PolyTile t : tileSystem.getTileTypes()){
             checkMatchingGlues(t);
@@ -183,7 +182,7 @@ public class Assembly {
 
             if(checkStability(pt, offset.x, offset.y) &&
                     geometryCheckSuccess(pt, offset.x, offset.y)) {
-                Pair<Point, PolyTile> candidate = new Pair<Point, PolyTile>(offset, pt);
+                FrontierElement candidate = new FrontierElement(offset, pt);
                 if(!frontier.contains(candidate)){
                     frontier.add(candidate);
                 }
@@ -253,11 +252,8 @@ public class Assembly {
 
     //Place "random" polytile from frontier
     private void addFromFrontier(){
-        Random rn = new Random();
-        Pair<Point, PolyTile> x = frontier.get(rn.nextInt(frontier.size()));
-        placePolytile(x.getValue(), x.getKey().x, x.getKey().y );
-        frontier.remove(x);
-        attached.add(x);
+
+
     }
 
     private void cleanUp() {
@@ -269,13 +265,14 @@ public class Assembly {
         openWestGlues.clear();
     }
 
-    private void negGlueDetach(){
-
-    }
-
     public double attach(){
-        if(tileSystem.getWeightOption() == 1)
-            weightedAddFromFrontier();
+        if(tileSystem.getWeightOption() == 1) {
+            FrontierElement fe = frontier.get(frontier.randomSelect());
+
+            placePolytile(fe.getPolyTile(), fe.get().x, pt.getKey().y);
+            frontier.remove(fe);
+            attached.add(fe);
+        }
         else if(tileSystem.getWeightOption() == 2)
             countWeightedAddFromFrontier();
         else
@@ -295,59 +292,17 @@ public class Assembly {
     }
 
     //Add "random" polytile from frontier based on Polytile's counts
-    private void countWeightedAddFromFrontier(){
-        //generate cumulative density list
-        ArrayList<Double> cdList = new ArrayList();
-        double totalConcentration = 0.0;
-        for (Pair<Point, PolyTile> p : frontier) {
-            PolyTile pt = p.getValue();
-            totalConcentration += pt.getCount()/tileSystem.getTotalCount();
-            cdList.add(totalConcentration);
-        }
-        Random rn = new Random();
-        double x = rn.nextDouble() * totalConcentration;
-        //Binary search for random number in cdList
-        int index = weightedAddBinarySearchHelper(cdList, x);
-        Pair<Point, PolyTile> pt = frontier.get(index);
-        placePolytile(pt.getValue(), pt.getKey().x, pt.getKey().y);
-        frontier.remove(x);
-    }
+
 
     //Add "random" polytile from frontier based on Polytile's concentrations
-    public void weightedAddFromFrontier() {
-        //generate cumulative density list
-        ArrayList<Double> cdList = new ArrayList();
-        double totalConcentration = 0.0;
-        for (Pair<Point, PolyTile> p : frontier) {
-            PolyTile pt = p.getValue();
-            totalConcentration += pt.getConcentration();
-            cdList.add(totalConcentration);
-        }
-        Random rn = new Random();
-        double x = rn.nextDouble() * totalConcentration;
-        //Binary search for random number in cdList
-        int index = weightedAddBinarySearchHelper(cdList, x);
+
         Pair<Point, PolyTile> pt = frontier.get(index);
         placePolytile(pt.getValue(), pt.getKey().x, pt.getKey().y);
-        frontier.remove(x);
+        frontier.remove(pt);
+        attached.add(pt);
     }
 
-    private static int weightedAddBinarySearchHelper(ArrayList<Double> cdList, double x) {
-        int lo = 0;
-        int hi = cdList.size() - 1;
-        while (lo <= hi) {
-            int mid = lo + (hi - lo) / 2;
-            if (mid == 0)
-                return mid;
-            if (x < cdList.get(mid) && x >= cdList.get(mid - 1))
-                return mid;
-            else if (x < cdList.get(mid))
-                hi = mid - 1;
-            else if (x > cdList.get(mid))
-                lo = mid + 1;
-        }
-        return -1;
-    }
+
 
     public void placeSeed(PolyTile t){
         if(Grid.size() == 0)

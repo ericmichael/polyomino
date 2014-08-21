@@ -110,6 +110,7 @@ public class PolyTile {
         count = c;
         System.out.println("concentration changed to "+c);
     }
+
     public void changeName(String n){
         polyName = n;
     }
