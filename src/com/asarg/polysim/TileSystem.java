@@ -4,12 +4,19 @@ Tile system is meant to be the container where all different types of polytiles 
  Glue function is also called from here.
  */
 
+import java.io.InvalidObjectException;
 import java.util.Set;
 import java.util.HashSet;
+
+import com.sun.javaws.exceptions.MissingFieldException;
 import javafx.util.Pair;
 import java.util.HashMap;
 
 public class TileSystem {
+    public static final int UNIFORMDISTRIBUTION = 0;
+    public static final int CONCENTRATION = 1;
+    public static final int COUNT = 2;
+
     // temperature of the system, bonds must be of at least this value or they break.
     private int temperature;
     // glue function to determine strength between two labels
@@ -21,7 +28,7 @@ public class TileSystem {
     // total count of all tiles in tile system; used for count-based attachment
     private int totalCount = 0;
 
-    public TileSystem(int temp){ temperature = temp; weightOption = 0; }
+    public TileSystem(int temp){ temperature = temp; weightOption = UNIFORMDISTRIBUTION; }
 
     public TileSystem(int temp, int wO){ temperature = temp; weightOption = wO; }
 
@@ -49,13 +56,29 @@ public class TileSystem {
     }
 
     // add polytile to tiletypes
-    public void addPolyTile(PolyTile p){
+    public void addPolyTile(PolyTile p) throws IllegalStateException{
         // check that the polytile to be added fits in with the weight model.
             // if equal concentration, nothing needs to be done, as all tiles will be assumed to be of equal
             // concentration.
-        if ( weightOption == 1)
+        if ( weightOption == CONCENTRATION ){
+            if ( p.getConcentration() > -1)
+                tileTypes.add(p);
+            else {
+                throw new IllegalStateException("polytile does not fit weight model, " +
+                        "You must set a concentration for it.");
+            }
+        }
+        else if (weightOption == COUNT){
+            if (p.getCount() > -1)
+                tileTypes.add(p);
+            else {
+                throw new IllegalStateException("polytile does not fit weight model, " +
+                        "You must set a concentration for it.");
+            }
+        }
 
-        tileTypes.add(p);
+        else
+            tileTypes.add(p);
     }
 
     public int getTemperature(){
@@ -66,10 +89,27 @@ public class TileSystem {
     }
 
     public int getWeightOption() { return weightOption; }
-    public void setWeightOption(int x) {
+    public void setWeightOption(int x) throws InvalidObjectException{
         // when the weight option is changed, a check should be made on all polytiles and see that they all
         //  have the required variable set. Otherwise, pop up an error telling the user to fix their variables.
-
+        if ( x == CONCENTRATION) {
+            for (PolyTile p : tileTypes){
+                if ( p.getConcentration() < 0) {
+                    // TODO: we can either change the value to a default or return all polytiles that do not match
+                    //  the weight option.
+                    throw new InvalidObjectException("Polytile " + p.getPolyName() + " does not have a set concentration.");
+                }
+            }
+        }
+        else if ( x == COUNT) {
+            for (PolyTile p : tileTypes){
+                if ( p.getCount() < 0) {
+                    // TODO: we can either change the value to a default or return all polytiles that do not match
+                    //  the weight option.
+                    throw new InvalidObjectException("Polytile " + p.getPolyName() + " does not have a set count.");
+                }
+            }
+        }
         weightOption = x;
     }
 
