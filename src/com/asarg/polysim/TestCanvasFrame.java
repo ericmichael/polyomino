@@ -23,7 +23,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
     int dragCount = 0;
 
     Assembly assembly;
-    java.util.List<Pair<Point, PolyTile>> frontier;
+    Frontier frontier;
 
 
     public TestCanvasFrame(int w, int h, final Assembly assembly)

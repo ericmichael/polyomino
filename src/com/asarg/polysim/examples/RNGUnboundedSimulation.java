@@ -138,7 +138,7 @@ public class RNGUnboundedSimulation {
     private ATAMAssembly assembly;
 
     public RNGUnboundedSimulation(int temperature){
-        ts = new TileSystem(temperature, 0);
+        ts = new TileSystem(temperature);
 
         ts.addPolyTile(rngL());
         ts.addPolyTile(rngUL());

@@ -14,6 +14,7 @@ public class Frontier extends ArrayList<FrontierElement> {
     private TileSystem tileSystem;
 
     Frontier( TileSystem parent ) {
+        super();
         totalConcentration = 0;
         tileSystem = parent;
     }

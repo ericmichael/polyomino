@@ -50,7 +50,12 @@ public class TileSystem {
 
     // add polytile to tiletypes
     public void addPolyTile(PolyTile p){
+
         tileTypes.add(p);
+
+        if(getWeightOption()==2){
+            totalCount+=p.getCount();
+        }
     }
 
     public int getTemperature(){

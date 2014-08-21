@@ -19,7 +19,7 @@ public class Assembly {
     // placeholder for the grid
     public HashMap<Point, Tile> Grid = new HashMap<Point, Tile>();
     // frontier list: calculated, increased, decreased, and changed here.
-    Frontier frontier = new Frontier( tileSystem );
+    Frontier frontier;
     ArrayList<FrontierElement> attached = new ArrayList<FrontierElement>();
 
     //Open glue ends stored by their coordinate
@@ -27,13 +27,12 @@ public class Assembly {
     HashMap<Point, String> openEastGlues = new HashMap<Point, String>();
     HashMap<Point, String> openSouthGlues = new HashMap<Point, String>();
     HashMap<Point, String> openWestGlues = new HashMap<Point, String>();
-    ArrayList<ArrayList<Object>> possibleAttach = new ArrayList<ArrayList<Object>>();
+    ArrayList<FrontierElement> possibleAttach = new ArrayList<FrontierElement>();
 
     public Assembly(){
         System.out.print("in assembly,");
         tileSystem = new TileSystem(2, 0);
-
-        //tileSystem.addPolyTile();
+        frontier = new Frontier( tileSystem );
     }
 
     //change tile system stub
@@ -44,6 +43,7 @@ public class Assembly {
 
     public Assembly(TileSystem ts){
         tileSystem = ts;
+        frontier = new Frontier( tileSystem );
     }
     //Finds open glues on assembly grid and puts them in 4 maps.
     private void getOpenGlues() {
@@ -148,13 +148,8 @@ public class Assembly {
                 glue2 = glues.get(aPoint);
                 if (tileSystem.getStrength(glue1, glue2) > 0) {
                     Pair<Point, Point> locAndOffset = getOffset(aPoint, ptPoint, offsetX, offsetY);
-                    Pair<Pair<Point, Point>, PolyTile> x = new Pair<Pair<Point, Point>, PolyTile>(locAndOffset, pt);
-                    ArrayList attachment = new ArrayList();
-                    attachment.add(locAndOffset.getKey());
-                    attachment.add(locAndOffset.getValue());
-                    attachment.add(new Integer(direction));
-                    attachment.add(pt);
-                    possibleAttach.add(attachment);
+                    FrontierElement fe = new FrontierElement(locAndOffset.getKey(), locAndOffset.getValue(), pt, direction);
+                    possibleAttach.add(fe);
                 }
             }
         }
@@ -174,19 +169,14 @@ public class Assembly {
         for(PolyTile t : tileSystem.getTileTypes()){
             checkMatchingGlues(t);
         }
-        for(ArrayList e : possibleAttach) {
-            Point location = (Point) e.get(0);
-            Point offset = (Point) e.get(1);
-            int direction = ((Integer) e.get(2)).intValue();
-            PolyTile pt = (PolyTile) e.get(3);
+        for(FrontierElement fe : possibleAttach) {
+            if(checkStability(fe.getPolyTile(), fe.getOffset().x, fe.getOffset().y) &&
+                    geometryCheckSuccess(fe.getPolyTile(), fe.getOffset().x, fe.getOffset().y)) {
 
-            if(checkStability(pt, offset.x, offset.y) &&
-                    geometryCheckSuccess(pt, offset.x, offset.y)) {
-                FrontierElement candidate = new FrontierElement(offset, pt);
-                if(!frontier.contains(candidate)){
-                    frontier.add(candidate);
+                if(!frontier.contains(fe)){
+                    frontier.add(fe);
                 }
-                toRemove.add(e);
+                toRemove.add(fe);
             }
         }
         for(Object e : toRemove){
@@ -248,14 +238,6 @@ public class Assembly {
 
     // delete from frontier
 
-    // add to frontier
-
-    //Place "random" polytile from frontier
-    private void addFromFrontier(){
-
-
-    }
-
     private void cleanUp() {
         frontier.clear();
         possibleAttach.clear();
@@ -266,17 +248,12 @@ public class Assembly {
     }
 
     public double attach(){
-        if(tileSystem.getWeightOption() == 1) {
-            FrontierElement fe = frontier.get(frontier.randomSelect());
+        FrontierElement fe = frontier.get(frontier.randomSelect());
 
-            placePolytile(fe.getPolyTile(), fe.get().x, pt.getKey().y);
-            frontier.remove(fe);
-            attached.add(fe);
-        }
-        else if(tileSystem.getWeightOption() == 2)
-            countWeightedAddFromFrontier();
-        else
-            addFromFrontier();
+        placePolytile(fe.getPolyTile(), fe.getOffset().x, fe.getOffset().y);
+        frontier.remove(fe);
+        attached.add(fe);
+
         cleanUp();
         getOpenGlues();
         return 0.0;
@@ -284,24 +261,12 @@ public class Assembly {
 
     public void detach(){
         if(!attached.isEmpty()) {
-            Pair<Point, PolyTile> last = attached.remove(attached.size() - 1);
-            removePolytile(last.getValue(), last.getKey().x, last.getKey().y);
+            FrontierElement last = attached.remove(attached.size() - 1);
+            removePolytile(last.getPolyTile(), last.getOffset().x, last.getOffset().y);
             cleanUp();
             getOpenGlues();
         }
     }
-
-    //Add "random" polytile from frontier based on Polytile's counts
-
-
-    //Add "random" polytile from frontier based on Polytile's concentrations
-
-        Pair<Point, PolyTile> pt = frontier.get(index);
-        placePolytile(pt.getValue(), pt.getKey().x, pt.getKey().y);
-        frontier.remove(pt);
-        attached.add(pt);
-    }
-
 
 
     public void placeSeed(PolyTile t){
