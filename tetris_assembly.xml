@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Assembly>
+    <TileSystem Temperature="2" WeightingOption="0"/>
     <AssemblyGrid>
-        <entries>
-            <point x="0" y="0"/>
-            <tile>
+        <GridTile>
+            <GridLocation x="0" y="0"/>
+            <Tile>
                 <Location x="0" y="0"/>
                 <Color>5133AB</Color>
-            </tile>
-            <parent Label="F" Color="5133AB">
+            </Tile>
+            <ParentPolyTile Label="F" Color="5133AB">
                 <Tile>
                     <Location x="0" y="0"/>
                     <Color>5133AB</Color>
@@ -30,17 +31,17 @@
                     <Color>5133AB</Color>
                     <EastGlue>d</EastGlue>
                 </Tile>
-                <Concentration>0.0</Concentration>
-                <Count>0</Count>
-            </parent>
-        </entries>
-        <entries>
-            <point x="0" y="-1"/>
-            <tile>
+                <Concentration>-1.0</Concentration>
+                <Count>-1</Count>
+            </ParentPolyTile>
+        </GridTile>
+        <GridTile>
+            <GridLocation x="0" y="-1"/>
+            <Tile>
                 <Location x="0" y="-1"/>
                 <Color>5133AB</Color>
-            </tile>
-            <parent Label="F" Color="5133AB">
+            </Tile>
+            <ParentPolyTile Label="F" Color="5133AB">
                 <Tile>
                     <Location x="0" y="0"/>
                     <Color>5133AB</Color>
@@ -63,17 +64,17 @@
                     <Color>5133AB</Color>
                     <EastGlue>d</EastGlue>
                 </Tile>
-                <Concentration>0.0</Concentration>
-                <Count>0</Count>
-            </parent>
-        </entries>
-        <entries>
-            <point x="-1" y="0"/>
-            <tile>
+                <Concentration>-1.0</Concentration>
+                <Count>-1</Count>
+            </ParentPolyTile>
+        </GridTile>
+        <GridTile>
+            <GridLocation x="-1" y="0"/>
+            <Tile>
                 <Location x="-1" y="0"/>
                 <Color>5133AB</Color>
-            </tile>
-            <parent Label="F" Color="5133AB">
+            </Tile>
+            <ParentPolyTile Label="F" Color="5133AB">
                 <Tile>
                     <Location x="0" y="0"/>
                     <Color>5133AB</Color>
@@ -96,18 +97,18 @@
                     <Color>5133AB</Color>
                     <EastGlue>d</EastGlue>
                 </Tile>
-                <Concentration>0.0</Concentration>
-                <Count>0</Count>
-            </parent>
-        </entries>
-        <entries>
-            <point x="0" y="1"/>
-            <tile>
+                <Concentration>-1.0</Concentration>
+                <Count>-1</Count>
+            </ParentPolyTile>
+        </GridTile>
+        <GridTile>
+            <GridLocation x="0" y="1"/>
+            <Tile>
                 <Location x="0" y="1"/>
                 <Color>5133AB</Color>
                 <WestGlue>b</WestGlue>
-            </tile>
-            <parent Label="F" Color="5133AB">
+            </Tile>
+            <ParentPolyTile Label="F" Color="5133AB">
                 <Tile>
                     <Location x="0" y="0"/>
                     <Color>5133AB</Color>
@@ -130,18 +131,18 @@
                     <Color>5133AB</Color>
                     <EastGlue>d</EastGlue>
                 </Tile>
-                <Concentration>0.0</Concentration>
-                <Count>0</Count>
-            </parent>
-        </entries>
-        <entries>
-            <point x="1" y="1"/>
-            <tile>
+                <Concentration>-1.0</Concentration>
+                <Count>-1</Count>
+            </ParentPolyTile>
+        </GridTile>
+        <GridTile>
+            <GridLocation x="1" y="1"/>
+            <Tile>
                 <Location x="1" y="1"/>
                 <Color>5133AB</Color>
                 <EastGlue>d</EastGlue>
-            </tile>
-            <parent Label="F" Color="5133AB">
+            </Tile>
+            <ParentPolyTile Label="F" Color="5133AB">
                 <Tile>
                     <Location x="0" y="0"/>
                     <Color>5133AB</Color>
@@ -164,23 +165,23 @@
                     <Color>5133AB</Color>
                     <EastGlue>d</EastGlue>
                 </Tile>
-                <Concentration>0.0</Concentration>
-                <Count>0</Count>
-            </parent>
-        </entries>
+                <Concentration>-1.0</Concentration>
+                <Count>-1</Count>
+            </ParentPolyTile>
+        </GridTile>
     </AssemblyGrid>
     <OpenNorthGlues/>
     <OpenEastGlues>
-        <entries>
-            <point x="1" y="1"/>
-            <glue>d</glue>
-        </entries>
+        <Glue>
+            <Location x="1" y="1"/>
+            <GlueLabel>d</GlueLabel>
+        </Glue>
     </OpenEastGlues>
     <OpenSouthGlues/>
     <OpenWestGlues>
-        <entries>
-            <point x="0" y="1"/>
-            <glue>b</glue>
-        </entries>
+        <Glue>
+            <Location x="0" y="1"/>
+            <GlueLabel>b</GlueLabel>
+        </Glue>
     </OpenWestGlues>
 </Assembly>
