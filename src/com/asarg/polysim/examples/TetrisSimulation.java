@@ -121,32 +121,51 @@ public class TetrisSimulation {
         return tetris;
     }
 
+    public Assembly loadAssembly() throws JAXBException {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Assembly.class);
+        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+        Assembly a = (Assembly) unmarshaller.unmarshal(new File("./tetris_seed_assembly.xml"));
+
+        jaxbContext = JAXBContext.newInstance(TileSystem.class);
+        unmarshaller = jaxbContext.createUnmarshaller();
+        TileSystem t = (TileSystem) unmarshaller.unmarshal(new File("./tetris_example.xml"));
+
+        for(PolyTile p : t.getTileTypes())
+            p.setGlues();
+
+        a.changeTileSystem(t);
+
+        return a;
+    }
+
     public TileSystem ts;
     public Assembly assembly;
 
     public TetrisSimulation(int temperature) throws JAXBException {
-        ts = new TileSystem(temperature, 0);
-
-        JAXBContext jaxbContext = JAXBContext.newInstance(TileSystem.class);
+//        ts = new TileSystem(temperature, 0);
+//
+//        JAXBContext jaxbContext = JAXBContext.newInstance(TileSystem.class);
 //        Marshaller marshaller = jaxbContext.createMarshaller();
 //        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        ts = (TileSystem) unmarshaller.unmarshal(new File("./tetris_example.xml"));
-        for(PolyTile p : ts.getTileTypes()) {
-            p.setGlues();
-        }
-
+//        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+//        ts = (TileSystem) unmarshaller.unmarshal(new File("./tetris_example.xml"));
+//        for(PolyTile p : ts.getTileTypes()) {
+//            p.setGlues();
+//        }
+//
 //        assembly = new Assembly(ts);
 //        assembly.placeSeed(tetrisF());
-
-        JAXBContext jaxbContext2 = JAXBContext.newInstance(Assembly.class);
+//
+//        JAXBContext jaxbContext2 = JAXBContext.newInstance(Assembly.class);
 //        Marshaller marshaller = jaxbContext2.createMarshaller();
 //        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 //        marshaller.marshal(assembly, new File("./tetris_seed_assembly.xml"));
-        Unmarshaller unmarshaller2 = jaxbContext2.createUnmarshaller();
-        assembly = (Assembly) unmarshaller2.unmarshal(new File("./tetris_seed_assembly.xml"));
-        assembly.changeTileSystem(ts);
-        System.out.println();
+//        Unmarshaller unmarshaller2 = jaxbContext2.createUnmarshaller();
+//        assembly = (Assembly) unmarshaller2.unmarshal(new File("./tetris_seed_assembly.xml"));
+//        assembly.changeTileSystem(ts);
+//        System.out.println();
+
+        assembly = loadAssembly();
     }
 
     public static void main(String args[]) throws JAXBException {
