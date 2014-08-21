@@ -8,7 +8,7 @@ import com.asarg.polysim.models.hextam.hexTAMTile;
 /**
  * Created by ericmartinez on 8/20/14.
  */
-public class HexSimulation {
+public class RNGHexSimulation {
     private hexTileSystem ts;
     private Assembly assembly;
 
@@ -19,18 +19,34 @@ public class HexSimulation {
         return d;
     }
 
-    public HexSimulation(int temperature){
+    public static hexTAMTile choiceTile(){
+        hexTAMTile d = new hexTAMTile("choice tile");
+        String glues[] = {null, "-1", "a","a","-1",null};
+        d.setGlues(glues);
+        return d;
+    }
+
+    public static hexTAMTile seedTile() {
+        hexTAMTile d = new hexTAMTile("seed tile");
+        String glues[] = {"a", "-1", null,null,"-1","a"};
+        d.setGlues(glues);
+        return d;
+    }
+
+    public RNGHexSimulation(int temperature){
         ts = new hexTileSystem(temperature);
-        ts.addPolyTile(tile());
+        ts.addPolyTile(choiceTile());
+        ts.addPolyTile(seedTile());
 
         ts.addGlueFunction("a", "a", 2);
+        ts.addGlueFunction("-1", "-1", -1);
 
         assembly = new Assembly(ts);
-        assembly.placeSeed(tile());
+        assembly.placeSeed(seedTile());
     }
 
     public static void main(String args[]){
-        HexSimulation hsim = new HexSimulation(2);
+        RNGHexSimulation hsim = new RNGHexSimulation(2);
         TestCanvasFrame tcf = new TestCanvasFrame(800,600, hsim.assembly);
     }
 }

@@ -7,7 +7,7 @@ import com.asarg.polysim.models.datam.*;
 /**
  * Created by ericmartinez on 8/20/14.
  */
-public class DominoSimulation {
+public class RNGDominoSimulation {
     private TileSystem ts;
     private Assembly assembly;
 
@@ -32,7 +32,7 @@ public class DominoSimulation {
         return d;
     }
 
-    public DominoSimulation(int temperature){
+    public RNGDominoSimulation(int temperature){
         ts = new TileSystem(temperature);
         ts.addPolyTile(dR());
         ts.addPolyTile(dCoin());
@@ -44,7 +44,7 @@ public class DominoSimulation {
     }
 
     public static void main(String args[]){
-        DominoSimulation dsim = new DominoSimulation(2);
+        RNGDominoSimulation dsim = new RNGDominoSimulation(2);
         TestCanvasFrame tcf = new TestCanvasFrame(800,600, dsim.assembly);
     }
 }
