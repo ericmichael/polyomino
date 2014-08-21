@@ -4,28 +4,39 @@ package com.asarg.polysim;
     TODO: Check connected tiles in the polytile and change their strength to infinite
 */
 
+import javax.xml.bind.annotation.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
+@XmlRootElement
+@XmlType(propOrder = {"polyName", "color", "tiles", "concentration", "count"})
 public class PolyTile {
     // tiles that make up the shape of the polytile.
-    List<Tile> tiles = new ArrayList<Tile>();
+    @XmlElement(name = "Tile")
+    protected List<Tile> tiles = new ArrayList<Tile>();
     // polytiles have a concentration or a count. Initialized to -1 to use as "not set" exception.
     private double concentration = -1;
     private int count = -1;
     // polytiles can be labeled and can have a unique name/id. (id might be useless)
+    @XmlAttribute(name = "Label")
     private String polyName;
+    private int polyID;
     // tileID increases every time a new tile is created, changes are not accounted for.
     //          (delete one, that number is lost forever)
     private static int tileID = 0;
 
     private String color;
 
+    @XmlTransient
     public HashMap<Point, String> northGlues = new HashMap<Point, String>();
+    @XmlTransient
     public HashMap<Point, String> eastGlues = new HashMap<Point, String>();
+    @XmlTransient
     public HashMap<Point, String> southGlues = new HashMap<Point, String>();
+    @XmlTransient
     public HashMap<Point, String> westGlues = new HashMap<Point, String>();
 
     public PolyTile() {
@@ -71,6 +82,7 @@ public class PolyTile {
         this.color = color;
     }
 
+    @XmlAttribute(name = "Color")
     public String getColor(){
         return color;
     }
@@ -107,9 +119,13 @@ public class PolyTile {
         }
         return null;
     }
+    @XmlElement(name = "Concentration")
     public double getConcentration(){return concentration;}
+    @XmlElement(name = "Count")
     public int getCount(){return count;}
+
     public String getPolyName(){return polyName;}
+    public void setPolyname(String n) { polyName = n; }
 
 
     public void setConcentration(double c){
