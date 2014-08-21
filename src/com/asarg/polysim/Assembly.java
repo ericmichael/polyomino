@@ -2,12 +2,18 @@
 "execution" place. takes care of the tile system, its changes, the grid, the frontier, and the open glue list.
  */
 package com.asarg.polysim;
+import com.asarg.polysim.xml.GridXmlAdapter;
+import com.asarg.polysim.xml.OpenGlueXmlAdapter;
 import javafx.util.Pair;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+@XmlRootElement(name = "Assembly")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Assembly {
     private static final int NORTH = 0;
     private static final int EAST = 1;
@@ -15,19 +21,33 @@ public class Assembly {
     private static final int WEST = 3;
 
     // tile system, it can be changed so it needs its own class
+    @XmlElement(name = "TileSystem")
     private TileSystem tileSystem;
     // placeholder for the grid
+    @XmlElement(name = "AssemblyGrid")
+    @XmlJavaTypeAdapter(GridXmlAdapter.class)
     public HashMap<Point, Tile> Grid = new HashMap<Point, Tile>();
     // frontier list: calculated, increased, decreased, and changed here.
+    @XmlTransient
     private List<Pair<Point, PolyTile>> frontier = new ArrayList<Pair<Point, PolyTile>>();
+    @XmlTransient
     private List<Pair<Point, PolyTile>> attached = new ArrayList<Pair<Point, PolyTile>>();
 
 
     //Open glue ends stored by their coordinate
+    @XmlElement(name = "OpenNorthGlues")
+    @XmlJavaTypeAdapter(OpenGlueXmlAdapter.class)
     HashMap<Point, String> openNorthGlues = new HashMap<Point, String>();
+    @XmlElement(name = "OpenEastGlues")
+    @XmlJavaTypeAdapter(OpenGlueXmlAdapter.class)
     HashMap<Point, String> openEastGlues = new HashMap<Point, String>();
+    @XmlElement(name = "OpenSouthGlues")
+    @XmlJavaTypeAdapter(OpenGlueXmlAdapter.class)
     HashMap<Point, String> openSouthGlues = new HashMap<Point, String>();
+    @XmlElement(name = "OpenWestGlues")
+    @XmlJavaTypeAdapter(OpenGlueXmlAdapter.class)
     HashMap<Point, String> openWestGlues = new HashMap<Point, String>();
+    @XmlTransient
     ArrayList<ArrayList<Object>> possibleAttach = new ArrayList<ArrayList<Object>>();
 
     public Assembly(){

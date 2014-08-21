@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<tileSystem>
-    <Temperature>2</Temperature>
+<TileConfiguration>
     <GlueFunction>
         <entries>
             <labels>
@@ -200,5 +199,4 @@
         <Count>0</Count>
     </TileTypes>
     <Weighting>0</Weighting>
-    <TotalCount>0</TotalCount>
-</tileSystem>
+</TileConfiguration>
