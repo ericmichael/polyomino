@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Assembly>
+    <AssemblyGrid>
+        <entries>
+            <point x="0" y="0"/>
+            <tile>
+                <Location x="0" y="0"/>
+                <Color>5133AB</Color>
+            </tile>
+            <parent Label="F" Color="5133AB">
+                <Tile>
+                    <Location x="0" y="0"/>
+                    <Color>5133AB</Color>
+                </Tile>
+                <Tile>
+                    <Location x="0" y="-1"/>
+                    <Color>5133AB</Color>
+                </Tile>
+                <Tile>
+                    <Location x="-1" y="0"/>
+                    <Color>5133AB</Color>
+                </Tile>
+                <Tile>
+                    <Location x="0" y="1"/>
+                    <Color>5133AB</Color>
+                    <WestGlue>b</WestGlue>
+                </Tile>
+                <Tile>
+                    <Location x="1" y="1"/>
+                    <Color>5133AB</Color>
+                    <EastGlue>d</EastGlue>
+                </Tile>
+                <Concentration>0.0</Concentration>
+                <Count>0</Count>
+            </parent>
+        </entries>
+        <entries>
+            <point x="0" y="-1"/>
+            <tile>
+                <Location x="0" y="-1"/>
+                <Color>5133AB</Color>
+            </tile>
+            <parent Label="F" Color="5133AB">
+                <Tile>
+                    <Location x="0" y="0"/>
+                    <Color>5133AB</Color>
+                </Tile>
+                <Tile>
+                    <Location x="0" y="-1"/>
+                    <Color>5133AB</Color>
+                </Tile>
+                <Tile>
+                    <Location x="-1" y="0"/>
+                    <Color>5133AB</Color>
+                </Tile>
+                <Tile>
+                    <Location x="0" y="1"/>
+                    <Color>5133AB</Color>
+                    <WestGlue>b</WestGlue>
+                </Tile>
+                <Tile>
+                    <Location x="1" y="1"/>
+                    <Color>5133AB</Color>
+                    <EastGlue>d</EastGlue>
+                </Tile>
+                <Concentration>0.0</Concentration>
+                <Count>0</Count>
+            </parent>
+        </entries>
+        <entries>
+            <point x="-1" y="0"/>
+            <tile>
+                <Location x="-1" y="0"/>
+                <Color>5133AB</Color>
+            </tile>
+            <parent Label="F" Color="5133AB">
+                <Tile>
+                    <Location x="0" y="0"/>
+                    <Color>5133AB</Color>
+                </Tile>
+                <Tile>
+                    <Location x="0" y="-1"/>
+                    <Color>5133AB</Color>
+                </Tile>
+                <Tile>
+                    <Location x="-1" y="0"/>
+                    <Color>5133AB</Color>
+                </Tile>
+                <Tile>
+                    <Location x="0" y="1"/>
+                    <Color>5133AB</Color>
+                    <WestGlue>b</WestGlue>
+                </Tile>
+                <Tile>
+                    <Location x="1" y="1"/>
+                    <Color>5133AB</Color>
+                    <EastGlue>d</EastGlue>
+                </Tile>
+                <Concentration>0.0</Concentration>
+                <Count>0</Count>
+            </parent>
+        </entries>
+        <entries>
+            <point x="0" y="1"/>
+            <tile>
+                <Location x="0" y="1"/>
+                <Color>5133AB</Color>
+                <WestGlue>b</WestGlue>
+            </tile>
+            <parent Label="F" Color="5133AB">
+                <Tile>
+                    <Location x="0" y="0"/>
+                    <Color>5133AB</Color>
+                </Tile>
+                <Tile>
+                    <Location x="0" y="-1"/>
+                    <Color>5133AB</Color>
+                </Tile>
+                <Tile>
+                    <Location x="-1" y="0"/>
+                    <Color>5133AB</Color>
+                </Tile>
+                <Tile>
+                    <Location x="0" y="1"/>
+                    <Color>5133AB</Color>
+                    <WestGlue>b</WestGlue>
+                </Tile>
+                <Tile>
+                    <Location x="1" y="1"/>
+                    <Color>5133AB</Color>
+                    <EastGlue>d</EastGlue>
+                </Tile>
+                <Concentration>0.0</Concentration>
+                <Count>0</Count>
+            </parent>
+        </entries>
+        <entries>
+            <point x="1" y="1"/>
+            <tile>
+                <Location x="1" y="1"/>
+                <Color>5133AB</Color>
+                <EastGlue>d</EastGlue>
+            </tile>
+            <parent Label="F" Color="5133AB">
+                <Tile>
+                    <Location x="0" y="0"/>
+                    <Color>5133AB</Color>
+                </Tile>
+                <Tile>
+                    <Location x="0" y="-1"/>
+                    <Color>5133AB</Color>
+                </Tile>
+                <Tile>
+                    <Location x="-1" y="0"/>
+                    <Color>5133AB</Color>
+                </Tile>
+                <Tile>
+                    <Location x="0" y="1"/>
+                    <Color>5133AB</Color>
+                    <WestGlue>b</WestGlue>
+                </Tile>
+                <Tile>
+                    <Location x="1" y="1"/>
+                    <Color>5133AB</Color>
+                    <EastGlue>d</EastGlue>
+                </Tile>
+                <Concentration>0.0</Concentration>
+                <Count>0</Count>
+            </parent>
+        </entries>
+    </AssemblyGrid>
+    <OpenNorthGlues/>
+    <OpenEastGlues>
+        <entries>
+            <point x="1" y="1"/>
+            <glue>d</glue>
+        </entries>
+    </OpenEastGlues>
+    <OpenSouthGlues/>
+    <OpenWestGlues>
+        <entries>
+            <point x="0" y="1"/>
+            <glue>b</glue>
+        </entries>
+    </OpenWestGlues>
+</Assembly>
