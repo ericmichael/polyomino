@@ -55,7 +55,7 @@ public class Main {
     public static PolyTile tetrisX() {
         String blank[] = blankGlues();
         String glue[] = {null, null, "e", null};
-        String glue2[] = {null, null, null, "d"};
+        String glue2[] = {null, null, null, "ddeFE"};
 
         PolyTile poly = new PolyTile("X");
 
@@ -72,7 +72,7 @@ public class Main {
 
     public static PolyTile tetrisF() {
         String[] gleft = {null, null, null, "b"};
-        String[] gright = {null, "d", null, null};
+        String[] gright = {null, "ddeFE", null, null};
 
         PolyTile tetrisF = new PolyTile("F");
 
@@ -136,6 +136,7 @@ public class Main {
         ts.addGlueFunction("d","d",2);
         ts.addGlueFunction("e","e",2);
         ts.addGlueFunction("f","f",2);
+        ts.addGlueFunction("ddeFE","ddeFE",2);
 
         Assembly assembly = new Assembly(ts);
         assembly.placeSeed(tetrisF());

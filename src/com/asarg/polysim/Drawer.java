@@ -111,10 +111,10 @@ public class Drawer {
             String northGlue = tile.getGlueN();
             String eastGlue = tile.getGlueE();
             String southGlue = tile.getGlueS();
-            String westGLue = tile.getGlueW();
+            String westGlue = tile.getGlueW();
+            //System.out.println(westGlue + "@334234234");
 
-
-            g.setFont(g.getFont().deriveFont((float)(diameter/5)));
+            g.setFont(g.getFont().deriveFont((float)(diameter/3)));
             Dimension labelBounds = getStringPixelDimension(g,tileLabel );
 
 
@@ -141,11 +141,31 @@ public class Drawer {
             g.drawString(tileLabel, x + (diameter / 2) - (labelBounds.width/ 2) - labelXShift, y + (diameter / 2) + (labelBounds.height / 2) );
 
             //glue drawing
-            if (northGlue != null && northGlue.isEmpty()) {
-                g.setFont(new Font("Courier", Font.BOLD, 10));
-                Dimension northGluePixelDim = getStringPixelDimension(g,northGlue);
-
-
+            if (westGlue != null && !westGlue.isEmpty()) {
+                g.setFont(g.getFont().deriveFont((float)(diameter/4)));
+                Dimension westGluePixelDim = getStringPixelDimension(g,westGlue);
+                Rectangle2D r2d = g.getFontMetrics().getStringBounds(westGlue, g);
+                //get string image
+                BufferedImage tBFI = new BufferedImage((int) r2d.getHeight(), (int)r2d.getWidth(), BufferedImage.TYPE_INT_ARGB);
+                Graphics2D tGFX = tBFI.createGraphics();
+                tGFX.setFont(g.getFont());
+                tGFX.setColor(g.getColor());
+                AffineTransform posNinety = new AffineTransform();
+                posNinety.setToRotation(Math.toRadians(90),x+westGluePixelDim.height, y+ westGluePixelDim.width/2 + diameter/2);
+                g.setTransform(posNinety);
+                g.drawString(  westGlue,  x+westGluePixelDim.height,  y- westGluePixelDim.width/2 + diameter/2);
+                g.setTransform(gOriginalATransform);
+                //System.out.println("SDFS");
+            }
+            if (eastGlue != null && !eastGlue.isEmpty()) {
+                g.setFont(g.getFont().deriveFont((float)(diameter/4)));
+                Dimension eastGluePixelDim = getStringPixelDimension(g,eastGlue);
+                AffineTransform negNinety = new AffineTransform();
+                negNinety.setToRotation(Math.toRadians(-90),x+ diameter - eastGluePixelDim.height, y+ eastGluePixelDim.width/2 + diameter/2 );
+                g.setTransform(negNinety);
+                g.drawString(eastGlue, x+ diameter - eastGluePixelDim.height, y +eastGluePixelDim.width/2 + diameter/2);
+                g.setTransform(gOriginalATransform);
+                //System.out.println("SDFS");
             }
 
 
