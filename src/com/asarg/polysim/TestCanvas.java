@@ -4,8 +4,7 @@ package com.asarg.polysim;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.*;
-import java.util.List;
+import java.util.HashMap;
 
 /**
  * Created by Dom on 8/15/2014.
@@ -25,8 +24,6 @@ public class TestCanvas extends JPanel {
         center = new Point(w / 2, h / 2);
         canvasBFI = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         cg2d = canvasBFI.createGraphics();
-       // cg2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        cg2d.setFont(new Font("Courier", Font.BOLD, 20));
         cg2d.setComposite(AlphaComposite.Src);
         cg2d.setColor(Color.black);
         res.setSize(w, h);
@@ -34,12 +31,33 @@ public class TestCanvas extends JPanel {
         this.w = w;
         this.h = h;
     }
+    TestCanvas()
+    {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        canvasBFI = new BufferedImage(screenSize.width, screenSize.height, BufferedImage.TYPE_INT_ARGB);
+        cg2d = canvasBFI.createGraphics();
+        cg2d.setComposite(AlphaComposite.Src);
+        cg2d.setColor(Color.black);
+        res.setSize(screenSize.width,screenSize.height);
+        cg2d.setClip(0, 0, screenSize.width, screenSize.height);
 
+
+    }
+
+
+
+    @Override
+    public void setSize(int width, int height)
+    {
+        super.setSize(width,height);
+        center = new Point(width/2, height/2);
+    }
     public void reset() {
 
         Drawer.clearGraphics(cg2d);
 
     }
+
 
     @Override
     public void paintComponent(Graphics g) {
@@ -48,33 +66,6 @@ public class TestCanvas extends JPanel {
         g.drawImage(canvasBFI, 0, 0, null);
     }
 
-    public void drawPolyTile(PolyTile pt) {
-        Drawer.clearGraphics(cg2d);
-        List<Tile> lt = pt.tiles;
-        for (Tile t : lt) {
-
-            cg2d.setColor(Color.black);
-            cg2d.fillRect(t.getLocation().x * tileDiameter + center.x - tileDiameter / 2, -t.getLocation().y * tileDiameter + center.y - tileDiameter / 2, tileDiameter, tileDiameter);
-            if (t.getGlueE() != null && !t.getGlueE().isEmpty()) {
-                cg2d.setColor(Color.cyan);
-                cg2d.fillRect(t.getLocation().x * tileDiameter + center.x - tileDiameter / 2 + tileDiameter, -t.getLocation().y * tileDiameter + center.y - tileDiameter / 2, tileDiameter, tileDiameter);
-                System.out.println(t.getGlueE());
-            }
-            if (t.getGlueW() != null && !t.getGlueW().isEmpty()) {
-                cg2d.setColor(Color.cyan);
-                cg2d.fillRect(t.getLocation().x * tileDiameter + center.x - tileDiameter / 2 - tileDiameter, -t.getLocation().y * tileDiameter + center.y - tileDiameter / 2, tileDiameter, tileDiameter);
-            }
-            if (t.getGlueS() != null && !t.getGlueS().isEmpty()) {
-                cg2d.setColor(Color.cyan);
-                cg2d.fillRect(t.getLocation().x * tileDiameter + center.x - tileDiameter / 2, -t.getLocation().y * tileDiameter + center.y - tileDiameter / 2 + tileDiameter, tileDiameter, tileDiameter);
-            }
-            if (t.getGlueN() != null && !t.getGlueN().isEmpty()) {
-                cg2d.setColor(Color.cyan);
-                cg2d.fillRect(t.getLocation().x * tileDiameter + center.x - tileDiameter / 2, -t.getLocation().y * tileDiameter + center.y - tileDiameter / 2 - tileDiameter, tileDiameter, tileDiameter);
-            }
-        }
-        repaint();
-    }
 
     public void drawGrid(HashMap<Point, Tile> hmpt) {
 
@@ -86,7 +77,7 @@ public class TestCanvas extends JPanel {
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(res.width, res.height);
+        return new Dimension(800, 600);
     }
     public void setTileDiameter(int td)
     {
