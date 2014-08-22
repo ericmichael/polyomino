@@ -191,9 +191,11 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         }
         else if(e.getKeyCode() == KeyEvent.VK_RIGHT)
         {
-            assembly.attach();
-            drawGrid();
-            frontier = assembly.calculateFrontier();
+            if(!frontier.isEmpty()) {
+                assembly.attach();
+                drawGrid();
+                frontier = assembly.calculateFrontier();
+            }
         }
         else if(e.getKeyCode() == KeyEvent.VK_LEFT)
         {

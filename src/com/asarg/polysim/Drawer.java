@@ -112,7 +112,7 @@ public class Drawer {
             String eastGlue = tile.getGlueE();
             String southGlue = tile.getGlueS();
             String westGlue = tile.getGlueW();
-            System.out.println(westGlue + "@334234234");
+            //System.out.println(westGlue + "@334234234");
 
             g.setFont(g.getFont().deriveFont((float)(diameter/3)));
             Dimension labelBounds = getStringPixelDimension(g,tileLabel );
@@ -155,7 +155,7 @@ public class Drawer {
                 g.setTransform(posNinety);
                 g.drawString(  westGlue,  x+westGluePixelDim.height,  y- westGluePixelDim.width/2 + diameter/2);
                 g.setTransform(gOriginalATransform);
-                System.out.println("SDFS");
+                //System.out.println("SDFS");
             }
             if (eastGlue != null && !eastGlue.isEmpty()) {
                 g.setFont(g.getFont().deriveFont((float)(diameter/4)));
@@ -165,7 +165,7 @@ public class Drawer {
                 g.setTransform(negNinety);
                 g.drawString(eastGlue, x+ diameter - eastGluePixelDim.height, y +eastGluePixelDim.width/2 + diameter/2);
                 g.setTransform(gOriginalATransform);
-                System.out.println("SDFS");
+                //System.out.println("SDFS");
             }
 
 
