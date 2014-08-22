@@ -19,7 +19,6 @@ public class TileSystem {
     public static final int COUNT = 2;
 
     // temperature of the system, bonds must be of at least this value or they break.
-    //@XmlElement(name = "Temperature")
     @XmlAttribute(name = "Temperature")
     private int temperature;
     // glue function to determine strength between two labels
@@ -34,6 +33,7 @@ public class TileSystem {
     // total count of all tiles in tile system; used for count-based attachment
     @XmlTransient
     private int totalCount = 0;
+    private double totalConcentration = 0;
 
     public TileSystem() { }
 
@@ -125,8 +125,25 @@ public class TileSystem {
         weightOption = x;
     }
 
-    public int getTotalCount() { return totalCount; }
-    public void setTotalCount( int x ) { totalCount = x; }
+    // loops over the polytiles in the system, reads their concentration and count, and gets
+        // their total.
+    public int getTotalCount() {
+        int tCount = 0;
+        for (PolyTile p : tileTypes){
+            tCount += p.getCount();
+        }
+        totalCount = tCount;
+        return totalCount;
+    }
+
+    public double getTotalConcentration() {
+        double tConc = 0;
+        for (PolyTile p : tileTypes){
+            tConc += p.getConcentration();
+        }
+        totalConcentration = tConc;
+        return totalConcentration;
+    }
 
     public Set<PolyTile> getTileTypes() {
         return tileTypes;
