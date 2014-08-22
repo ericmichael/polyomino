@@ -15,6 +15,11 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
     JMenuBar tcfBar = new JMenuBar();
     JMenuItem nextStepMI = new JMenuItem("Step >");
     JMenuItem previousStepMI = new JMenuItem("< Previous");
+    ControlButton next = new ControlButton("forward");
+    ControlButton prev = new ControlButton("backward");
+    ControlButton play = new ControlButton("play");
+    ControlButton fastf = new ControlButton("fast-forward");
+    ControlButton fastb = new ControlButton("fast-backward");
 
     int width;
     int height;
@@ -46,28 +51,62 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         ActionListener al = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(e.getSource().equals(nextStepMI))
+                if(e.getSource().equals(next))
                 {
                     if(!frontier.isEmpty()) {
                         assembly.attach();
                         drawGrid();
                         frontier = assembly.calculateFrontier();
                     }
-                }else if(e.getSource().equals(previousStepMI))
+                }else if(e.getSource().equals(prev))
                 {
-                    assembly.detach();
+                    if(!assembly.getAttached().isEmpty()) {
+                        assembly.detach();
+                        tc.reset();
+                        drawGrid();
+                        frontier = assembly.calculateFrontier();
+                    }
+                }else if(e.getSource().equals(play)){
+                    while(!frontier.isEmpty()){
+                        assembly.attach();
+                        tc.reset();
+                        drawGrid();
+                        frontier = assembly.calculateFrontier();
+                        try {
+                            Thread.sleep(1000);
+                        }catch(InterruptedException ie) {
+                        }
+                    }
+                }else if(e.getSource().equals(fastb)){
+                    while(!assembly.getAttached().isEmpty()){
+                        assembly.detach();
+                    }
                     tc.reset();
                     drawGrid();
                     frontier = assembly.calculateFrontier();
+                }else if(e.getSource().equals(fastf)){
+                    while(!frontier.isEmpty()){
+                        assembly.attach();
+                        frontier = assembly.calculateFrontier();
+                    }
+                    tc.reset();
+                    drawGrid();
+
                 }
 
             }
         };
 
-        nextStepMI.addActionListener(al);
-        previousStepMI.addActionListener(al);
-        tcfBar.add(previousStepMI);
-        tcfBar.add(nextStepMI);
+        next.addActionListener(al);
+        prev.addActionListener(al);
+        play.addActionListener(al);
+        fastf.addActionListener(al);
+        fastb.addActionListener(al);
+        tcfBar.add(fastb);
+        tcfBar.add(prev);
+        tcfBar.add(play);
+        tcfBar.add(next);
+        tcfBar.add(fastf);
         setJMenuBar(tcfBar);
         pack();
         setVisible(true);

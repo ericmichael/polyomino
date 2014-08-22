@@ -182,6 +182,11 @@ public class Assembly {
         fillPossibleList(t, SOUTH);
         fillPossibleList(t, WEST);
     }
+
+    public ArrayList<FrontierElement> getAttached(){
+        return attached;
+    }
+
     // calculate frontier
 
     public Frontier calculateFrontier() {
