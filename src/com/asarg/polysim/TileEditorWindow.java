@@ -2,15 +2,18 @@ package com.asarg.polysim;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 
 /**
  * Created by Dom on 8/21/2014.
  */
-public class TileEditorWindow extends JFrame {
+public class TileEditorWindow extends JFrame implements ComponentListener{
 
     JPanel wP;
     Dimension res = new Dimension();
+    JScrollPane jsp;
     TileEditorWindow(int width, int height) {
         final Toolkit toolkit = Toolkit.getDefaultToolkit();
         setLayout(new BorderLayout());
@@ -25,10 +28,20 @@ public class TileEditorWindow extends JFrame {
                 return new Dimension(res.width/7, res.height/100);
             }
         };
+        jsp = new JScrollPane()
+        {
+            @Override
+            public Dimension getPreferredSize()
+            {
+                return new Dimension(getContentPane().getWidth()/7, getContentPane().getHeight()-5);
+
+            }
+        };
+
 
 
         ImageIcon[] icon = new ImageIcon[20];
-        final BufferedImage polyBFI = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        final BufferedImage polyBFI = new BufferedImage(100 - jsp.getVerticalScrollBar().getWidth(), 100, BufferedImage.TYPE_INT_ARGB);
         Graphics2D polyGFX = polyBFI.createGraphics();
         polyGFX.setClip(0, 0, 100, 100);
         Drawer.TileDrawer.drawCenteredPolyTile(polyGFX, Main.tetrisL());
@@ -53,22 +66,14 @@ public class TileEditorWindow extends JFrame {
         icon[9] = new ImageIcon(toolkit.createImage(polyBFI.getSource()));
 
         JList<Icon> polyList = new JList<Icon>(icon);
-        JScrollPane jsp = new JScrollPane()
-        {
-           /* @Override
-            public Dimension getPreferredSize()
-            {
-                return new Dimension(, getContentPane().getHeight()-5);
 
-        }*/
-        };
 
         jsp.setViewportView(polyList);
         polyList.setBackground(getBackground());
 
-        //wP.add(polyList);
         wP.add(jsp);
-        wP.setSize(100,res.height);
+        System.out.println(jsp.getVerticalScrollBar().getHeight());
+
 
         JPanel cP = new JPanel() {
             @Override
@@ -94,6 +99,27 @@ public class TileEditorWindow extends JFrame {
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(res.width, res.height);
+
+    }
+
+    @Override
+    public void componentResized(ComponentEvent e) {
+        remove(jsp);
+        add(jsp);
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentShown(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {
 
     }
 }
