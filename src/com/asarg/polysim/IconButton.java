@@ -12,7 +12,7 @@ public class IconButton extends JButton {
     public IconButton() {
         setFocusable(false);
         try {
-            InputStream in = this.getClass().getResourceAsStream("/fontawesome.ttf");
+            InputStream in = this.getClass().getResourceAsStream("./resources/fontawesome.ttf");
             Font ttfBase = Font.createFont(Font.TRUETYPE_FONT, in);
             Font ttfReal = ttfBase.deriveFont(Font.BOLD, 24);
             setFont(ttfReal);
