@@ -23,7 +23,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
     int dragCount = 0;
 
     Assembly assembly;
-    java.util.List<Pair<Point, PolyTile>> frontier;
+    Frontier frontier;
 
 
     public TestCanvasFrame(int w, int h, final Assembly assembly)
@@ -181,6 +181,19 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         }else if(e.getKeyCode() == KeyEvent.VK_PAGE_DOWN)
         {
             zoomOutDraw();
+        }
+        else if(e.getKeyCode() == KeyEvent.VK_RIGHT)
+        {
+            assembly.attach();
+            drawGrid();
+            frontier = assembly.calculateFrontier();
+        }
+        else if(e.getKeyCode() == KeyEvent.VK_LEFT)
+        {
+            assembly.detach();
+            tc.reset();
+            drawGrid();
+            frontier = assembly.calculateFrontier();
         }
     }
 
