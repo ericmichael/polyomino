@@ -2,6 +2,7 @@ package com.asarg.polysim.xml;
 
 import javafx.util.Pair;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 public class PairXmlAdapter extends XmlAdapter<PairXmlAdapter.PairXml, Pair<String, String>> {
@@ -22,7 +23,9 @@ public class PairXmlAdapter extends XmlAdapter<PairXmlAdapter.PairXml, Pair<Stri
     }
 
     public static class PairXml {
+        @XmlAttribute(name = "L1")
         public String label1;
+        @XmlAttribute(name = "L2")
         public String label2;
     }
 }
