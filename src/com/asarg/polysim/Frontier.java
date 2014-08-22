@@ -19,8 +19,6 @@ public class Frontier extends ArrayList<FrontierElement> {
         tileSystem = parent;
     }
 
-    ;
-
     @Override
     public boolean add(FrontierElement frontierElement) {
         if( tileSystem.getWeightOption() == TileSystem.CONCENTRATION )
@@ -116,7 +114,7 @@ public class Frontier extends ArrayList<FrontierElement> {
 
     // returns the sum of all polytile concentrations in the frontier.
     //  value will be used to calculate the time it took for a single attachment to happen.
-    public double getAttachTime() {
-        return -1;
+    public double getTotalConcentration(){
+        return totalConcentration;
     }
 }
