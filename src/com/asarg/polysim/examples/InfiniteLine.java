@@ -12,10 +12,11 @@ public class InfiniteLine {
     private TileSystem ts;
     private Assembly assembly;
 
-    public static ATAMTile dL(){
+    public static PolyTile dL(){
         ATAMTile d = new ATAMTile("L");
         String glues[] = {"a", "a", "a", "a"};
-        d.setGlues(glues);
+        String glues2[] = {null, "a",null, null};
+        d.setGlues(glues2);
         return d;
     }
 
@@ -24,9 +25,10 @@ public class InfiniteLine {
 
         ts.addGlueFunction("a", "a", 2);
         assembly = new Assembly(ts);
-        PolyTile p = new PolyTile();
-        String[] g = new String[]{"a","a","a","a"};
-        p.addTile(0,0, g);
+        PolyTile p = new PolyTile("thing");
+        String[] g = {"a","a","a","a"};
+        String[] g2 = {null ,"a", null, "a"};
+        p.addTile(0,0, g2);
         ts.addPolyTile(p);
         assembly.placeSeed(dL());
 

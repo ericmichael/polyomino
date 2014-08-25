@@ -275,6 +275,7 @@ public class Assembly {
     public double attach(){
         FrontierElement fe = frontier.get(frontier.randomSelect());
 
+        fe.setAttachTime(getDistribution());
         placePolytile(fe.getPolyTile(), fe.getOffset().x, fe.getOffset().y);
         frontier.remove(fe);
         attached.add(fe);
@@ -305,6 +306,13 @@ public class Assembly {
 
     public Set<Point> pointsInGrid(){
         return Grid.keySet();
+    }
+
+    public double getDistribution(){
+        Random rand = new Random();
+        double randNum = rand.nextDouble();
+
+        return (-1 * Math.log(randNum)) / frontier.getTotalConcentration();
     }
 
     //Prints assembly as grid, with the number being the number of tiles in a spot

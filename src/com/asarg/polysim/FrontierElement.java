@@ -15,6 +15,7 @@ public class FrontierElement {
     private PolyTile polyTile;
     private int direction;
     private boolean attachment;
+    private double attachTime = -1;
 
     public FrontierElement(Point tg, Point poff, PolyTile p,int d ){
         tileWithGlue = tg;
@@ -49,5 +50,11 @@ public class FrontierElement {
 
         // if both the offset and polytile match, it's the same placement.
         return true;
+    }
+    public double getAttachTime(){
+        return attachTime;
+    }
+    public void setAttachTime(double t){
+        attachTime = t;
     }
 }
