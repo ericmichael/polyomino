@@ -44,6 +44,14 @@ public class ATAMTile extends PolyTile {
            addTile(glues);
         }
     }
+    public void setGlues(String[] g){
+        if(getTiles().isEmpty()){
+            addTile(g);
+        } else{
+            super.removeTile(0,0);
+            addTile(g);
+        }
+    }
 
     // add tile, increases the size the polytile by creating a tile with the given data
     private void addTile(String[] gl) {
