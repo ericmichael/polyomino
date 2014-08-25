@@ -190,9 +190,11 @@ public class Drawer {
             g.setStroke(new BasicStroke(diameter / 25));
 
 
-            //glue drawing
-            if (westGlue != null && !westGlue.isEmpty()) {
-              
+            //Drawing the glues-------------------------------------
+
+            //west glue flipped
+           /* if (westGlue != null && !westGlue.isEmpty()) {
+
                 g.setFont(g.getFont().deriveFont((float)(diameter/8)));
                 Dimension westGluePixelDim = getStringPixelDimension(g,westGlue);
 
@@ -208,7 +210,26 @@ public class Drawer {
                 posNinety.setToRotation(Math.toRadians(90),0, 0);
                 tGFX.setTransform(posNinety);
                 tGFX.drawString( westGlue, 0, -g.getFontMetrics().getMaxDescent());
-                g.drawImage(tBFI, x + diameter/36, y + diameter/2 - westGluePixelDim.width/2, null);
+                g.drawImage(tBFI, x + g.getFontMetrics().getMaxDescent(), y + diameter/2 - westGluePixelDim.width/2, null);
+            }*/
+            if (westGlue != null && !westGlue.isEmpty()) {
+
+                g.setFont(g.getFont().deriveFont((float)(diameter/8)));
+                Dimension westGluePixelDim = getStringPixelDimension(g,westGlue);
+
+                Rectangle2D r2d = g.getFontMetrics().getStringBounds(westGlue, g);
+                //get string image
+                BufferedImage tBFI = new BufferedImage((int)r2d.getHeight(), westGluePixelDim.width+3, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D tGFX = tBFI.createGraphics();
+                tGFX.setColor(tileColor);
+                tGFX.fillRect(0,0 , (int)r2d.getHeight(), westGluePixelDim.width+3);
+                tGFX.setFont(g.getFont());
+                tGFX.setColor(g.getColor());
+                AffineTransform posNinety = new AffineTransform();
+                posNinety.setToRotation(Math.toRadians(-90),0, 0);
+                tGFX.setTransform(posNinety);
+                tGFX.drawString( westGlue, -westGluePixelDim.width-3,westGluePixelDim.height+g.getFontMetrics().getMaxDescent());
+                g.drawImage(tBFI, x + g.getFontMetrics().getMaxDescent(), y + diameter/2 - westGluePixelDim.width/2, null);
             }
             if (eastGlue != null && !eastGlue.isEmpty()) {
                 g.setFont(g.getFont().deriveFont((float)(diameter/8)));
