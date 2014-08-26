@@ -27,6 +27,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
 
     Assembly assembly;
     Frontier frontier;
+    PolyTile frontierTile;
 
 
     public TestCanvasFrame(int w, int h, final Assembly assembly)
@@ -55,23 +56,23 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                 {
                     if(!frontier.isEmpty()) {
                         assembly.attach();
-                        drawGrid();
                         frontier = assembly.calculateFrontier();
+                        drawGrid();
                     }
                 }else if(e.getSource().equals(prev))
                 {
                     if(!assembly.getAttached().isEmpty()) {
                         assembly.detach();
                         tc.reset();
-                        drawGrid();
                         frontier = assembly.calculateFrontier();
+                        drawGrid();
                     }
                 }else if(e.getSource().equals(play)){
                     while(!frontier.isEmpty()){
                         assembly.attach();
                         tc.reset();
-                        drawGrid();
                         frontier = assembly.calculateFrontier();
+                        drawGrid();
                         try {
                             Thread.sleep(1000);
                         }catch(InterruptedException ie) {
@@ -82,8 +83,8 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                         assembly.detach();
                     }
                     tc.reset();
-                    drawGrid();
                     frontier = assembly.calculateFrontier();
+                    drawGrid();
                 }else if(e.getSource().equals(fastf)){
                     while(!frontier.isEmpty()){
                         assembly.attach();
@@ -116,10 +117,35 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
 
     public void drawGrid()
     {
+        PlaceFrontierOnGrid();
         tc.drawGrid(assembly.Grid);
         repaint();
+        RemoveFrontierFromGrid();
 
     }
+
+    private PolyTile getFrontierPolyTile(){
+        if(frontierTile==null){
+            frontierTile = new PolyTile("");
+            frontierTile.setColor("428bca");
+            String glues[]= {null, null, null, null};
+            frontierTile.addTile(0,0, glues);
+            return frontierTile;
+        }else return frontierTile;
+    }
+
+    private void PlaceFrontierOnGrid(){
+        for (FrontierElement fe : frontier){
+            assembly.Grid.put(fe.getLocation(), getFrontierPolyTile().getTile(0,0));
+        }
+    }
+
+    private void RemoveFrontierFromGrid(){
+        for (FrontierElement fe : frontier){
+            assembly.Grid.remove(fe.getLocation());
+        }
+    }
+
     public void zoomInDraw()
     {
         int tileDiameter = tc.getTileDiameter();
