@@ -146,7 +146,7 @@ public class RNGUnboundedSimulation {
     private Assembly assembly;
 
     public RNGUnboundedSimulation(int temperature) throws JAXBException {
-        ts = new TileSystem(temperature, 0);
+        ts = new TileSystem(temperature, TileSystem.CONCENTRATION);
         TileConfiguration tc;
 
         JAXBContext jaxbContext = JAXBContext.newInstance(TileConfiguration.class);
@@ -168,7 +168,5 @@ public class RNGUnboundedSimulation {
     public static void main(String args[]) throws JAXBException {
         RNGUnboundedSimulation rngsim = new RNGUnboundedSimulation(2);
         TestCanvasFrame tcf = new TestCanvasFrame(800,600, rngsim.assembly);
-
     }
-
 }

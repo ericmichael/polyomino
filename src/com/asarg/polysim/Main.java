@@ -53,17 +53,17 @@ public class Main {
     }
 
     public static PolyTile tetrisX() {
-        String blank[] = blankGlues();
-        String glue[] = {null, null, "e", null};
-        String glue2[] = {null, null, null, "ddeFE"};
+        String glue[] = {"x", "x", "e", "x"};
+        String glue2[] = {"x", "x", "x", "ddeFE"};
+        String allX[] = {"x","x","x","x"};
 
         PolyTile poly = new PolyTile("X");
 
         poly.setColor("8C0095");
 
-        poly.addTile(0, 0, blankGlues());
-        poly.addTile(-1, 0, blankGlues());
-        poly.addTile(1, 0, blankGlues());
+        poly.addTile(0, 0, allX);
+        poly.addTile(-1, 0, allX);
+        poly.addTile(1, 0, allX);
         poly.addTile(0, 1, glue2);
         poly.addTile(0, -1, glue);
 
@@ -136,6 +136,7 @@ public class Main {
         ts.addGlueFunction("d","d",2);
         ts.addGlueFunction("e","e",2);
         ts.addGlueFunction("f","f",2);
+        ts.addGlueFunction("x","x",2);
         ts.addGlueFunction("ddeFE","ddeFE",2);
 
         Assembly assembly = new Assembly(ts);

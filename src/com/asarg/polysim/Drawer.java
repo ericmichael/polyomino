@@ -166,6 +166,10 @@ public class Drawer {
         public static void drawTile(Graphics2D g, Tile tile, int x, int y, int diameter) {
 
 
+
+            Rectangle clip = g.getClipBounds();
+            if(x>clip.width + diameter || x < 0 -diameter || y>clip.height + diameter || y < 0 -diameter)
+                return;
             AffineTransform gOriginalATransform = g.getTransform();
 
             String tileLabel = tile.getLabel();
