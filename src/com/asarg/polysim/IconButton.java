@@ -14,7 +14,7 @@ public class IconButton extends JButton {
         try {
             InputStream in = this.getClass().getResourceAsStream("./resources/fontawesome.ttf");
             Font ttfBase = Font.createFont(Font.TRUETYPE_FONT, in);
-            Font ttfReal = ttfBase.deriveFont(Font.BOLD, 24);
+            Font ttfReal = ttfBase.deriveFont(Font.BOLD, 16);
             setFont(ttfReal);
 
 
