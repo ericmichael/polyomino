@@ -282,7 +282,7 @@ public class Assembly {
 
         cleanUp();
         getOpenGlues();
-        return 0.0;
+        return fe.getAttachTime();
     }
 
     public void detach(){
