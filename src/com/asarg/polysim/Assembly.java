@@ -61,6 +61,10 @@ public class Assembly {
         tileSystem = newTS;
     }
 
+    public TileSystem getTileSystem(){
+        return tileSystem;
+    }
+
     public Assembly(TileSystem ts){
         tileSystem = ts;
         frontier = new Frontier( tileSystem );

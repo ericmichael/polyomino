@@ -8,6 +8,11 @@ import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.URL;
+import javax.swing.JFileChooser;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class TestCanvasFrame extends JFrame implements MouseWheelListener, MouseMotionListener, MouseListener,KeyListener, ComponentListener{
 
@@ -192,8 +197,54 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                     }
                     tc.reset();
                     drawGrid();
-                } else if (e.getSource().equals(newMenuItem)){
+                } else if (e.getSource().equals(newMenuItem)) {
                     System.out.println("new assembly");
+                } else if (e.getSource().equals(loadAssemblyMenuItem)) {
+                    JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+                    int result = fileChooser.showOpenDialog(getParent());
+                    if (result == JFileChooser.APPROVE_OPTION) {
+                        File selectedFile = fileChooser.getSelectedFile();
+                        File tileConfig;
+                        try {
+                            tileConfig = new File(selectedFile.getParentFile() + "tileconfig.xml");
+                        }
+                        catch(Exception exc){
+                            tileConfig = null;
+                        }
+                        try {
+                            JAXBContext jaxbContext = JAXBContext.newInstance(Assembly.class);
+                            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+                            unmarshaller = jaxbContext.createUnmarshaller();
+                            assembly = (Assembly) unmarshaller.unmarshal(selectedFile);
+                            if(tileConfig!=null){
+                                TileConfiguration tc;
+
+                                jaxbContext = JAXBContext.newInstance(TileConfiguration.class);
+                                unmarshaller = jaxbContext.createUnmarshaller();
+                                tc = (TileConfiguration) unmarshaller.unmarshal(new File("./Examples/RNG_ATAM/tileconfig.xml"));
+
+                                assembly.getTileSystem().loadTileConfiguration(tc);
+
+                                for(PolyTile p : assembly.getTileSystem().getTileTypes()) {
+                                    p.setGlues();
+                                }
+                            }
+
+                            TestCanvasFrame tcf = new TestCanvasFrame(800, 600, assembly);
+                        } catch (javax.xml.bind.JAXBException jaxbe) {
+                            javax.swing.JOptionPane.showMessageDialog(null, "Failed to load assembly");
+                        }
+                    }
+                } else if (e.getSource().equals(closeMenuItem)){
+                    int result = JOptionPane.showConfirmDialog(
+                            null,
+                            "Are you sure you want to exit the application?",
+                            "Exit Application",
+                            JOptionPane.YES_NO_OPTION);
+
+                    if (result == JOptionPane.YES_OPTION)
+                        System.exit(0);
                 } else if (e.getSource().equals(tileSetEditorMenuItem)){
                     tileEditorWindow.setVisible(true);
                 }
