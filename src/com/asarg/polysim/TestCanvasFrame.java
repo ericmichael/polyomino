@@ -38,7 +38,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         frontier = this.assembly.calculateFrontier();
         setLayout(new BorderLayout());
         tc = new TestCanvas();
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         addMouseWheelListener(this);
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -66,6 +66,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                         tc.reset();
                         frontier = assembly.calculateFrontier();
                         drawGrid();
+
                     }
                 }else if(e.getSource().equals(play)){
                     while(!frontier.isEmpty()){
@@ -108,6 +109,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         tcfBar.add(play);
         tcfBar.add(next);
         tcfBar.add(fastf);
+
         setJMenuBar(tcfBar);
         pack();
         setVisible(true);
@@ -202,6 +204,18 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        if(e.getSource() == tc) {
+
+
+
+        }
+
+
+        tc.reset();
+        drawGrid();
+        repaint();
+
+
 
     }
 

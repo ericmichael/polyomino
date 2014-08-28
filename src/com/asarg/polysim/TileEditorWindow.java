@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Dom on 8/21/2014.
@@ -13,6 +15,8 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
 
     JPanel wP;
     Dimension res = new Dimension();
+    BufferedImage polyTileCanvas;
+    List<PolyTile> polytileList = new ArrayList<PolyTile>();
     JScrollPane jsp;
     TileEditorWindow(int width, int height) {
         final Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -40,8 +44,10 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
 
 
 
+
+
         ImageIcon[] icon = new ImageIcon[20];
-        final BufferedImage polyBFI = new BufferedImage(100 - jsp.getVerticalScrollBar().getWidth(), 100, BufferedImage.TYPE_INT_ARGB);
+        final BufferedImage polyBFI = new BufferedImage(100 , 100, BufferedImage.TYPE_INT_ARGB);
         Graphics2D polyGFX = polyBFI.createGraphics();
         polyGFX.setClip(0, 0, 100, 100);
         Drawer.TileDrawer.drawCenteredPolyTile(polyGFX, Main.tetrisL());
@@ -54,24 +60,17 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
         icon[3] = new ImageIcon(toolkit.createImage(polyBFI.getSource()));
         Drawer.TileDrawer.drawCenteredPolyTile(polyGFX, Main.tetrisV());
         icon[4] = new ImageIcon(toolkit.createImage(polyBFI.getSource()));
-        Drawer.TileDrawer.drawPolyTile(polyGFX, Main.tetrisL(), 15, new Point(50, 50));
-        icon[5] = new ImageIcon(toolkit.createImage(polyBFI.getSource()));
-        Drawer.TileDrawer.drawPolyTile(polyGFX, Main.tetrisX(), 15, new Point(50, 50));
-        icon[6] = new ImageIcon(toolkit.createImage(polyBFI.getSource()));
-        Drawer.TileDrawer.drawPolyTile(polyGFX, Main.tetrisF(), 15, new Point(50, 50));
-        icon[7] = new ImageIcon(toolkit.createImage(polyBFI.getSource()));
-        Drawer.TileDrawer.drawPolyTile(polyGFX, Main.tetrisV(), 15, new Point(50, 50));
-        icon[8] = new ImageIcon(toolkit.createImage(polyBFI.getSource()));
-        Drawer.TileDrawer.drawPolyTile(polyGFX, Main.tetrisU(), 15, new Point(50, 50));
-        icon[9] = new ImageIcon(toolkit.createImage(polyBFI.getSource()));
+
 
         JList<Icon> polyList = new JList<Icon>(icon);
 
 
         jsp.setViewportView(polyList);
+        jsp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         polyList.setBackground(getBackground());
 
         wP.add(jsp);
+
         System.out.println(jsp.getVerticalScrollBar().getHeight());
 
 
