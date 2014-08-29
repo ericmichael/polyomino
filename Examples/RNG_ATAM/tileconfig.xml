@@ -50,7 +50,7 @@
             <Strength>1</Strength>
         </Function>
         <Function>
-            <Labels L1="2-t" L2="2-t"/>
+            <Labels L1="2-h" L2="2-h"/>
             <Strength>1</Strength>
         </Function>
         <Function>
@@ -62,7 +62,7 @@
             <Strength>1</Strength>
         </Function>
         <Function>
-            <Labels L1="1-t" L2="1-t"/>
+            <Labels L1="1-h" L2="1-h"/>
             <Strength>1</Strength>
         </Function>
         <Function>
@@ -78,14 +78,14 @@
             <Strength>2</Strength>
         </Function>
         <Function>
-            <Labels L1="1-b" L2="1-b"/>
+            <Labels L1="1-t" L2="1-t"/>
             <Strength>1</Strength>
         </Function>
     </GlueFunction>
-    <TileType Label="R" Color="FFFFF">
+    <TileType Label="R" Color="2ecc71">
         <Tile>
             <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
+            <Color>2ecc71</Color>
             <NorthGlue>p</NorthGlue>
             <EastGlue>r</EastGlue>
             <SouthGlue>ur</SouthGlue>
@@ -94,11 +94,11 @@
         <Concentration>-1.0</Concentration>
         <Count>-1</Count>
     </TileType>
-    <TileType Label="T" Color="FFFFF">
+    <TileType Label="Heads" Color="f1c40f">
         <Tile>
             <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
-            <NorthGlue>1-t</NorthGlue>
+            <Color>f1c40f</Color>
+            <NorthGlue>1-h</NorthGlue>
             <EastGlue>p</EastGlue>
             <SouthGlue>p</SouthGlue>
             <WestGlue>p</WestGlue>
@@ -106,32 +106,32 @@
         <Concentration>-1.0</Concentration>
         <Count>-1</Count>
     </TileType>
-    <TileType Label="1-b" Color="FFFFF">
+    <TileType Label="1-t" Color="9b59b6">
         <Tile>
             <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
+            <Color>9b59b6</Color>
             <NorthGlue>reset</NorthGlue>
-            <EastGlue>1-b</EastGlue>
-            <SouthGlue>1-b</SouthGlue>
+            <EastGlue>1-t</EastGlue>
+            <SouthGlue>1-t</SouthGlue>
             <WestGlue>sw</WestGlue>
         </Tile>
         <Concentration>-1.0</Concentration>
         <Count>-1</Count>
     </TileType>
-    <TileType Label="1-b 1-t" Color="FFFFF">
+    <TileType Label="A: Tails" Color="95a5a6">
         <Tile>
             <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
-            <SouthGlue>1-t</SouthGlue>
-            <WestGlue>1-b</WestGlue>
+            <Color>95a5a6</Color>
+            <SouthGlue>1-h</SouthGlue>
+            <WestGlue>1-t</WestGlue>
         </Tile>
         <Concentration>-1.0</Concentration>
         <Count>-1</Count>
     </TileType>
-    <TileType Label="UL" Color="FFFFF">
+    <TileType Label="UL" Color="9b59b6">
         <Tile>
             <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
+            <Color>9b59b6</Color>
             <NorthGlue>ul</NorthGlue>
             <EastGlue>floor-left</EastGlue>
             <WestGlue>ul</WestGlue>
@@ -139,30 +139,30 @@
         <Concentration>-1.0</Concentration>
         <Count>-1</Count>
     </TileType>
-    <TileType Label="WL3" Color="FFFFF">
+    <TileType Label="WL3" Color="9b59b6">
         <Tile>
             <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
+            <Color>9b59b6</Color>
             <NorthGlue>wl3</NorthGlue>
             <SouthGlue>wl2</SouthGlue>
         </Tile>
         <Concentration>-1.0</Concentration>
         <Count>-1</Count>
     </TileType>
-    <TileType Label="floor" Color="FFFFF">
+    <TileType Label="floor" Color="9b59b6">
         <Tile>
             <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
+            <Color>9b59b6</Color>
             <EastGlue>floor-right</EastGlue>
             <WestGlue>floor-left</WestGlue>
         </Tile>
         <Concentration>-1.0</Concentration>
         <Count>-1</Count>
     </TileType>
-    <TileType Label="connector" Color="FFFFF">
+    <TileType Label="connector" Color="9b59b6">
         <Tile>
             <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
+            <Color>9b59b6</Color>
             <NorthGlue>extension</NorthGlue>
             <EastGlue>p</EastGlue>
             <SouthGlue>connector</SouthGlue>
@@ -171,10 +171,10 @@
         <Concentration>-1.0</Concentration>
         <Count>-1</Count>
     </TileType>
-    <TileType Label="reset" Color="FFFFF">
+    <TileType Label="reset" Color="c0392b">
         <Tile>
             <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
+            <Color>c0392b</Color>
             <EastGlue>reset</EastGlue>
             <SouthGlue>reset</SouthGlue>
             <WestGlue>reset</WestGlue>
@@ -182,20 +182,20 @@
         <Concentration>-1.0</Concentration>
         <Count>-1</Count>
     </TileType>
-    <TileType Label="UR" Color="FFFFF">
+    <TileType Label="UR" Color="9b59b6">
         <Tile>
             <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
+            <Color>9b59b6</Color>
             <NorthGlue>ur</NorthGlue>
             <WestGlue>floor-right</WestGlue>
         </Tile>
         <Concentration>-1.0</Concentration>
         <Count>-1</Count>
     </TileType>
-    <TileType Label="Wl Repeat" Color="FFFFF">
+    <TileType Label="Wl Repeat" Color="e67e22">
         <Tile>
             <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
+            <Color>e67e22</Color>
             <NorthGlue>wl</NorthGlue>
             <EastGlue>ul</EastGlue>
             <SouthGlue>master reset</SouthGlue>
@@ -203,10 +203,22 @@
         <Concentration>-1.0</Concentration>
         <Count>-1</Count>
     </TileType>
-    <TileType Label="1-t ext" Color="FFFFF">
+    <TileType Label="1-h ext" Color="9b59b6">
         <Tile>
             <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
+            <Color>9b59b6</Color>
+            <NorthGlue>reset</NorthGlue>
+            <EastGlue>1-h</EastGlue>
+            <SouthGlue>extension</SouthGlue>
+            <WestGlue>1-h</WestGlue>
+        </Tile>
+        <Concentration>-1.0</Concentration>
+        <Count>-1</Count>
+    </TileType>
+    <TileType Label="1-t ext" Color="9b59b6">
+        <Tile>
+            <Location x="0" y="0"/>
+            <Color>9b59b6</Color>
             <NorthGlue>reset</NorthGlue>
             <EastGlue>1-t</EastGlue>
             <SouthGlue>extension</SouthGlue>
@@ -215,22 +227,10 @@
         <Concentration>-1.0</Concentration>
         <Count>-1</Count>
     </TileType>
-    <TileType Label="1-b ext" Color="FFFFF">
+    <TileType Label="reset right" Color="c0392b">
         <Tile>
             <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
-            <NorthGlue>reset</NorthGlue>
-            <EastGlue>1-b</EastGlue>
-            <SouthGlue>extension</SouthGlue>
-            <WestGlue>1-b</WestGlue>
-        </Tile>
-        <Concentration>-1.0</Concentration>
-        <Count>-1</Count>
-    </TileType>
-    <TileType Label="reset right" Color="FFFFF">
-        <Tile>
-            <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
+            <Color>c0392b</Color>
             <EastGlue>reset</EastGlue>
             <SouthGlue>reset-2</SouthGlue>
             <WestGlue>reset</WestGlue>
@@ -238,100 +238,10 @@
         <Concentration>-1.0</Concentration>
         <Count>-1</Count>
     </TileType>
-    <TileType Label="2-b" Color="FFFFF">
+    <TileType Label="2-t" Color="c0392b">
         <Tile>
             <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
-            <NorthGlue>reset-2</NorthGlue>
-            <EastGlue>2-b</EastGlue>
-            <SouthGlue>1-b</SouthGlue>
-            <WestGlue>1-b</WestGlue>
-        </Tile>
-        <Concentration>-1.0</Concentration>
-        <Count>-1</Count>
-    </TileType>
-    <TileType Label="B" Color="FFFFF">
-        <Tile>
-            <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
-            <NorthGlue>1-b</NorthGlue>
-            <EastGlue>p</EastGlue>
-            <SouthGlue>p</SouthGlue>
-            <WestGlue>p</WestGlue>
-        </Tile>
-        <Concentration>-1.0</Concentration>
-        <Count>-1</Count>
-    </TileType>
-    <TileType Label="WL2" Color="FFFFF">
-        <Tile>
-            <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
-            <NorthGlue>wl2</NorthGlue>
-            <SouthGlue>wl</SouthGlue>
-        </Tile>
-        <Concentration>-1.0</Concentration>
-        <Count>-1</Count>
-    </TileType>
-    <TileType Label="1-t" Color="FFFFF">
-        <Tile>
-            <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
-            <NorthGlue>reset</NorthGlue>
-            <EastGlue>1-t</EastGlue>
-            <SouthGlue>1-t</SouthGlue>
-            <WestGlue>sw</WestGlue>
-        </Tile>
-        <Concentration>-1.0</Concentration>
-        <Count>-1</Count>
-    </TileType>
-    <TileType Label="1-t 1-b" Color="FFFFF">
-        <Tile>
-            <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
-            <SouthGlue>1-b</SouthGlue>
-            <WestGlue>1-t</WestGlue>
-        </Tile>
-        <Concentration>-1.0</Concentration>
-        <Count>-1</Count>
-    </TileType>
-    <TileType Label="L" Color="FFFFF">
-        <Tile>
-            <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
-            <NorthGlue>p</NorthGlue>
-            <EastGlue>bind</EastGlue>
-            <SouthGlue>ul</SouthGlue>
-            <WestGlue>l</WestGlue>
-        </Tile>
-        <Concentration>-1.0</Concentration>
-        <Count>-1</Count>
-    </TileType>
-    <TileType Label="bind" Color="FFFFF">
-        <Tile>
-            <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
-            <NorthGlue>connector</NorthGlue>
-            <EastGlue>bind</EastGlue>
-            <WestGlue>bind</WestGlue>
-        </Tile>
-        <Concentration>-1.0</Concentration>
-        <Count>-1</Count>
-    </TileType>
-    <TileType Label="SW" Color="FFFFF">
-        <Tile>
-            <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
-            <NorthGlue>sw</NorthGlue>
-            <EastGlue>sw</EastGlue>
-            <SouthGlue>wl3</SouthGlue>
-        </Tile>
-        <Concentration>-1.0</Concentration>
-        <Count>-1</Count>
-    </TileType>
-    <TileType Label="2-t" Color="FFFFF">
-        <Tile>
-            <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
+            <Color>c0392b</Color>
             <NorthGlue>reset-2</NorthGlue>
             <EastGlue>2-t</EastGlue>
             <SouthGlue>1-t</SouthGlue>
@@ -340,10 +250,100 @@
         <Concentration>-1.0</Concentration>
         <Count>-1</Count>
     </TileType>
-    <TileType Label="reset left" Color="FFFFF">
+    <TileType Label="Tails" Color="95a5a6">
         <Tile>
             <Location x="0" y="0"/>
-            <Color>FFFFF</Color>
+            <Color>95a5a6</Color>
+            <NorthGlue>1-t</NorthGlue>
+            <EastGlue>p</EastGlue>
+            <SouthGlue>p</SouthGlue>
+            <WestGlue>p</WestGlue>
+        </Tile>
+        <Concentration>-1.0</Concentration>
+        <Count>-1</Count>
+    </TileType>
+    <TileType Label="WL2" Color="9b59b6">
+        <Tile>
+            <Location x="0" y="0"/>
+            <Color>9b59b6</Color>
+            <NorthGlue>wl2</NorthGlue>
+            <SouthGlue>wl</SouthGlue>
+        </Tile>
+        <Concentration>-1.0</Concentration>
+        <Count>-1</Count>
+    </TileType>
+    <TileType Label="1-h" Color="9b59b6">
+        <Tile>
+            <Location x="0" y="0"/>
+            <Color>9b59b6</Color>
+            <NorthGlue>reset</NorthGlue>
+            <EastGlue>1-h</EastGlue>
+            <SouthGlue>1-h</SouthGlue>
+            <WestGlue>sw</WestGlue>
+        </Tile>
+        <Concentration>-1.0</Concentration>
+        <Count>-1</Count>
+    </TileType>
+    <TileType Label="A: Heads" Color="f1c40f">
+        <Tile>
+            <Location x="0" y="0"/>
+            <Color>f1c40f</Color>
+            <SouthGlue>1-t</SouthGlue>
+            <WestGlue>1-h</WestGlue>
+        </Tile>
+        <Concentration>-1.0</Concentration>
+        <Count>-1</Count>
+    </TileType>
+    <TileType Label="L" Color="2ecc71">
+        <Tile>
+            <Location x="0" y="0"/>
+            <Color>2ecc71</Color>
+            <NorthGlue>p</NorthGlue>
+            <EastGlue>bind</EastGlue>
+            <SouthGlue>ul</SouthGlue>
+            <WestGlue>l</WestGlue>
+        </Tile>
+        <Concentration>-1.0</Concentration>
+        <Count>-1</Count>
+    </TileType>
+    <TileType Label="bind" Color="9b59b6">
+        <Tile>
+            <Location x="0" y="0"/>
+            <Color>9b59b6</Color>
+            <NorthGlue>connector</NorthGlue>
+            <EastGlue>bind</EastGlue>
+            <WestGlue>bind</WestGlue>
+        </Tile>
+        <Concentration>-1.0</Concentration>
+        <Count>-1</Count>
+    </TileType>
+    <TileType Label="SW" Color="9b59b6">
+        <Tile>
+            <Location x="0" y="0"/>
+            <Color>9b59b6</Color>
+            <NorthGlue>sw</NorthGlue>
+            <EastGlue>sw</EastGlue>
+            <SouthGlue>wl3</SouthGlue>
+        </Tile>
+        <Concentration>-1.0</Concentration>
+        <Count>-1</Count>
+    </TileType>
+    <TileType Label="2-h" Color="c0392b">
+        <Tile>
+            <Location x="0" y="0"/>
+            <Color>c0392b</Color>
+            <NorthGlue>reset-2</NorthGlue>
+            <EastGlue>2-h</EastGlue>
+            <SouthGlue>1-h</SouthGlue>
+            <WestGlue>1-h</WestGlue>
+        </Tile>
+        <Concentration>-1.0</Concentration>
+        <Count>-1</Count>
+    </TileType>
+    <TileType Label="reset left" Color="c0392b">
+        <Tile>
+            <Location x="0" y="0"/>
+            <Color>c0392b</Color>
             <NorthGlue>master reset</NorthGlue>
             <EastGlue>reset</EastGlue>
             <SouthGlue>sw</SouthGlue>

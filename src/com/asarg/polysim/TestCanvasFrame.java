@@ -4,20 +4,44 @@ package com.asarg.polysim;
 
 
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.event.*;
+import java.net.URL;
+import javax.swing.JFileChooser;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class TestCanvasFrame extends JFrame implements MouseWheelListener, MouseMotionListener, MouseListener,KeyListener, ComponentListener{
 
     TestCanvas tc;
-    JMenuBar tcfBar = new JMenuBar();
-    JMenuItem nextStepMI = new JMenuItem("Step >");
-    JMenuItem previousStepMI = new JMenuItem("< Previous");
+    GradientToolbar stepControlToolBar = new GradientToolbar();
+    ActionListener actionListener;
+    TileEditorWindow tileEditorWindow = new TileEditorWindow(800,600);
     ControlButton next = new ControlButton("forward");
     ControlButton prev = new ControlButton("backward");
     ControlButton play = new ControlButton("play");
     ControlButton fastf = new ControlButton("fast-forward");
     ControlButton fastb = new ControlButton("fast-backward");
+    IconButton optionButton = new IconButton();
+    JMenuBar mainMenu = new JMenuBar();
+    // Menu Bar Items
+    JMenuItem newMenuItem = new JMenuItem("New Assembly");
+    JMenuItem loadAssemblyMenuItem = new JMenuItem("Load");
+    JMenuItem saveAssemblyMenuItem = new JMenuItem("Save");
+    JMenuItem saveAsMenuItem = new JMenuItem("Save as...");
+    JMenuItem closeMenuItem = new JMenuItem("Close");
+
+    JMenuItem importTileSetMenuItem = new JMenuItem("Import Tile Set");
+    JMenuItem tileSetEditorMenuItem = new JMenuItem("Tile Set Editor");
+
+    JMenuItem undoMenuItem = new JMenuItem("Undo");
+    JMenuItem redoMenuItem = new JMenuItem("Redo");
+
+    JMenuItem seedCreatorMenuItem = new JMenuItem("Seed Creator");
+    JMenuItem tileSystemOptionsMenuItem = new JMenuItem("Options");
 
     int width;
     int height;
@@ -32,24 +56,105 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
 
     public TestCanvasFrame(int w, int h, final Assembly assembly)
     {
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.assembly = assembly;
         width = w;
         height = h;
         frontier = this.assembly.calculateFrontier();
         setLayout(new BorderLayout());
+
         tc = new TestCanvas();
-        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        add(tc, BorderLayout.SOUTH);
+        tc.setSize(width, height);
+
+        addActionListeners();
+
+        addToolBars();
+
+        addMenuBars();
+
+        pack();
+        setVisible(true);
+        drawGrid();
+    }
+
+    private void addToolBars(){
+        stepControlToolBar.add(fastb);
+        fastb.setPreferredSize(new Dimension(30, 25));
+        stepControlToolBar.add(prev);
+        prev.setPreferredSize(new Dimension(30, 25));
+        stepControlToolBar.add(play);
+        play.setPreferredSize(new Dimension(30, 25));
+        stepControlToolBar.add(next);
+        next.setPreferredSize(new Dimension(30, 25));
+        stepControlToolBar.add(fastf);
+        fastf.setPreferredSize(new Dimension(30, 25));
+
+        optionButton.setText(String.valueOf('\uf013'));
+        stepControlToolBar.add(optionButton);
+
+        stepControlToolBar.setBorder(new EtchedBorder());
+        stepControlToolBar.setLayout(new FlowLayout(FlowLayout.CENTER));
+        add(stepControlToolBar);
+    }
+
+    private void addMenuBars(){
+        JMenu fileMenu = new JMenu("File");
+        newMenuItem = new JMenuItem("New Assembly");
+        newMenuItem.addActionListener(actionListener);
+        loadAssemblyMenuItem = new JMenuItem("Load");
+        loadAssemblyMenuItem.addActionListener(actionListener);
+        saveAssemblyMenuItem = new JMenuItem("Save");
+        saveAssemblyMenuItem.addActionListener(actionListener);
+        saveAsMenuItem = new JMenuItem("Save as...");
+        saveAsMenuItem.addActionListener(actionListener);
+        closeMenuItem = new JMenuItem("Close");
+        closeMenuItem.addActionListener(actionListener);
+        fileMenu.add(newMenuItem);
+        fileMenu.add(loadAssemblyMenuItem);
+        fileMenu.add(saveAssemblyMenuItem);
+        fileMenu.add(saveAsMenuItem);
+        fileMenu.addSeparator();
+        fileMenu.add(closeMenuItem);
+
+        JMenu toolsMenu = new JMenu("Tools");
+        importTileSetMenuItem = new JMenuItem("Import Tile Set");
+        importTileSetMenuItem.addActionListener(actionListener);
+        tileSetEditorMenuItem = new JMenuItem("Tile Set Editor");
+        tileSetEditorMenuItem.addActionListener(actionListener);
+        toolsMenu.add(importTileSetMenuItem);
+        toolsMenu.add(tileSetEditorMenuItem);
+
+        JMenu editMenu = new JMenu("Edit");
+        undoMenuItem = new JMenuItem("Undo");
+        undoMenuItem.addActionListener(actionListener);
+        redoMenuItem = new JMenuItem("Redo");
+        redoMenuItem.addActionListener(actionListener);
+        editMenu.add(undoMenuItem);
+        editMenu.add(redoMenuItem);
+
+        JMenu tileSystemMenu = new JMenu("Tile System");
+        seedCreatorMenuItem = new JMenuItem("Seed Creator");
+        seedCreatorMenuItem.addActionListener(actionListener);
+        tileSystemOptionsMenuItem = new JMenuItem("Options");
+        tileSystemOptionsMenuItem.addActionListener(actionListener);
+        tileSystemMenu.add(seedCreatorMenuItem);
+        tileSystemMenu.add(tileSystemOptionsMenuItem);
+
+        mainMenu.add(fileMenu);
+        mainMenu.add(editMenu);
+        mainMenu.add(toolsMenu);
+        mainMenu.add(tileSystemMenu);
+        setJMenuBar(mainMenu);
+    }
+
+    private void addActionListeners(){
         addMouseWheelListener(this);
         addMouseListener(this);
         addMouseMotionListener(this);
         addKeyListener(this);
         addComponentListener(this);
-
-
-        add(tc, BorderLayout.SOUTH);
-        tc.setSize(w,h);
-
-        ActionListener al = new ActionListener() {
+        actionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(e.getSource().equals(next))
@@ -93,27 +198,66 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                     }
                     tc.reset();
                     drawGrid();
+                } else if (e.getSource().equals(newMenuItem)) {
+                    System.out.println("new assembly");
+                    TestCanvasFrame tcf = new TestCanvasFrame(800, 600, new Assembly());
+                } else if (e.getSource().equals(loadAssemblyMenuItem)) {
+                    JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+                    int result = fileChooser.showOpenDialog(getParent());
+                    if (result == JFileChooser.APPROVE_OPTION) {
+                        File selectedFile = fileChooser.getSelectedFile();
+                        File tileConfig;
+                        try {
+                            tileConfig = new File(selectedFile.getParentFile() + "tileconfig.xml");
+                        }
+                        catch(Exception exc){
+                            tileConfig = null;
+                        }
+                        try {
+                            JAXBContext jaxbContext = JAXBContext.newInstance(Assembly.class);
+                            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+                            unmarshaller = jaxbContext.createUnmarshaller();
+                            assembly = (Assembly) unmarshaller.unmarshal(selectedFile);
+                            if(tileConfig!=null){
+                                TileConfiguration tc;
 
+                                jaxbContext = JAXBContext.newInstance(TileConfiguration.class);
+                                unmarshaller = jaxbContext.createUnmarshaller();
+                                tc = (TileConfiguration) unmarshaller.unmarshal(new File("./Examples/RNG_ATAM/tileconfig.xml"));
+
+                                assembly.getTileSystem().loadTileConfiguration(tc);
+
+                                for(PolyTile p : assembly.getTileSystem().getTileTypes()) {
+                                    p.setGlues();
+                                }
+                            }
+
+                            TestCanvasFrame tcf = new TestCanvasFrame(800, 600, assembly);
+                        } catch (javax.xml.bind.JAXBException jaxbe) {
+                            javax.swing.JOptionPane.showMessageDialog(null, "Failed to load assembly");
+                        }
+                    }
+                } else if (e.getSource().equals(closeMenuItem)){
+                    int result = JOptionPane.showConfirmDialog(
+                            null,
+                            "Are you sure you want to exit the application?",
+                            "Exit Application",
+                            JOptionPane.YES_NO_OPTION);
+
+                    if (result == JOptionPane.YES_OPTION)
+                        System.exit(0);
+                } else if (e.getSource().equals(tileSetEditorMenuItem)){
+                    tileEditorWindow.setVisible(true);
                 }
-
             }
         };
 
-        next.addActionListener(al);
-        prev.addActionListener(al);
-        play.addActionListener(al);
-        fastf.addActionListener(al);
-        fastb.addActionListener(al);
-        tcfBar.add(fastb);
-        tcfBar.add(prev);
-        tcfBar.add(play);
-        tcfBar.add(next);
-        tcfBar.add(fastf);
-
-        setJMenuBar(tcfBar);
-        pack();
-        setVisible(true);
-        drawGrid();
+        next.addActionListener(actionListener);
+        prev.addActionListener(actionListener);
+        play.addActionListener(actionListener);
+        fastf.addActionListener(actionListener);
+        fastb.addActionListener(actionListener);
     }
 
 
@@ -174,8 +318,6 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-
-
         if(e.getWheelRotation() == 1)
         {
            zoomOutDraw();
@@ -184,7 +326,6 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         {
            zoomInDraw();
         }
-
     }
 
     @Override
@@ -194,7 +335,6 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         tc.reset();
         drawGrid();
         repaint();
-
     }
 
     @Override
@@ -244,10 +384,6 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
     @Override
     public void keyTyped(KeyEvent e) {
 
-
-
-
-
     }
 
     @Override
@@ -263,16 +399,16 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         {
             if(!frontier.isEmpty()) {
                 assembly.attach();
-                drawGrid();
                 frontier = assembly.calculateFrontier();
+                drawGrid();
             }
         }
         else if(e.getKeyCode() == KeyEvent.VK_LEFT)
         {
             assembly.detach();
             tc.reset();
-            drawGrid();
             frontier = assembly.calculateFrontier();
+            drawGrid();
         }
     }
 
@@ -284,8 +420,6 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
 
     @Override
     public void componentResized(ComponentEvent e) {
-
-
         remove(tc);
         add(tc);
     }
