@@ -194,8 +194,9 @@ public class Drawer {
 
 
             //get hex color string to int, then create new color out of the rgb
-            int colorInt = Integer.parseInt(tile.getColor(), 16);
-            Color tileColor =new Color(colorInt >> 16, (colorInt & 0x00FF00) >> 8, colorInt & 0x0000FF, 100);
+            //int colorInt = Integer.parseInt(tile.getColor(), 16);
+            //Color tileColor =new Color(colorInt >> 16, (colorInt & 0x00FF00) >> 8, colorInt & 0x0000FF, 100);
+            Color tileColor = Color.decode("#"+tile.getColor());
             g.setColor(tileColor);
 
             // the tiles fill color
