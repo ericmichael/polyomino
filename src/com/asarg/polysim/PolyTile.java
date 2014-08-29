@@ -9,7 +9,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 @XmlRootElement
 @XmlType(propOrder = {"polyName", "color", "tiles", "concentration", "count"})
@@ -40,7 +39,8 @@ public class PolyTile {
     public HashMap<Point, String> westGlues = new HashMap<Point, String>();
 
     public PolyTile() {
-        System.out.println("polytile with no name and infinite counts");
+        tiles.add(new Tile(0,0, this));
+        polyName = "New";
         setColor("FFFFF");
     }
     public PolyTile(int c, double con){

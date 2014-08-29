@@ -343,9 +343,9 @@ public class Drawer {
         public static void drawCenteredPolyTile(Graphics2D g, PolyTile pt)
         {
            Point polyDim = calculatePolyTileGridDimension(pt);
-            Rectangle graphicsDim = g.getClipBounds();
+           Rectangle graphicsDim = g.getClipBounds();
 
-            int diameter =  (int) Math.floor(Math.min(graphicsDim.getWidth(), graphicsDim.getHeight()) /Math.max(polyDim.x, polyDim.y))/2 ;
+            int diameter =  (int)( Math.floor(Math.min(graphicsDim.getWidth(), graphicsDim.getHeight()) /Math.max(polyDim.x, polyDim.y))/2) ;
             Point offset = new Point(0, 0 );
 
 

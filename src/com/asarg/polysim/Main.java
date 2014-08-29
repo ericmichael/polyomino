@@ -144,6 +144,7 @@ public class Main {
 
         TestCanvasFrame tcf = new TestCanvasFrame(800,600,assembly);
 
+
         JAXBContext jaxbContext = JAXBContext.newInstance(TileSystem.class);
         Marshaller marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);

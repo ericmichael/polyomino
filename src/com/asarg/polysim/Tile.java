@@ -24,6 +24,16 @@ public class Tile {
 
     }
 
+    public Tile(int x, int y, PolyTile parent)
+    {
+        glueLabels[0]=null;
+        glueLabels[1]=null;
+        glueLabels[2]=null;
+        glueLabels[3]=null;
+        tileLocation.setLocation(x,y);
+        polyTile= parent;
+
+    }
     public Tile( int x, int y, String[] gl, PolyTile parent) {
         tileLocation.setLocation(x, y);
         glueLabels = gl;
