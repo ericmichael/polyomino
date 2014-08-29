@@ -93,7 +93,7 @@ public class Assembly {
         }
     }
 
-    private void placePolytile(PolyTile p, int x, int y) {
+    public void placePolytile(PolyTile p, int x, int y) {
         for(Tile t : p.tiles) {
             Point tmp = new Point(t.getLocation());
             tmp.translate(x, y);
@@ -101,7 +101,7 @@ public class Assembly {
         }
     }
 
-    private void removePolytile(PolyTile p, int x, int y) {
+    public void removePolytile(PolyTile p, int x, int y) {
         for(Tile t : p.tiles) {
             Point tmp = new Point(t.getLocation());
             tmp.translate(x, y);

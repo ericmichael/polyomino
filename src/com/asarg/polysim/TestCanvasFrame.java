@@ -13,6 +13,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class TestCanvasFrame extends JFrame implements MouseWheelListener, MouseMotionListener, MouseListener,KeyListener, ComponentListener{
 
@@ -53,6 +54,12 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
     Frontier frontier;
     PolyTile frontierTile;
 
+    boolean frontierClick = false;
+    ArrayList<FrontierElement> frontierAttachments;
+    int frontierIndex = 0;
+    FrontierElement currentFrontierAttachment = null;
+    Point frontierClickPoint = null;
+
 
     public TestCanvasFrame(int w, int h, final Assembly assembly)
     {
@@ -65,6 +72,9 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
 
         tc = new TestCanvas();
         add(tc, BorderLayout.SOUTH);
+        tc.addMouseWheelListener(this);
+        tc.addMouseListener(this);
+        tc.addMouseMotionListener(this);
         tc.setSize(width, height);
 
         addActionListeners();
@@ -149,9 +159,6 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
     }
 
     private void addActionListeners(){
-        addMouseWheelListener(this);
-        addMouseListener(this);
-        addMouseMotionListener(this);
         addKeyListener(this);
         addComponentListener(this);
         actionListener = new ActionListener() {
@@ -160,6 +167,8 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                 if(e.getSource().equals(next))
                 {
                     if(!frontier.isEmpty()) {
+                        removeFrontierAttachments();
+                        RemoveFrontierFromGrid();
                         assembly.attach();
                         frontier = assembly.calculateFrontier();
                         drawGrid();
@@ -167,6 +176,8 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                 }else if(e.getSource().equals(prev))
                 {
                     if(!assembly.getAttached().isEmpty()) {
+                        removeFrontierAttachments();
+                        RemoveFrontierFromGrid();
                         assembly.detach();
                         tc.reset();
                         frontier = assembly.calculateFrontier();
@@ -175,6 +186,8 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                     }
                 }else if(e.getSource().equals(play)){
                     while(!frontier.isEmpty()){
+                        removeFrontierAttachments();
+                        RemoveFrontierFromGrid();
                         assembly.attach();
                         tc.reset();
                         frontier = assembly.calculateFrontier();
@@ -185,6 +198,8 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                         }
                     }
                 }else if(e.getSource().equals(fastb)){
+                    removeFrontierAttachments();
+                    RemoveFrontierFromGrid();
                     while(!assembly.getAttached().isEmpty()){
                         assembly.detach();
                     }
@@ -193,6 +208,8 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                     drawGrid();
                 }else if(e.getSource().equals(fastf)){
                     while(!frontier.isEmpty()){
+                        removeFrontierAttachments();
+                        RemoveFrontierFromGrid();
                         assembly.attach();
                         frontier = assembly.calculateFrontier();
                     }
@@ -266,8 +283,6 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         PlaceFrontierOnGrid();
         tc.drawGrid(assembly.Grid);
         repaint();
-        RemoveFrontierFromGrid();
-
     }
 
     private PolyTile getFrontierPolyTile(){
@@ -276,6 +291,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
             frontierTile.setColor("428bca");
             String glues[]= {null, null, null, null};
             frontierTile.addTile(0,0, glues);
+            frontierTile.setFrontier();
             return frontierTile;
         }else return frontierTile;
     }
@@ -316,15 +332,91 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         repaint();
     }
 
+    private void nextFrontierPoint(){
+        System.out.println("next frontier point");
+    }
+
+    private void prevFrontierPoint(){
+        System.out.println("prev frontier point");
+    }
+
+    private void removeCurrentFrontierAttachment(){
+        try {
+            if (currentFrontierAttachment != null) {
+                assembly.removePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().x, currentFrontierAttachment.getOffset().y);
+            } else {
+                assembly.Grid.remove(frontierClickPoint);
+            }
+        }catch(NullPointerException npe){
+
+        }
+    }
+
+    private void addPreviousFrontierAttachment(){
+        if(frontierIndex>0 && frontierAttachments.size()>0){
+            frontierIndex-=1;
+            currentFrontierAttachment = frontierAttachments.get(frontierIndex);
+            assembly.placePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().x, currentFrontierAttachment.getOffset().y);
+        }
+    }
+
+    private void addFrontierAttachment(int index){
+        if( frontierAttachments.size()>0){
+            currentFrontierAttachment = frontierAttachments.get(index);
+            assembly.placePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().x, currentFrontierAttachment.getOffset().y);
+        }
+    }
+
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         if(e.getWheelRotation() == 1)
         {
-           zoomOutDraw();
+            System.out.println("wheel");
+            if(frontierClick){
+                System.out.println("wheel with frontier");
+                removeCurrentFrontierAttachment();
+                if(currentFrontierAttachment==null){
+                    addFrontierAttachment(frontierIndex);
+                }else if(frontierIndex!=0){
+                    addFrontierAttachment(frontierIndex-1);
+                    frontierIndex-=1;
+                }else {
+                    frontierIndex=frontierAttachments.size()-1;
+                    addFrontierAttachment(frontierIndex);
+                }
+
+
+                tc.drawGrid(assembly.Grid);
+                repaint();
+                return;
+            }
+            zoomOutDraw();
         }
-        if(e.getWheelRotation() == -1)
+        else if(e.getWheelRotation() == -1)
         {
-           zoomInDraw();
+            System.out.println("wheel");
+            if(frontierClick){
+                System.out.println("wheel with frontier");
+                int flength = frontierAttachments.size();
+                System.out.println("Flength: " + flength);
+                System.out.println("index: " + frontierIndex);
+                removeCurrentFrontierAttachment();
+                if(currentFrontierAttachment==null) {
+                    addFrontierAttachment(frontierIndex);
+                }
+                else if(frontierIndex+1 < frontierAttachments.size()){
+                    addFrontierAttachment(frontierIndex+1);
+                    frontierIndex+=1;
+                }else{
+                    addFrontierAttachment(0);
+                    frontierIndex=0;
+                }
+
+                tc.drawGrid(assembly.Grid);
+                repaint();
+                return;
+            }
+            zoomInDraw();
         }
     }
 
@@ -342,20 +434,46 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
 
     }
 
+    private void removeFrontierAttachments(){
+        if(currentFrontierAttachment!=null) {
+            assembly.removePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().x, currentFrontierAttachment.getOffset().y);
+        }
+        frontierClick = false;
+        frontierClickPoint = null;
+        frontierAttachments = null;
+        frontierIndex = 0;
+        drawGrid();
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
         if(e.getSource() == tc) {
+            Point clicked = tc.getGridPoint(e.getPoint());
+            Tile clicked_tile = assembly.Grid.get(clicked);
+            if(clicked_tile!=null){
+                PolyTile clicked_pt = clicked_tile.getParent();
+                System.out.println(clicked_pt);
+                frontierClick = clicked_pt.isFrontier();
+                if(frontierClick) {
+                    try {
+                        if (currentFrontierAttachment != null) {
+                            assembly.removePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().x, currentFrontierAttachment.getOffset().y);
+                        }
+                    }catch(NullPointerException npe){
 
-
-
+                    }
+                    frontierClickPoint = clicked;
+                    frontierAttachments = new ArrayList<FrontierElement>();
+                    frontierIndex = 0;
+                    for (FrontierElement fe : frontier) {
+                        if (fe.getLocation().equals(clicked) && fe.checkAttachment()) {
+                            frontierAttachments.add(fe);
+                        }
+                    }
+                    drawGrid();
+                }
+            }
         }
-
-
-        tc.reset();
-        drawGrid();
-        repaint();
-
-
 
     }
 
@@ -398,6 +516,8 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         else if(e.getKeyCode() == KeyEvent.VK_RIGHT)
         {
             if(!frontier.isEmpty()) {
+                removeFrontierAttachments();
+                RemoveFrontierFromGrid();
                 assembly.attach();
                 frontier = assembly.calculateFrontier();
                 drawGrid();
@@ -405,7 +525,16 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         }
         else if(e.getKeyCode() == KeyEvent.VK_LEFT)
         {
+            removeFrontierAttachments();
+            RemoveFrontierFromGrid();
             assembly.detach();
+            tc.reset();
+            frontier = assembly.calculateFrontier();
+            drawGrid();
+        }
+        else if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+            removeFrontierAttachments();
+            RemoveFrontierFromGrid();
             tc.reset();
             frontier = assembly.calculateFrontier();
             drawGrid();
