@@ -318,9 +318,6 @@ public class Drawer {
                 Tile tile = mep.getValue();
 
                 drawTile(g, tile, pt.x * diameter + offset.x - diameter / 2, -pt.y * diameter + offset.y - diameter / 2, diameter);
-                g.setFont(new Font("Courier", Font.PLAIN, 10));
-                g.setColor(Color.BLACK);
-                g.drawString(pt.x + " " + pt.y, pt.x * diameter + offset.x , -pt.y * diameter + offset.y );
             }
 
         }
