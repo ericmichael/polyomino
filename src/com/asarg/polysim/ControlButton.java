@@ -20,6 +20,5 @@ public class ControlButton extends IconButton {
             setText(String.valueOf('\uf049'));
         }
 
-        setForeground(Color.BLACK);
     }
 }

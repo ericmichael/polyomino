@@ -61,7 +61,8 @@ public class TestCanvas extends JPanel {
 
     @Override
     public void paintComponent(Graphics g) {
-
+        super.paintComponent(g);
+        this.setBackground(Color.WHITE);
         Graphics2D g2 = (Graphics2D) g;
         g.drawImage(canvasBFI, 0, 0, null);
     }

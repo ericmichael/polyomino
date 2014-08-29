@@ -17,7 +17,7 @@ import java.io.FileNotFoundException;
 public class TestCanvasFrame extends JFrame implements MouseWheelListener, MouseMotionListener, MouseListener,KeyListener, ComponentListener{
 
     TestCanvas tc;
-    JToolBar stepControlToolBar = new JToolBar();
+    GradientToolbar stepControlToolBar = new GradientToolbar();
     ActionListener actionListener;
     TileEditorWindow tileEditorWindow = new TileEditorWindow(800,600);
     ControlButton next = new ControlButton("forward");
@@ -56,6 +56,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
 
     public TestCanvasFrame(int w, int h, final Assembly assembly)
     {
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.assembly = assembly;
         width = w;
         height = h;
@@ -63,7 +64,6 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         setLayout(new BorderLayout());
 
         tc = new TestCanvas();
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(tc, BorderLayout.SOUTH);
         tc.setSize(width, height);
 
@@ -199,6 +199,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                     drawGrid();
                 } else if (e.getSource().equals(newMenuItem)) {
                     System.out.println("new assembly");
+                    TestCanvasFrame tcf = new TestCanvasFrame(800, 600, new Assembly());
                 } else if (e.getSource().equals(loadAssemblyMenuItem)) {
                     JFileChooser fileChooser = new JFileChooser();
                     fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
