@@ -158,7 +158,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         setJMenuBar(mainMenu);
     }
     private void resetFrontier(){
-        removeFrontierAttachments();
+        exitFrontierMode();
         RemoveFrontierFromGrid();
     }
     private void step(int i){
@@ -210,8 +210,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                     step(-1);
                 }else if(e.getSource().equals(play)){
                     while(!frontier.isEmpty()){
-                        removeFrontierAttachments();
-                        RemoveFrontierFromGrid();
+                        resetFrontier();
                         assembly.attach();
                         tc.reset();
                         frontier = assembly.calculateFrontier();
@@ -434,7 +433,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
 
     }
 
-    private void removeFrontierAttachments(){
+    private void exitFrontierMode(){
         if(currentFrontierAttachment!=null) {
             assembly.removePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().x, currentFrontierAttachment.getOffset().y);
         }
@@ -443,7 +442,27 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         frontierAttachments = null;
         frontierIndex = 0;
         currentFrontierAttachment=null;
-        drawGrid();
+    }
+
+    private void processFrontierClick(Point clicked, Tile clicked_tile){
+        PolyTile clicked_pt = clicked_tile.getParent();
+        System.out.println(clicked_pt);
+        frontierClick = clicked_pt.isFrontier();
+        if(frontierClick) {
+            //kick me out of any previous frontier state
+            exitFrontierMode();
+            frontierClick=true;
+            frontierClickPoint = clicked;
+            frontierAttachments = new ArrayList<FrontierElement>();
+            frontierIndex = 0;
+            for (FrontierElement fe : frontier) {
+                if (fe.getLocation().equals(clicked) && fe.checkAttachment()) {
+                    frontierAttachments.add(fe);
+                }
+            }
+            drawGrid();
+        }
+
     }
 
     @Override
@@ -452,28 +471,9 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
             Point clicked = tc.getGridPoint(e.getPoint());
             Tile clicked_tile = assembly.Grid.get(clicked);
             if(clicked_tile!=null){
-                PolyTile clicked_pt = clicked_tile.getParent();
-                System.out.println(clicked_pt);
-                frontierClick = clicked_pt.isFrontier();
-                if(frontierClick) {
-                    try {
-                        if (currentFrontierAttachment != null) {
-                            assembly.removePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().x, currentFrontierAttachment.getOffset().y);
-                        }
-                    }catch(NullPointerException npe){
-
-                    }
-                    frontierClickPoint = clicked;
-                    frontierAttachments = new ArrayList<FrontierElement>();
-                    frontierIndex = 0;
-                    for (FrontierElement fe : frontier) {
-                        if (fe.getLocation().equals(clicked) && fe.checkAttachment()) {
-                            frontierAttachments.add(fe);
-                        }
-                    }
-                    drawGrid();
-                }
+                processFrontierClick(clicked, clicked_tile);
             }
+
         }
 
     }
@@ -523,8 +523,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
             step(-1);
         }
         else if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
-            removeFrontierAttachments();
-            RemoveFrontierFromGrid();
+            exitFrontierMode();
             tc.reset();
             frontier = assembly.calculateFrontier();
             drawGrid();
