@@ -341,14 +341,6 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         repaint();
     }
 
-    private void nextFrontierPoint(){
-        System.out.println("next frontier point");
-    }
-
-    private void prevFrontierPoint(){
-        System.out.println("prev frontier point");
-    }
-
     private void removeCurrentFrontierAttachment(){
         if (currentFrontierAttachment != null) {
             assembly.removePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().x, currentFrontierAttachment.getOffset().y);
@@ -370,15 +362,15 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
     public void mouseWheelMoved(MouseWheelEvent e) {
         if(e.getWheelRotation() == 1)
         {
-            System.out.println("wheel");
             if(frontierClick){
-                System.out.println("wheel with frontier");
                 removeCurrentFrontierAttachment();
                 if(currentFrontierAttachment==null){
+                    frontierIndex=0;
                     addFrontierAttachment(frontierIndex);
+
                 }else if(frontierIndex!=0){
-                    addFrontierAttachment(frontierIndex-1);
                     frontierIndex-=1;
+                    addFrontierAttachment(frontierIndex);
                 }else {
                     frontierIndex=frontierAttachments.size()-1;
                     addFrontierAttachment(frontierIndex);
@@ -393,19 +385,15 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         }
         else if(e.getWheelRotation() == -1)
         {
-            System.out.println("wheel");
             if(frontierClick){
-                System.out.println("wheel with frontier");
-                int flength = frontierAttachments.size();
-                System.out.println("Flength: " + flength);
-                System.out.println("index: " + frontierIndex);
                 removeCurrentFrontierAttachment();
                 if(currentFrontierAttachment==null) {
+                    frontierIndex=0;
                     addFrontierAttachment(frontierIndex);
                 }
                 else if(frontierIndex+1 < frontierAttachments.size()){
-                    addFrontierAttachment(frontierIndex+1);
                     frontierIndex+=1;
+                    addFrontierAttachment(frontierIndex);
                 }else{
                     addFrontierAttachment(0);
                     frontierIndex=0;
@@ -446,7 +434,6 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
 
     private void processFrontierClick(Point clicked, Tile clicked_tile){
         PolyTile clicked_pt = clicked_tile.getParent();
-        System.out.println(clicked_pt);
         frontierClick = clicked_pt.isFrontier();
         if(frontierClick) {
             //kick me out of any previous frontier state
