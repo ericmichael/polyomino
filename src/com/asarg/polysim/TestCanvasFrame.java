@@ -1,8 +1,5 @@
 package com.asarg.polysim;
 
-
-
-
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
@@ -105,7 +102,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
 
         stepControlToolBar.setBorder(new EtchedBorder());
         stepControlToolBar.setLayout(new FlowLayout(FlowLayout.CENTER));
-        add(stepControlToolBar);
+        add(stepControlToolBar,BorderLayout.NORTH);
     }
 
     private void addMenuBars(){
