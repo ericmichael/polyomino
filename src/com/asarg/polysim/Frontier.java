@@ -16,6 +16,8 @@ public class Frontier extends ArrayList<FrontierElement> {
         tileSystem = parent;
     }
 
+    public void changeTileSystem(TileSystem newts){ tileSystem = newts; }
+
     @Override
     public boolean add(FrontierElement frontierElement) {
         return super.add(frontierElement);
@@ -92,12 +94,12 @@ public class Frontier extends ArrayList<FrontierElement> {
         return -1;
     }
 
-    private double getProbability( FrontierElement frontierElement ){
+    public double getProbability( FrontierElement frontierElement ){
         if( tileSystem.getWeightOption() == TileSystem.CONCENTRATION )
             return frontierElement.getPolyTile().getConcentration()/getTotalConcentration();
         else if( tileSystem.getWeightOption() == TileSystem.COUNT )
             return ( frontierElement.getPolyTile().getCount()/tileSystem.getTotalCount() ) / getTotalConcentration();
-        return 1/size();
+        return 1.0/size();
     }
 
     // Returns the sum of all polytile concentrations in the frontier.
@@ -105,10 +107,16 @@ public class Frontier extends ArrayList<FrontierElement> {
     //  value will be used to calculate the time it took for a single attachment to happen.
     public double getTotalConcentration(){
         double totalConcentration = 0;
-        for (FrontierElement fe : this) {
-            totalConcentration += fe.getPolyTile().getConcentration();
-        }
 
+        if( tileSystem.getWeightOption() == TileSystem.UNIFORMDISTRIBUTION){
+            int polytile_count = tileSystem.getTileTypes().size();
+            double uniform_concentration = 1.0/polytile_count;
+            totalConcentration = this.size() * uniform_concentration;
+        }else {
+            for (FrontierElement fe : this) {
+                totalConcentration += fe.getPolyTile().getConcentration();
+            }
+        }
         return totalConcentration;
     }
 }

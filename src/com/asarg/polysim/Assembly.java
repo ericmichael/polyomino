@@ -59,6 +59,12 @@ public class Assembly {
     public void changeTileSystem(TileSystem newTS){
         System.out.println("WARNING: CHANGING THE TILE SYSTEM, PREPARE FOR ERRORS!");
         tileSystem = newTS;
+        frontier.changeTileSystem(newTS);
+    }
+
+    public void changeTileConfiguration(TileConfiguration tc){
+        tileSystem.loadTileConfiguration(tc);
+        frontier.changeTileSystem(tileSystem);
     }
 
     public TileSystem getTileSystem(){
@@ -279,7 +285,7 @@ public class Assembly {
     public double attach(){
         FrontierElement fe = frontier.get(frontier.randomSelect());
 
-        fe.setAttachTime(getDistribution());
+        fe.setAttachTime(getDistribution(frontier.getTotalConcentration()));
         placePolytile(fe.getPolyTile(), fe.getOffset().x, fe.getOffset().y);
         frontier.remove(fe);
         attached.add(fe);
@@ -312,11 +318,15 @@ public class Assembly {
         return Grid.keySet();
     }
 
-    public double getDistribution(){
+
+
+    public double getDistribution(double rate){
         Random rand = new Random();
         double randNum = rand.nextDouble();
+        double logger = Math.log(1-randNum);
+        double time = logger/(-rate);
+        return time;
 
-        return (-1 * Math.log(randNum)) / frontier.getTotalConcentration();
     }
 
     //Prints assembly as grid, with the number being the number of tiles in a spot

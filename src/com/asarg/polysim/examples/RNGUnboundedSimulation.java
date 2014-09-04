@@ -146,27 +146,25 @@ public class RNGUnboundedSimulation {
     private Assembly assembly;
 
     public RNGUnboundedSimulation(int temperature) throws JAXBException {
-        ts = new TileSystem(temperature, TileSystem.CONCENTRATION);
+        //ts = new TileSystem(temperature, TileSystem.CONCENTRATION);
         TileConfiguration tc;
 
         JAXBContext jaxbContext = JAXBContext.newInstance(TileConfiguration.class);
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
         tc = (TileConfiguration) unmarshaller.unmarshal(new File("./Examples/RNG_ATAM/tileconfig.xml"));
-        ts.loadTileConfiguration(tc);
-
-        for(PolyTile p : ts.getTileTypes()) {
-            p.setGlues();
-        }
-        System.out.println();
 
         jaxbContext = JAXBContext.newInstance(Assembly.class);
         unmarshaller = jaxbContext.createUnmarshaller();
         assembly = (Assembly) unmarshaller.unmarshal(new File("./Examples/RNG_ATAM/assembly.xml"));
-        assembly.changeTileSystem(ts);
+
+        assembly.changeTileConfiguration(tc);
+
+        System.out.println();
     }
 
     public static void main(String args[]) throws JAXBException {
         RNGUnboundedSimulation rngsim = new RNGUnboundedSimulation(2);
+        System.out.println("POLYTILE COUNT" + rngsim.assembly.getTileSystem().getTileTypes().size());
         TestCanvasFrame tcf = new TestCanvasFrame(800,600, rngsim.assembly);
     }
 }

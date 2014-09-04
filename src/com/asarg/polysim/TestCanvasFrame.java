@@ -11,11 +11,14 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import javax.swing.border.BevelBorder;
 
 public class TestCanvasFrame extends JFrame implements MouseWheelListener, MouseMotionListener, MouseListener,KeyListener, ComponentListener{
 
     TestCanvas tc;
     GradientToolbar stepControlToolBar = new GradientToolbar();
+    JLabel statusLabel = new JLabel();
+    String statusLabelPreviousText = "";
     ActionListener actionListener;
     TileEditorWindow tileEditorWindow = new TileEditorWindow(800,600);
     ControlButton next = new ControlButton("forward");
@@ -79,6 +82,8 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         addToolBars();
 
         addMenuBars();
+
+        addStatusBar();
 
         pack();
         setVisible(true);
@@ -154,22 +159,40 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         mainMenu.add(tileSystemMenu);
         setJMenuBar(mainMenu);
     }
+
+    private void addStatusBar(){
+        JPanel statusPanel = new JPanel();
+        statusPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
+        add(statusPanel, BorderLayout.SOUTH);
+        statusPanel.setPreferredSize(new Dimension(getWidth(), 24));
+        statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.X_AXIS));
+        statusLabel.setText("");
+        statusLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        statusPanel.add(statusLabel);
+    }
+
     private void resetFrontier(){
         exitFrontierMode();
         RemoveFrontierFromGrid();
     }
+
+    private void updateAttachTime(double time){
+        String time_str = String.format("%.2f", time);
+        statusLabel.setText("Attachment took " + time_str + "ms");
+    }
+
     private void step(int i){
         if(i==1) { //forward
             if(!frontier.isEmpty()) {
                 resetFrontier();
-                assembly.attach();
+                updateAttachTime(assembly.attach());
                 frontier = assembly.calculateFrontier();
                 drawGrid();
             }
         }else if(i==2) { //fastforward
             while(!frontier.isEmpty()){
                 resetFrontier();
-                assembly.attach();
+                updateAttachTime(assembly.attach());
                 frontier = assembly.calculateFrontier();
             }
             tc.reset();
@@ -341,17 +364,19 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
     private void removeCurrentFrontierAttachment(){
         if (currentFrontierAttachment != null) {
             assembly.removePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().x, currentFrontierAttachment.getOffset().y);
-            //currentFrontierAttachment=null;
+            statusLabel.setText(statusLabelPreviousText);
         } else {
             assembly.Grid.remove(frontierClickPoint);
         }
-
+        tc.reset();
     }
 
     private void addFrontierAttachment(int index){
         if( frontierAttachments.size()>0){
             currentFrontierAttachment = frontierAttachments.get(index);
-            System.out.println("Non-null currentFrontierAttachment:" + currentFrontierAttachment);
+            double probability = frontier.getProbability(currentFrontierAttachment);
+            String status_str = String.format("Probability of Attachment: %.2f", probability);
+            statusLabel.setText(status_str);
             assembly.placePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().x, currentFrontierAttachment.getOffset().y);
         }
     }
@@ -361,7 +386,6 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         if(e.getWheelRotation() == 1)
         {
             if(frontierClick){
-                System.out.println("frontierIndex: "+frontierIndex);
                 removeCurrentFrontierAttachment();
                 if(currentFrontierAttachment==null){
                     frontierIndex=0;
@@ -385,10 +409,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         else if(e.getWheelRotation() == -1)
         {
             if(frontierClick){
-                System.out.println("frontierIndex: "+frontierIndex);
                 removeCurrentFrontierAttachment();
-                System.out.println("currentFrontierAttachment:" + currentFrontierAttachment);
-                System.out.println("FrontierAttachmentsSize:" + frontierAttachments.size());
                 if(currentFrontierAttachment==null) {
                     frontierIndex=0;
                     addFrontierAttachment(frontierIndex);
@@ -400,7 +421,6 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                     frontierIndex=0;
                     addFrontierAttachment(0);
                 }
-                System.out.println("After, frontierIndex: "+frontierIndex);
                 tc.drawGrid(assembly.Grid);
                 repaint();
                 return;
@@ -432,10 +452,15 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         frontierAttachments = null;
         frontierIndex = 0;
         currentFrontierAttachment=null;
+        statusLabel.setText(statusLabelPreviousText);
+        tc.reset();
     }
 
     private void processFrontierClick(Point clicked, Tile clicked_tile){
         PolyTile clicked_pt = clicked_tile.getParent();
+        if(!frontierClick){
+            statusLabelPreviousText = statusLabel.getText();
+        }
         frontierClick = clicked_pt.isFrontier();
         if(frontierClick) {
             //kick me out of any previous frontier state
@@ -513,7 +538,6 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         }
         else if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
             exitFrontierMode();
-            tc.reset();
             frontier = assembly.calculateFrontier();
             drawGrid();
         }
