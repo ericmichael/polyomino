@@ -71,7 +71,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         setLayout(new BorderLayout());
 
         tc = new TestCanvas();
-        add(tc, BorderLayout.SOUTH);
+        add(tc, BorderLayout.CENTER);
         tc.addMouseWheelListener(this);
         tc.addMouseListener(this);
         tc.addMouseMotionListener(this);
