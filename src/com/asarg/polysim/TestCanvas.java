@@ -95,12 +95,6 @@ public class TestCanvas extends JPanel {
         center.translate(x, y);
     }
     public final Point getOffset(){ return center;}
-    public Point getGridPoint(Point canvasPoint)
-    {
-
-
-        return new Point((int)Math.round((canvasPoint.x-getOffset().x)/(double)getTileDiameter()),(int) Math.round((-canvasPoint.y +getOffset().y)/(double)getTileDiameter()));
-    }
 
 
 }

@@ -51,9 +51,9 @@ public class Drawer {
 
     }
 
-
     public static Dimension getStringPixelDimension(Graphics2D gContext, String string) {
         Rectangle2D stringBounds = gContext.getFontMetrics().getStringBounds(string, gContext);
+
         int stringBoundWidth = (int) stringBounds.getWidth();
         int stringBoundHeight = (int) stringBounds.getHeight();
         if(stringBoundWidth > 2 && stringBoundWidth > 2) {
@@ -81,8 +81,6 @@ public class Drawer {
                         minX = i;
                         break outerXLoop1;
                     }
-
-
                 }
             }
             //maxX scan
@@ -94,7 +92,6 @@ public class Drawer {
                         maxX = i;
                         break outerXLoop2;
                     }
-
                 }
             }
             //minY scan
@@ -123,9 +120,6 @@ public class Drawer {
             return  new Dimension(maxX - minX, maxY - minY);
         }
         else return new Dimension(1,1);
-
-
-
     }
 
 
@@ -191,8 +185,6 @@ public class Drawer {
             String westGlue = tile.getGlueW();
 
 
-
-
             //get hex color string to int, then create new color out of the rgb
             //int colorInt = Integer.parseInt(tile.getColor(), 16);
             //Color tileColor =new Color(colorInt >> 16, (colorInt & 0x00FF00) >> 8, colorInt & 0x0000FF, 100);
@@ -235,36 +227,40 @@ public class Drawer {
                 Dimension westGluePixelDim = getStringPixelDimension(g,westGlue);
 
                 Rectangle2D r2d = g.getFontMetrics().getStringBounds(westGlue, g);
-                //get string image
-                BufferedImage tBFI = new BufferedImage((int)r2d.getHeight(), westGluePixelDim.width+3, BufferedImage.TYPE_INT_ARGB);
-                Graphics2D tGFX = tBFI.createGraphics();
-                tGFX.setColor(tileColor);
-                tGFX.fillRect(0,0 , (int)r2d.getHeight(), westGluePixelDim.width+3);
-                tGFX.setFont(g.getFont());
-                tGFX.setColor(g.getColor());
-                AffineTransform posNinety = new AffineTransform();
-                posNinety.setToRotation(Math.toRadians(-90),0, 0);
-                tGFX.setTransform(posNinety);
-                tGFX.drawString( westGlue, -westGluePixelDim.width-3,westGluePixelDim.height+g.getFontMetrics().getMaxDescent());
-                g.drawImage(tBFI, x + g.getFontMetrics().getMaxDescent(), y + diameter/2 - westGluePixelDim.width/2, null);
+                if(r2d.getWidth() > 4 && r2d.getHeight()>4) {
+                    //get string image
+                    BufferedImage tBFI = new BufferedImage((int) r2d.getHeight(), westGluePixelDim.width + 3, BufferedImage.TYPE_INT_ARGB);
+                    Graphics2D tGFX = tBFI.createGraphics();
+                    tGFX.setColor(tileColor);
+                    tGFX.fillRect(0, 0, (int) r2d.getHeight(), westGluePixelDim.width + 3);
+                    tGFX.setFont(g.getFont());
+                    tGFX.setColor(g.getColor());
+                    AffineTransform posNinety = new AffineTransform();
+                    posNinety.setToRotation(Math.toRadians(-90), 0, 0);
+                    tGFX.setTransform(posNinety);
+                    tGFX.drawString(westGlue, -westGluePixelDim.width - 3, westGluePixelDim.height + g.getFontMetrics().getMaxDescent());
+                    g.drawImage(tBFI, x + g.getFontMetrics().getMaxDescent(), y + diameter / 2 - westGluePixelDim.width / 2, null);
+                }
             }
             if (eastGlue != null && !eastGlue.isEmpty()) {
                 g.setFont(g.getFont().deriveFont((float)(diameter/8)));
                 Dimension eastGluePixelDim = getStringPixelDimension(g,eastGlue);
                 Rectangle2D r2d = g.getFontMetrics().getStringBounds(eastGlue, g);
 
-                //get string image
-                BufferedImage tBFI = new BufferedImage((int)r2d.getHeight(), eastGluePixelDim.width+3, BufferedImage.TYPE_INT_ARGB);
-                Graphics2D tGFX = tBFI.createGraphics();
-                tGFX.setColor(tileColor);
-                tGFX.fillRect(0,0 , (int)r2d.getHeight(), eastGluePixelDim.width+3);
-                tGFX.setFont(g.getFont());
-                tGFX.setColor(g.getColor());
-                AffineTransform negNinety = new AffineTransform();
-                negNinety.setToRotation(Math.toRadians(-90),0, 0);
-                tGFX.setTransform(negNinety);
-                tGFX.drawString( eastGlue, -eastGluePixelDim.width-3, eastGluePixelDim.height + g.getFontMetrics().getMaxDescent() );
-                g.drawImage(tBFI, x + diameter - (int) (r2d.getHeight()), y + diameter/2 - eastGluePixelDim.width/2, null);
+                if(r2d.getWidth() > 4 && r2d.getHeight()>4) {
+                    //get string image
+                    BufferedImage tBFI = new BufferedImage((int) r2d.getHeight(), eastGluePixelDim.width + 3, BufferedImage.TYPE_INT_ARGB);
+                    Graphics2D tGFX = tBFI.createGraphics();
+                    tGFX.setColor(tileColor);
+                    tGFX.fillRect(0, 0, (int) r2d.getHeight(), eastGluePixelDim.width + 3);
+                    tGFX.setFont(g.getFont());
+                    tGFX.setColor(g.getColor());
+                    AffineTransform negNinety = new AffineTransform();
+                    negNinety.setToRotation(Math.toRadians(-90), 0, 0);
+                    tGFX.setTransform(negNinety);
+                    tGFX.drawString(eastGlue, -eastGluePixelDim.width - 3, eastGluePixelDim.height + g.getFontMetrics().getMaxDescent());
+                    g.drawImage(tBFI, x + diameter - (int) (r2d.getHeight()), y + diameter / 2 - eastGluePixelDim.width / 2, null);
+                }
               
             }
 
@@ -284,7 +280,6 @@ public class Drawer {
 
             }
 
-
             //draw tile label
             g.setFont(g.getFont().deriveFont((float)(diameter/6)));
             Dimension labelBounds = getStringPixelDimension(g,tileLabel );
@@ -298,14 +293,9 @@ public class Drawer {
             g.drawString(tileLabel, x + (diameter / 2) - (labelBounds.width/ 2) - labelXShift, y + (diameter / 2) + (labelBounds.height / 2) );
 
 
-
-
-
             //now a black border with thickness based on diameter
 
             g.drawRect(x, y, diameter, diameter);
-
-
 
 
         }
@@ -322,19 +312,13 @@ public class Drawer {
 
         }
 
-
         public static void drawPolyTile(Graphics2D g, PolyTile pt, int diameter, Point offset) {
             Drawer.clearGraphics(g);
             java.util.List<Tile> lt = pt.tiles;
             for (Tile t : lt) {
 
-
-
                 drawTile(g, t, t.getLocation().x * diameter + offset.x - diameter / 2, -t.getLocation().y * diameter + offset.y - diameter / 2, diameter);
             }
-
-
-
 
         }
         public static void drawCenteredPolyTile(Graphics2D g, PolyTile pt)
@@ -342,11 +326,8 @@ public class Drawer {
            Point polyDim = calculatePolyTileGridDimension(pt);
            Rectangle graphicsDim = g.getClipBounds();
 
-            int diameter =  (int)( Math.floor(Math.min(graphicsDim.getWidth(), graphicsDim.getHeight()) /Math.max(polyDim.x, polyDim.y))/2) ;
+            int diameter =  (int)( Math.floor(Math.min(graphicsDim.getWidth(), graphicsDim.getHeight()) /Math.max(polyDim.x, polyDim.y))/4) ;
             Point offset = new Point(0, 0 );
-
-
-            AffineTransform orig = g.getTransform();
 
             int maxX = Integer.MIN_VALUE;
             int maxY = Integer.MIN_VALUE;
@@ -362,19 +343,16 @@ public class Drawer {
             Point xRange = new Point(minX * diameter, maxX*diameter);
             Point yRange = new Point(minY*diameter, maxY*diameter);
 
-         /* if( ((-maxY * diameter) - diameter/2 + offset.y) < 0 )
-            {
-
-                g.translate(0,  -((-maxY * diameter) - diameter/2 + offset.y) -1  - diameter/2);
-            }*/
-
             offset.translate(-minX*diameter + diameter/2 +((graphicsDim.width-(polyDim.x*diameter))/2), +maxY*diameter + diameter/2 + ((graphicsDim.height-(polyDim.y*diameter)) /2));
 
             drawPolyTile(g, pt,diameter, offset );
 
-            g.setTransform(orig);
+        }
+        public static Point getGridPoint(Point canvasPoint, Point offset, int diameter)
+        {
 
 
+            return new Point((int)Math.round((canvasPoint.x-offset.x)/(double)diameter),(int) Math.round((-canvasPoint.y +offset.y)/(double)diameter));
         }
 
     }
