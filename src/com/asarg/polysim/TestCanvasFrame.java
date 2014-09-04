@@ -178,7 +178,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
     }
 
     private void updateAttachTime(double time){
-        String time_str = String.format("%.2f", time);
+        String time_str = String.format("%.4f", time);
         statusLabel.setText("Attachment took " + time_str + "ms");
     }
 
@@ -383,7 +383,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         if( frontierAttachments.size()>0){
             currentFrontierAttachment = frontierAttachments.get(index);
             double probability = frontier.getProbability(currentFrontierAttachment);
-            String status_str = String.format("Probability of Attachment: %.2f", probability);
+            String status_str = String.format("Probability of Attachment: %.4f", probability);
             statusLabel.setText(status_str);
             assembly.placePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().x, currentFrontierAttachment.getOffset().y);
         }
