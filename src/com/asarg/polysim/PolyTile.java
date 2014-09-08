@@ -78,6 +78,36 @@ public class PolyTile {
         return tiles;
     }
 
+
+    public boolean adjacentExists(int x, int y)
+    {
+        if(getTile(x+1,y) != null || getTile(x-1,y) != null || getTile(x,y+1) != null || getTile(x,y-1) != null)
+            return true;
+
+        return false;
+    }
+    public boolean adjacentExits(Point gridPoint)
+    {
+        int x = gridPoint.x;
+        int y = gridPoint.y;
+        if(getTile(x+1,y) != null || getTile(x-1,y) != null || getTile(x,y+1) != null || getTile(x,y-1) != null)
+            return true;
+        return false;
+    }
+
+    public boolean canAddAtPoint(int x, int y)
+    {
+        if(adjacentExists(x, y) && getTile(x, y) == null)
+            return true;
+        return false;
+
+    }
+    public boolean canAddAtPoint(Point gridPoint)
+    {
+        return false;
+    }
+
+
     public void setColor(String color){
         this.color = color;
     }

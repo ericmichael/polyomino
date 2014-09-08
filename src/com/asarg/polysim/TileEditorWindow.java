@@ -1,13 +1,12 @@
 package com.asarg.polysim;
 
+import javafx.util.Pair;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +19,17 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
     JPanel wP;
     JPanel cP;
     Dimension res = new Dimension();
+
+    //canvas stuff
     BufferedImage polyTileCanvas;
     Graphics2D polyTileCanvasGFX;
+    BufferedImage overLayer;
+    Graphics2D overLayerGFX;
+    
+    //the current canvas display info
+    Point canvasCenteredOffset = new Point(0,0);
+    int tileDiameter= 1;
+
 
     List<ImageIcon> iconList = new ArrayList<ImageIcon>();
     List<PolyTile> polytileList = new ArrayList<PolyTile>();
@@ -29,6 +37,20 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
     BufferedImage iconDrawSpace;
     Graphics2D iconDrawSpaceGraphics;
 
+    //for tile info display
+    Font infoFont = new Font("Courier", Font.PLAIN, 20);
+    JTextField tileLabelTF = new JTextField(5)
+    {
+       /* @Override
+        public Dimension getPreferredSize()
+        {
+            return new Dimension(, toolkit.getFontMetrics(infoFont).getHeight());
+        }*/
+    };
+    JTextField nGlueLabelTF = new JTextField(5);
+    JTextField eGlueLabelTF = new JTextField(5);
+    JTextField sGlueLabelTF = new JTextField(5);
+    JTextField wGlueLabelTF = new JTextField(5);
     final private Toolkit toolkit = Toolkit.getDefaultToolkit();
 
     //Components
@@ -55,7 +77,9 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
         polyTileCanvas = new BufferedImage((int)(res.width*.75), (int)(res.width*.75), BufferedImage.TYPE_INT_ARGB);
         polyTileCanvasGFX = polyTileCanvas.createGraphics();
         polyTileCanvasGFX.setClip(0,0, (int)(res.width*.75), (int)(res.width*.75));
-
+        overLayer = new BufferedImage((int)(res.width*.75), (int)(res.width*.75), BufferedImage.TYPE_INT_ARGB);
+        overLayerGFX = overLayer.createGraphics();
+        overLayerGFX.setClip(0,0, (int)(res.width*.75), (int)(res.width*.75));
          cP = new JPanel() {
          /*   @Override
             public Dimension getPreferredSize() {
@@ -69,6 +93,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
             public void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D)g;
                 g2.drawImage(polyTileCanvas,0,0, null);
+                g2.drawImage(overLayer, 0, 0, null);
 
             }
 
@@ -112,22 +137,72 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
         polyJList.setBackground(getBackground());
 
         wP.setLayout(new BorderLayout());
-      //  jsp.setAlignmentX(JScrollPane.LEFT_ALIGNMENT);
 
-
-        System.out.println(jsp.getVerticalScrollBar().getHeight());
-
-
-        //form stuff
+        //tile information panel stuff
         eP.setLayout(new GridBagLayout());
         GridBagConstraints gC = new GridBagConstraints();
-        gC.weighty=.1;
-        gC.weightx= 0.5;
-        gC.gridy=0;
+        gC.weighty=0;
+       // gC.weightx= 0.5;
+      /*  gC.gridy=0;
         gC.gridx=0;
-        eP.add(new JLabel("Name: ") , gC);
+        JPanel labelPanel = new JPanel(new GridBagLayout());
+        labelPanel.add(new JLabel("Tile Label: ") , gC);
+        gC.gridy=1;
+        labelPanel.add(new JLabel("N. Glue label"),gC);
+        gC.gridy=2;
+        labelPanel.add(new JLabel("E. Glue label"),gC);
+        gC.gridy=3;
+        labelPanel.add(new JLabel("S. Glue label"),gC);
+        gC.gridy=4;
+        labelPanel.add(new JLabel("W. Glue label"),gC);
         gC.gridx=1;
-        eP.add(new JLabel("Sup"),gC);
+        gC.gridy=0;
+
+    gC.fill = GridBagConstraints.HORIZONTAL;
+
+        labelPanel.add(tileLabelTF, gC);
+        gC.gridy=1;
+        labelPanel.add(nGlueLabelTF, gC);
+        gC.gridy=2;
+        labelPanel.add(eGlueLabelTF, gC);
+        gC.gridy=3;
+        labelPanel.add(sGlueLabelTF, gC);
+
+        gC.gridy=4;
+        labelPanel.add(wGlueLabelTF, gC);
+*/
+        JPanel tlPanel = new JPanel();
+        JPanel ngPanel = new JPanel();
+        JPanel egPanel = new JPanel();
+        JPanel sgPanel = new JPanel();
+        JPanel wgPanel = new JPanel();
+
+        tlPanel.add(new JLabel("Tile Label:"));
+        tlPanel.add(tileLabelTF);
+
+
+        ngPanel.add(new JLabel("N."));
+        ngPanel.add(nGlueLabelTF);
+        egPanel.add(new JLabel("E."));
+        egPanel.add(eGlueLabelTF);
+        sgPanel.add(new JLabel("S."));
+        sgPanel.add(sGlueLabelTF);
+        wgPanel.add(new JLabel("W."));
+        wgPanel.add(wGlueLabelTF);
+
+
+        gC.gridy=0;
+        eP.add(tlPanel, gC);
+        gC.gridy=1;
+        eP.add(new JLabel("-Glues Labels-"), gC);
+        gC.gridy=2;
+        eP.add(ngPanel,gC);
+        gC.gridy=3;
+        eP.add(egPanel,gC);
+        gC.gridy=4;
+        eP.add(sgPanel,gC);
+        gC.gridy=5;
+        eP.add(wgPanel,gC);
 
 
         //create a menu bar-------------------------------
@@ -152,7 +227,6 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
                     addPolyTile(Main.tetrisV());
                     addPolyTile(Main.tetrisX());
 
-
                 }
                 if(e.getSource() == clearListsMenuItem)
                 {
@@ -168,8 +242,12 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
         polyJList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                if(!((JList)(e.getSource())).isSelectionEmpty())
-                Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX, polytileList.get(polyJList.getSelectedIndex()));
+                if(!((JList)(e.getSource())).isSelectionEmpty()) {
+                    Drawer.clearGraphics(overLayerGFX);
+                    Pair<Point, Integer> ppi = Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX, polytileList.get(polyJList.getSelectedIndex()));
+                    canvasCenteredOffset = ppi.getKey();
+                    tileDiameter = ppi.getValue();
+                }
                 repaint();
             }
         });
@@ -198,8 +276,37 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
         wP.add(jsp);
         pack();
 
+
+        MouseListener gridListener = new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mouseClicked(e);
+
+                Point gridPoint = Drawer.TileDrawer.getGridPoint(e.getPoint(), canvasCenteredOffset, tileDiameter);
+
+                Tile selectedTile =polytileList.get(polyJList.getSelectedIndex()).getTile(gridPoint.x, gridPoint.y);
+                if(selectedTile!=null) {
+                    displayInfo(selectedTile);
+                    Drawer.clearGraphics(overLayerGFX);
+                    Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
+                   repaint();
+                }
+            }
+        };
+
+        cP.addMouseListener(gridListener);
+
     }
 
+
+    public void displayInfo(Tile tile)
+    {
+        tileLabelTF.setText(tile.getLabel());
+        nGlueLabelTF.setText(tile.getGlueN());
+        eGlueLabelTF.setText(tile.getGlueE());
+        sGlueLabelTF.setText(tile.getGlueS());
+        wGlueLabelTF.setText(tile.getGlueW());
+    }
     public void newPolyTile()
     {
         PolyTile newPolytile = new PolyTile();
@@ -232,8 +339,6 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
 
 
     }
-
-
 
     public void reDrawJList()
     {
@@ -271,13 +376,13 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
     @Override
     public void componentResized(ComponentEvent e) {
 
-
-        System.out.println(wP.getWidth());
-
         Dimension newCPSize = cP.getSize();
         polyTileCanvas = new BufferedImage(newCPSize.width, newCPSize.height, BufferedImage.TYPE_INT_ARGB);
         polyTileCanvasGFX = polyTileCanvas.createGraphics();
         polyTileCanvasGFX.setClip(0,0, newCPSize.width, newCPSize.height);
+        overLayer = new BufferedImage(newCPSize.width, newCPSize.height, BufferedImage.TYPE_INT_ARGB);
+        overLayerGFX = overLayer.createGraphics();
+        overLayerGFX.setClip(0,0, newCPSize.width, newCPSize.height);
 
         res.setSize(getWidth(), getHeight());
 

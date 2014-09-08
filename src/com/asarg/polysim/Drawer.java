@@ -1,5 +1,7 @@
 package com.asarg.polysim;
 
+import javafx.util.Pair;
+
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
@@ -172,8 +174,9 @@ public class Drawer {
         public static void drawTile(Graphics2D g, Tile tile, int x, int y, int diameter) {
 
 
-
             Rectangle clip = g.getClipBounds();
+
+
             if(x>clip.width + diameter || x < 0 -diameter || y>clip.height + diameter || y < 0 -diameter)
                 return;
             AffineTransform gOriginalATransform = g.getTransform();
@@ -197,6 +200,8 @@ public class Drawer {
             //change stroke/color for rest
             g.setColor(Color.black);
             g.setStroke(new BasicStroke(diameter / 25));
+
+
 
 
             //Drawing the glues-------------------------------------
@@ -227,7 +232,7 @@ public class Drawer {
                 Dimension westGluePixelDim = getStringPixelDimension(g,westGlue);
 
                 Rectangle2D r2d = g.getFontMetrics().getStringBounds(westGlue, g);
-                if(r2d.getWidth() > 4 && r2d.getHeight()>4) {
+                if(r2d.getWidth() > 1 && r2d.getHeight()>1) {
                     //get string image
                     BufferedImage tBFI = new BufferedImage((int) r2d.getHeight(), westGluePixelDim.width + 3, BufferedImage.TYPE_INT_ARGB);
                     Graphics2D tGFX = tBFI.createGraphics();
@@ -247,7 +252,7 @@ public class Drawer {
                 Dimension eastGluePixelDim = getStringPixelDimension(g,eastGlue);
                 Rectangle2D r2d = g.getFontMetrics().getStringBounds(eastGlue, g);
 
-                if(r2d.getWidth() > 4 && r2d.getHeight()>4) {
+                if(r2d.getWidth() > 1 && r2d.getHeight()>1) {
                     //get string image
                     BufferedImage tBFI = new BufferedImage((int) r2d.getHeight(), eastGluePixelDim.width + 3, BufferedImage.TYPE_INT_ARGB);
                     Graphics2D tGFX = tBFI.createGraphics();
@@ -280,6 +285,8 @@ public class Drawer {
 
             }
 
+
+
             //draw tile label
             g.setFont(g.getFont().deriveFont((float)(diameter/6)));
             Dimension labelBounds = getStringPixelDimension(g,tileLabel );
@@ -298,6 +305,8 @@ public class Drawer {
             g.drawRect(x, y, diameter, diameter);
 
 
+
+
         }
 
 
@@ -308,7 +317,18 @@ public class Drawer {
                 Tile tile = mep.getValue();
 
                 drawTile(g, tile, pt.x * diameter + offset.x - diameter / 2, -pt.y * diameter + offset.y - diameter / 2, diameter);
+
             }
+
+         }
+
+        public static void drawTileSelection(Graphics2D g, Point location, int diameter, Point offset, Color color)
+        {
+
+
+            g.setColor(color);
+            g.setStroke(new BasicStroke(diameter / 25));
+            g.drawRect( location.x * diameter + offset.x - diameter / 2, -location.y * diameter + offset.y - diameter / 2, diameter ,diameter);
 
         }
 
@@ -321,7 +341,7 @@ public class Drawer {
             }
 
         }
-        public static void drawCenteredPolyTile(Graphics2D g, PolyTile pt)
+        public static Pair<Point, Integer> drawCenteredPolyTile(Graphics2D g, PolyTile pt)
         {
            Point polyDim = calculatePolyTileGridDimension(pt);
            Rectangle graphicsDim = g.getClipBounds();
@@ -346,7 +366,7 @@ public class Drawer {
             offset.translate(-minX*diameter + diameter/2 +((graphicsDim.width-(polyDim.x*diameter))/2), +maxY*diameter + diameter/2 + ((graphicsDim.height-(polyDim.y*diameter)) /2));
 
             drawPolyTile(g, pt,diameter, offset );
-
+            return new Pair<Point, Integer>(offset, diameter);
         }
         public static Point getGridPoint(Point canvasPoint, Point offset, int diameter)
         {
