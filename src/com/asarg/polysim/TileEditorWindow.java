@@ -16,6 +16,7 @@ import java.util.List;
  */
 public class TileEditorWindow extends JFrame implements ComponentListener{
 
+    final private Toolkit toolkit = Toolkit.getDefaultToolkit();
     JPanel wP;
     JPanel cP;
     Dimension res = new Dimension();
@@ -37,7 +38,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
     BufferedImage iconDrawSpace;
     Graphics2D iconDrawSpaceGraphics;
 
-    //for tile info display
+//> 3/For tile info display
     Font infoFont = new Font("Courier", Font.PLAIN, 20);
     JTextField tileLabelTF = new JTextField(5)
     {
@@ -51,11 +52,17 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
     JTextField eGlueLabelTF = new JTextField(5);
     JTextField sGlueLabelTF = new JTextField(5);
     JTextField wGlueLabelTF = new JTextField(5);
-    final private Toolkit toolkit = Toolkit.getDefaultToolkit();
+
+    JButton applyButton = new JButton("Set");
+    JButton removeButton = new JButton("Remove");
+
 
     //Components
 
 
+
+//< 3/
+    //Menubar Menu items
     JMenuItem newPolyTileMenuItem = new JMenuItem("New Polytile");
     JMenuItem clearListsMenuItem = new JMenuItem("Clear/Reset");
     JScrollPane jsp;
@@ -109,12 +116,12 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
         };
         wP = new JPanel()
         {
-            /*
+
             @Override
             public Dimension getPreferredSize()
             {
                 return new Dimension((int)(res.width*.10), res.height);
-            }*/
+            }
         };
 
         iconDrawSpace = new BufferedImage((int)(res.width*.10), (int)(res.width*.10), BufferedImage.TYPE_INT_ARGB);
@@ -142,40 +149,13 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
         eP.setLayout(new GridBagLayout());
         GridBagConstraints gC = new GridBagConstraints();
         gC.weighty=0;
-       // gC.weightx= 0.5;
-      /*  gC.gridy=0;
-        gC.gridx=0;
-        JPanel labelPanel = new JPanel(new GridBagLayout());
-        labelPanel.add(new JLabel("Tile Label: ") , gC);
-        gC.gridy=1;
-        labelPanel.add(new JLabel("N. Glue label"),gC);
-        gC.gridy=2;
-        labelPanel.add(new JLabel("E. Glue label"),gC);
-        gC.gridy=3;
-        labelPanel.add(new JLabel("S. Glue label"),gC);
-        gC.gridy=4;
-        labelPanel.add(new JLabel("W. Glue label"),gC);
-        gC.gridx=1;
-        gC.gridy=0;
 
-    gC.fill = GridBagConstraints.HORIZONTAL;
-
-        labelPanel.add(tileLabelTF, gC);
-        gC.gridy=1;
-        labelPanel.add(nGlueLabelTF, gC);
-        gC.gridy=2;
-        labelPanel.add(eGlueLabelTF, gC);
-        gC.gridy=3;
-        labelPanel.add(sGlueLabelTF, gC);
-
-        gC.gridy=4;
-        labelPanel.add(wGlueLabelTF, gC);
-*/
         JPanel tlPanel = new JPanel();
         JPanel ngPanel = new JPanel();
         JPanel egPanel = new JPanel();
         JPanel sgPanel = new JPanel();
         JPanel wgPanel = new JPanel();
+        JPanel applyRemovePanel = new JPanel();
 
         tlPanel.add(new JLabel("Tile Label:"));
         tlPanel.add(tileLabelTF);
@@ -189,6 +169,8 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
         sgPanel.add(sGlueLabelTF);
         wgPanel.add(new JLabel("W."));
         wgPanel.add(wGlueLabelTF);
+        applyRemovePanel.add(applyButton);
+        applyRemovePanel.add(removeButton);
 
 
         gC.gridy=0;
@@ -203,6 +185,8 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
         eP.add(sgPanel,gC);
         gC.gridy=5;
         eP.add(wgPanel,gC);
+        gC.gridy= 6;
+        eP.add(applyRemovePanel,gC);
 
 
         //create a menu bar-------------------------------
@@ -214,7 +198,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
         setJMenuBar(menubar);
 
         //Action listener stuff for the menu bar and List
-        ActionListener menuListener = new ActionListener(){
+        ActionListener tileEditorActionListener = new ActionListener(){
 
             @Override
             public void actionPerformed(ActionEvent e)
@@ -227,17 +211,26 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
                     addPolyTile(Main.tetrisV());
                     addPolyTile(Main.tetrisX());
 
+
                 }
-                if(e.getSource() == clearListsMenuItem)
+                else if(e.getSource() == clearListsMenuItem)
                 {
                     clearLists();
                     repaint();
 
+                }else if(e.getSource() == applyButton)
+                {
+
+                }
+               else  if(e.getSource() == removeButton )
+                {
+                    
                 }
             }
         };
-        newPolyTileMenuItem.addActionListener(menuListener);
-        clearListsMenuItem.addActionListener(menuListener);
+
+        newPolyTileMenuItem.addActionListener( tileEditorActionListener);
+        clearListsMenuItem.addActionListener( tileEditorActionListener);
 
         polyJList.addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -257,7 +250,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
 
         gbCon.gridy=0;
         gbCon.gridx=0;
-        gbCon.weightx=.10;
+        gbCon.weightx=.13;
         gbCon.weighty=1;
         gbCon.fill = GridBagConstraints.BOTH;
 
@@ -268,12 +261,13 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
 
 
         gbCon.gridx=2;
-        gbCon.weightx=.15;
+        gbCon.weightx=.12;
         add(eP,gbCon);
 
         cP.setBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.BLACK));
 
         wP.add(jsp);
+
         pack();
 
 
@@ -295,6 +289,14 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
         };
 
         cP.addMouseListener(gridListener);
+        applyButton.addActionListener(tileEditorActionListener);
+
+
+        //split pane
+
+     //  JSplitPane wpSplitPane = new JSplitPane()
+
+    wP.setSize(new Dimension(1000,10));
 
     }
 
@@ -386,9 +388,12 @@ public class TileEditorWindow extends JFrame implements ComponentListener{
 
         res.setSize(getWidth(), getHeight());
 
+
         reDrawJList();
         if(!polyJList.isSelectionEmpty())
                  Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX, polytileList.get(polyJList.getSelectedIndex()));
+
+   
     }
 
     @Override
