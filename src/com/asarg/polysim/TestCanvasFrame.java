@@ -5,21 +5,18 @@ package com.asarg.polysim;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
-import java.awt.*;
-import java.awt.event.*;
-import java.net.URL;
-import javax.swing.JFileChooser;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 
 public class TestCanvasFrame extends JFrame implements MouseWheelListener, MouseMotionListener, MouseListener,KeyListener, ComponentListener{
 
     TestCanvas tc;
     GradientToolbar stepControlToolBar = new GradientToolbar();
     ActionListener actionListener;
-    TileEditorWindow tileEditorWindow = new TileEditorWindow(800,600);
+    TileEditorWindow tileEditorWindow;
     ControlButton next = new ControlButton("forward");
     ControlButton prev = new ControlButton("backward");
     ControlButton play = new ControlButton("play");
@@ -56,6 +53,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
 
     public TestCanvasFrame(int w, int h, final Assembly assembly)
     {
+        tileEditorWindow = new TileEditorWindow(800,600, assembly);
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.assembly = assembly;
         width = w;
@@ -162,6 +160,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                     if(!frontier.isEmpty()) {
                         assembly.attach();
                         frontier = assembly.calculateFrontier();
+
                         drawGrid();
                     }
                 }else if(e.getSource().equals(prev))

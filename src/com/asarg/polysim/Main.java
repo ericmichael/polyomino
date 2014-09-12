@@ -62,8 +62,8 @@ public class Main {
         poly.setColor("8C0095");
 
         poly.addTile(0, 0, allX);
-        poly.addTile(-1, 0, allX);
-        poly.addTile(1, 0, allX);
+        poly.addTile(-1, 0, allX.clone());
+        poly.addTile(1, 0, allX.clone());
         poly.addTile(0, 1, glue2);
         poly.addTile(0, -1, glue);
 

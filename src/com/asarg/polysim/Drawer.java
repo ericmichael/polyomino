@@ -326,6 +326,8 @@ public class Drawer {
         {
 
 
+            clearGraphics(g);
+
             g.setColor(color);
             g.setStroke(new BasicStroke(diameter / 25));
             g.drawRect( location.x * diameter + offset.x - diameter / 2, -location.y * diameter + offset.y - diameter / 2, diameter ,diameter);
@@ -343,10 +345,10 @@ public class Drawer {
         }
         public static Pair<Point, Integer> drawCenteredPolyTile(Graphics2D g, PolyTile pt)
         {
-           Point polyDim = calculatePolyTileGridDimension(pt);
-           Rectangle graphicsDim = g.getClipBounds();
+            Point polyDim = calculatePolyTileGridDimension(pt);
+            Rectangle graphicsDim = g.getClipBounds();
 
-            int diameter =  (int)( Math.floor(Math.min(graphicsDim.getWidth(), graphicsDim.getHeight()) /Math.max(polyDim.x, polyDim.y))/4) ;
+            int diameter =  (int)( Math.ceil(Math.min(graphicsDim.getWidth(), graphicsDim.getHeight()) /Math.max(polyDim.x, polyDim.y))/1.5) ;
             Point offset = new Point(0, 0 );
 
             int maxX = Integer.MIN_VALUE;
@@ -354,11 +356,39 @@ public class Drawer {
             int minX = Integer.MAX_VALUE;
             int minY = Integer.MAX_VALUE;
             for (Tile t : pt.getTiles()) {
-               Point Tpt = t.getLocation();
-               maxX = Tpt.x > maxX ? Tpt.x: maxX;
-               maxY = Tpt.y  > maxY ? Tpt.y : maxY;
-               minX = Tpt.x < minX ? Tpt.x : minX;
-               minY = Tpt.y  < minY ? Tpt.y : minY;
+                Point Tpt = t.getLocation();
+                maxX = Tpt.x > maxX ? Tpt.x: maxX;
+                maxY = Tpt.y  > maxY ? Tpt.y : maxY;
+                minX = Tpt.x < minX ? Tpt.x : minX;
+                minY = Tpt.y  < minY ? Tpt.y : minY;
+            }
+            Point xRange = new Point(minX * diameter, maxX*diameter);
+            Point yRange = new Point(minY*diameter, maxY*diameter);
+
+            offset.translate(-minX*diameter + diameter/2 +((graphicsDim.width-(polyDim.x*diameter))/2), +maxY*diameter + diameter/2 + ((graphicsDim.height-(polyDim.y*diameter)) /2));
+
+            drawPolyTile(g, pt,diameter, offset );
+            return new Pair<Point, Integer>(offset, diameter);
+        }
+
+        public static Pair<Point, Integer> drawCenteredPolyTile(Graphics2D g, PolyTile pt, int diameter)
+        {
+            Point polyDim = calculatePolyTileGridDimension(pt);
+            Rectangle graphicsDim = g.getClipBounds();
+
+
+            Point offset = new Point(0, 0 );
+
+            int maxX = Integer.MIN_VALUE;
+            int maxY = Integer.MIN_VALUE;
+            int minX = Integer.MAX_VALUE;
+            int minY = Integer.MAX_VALUE;
+            for (Tile t : pt.getTiles()) {
+                Point Tpt = t.getLocation();
+                maxX = Tpt.x > maxX ? Tpt.x: maxX;
+                maxY = Tpt.y  > maxY ? Tpt.y : maxY;
+                minX = Tpt.x < minX ? Tpt.x : minX;
+                minY = Tpt.y  < minY ? Tpt.y : minY;
             }
             Point xRange = new Point(minX * diameter, maxX*diameter);
             Point yRange = new Point(minY*diameter, maxY*diameter);

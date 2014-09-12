@@ -4,12 +4,13 @@ Tile system is meant to be the container where all different types of polytiles 
  Glue function is also called from here.
  */
 
-import java.io.InvalidObjectException;
-import java.util.Set;
-import java.util.HashSet;
 import javafx.util.Pair;
+
 import javax.xml.bind.annotation.*;
+import java.io.InvalidObjectException;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 @XmlRootElement(name = "TileSystem")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -55,6 +56,10 @@ public class TileSystem {
         }
     }
 
+    public HashMap<Pair<String, String>, Integer> getGlueFunction()
+    {
+        return (HashMap<Pair<String, String>, Integer>)glueFunction.clone();
+    }
     public int getStrength(String label1, String label2) {
         Pair key = new Pair<String, String>(label1, label2);
 

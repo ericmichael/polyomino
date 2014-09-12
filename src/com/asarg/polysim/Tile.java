@@ -17,6 +17,7 @@ public class Tile {
     private Point tileLocation = new Point();
     // glue labels are 4 field array of strings: 0=N, 1=E, 2=S, 3=W
     private String[] glueLabels = new String[4];
+    private String label = new String();
     // tiles have an id that references the polyTile they belong to.
     private PolyTile polyTile;
 
@@ -41,7 +42,11 @@ public class Tile {
     }
 
     public String getLabel(){
-        return polyTile.getPolyName();
+       if(label.isEmpty()) return polyTile.getPolyName(); else return label;
+    }
+    public void setLabel(String Label)
+    {
+        this.label = Label;
     }
 
     @XmlTransient
