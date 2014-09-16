@@ -66,12 +66,12 @@ public class PolyTile {
         System.out.println("polytile "+polyName+" created with count "+c+" and no concentration.");
         setColor("FFFFF");
     }
-    public PolyTile(String n, int c, double con){
+    public PolyTile(String n, int c, double con, String colr){
         polyName = n;
         count = c;
         concentration = con;
+        color = colr;
         System.out.println("polytile "+polyName+" created with count "+c+" and concentration "+con);
-        setColor("FFFFF");
     }
 
     public List<Tile> getTiles(){
@@ -228,12 +228,17 @@ public class PolyTile {
         }
     }
 
-    public PolyTile deepCopy()
+    public PolyTile getCopy()
     {
-        PolyTile temp = new PolyTile(polyName,count,concentration);
+        PolyTile temp = new PolyTile(polyName,count,concentration, color);
         for(Tile t : tiles)
         {
-            temp.addTile(t.getLocation().x, t.getLocation().y, t.getGlueLabels());
+            String[] glues = new String[4];
+            glues[0] = t.getGlueN();
+            glues[1] = t.getGlueE();
+            glues[2] = t.getGlueS();
+            glues[3] = t.getGlueW();
+            temp.addTile(t.getLocation().x, t.getLocation().y, glues);
 
         }
 

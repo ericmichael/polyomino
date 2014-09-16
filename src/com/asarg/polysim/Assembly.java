@@ -101,13 +101,15 @@ public class Assembly {
     }
 
     private void removePolytile(PolyTile p, int x, int y) {
-        for(Tile t : p.tiles) {
+        for (Tile t : p.tiles) {
             Point tmp = new Point(t.getLocation());
             tmp.translate(x, y);
             Tile existing = Grid.get(tmp);
-            if(existing.samePolyTile(p)) {
-                Grid.remove(tmp);
-            }else System.out.println("not removing polytile");
+            if (existing.samePolyTile(p)) {
+                if (existing.samePolyTile(p)) {
+                    Grid.remove(tmp);
+                } else System.out.println("not removing polytile");
+            }
         }
     }
 
@@ -173,6 +175,9 @@ public class Assembly {
                     Pair<Point, Point> locAndOffset = getOffset(aPoint, ptPoint, offsetX, offsetY);
                     FrontierElement fe = new FrontierElement(locAndOffset.getKey(), locAndOffset.getValue(), pt, direction);
                     possibleAttach.add(fe);
+
+                    System.out.println( pt.getPolyName());
+
                 }
             }
         }
@@ -184,6 +189,7 @@ public class Assembly {
         fillPossibleList(t, EAST);
         fillPossibleList(t, SOUTH);
         fillPossibleList(t, WEST);
+
     }
 
     public ArrayList<FrontierElement> getAttached(){
@@ -196,6 +202,7 @@ public class Assembly {
         ArrayList toRemove = new ArrayList();
         for(PolyTile t : tileSystem.getTileTypes()){
             checkMatchingGlues(t);
+            System.out.println(possibleAttach.size()+ "t");
         }
         for(FrontierElement fe : possibleAttach) {
             if(checkStability(fe.getPolyTile(), fe.getOffset().x, fe.getOffset().y) &&
@@ -210,6 +217,7 @@ public class Assembly {
         for(Object e : toRemove){
             possibleAttach.remove(e);
         }
+
         return frontier;
     }
 

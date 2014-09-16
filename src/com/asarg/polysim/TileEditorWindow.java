@@ -195,7 +195,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
         //create a menu bar-------------------------------
         JMenuBar menubar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
-        JMenu assemblyMenu = new JMenu("Assembly");
+        final JMenu assemblyMenu = new JMenu("Assembly");
         JMenu polyTileMenu = new JMenu("PolyTile");
         fileMenu.add(newPolyTileMenuItem);
         fileMenu.add(clearListsMenuItem);
@@ -238,6 +238,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
                     assembly.cleanUp();
                     assembly.getOpenGlues();
                     assembly.calculateFrontier();
+
 
                 }
                 else if(e.getSource() == removePolyTileMenuItem)
@@ -317,15 +318,26 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
 
-                Point gridPoint = Drawer.TileDrawer.getGridPoint(e.getPoint(), canvasCenteredOffset, tileDiameter);
-                Tile tile = polytileList.get(polyJList.getSelectedIndex()).getTile(gridPoint.x, gridPoint.y);
-                selectedTile = tile == null ? selectedTile : tile;
-                System.out.println(selectedTile);
-                if (selectedTile != null) {
-                    displayTileData(selectedTile);
-                    Drawer.clearGraphics(overLayerGFX);
-                    Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
-                    repaint();
+                if(!polyJList.isSelectionEmpty()) {
+                    PolyTile polytile =  polytileList.get(polyJList.getSelectedIndex());
+                    Point gridPoint = Drawer.TileDrawer.getGridPoint(e.getPoint(), canvasCenteredOffset, tileDiameter);
+                    Tile tile = polytile.getTile(gridPoint.x, gridPoint.y);
+                    if (tile != null) {
+                        selectedTile = tile;
+                        if (selectedTile != null) {
+                            displayTileData(selectedTile);
+                            Drawer.clearGraphics(overLayerGFX);
+                            Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
+                            repaint();
+                        }
+                    } else if (polytile.adjacentExits(gridPoint)) {
+                        polytile.addTile(gridPoint.x, gridPoint.y, new String[4]);
+                        Pair<Point, Integer> newOffDia = Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX,polytile, tileDiameter);
+                        canvasCenteredOffset = newOffDia.getKey();
+                        tileDiameter = newOffDia.getValue();
+                        repaint();
+
+                    }
                 }
             }
 
@@ -435,7 +447,11 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
 
     public void initilizeLists() {
         clearLists();
-        polytileList = new ArrayList<PolyTile>(assembly.getTileSystem().getTileTypes());
+        List<PolyTile> polyList = new ArrayList<PolyTile>(assembly.getTileSystem().getTileTypes());
+        for(PolyTile polytile : polyList)
+        {
+            polytileList.add(polytile.getCopy());
+        }
         reDrawJList();
     }
 
