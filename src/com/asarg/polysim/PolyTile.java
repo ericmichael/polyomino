@@ -227,4 +227,16 @@ public class PolyTile {
             return super.toString();
         }
     }
+
+    public PolyTile deepCopy()
+    {
+        PolyTile temp = new PolyTile(polyName,count,concentration);
+        for(Tile t : tiles)
+        {
+            temp.addTile(t.getLocation().x, t.getLocation().y, t.getGlueLabels());
+
+        }
+
+        return temp;
+    }
 }

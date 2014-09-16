@@ -10,7 +10,6 @@ import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.awt.*;
 import java.util.*;
-import java.util.List;
 
 @XmlRootElement(name = "Assembly")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -70,7 +69,7 @@ public class Assembly {
         frontier = new Frontier( tileSystem );
     }
     //Finds open glues on assembly grid and puts them in 4 maps.
-    private void getOpenGlues() {
+    public void getOpenGlues() {
         openNorthGlues.clear();
         openEastGlues.clear();
         openSouthGlues.clear();
@@ -267,7 +266,7 @@ public class Assembly {
 
     // delete from frontier
 
-    private void cleanUp() {
+    public void cleanUp() {
         frontier.clear();
         possibleAttach.clear();
         openNorthGlues.clear();

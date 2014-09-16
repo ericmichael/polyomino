@@ -235,6 +235,9 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
 
                     tileSystem.loadTileConfiguration(tileConfig);
                     assembly.changeTileSystem(tileSystem);
+                    assembly.cleanUp();
+                    assembly.getOpenGlues();
+                    assembly.calculateFrontier();
 
                 }
                 else if(e.getSource() == removePolyTileMenuItem)
@@ -468,7 +471,6 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
         reDrawJList();
         if (!polyJList.isSelectionEmpty())
             Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX, polytileList.get(polyJList.getSelectedIndex()));
-
 
     }
 
