@@ -94,18 +94,57 @@ public class PolyTile {
             return true;
         return false;
     }
-
-    public boolean canAddAtPoint(int x, int y)
+    public boolean adjacentExistsExc(Point gridPoint, Point exclusionPoint)
     {
-        if(adjacentExists(x, y) && getTile(x, y) == null)
+
+        Point northNeighbor =  new Point(gridPoint.x, gridPoint.y+1);
+        Point eastNeighbor = new Point(gridPoint.x+1, gridPoint.y);
+        Point southNeighbor = new Point(gridPoint.x, gridPoint.y -1);
+        Point westNeighbor = new Point(gridPoint.x-1, gridPoint.y);
+        if(!exclusionPoint.equals(northNeighbor) && getTile(northNeighbor)!=null )
+        {
             return true;
+        }
+        if(!exclusionPoint.equals(eastNeighbor) && getTile(eastNeighbor)!=null)
+        {
+            return true;
+        }
+        if(!exclusionPoint.equals(southNeighbor) && getTile(southNeighbor)!=null )
+        {
+            return true;
+        }
+        if(!exclusionPoint.equals(westNeighbor) && getTile(westNeighbor)!=null)
+        {
+            return true;
+        }
+
+
         return false;
 
     }
-    public boolean canAddAtPoint(Point gridPoint)
+    public boolean breaksChain(Point gridPoint)
     {
-        return false;
+
+        Point northNeighbor =  new Point(gridPoint.x, gridPoint.y+1);
+        Point eastNeighbor = new Point(gridPoint.x+1, gridPoint.y);
+        Point southNeighbor = new Point(gridPoint.x, gridPoint.y -1);
+        Point westNeighbor = new Point(gridPoint.x-1, gridPoint.y);
+          boolean breaksChain=false;
+
+        for(Tile tile : tiles)
+        {
+
+            if(tiles.size() > 2)
+                if(!adjacentExistsExc(tile.getLocation(), gridPoint))
+
+                    breaksChain=true;
+
+        }
+
+        return breaksChain;
+
     }
+
 
 
     public void setColor(String color){
@@ -149,6 +188,16 @@ public class PolyTile {
         }
         return null;
     }
+    public Tile getTile(Point gridPoint)
+    {
+        for (Tile tile : tiles){
+            if (tile.getLocation().equals(new Point(gridPoint.x, gridPoint.y))) {
+                return tile;
+            }
+        }
+        return null;
+    }
+
     public double getConcentration(){return concentration;}
     public int getCount(){return count;}
     public String getPolyName(){return polyName;}

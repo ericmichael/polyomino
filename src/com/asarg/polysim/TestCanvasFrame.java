@@ -157,6 +157,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
             public void actionPerformed(ActionEvent e) {
                 if(e.getSource().equals(next))
                 {
+
                     if(!frontier.isEmpty()) {
                         assembly.attach();
                         frontier = assembly.calculateFrontier();

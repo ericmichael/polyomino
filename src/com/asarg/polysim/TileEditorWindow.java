@@ -56,6 +56,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
     JTextField eGlueLabelTF = new JTextField(5);
     JTextField sGlueLabelTF = new JTextField(5);
     JTextField wGlueLabelTF = new JTextField(5);
+    JTextField polyTileLabelTF = new JTextField(5);
 
     JButton applyButton = new JButton("Set");
     JButton removeButton = new JButton("Remove");
@@ -259,6 +260,39 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
                 } else
                 if (e.getSource() == removeButton) {
 
+                    if(!polyJList.isSelectionEmpty())
+                    {
+                        if(selectedTile!=null)
+                        {
+                            int selectedIndex = polyJList.getSelectedIndex();
+                            PolyTile polytile = polytileList.get(selectedIndex);
+
+                            if(!polytileList.get(polyJList.getSelectedIndex()).breaksChain(selectedTile.getLocation()))
+                            {
+                                polytile.removeTile(selectedTile.getLocation().x, selectedTile.getLocation().y);
+                                Pair<Point, Integer> newOffDia = Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX, polytile, tileDiameter);
+                                canvasCenteredOffset = newOffDia.getKey();
+                                tileDiameter = newOffDia.getValue();
+                                Drawer.clearGraphics(overLayerGFX);
+
+
+                                if(polytile.tiles.size()==0)
+                                {
+
+                                    polytileList.remove(selectedIndex);
+                                    reDrawJList();
+                                }
+                                else {
+                                    polyJList.setSelectedIndex(selectedIndex);
+                                }
+
+                                repaint();
+
+                            }
+
+                        }
+                    }
+
 
                 }
             }
@@ -333,8 +367,10 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
                     } else if (polytile.adjacentExits(gridPoint)) {
                         polytile.addTile(gridPoint.x, gridPoint.y, new String[4]);
                         Pair<Point, Integer> newOffDia = Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX,polytile, tileDiameter);
+                        Drawer.clearGraphics(overLayerGFX);
                         canvasCenteredOffset = newOffDia.getKey();
                         tileDiameter = newOffDia.getValue();
+                        Drawer.TileDrawer.drawTileSelection(overLayerGFX,Drawer.TileDrawer.getGridPoint(e.getPoint(),canvasCenteredOffset,tileDiameter),tileDiameter,canvasCenteredOffset,Color.CYAN);
                         repaint();
 
                     }
@@ -369,6 +405,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
         cP.addMouseListener(gridListener);
         cP.addMouseWheelListener(gridListener);
         applyButton.addActionListener(tileEditorActionListener);
+        removeButton.addActionListener(tileEditorActionListener);
 
 
         //split pane
@@ -387,6 +424,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
     }
 
 
+    
     public void setTileData(Tile tile) {
         tile.setLabel(tileLabelTF.getText());
         tile.setGlueN(nGlueLabelTF.getText());
