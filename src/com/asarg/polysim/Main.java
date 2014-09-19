@@ -1,6 +1,10 @@
 package com.asarg.polysim;
 
-import javax.xml.bind.*;
+import javax.swing.*;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.util.Random;
 
@@ -139,10 +143,26 @@ public class Main {
         ts.addGlueFunction("x","x",2);
         ts.addGlueFunction("ddeFE","ddeFE",2);
 
-        Assembly assembly = new Assembly(ts);
+        final Assembly assembly = new Assembly(ts);
         assembly.placeSeed(tetrisF());
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+               /* try {
+                   for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                        if ("Nimbus".equals(info.getName())) {
+                            UIManager.setLookAndFeel(info.getClassName());
+                            break;
+                        }
+                    }
+                } catch (Exception e) {
+                    // If Nimbus is not available, you can set the GUI to another look and feel.
+                }*/
+                TestCanvasFrame tcf = new TestCanvasFrame(800,600,assembly);
+            }
+        });
 
-        TestCanvasFrame tcf = new TestCanvasFrame(800,600,assembly);
+
 
 
         JAXBContext jaxbContext = JAXBContext.newInstance(TileSystem.class);

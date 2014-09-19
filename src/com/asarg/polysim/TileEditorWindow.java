@@ -241,6 +241,8 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
                     assembly.calculateFrontier();
 
 
+
+
                 }
                 else if(e.getSource() == removePolyTileMenuItem)
                 {
@@ -255,6 +257,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
                 else if (e.getSource() == applyButton) {
                     setTileData(selectedTile);
                     Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX, polytileList.get(polyJList.isSelectionEmpty() ? 0 : polyJList.getSelectedIndex()), tileDiameter);
+                    reDrawJList();
                     repaint();
 
                 } else
@@ -286,6 +289,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
                                     polyJList.setSelectedIndex(selectedIndex);
                                 }
 
+                                reDrawJList();
                                 repaint();
 
                             }
@@ -371,6 +375,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
                         canvasCenteredOffset = newOffDia.getKey();
                         tileDiameter = newOffDia.getValue();
                         Drawer.TileDrawer.drawTileSelection(overLayerGFX,Drawer.TileDrawer.getGridPoint(e.getPoint(),canvasCenteredOffset,tileDiameter),tileDiameter,canvasCenteredOffset,Color.CYAN);
+                        reDrawJList();
                         repaint();
 
                     }
@@ -412,7 +417,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
 
         JSplitPane wPSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, wP, cP);
         wPSplitPane.setOneTouchExpandable(true);
-        wPSplitPane.setDividerLocation(wP.getWidth());
+        wPSplitPane.setDividerLocation(wP.getWidth()+wPSplitPane.getWidth());
         add(wPSplitPane);
 
 
@@ -468,18 +473,28 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
 
 
     public void reDrawJList() {
+
         iconDrawSpace = new BufferedImage(wP.getWidth(), wP.getWidth(), BufferedImage.TYPE_INT_ARGB);
         iconDrawSpaceGraphics = iconDrawSpace.createGraphics();
         iconDrawSpaceGraphics.setClip(0, 0, wP.getWidth(), wP.getWidth());
         iconList.clear();
+        int selectedIndex = polyJList.getSelectedIndex();
         polyJList.removeAll();
+        ImageIcon[] icons = new ImageIcon[polytileList.size()];
         for (PolyTile pt : polytileList) {
-            Drawer.TileDrawer.drawCenteredPolyTile(iconDrawSpaceGraphics, pt);
+
+            if(wP.getWidth()*polytileList.size() > jsp.getHeight()-5)
+                 Drawer.TileDrawer.drawCenteredPolyTile(iconDrawSpaceGraphics, pt, new Point((int)(-jsp.getVerticalScrollBar().getMaximumSize().width/1.5),0));
+            else Drawer.TileDrawer.drawCenteredPolyTile(iconDrawSpaceGraphics, pt);
             iconList.add(new ImageIcon(toolkit.createImage(iconDrawSpace.getSource())));
-            ImageIcon[] icons = new ImageIcon[iconList.size()];
-            iconList.toArray(icons);
-            polyJList.setListData(icons);
+
+
+
         }
+        iconList.toArray(icons);
+        polyJList.setListData(icons);
+        polyJList.setSelectedIndex(selectedIndex);
+
 
     }
 

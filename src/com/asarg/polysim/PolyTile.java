@@ -131,13 +131,20 @@ public class PolyTile {
         Point westNeighbor = new Point(gridPoint.x-1, gridPoint.y);
           boolean breaksChain=false;
 
+
+
         for(Tile tile : tiles)
         {
 
-            if(tiles.size() > 2)
-                if(!adjacentExistsExc(tile.getLocation(), gridPoint))
+            if(tiles.size() > 2) {
 
-                    breaksChain=true;
+
+
+                    if (!adjacentExistsExc(tile.getLocation(), gridPoint)) {
+                       return true;
+
+                }
+            }
 
         }
 

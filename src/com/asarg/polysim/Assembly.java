@@ -176,7 +176,7 @@ public class Assembly {
                     FrontierElement fe = new FrontierElement(locAndOffset.getKey(), locAndOffset.getValue(), pt, direction);
                     possibleAttach.add(fe);
 
-                    System.out.println( pt.getPolyName());
+
 
                 }
             }
@@ -202,7 +202,7 @@ public class Assembly {
         ArrayList toRemove = new ArrayList();
         for(PolyTile t : tileSystem.getTileTypes()){
             checkMatchingGlues(t);
-            System.out.println(possibleAttach.size()+ "t");
+
         }
         for(FrontierElement fe : possibleAttach) {
             if(checkStability(fe.getPolyTile(), fe.getOffset().x, fe.getOffset().y) &&
