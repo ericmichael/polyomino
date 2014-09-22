@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 @XmlRootElement
@@ -125,32 +126,61 @@ public class PolyTile {
     public boolean breaksChain(Point gridPoint)
     {
 
-        Point northNeighbor =  new Point(gridPoint.x, gridPoint.y+1);
-        Point eastNeighbor = new Point(gridPoint.x+1, gridPoint.y);
-        Point southNeighbor = new Point(gridPoint.x, gridPoint.y -1);
-        Point westNeighbor = new Point(gridPoint.x-1, gridPoint.y);
+
           boolean breaksChain=false;
 
 
 
-        for(Tile tile : tiles)
+     /*   for(Tile tile : tiles)
         {
-
             if(tiles.size() > 2) {
-
-
-
                     if (!adjacentExistsExc(tile.getLocation(), gridPoint)) {
                        return true;
-
                 }
             }
 
+        }*/
+        HashSet<Point> checkedPoints = new HashSet<Point>();
+        checkedPoints.add(gridPoint);
+        int bondCount  = 0;
+        for(Tile tile : tiles)
+        {
+            if(tile.getLocation()!=gridPoint) {
+                Point tilePoint = tile.getLocation();
+                Point northPoint = new Point(tilePoint.x, tilePoint.y + 1);
+                Point eastPoint = new Point(tilePoint.x + 1, tilePoint.y);
+                Point southPoint = new Point(tilePoint.x, tilePoint.y - 1);
+                Point westPoint = new Point(tilePoint.x - 1, tilePoint.y);
+
+
+                if (!checkedPoints.contains(northPoint) && getTile(northPoint) != null)//north
+                {
+                    bondCount++;
+                }
+                if (!checkedPoints.contains(eastPoint) && getTile(eastPoint) != null)//east
+                {
+                    bondCount++;
+                }
+                if (!checkedPoints.contains(southPoint) && getTile(southPoint) != null)//south
+                {
+                    bondCount++;
+                }
+                if (!checkedPoints.contains(westPoint) && getTile(westPoint) != null)//west
+                {
+
+                    bondCount++;
+                }
+
+
+                checkedPoints.add(tilePoint);
+            }
         }
 
-        return breaksChain;
+        return !(tiles.size()-2 == bondCount);
 
     }
+
+
 
 
 
@@ -172,6 +202,18 @@ public class PolyTile {
         }else{
             System.out.println("Tile already exists at this relative coordinate");
         }
+    }
+    public void addTile(Tile tile)
+    {
+
+        if(tile.getLocation()!=null) {
+            if (getTile(tile.getLocation().x, tile.getLocation().y) == null) {
+                tile.setParent(this);
+                tiles.add(tile);
+                setGlues();
+            }
+        }
+        else System.out.println("tile does not have a location");
     }
 
     // deletes tile at the specified location
@@ -246,6 +288,7 @@ public class PolyTile {
             }
         }
     }
+
 
     public boolean equals(PolyTile toCompare){
         // check if the simple polytile data is the same

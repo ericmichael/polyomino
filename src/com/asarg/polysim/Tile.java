@@ -13,8 +13,13 @@ import java.util.Arrays;
 @XmlRootElement
 @XmlType(propOrder = {"location", "color", "glueN", "glueE", "glueS", "glueW"})
 public class Tile {
+
+    public static Point NORTH = new Point(0,1);
+    public static Point EAST = new Point(1,0);
+    public static Point SOUTH= new Point(0,-1);
+    public static Point WEST = new Point(-1,0);
     // each point in coordinates has 4 edges with a label and a direction
-    private Point tileLocation = new Point();
+    private Point tileLocation;
     // glue labels are 4 field array of strings: 0=N, 1=E, 2=S, 3=W
     private String[] glueLabels = new String[4];
     private String label = new String();
@@ -25,18 +30,21 @@ public class Tile {
 
     }
 
+
+
+
     public Tile(int x, int y, PolyTile parent)
     {
         glueLabels[0]=null;
         glueLabels[1]=null;
         glueLabels[2]=null;
         glueLabels[3]=null;
-        tileLocation.setLocation(x,y);
+        tileLocation = new Point(x,y);
         polyTile= parent;
 
     }
     public Tile( int x, int y, String[] gl, PolyTile parent) {
-        tileLocation.setLocation(x, y);
+        tileLocation = new Point(x, y);
         glueLabels = gl;
         polyTile = parent;
     }
@@ -71,7 +79,9 @@ public class Tile {
     }
 
     public void setTileLocation(int x, int y){
-        tileLocation.setLocation(x, y);
+        if(tileLocation!=null)
+            tileLocation.setLocation(x, y);
+        else tileLocation=new Point(x,y);
     }
     @XmlElement(name = "Location")
     @XmlJavaTypeAdapter(PointXmlAdapter.class)
@@ -79,7 +89,10 @@ public class Tile {
         return tileLocation;
     }
     public void setLocation(Point p) {
-        tileLocation = p;
+        System.out.println("SDF");
+        if(tileLocation!=null)
+               tileLocation = p;
+        else tileLocation=new Point(p.x, p.y);
     }
 
     public String[] getGlueLabels() {
