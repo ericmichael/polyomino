@@ -75,6 +75,14 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
     JScrollPane jsp;
 
 
+    //Canvas panning
+    Point lastXY = null;
+
+
+    //jlist
+
+    int lastSelectionIndex = -1;
+
     TileEditorWindow(int width, int height, Assembly assem) {
 
 
@@ -82,6 +90,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
         this.tileSystem = this.assembly.getTileSystem();
         setLayout(new BorderLayout());
         GridBagConstraints gbCon = new GridBagConstraints();
+
 
 
         res.setSize(width, height);
@@ -256,7 +265,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
                 }
                 else if (e.getSource() == applyButton) {
                     setTileData(selectedTile);
-                    Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX, polytileList.get(polyJList.isSelectionEmpty() ? 0 : polyJList.getSelectedIndex()), tileDiameter);
+                    Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX, polytileList.get(polyJList.isSelectionEmpty() ? 0 : polyJList.getSelectedIndex()), tileDiameter, canvasCenteredOffset);
                     reDrawJList();
                     repaint();
 
@@ -273,9 +282,10 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
                             if(!polytileList.get(polyJList.getSelectedIndex()).breaksChain(selectedTile.getLocation()))
                             {
                                 polytile.removeTile(selectedTile.getLocation().x, selectedTile.getLocation().y);
-                                Pair<Point, Integer> newOffDia = Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX, polytile, tileDiameter);
-                                canvasCenteredOffset = newOffDia.getKey();
-                                tileDiameter = newOffDia.getValue();
+                              //  Pair<Point, Integer> newOffDia = Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX, polytile, tileDiameter);
+                                Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX, polytile, tileDiameter, canvasCenteredOffset);
+                               // canvasCenteredOffset = newOffDia.getKey();
+                                //tileDiameter = newOffDia.getValue();
                                 Drawer.clearGraphics(overLayerGFX);
 
 
@@ -312,12 +322,20 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!((JList) (e.getSource())).isSelectionEmpty()) {
-                    Drawer.clearGraphics(overLayerGFX);
-                    Pair<Point, Integer> ppi = Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX, polytileList.get(polyJList.getSelectedIndex()));
-                    canvasCenteredOffset = ppi.getKey();
-                    tileDiameter = ppi.getValue();
-                    Drawer.clearGraphics(overLayerGFX);
-                    selectedTile = null;
+
+                    if(lastSelectionIndex != polyJList.getSelectedIndex()) {
+
+
+                        Drawer.clearGraphics(overLayerGFX);
+                        Pair<Point, Integer> ppi = Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX, polytileList.get(polyJList.getSelectedIndex()));
+                        canvasCenteredOffset = ppi.getKey();
+                        tileDiameter = ppi.getValue();
+                        Drawer.clearGraphics(overLayerGFX);
+                        selectedTile = null;
+                    }
+
+                    lastSelectionIndex = polyJList.getSelectedIndex();
+                    System.out.println("selection changed");
                 }
                 repaint();
             }
@@ -355,8 +373,52 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
+                lastXY= e.getPoint();
 
+
+            }
+
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                super.mouseWheelMoved(e);
+
+                if (e.getWheelRotation() == 1 && tileDiameter > 1) {
+                    tileDiameter = (int)Math.floor(tileDiameter *.95);
+
+                    Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX, polytileList.get(polyJList.isSelectionEmpty() ? 0 : polyJList.getSelectedIndex()), tileDiameter,canvasCenteredOffset);
+                 //   canvasCenteredOffset = ofnt.getKey();
+                    if (selectedTile != null)
+                        Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
+                    repaint();
+
+                } else if (e.getWheelRotation() == -1 && tileDiameter * 3 < cP.getWidth() && tileDiameter * 3 < cP.getHeight()) {
+                    tileDiameter = (int)Math.ceil(tileDiameter *1.05);
+                    Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX, polytileList.get(polyJList.isSelectionEmpty() ? 0 : polyJList.getSelectedIndex()), tileDiameter, canvasCenteredOffset);
+                  //  canvasCenteredOffset = ofnt.getKey();
+                    if (selectedTile != null)
+                        Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
+                    repaint();
+
+                }
+            }
+
+            @Override
+            public void mouseDragged(MouseEvent e)
+            {
+                canvasCenteredOffset.translate(e.getX() - lastXY.x, e.getY() - lastXY.y);
+                lastXY.setLocation(e.getPoint());
+                if(!polyJList.isSelectionEmpty())
+                    Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX,polytileList.get(polyJList.getSelectedIndex()),tileDiameter, canvasCenteredOffset);
+                Drawer.clearGraphics(overLayerGFX);
+                repaint();
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e)
+            {
+                super.mouseClicked(e);
                 if(!polyJList.isSelectionEmpty()) {
+
                     PolyTile polytile =  polytileList.get(polyJList.getSelectedIndex());
                     Point gridPoint = Drawer.TileDrawer.getGridPoint(e.getPoint(), canvasCenteredOffset, tileDiameter);
                     Tile tile = polytile.getTile(gridPoint.x, gridPoint.y);
@@ -369,39 +431,21 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
                             repaint();
                         }
                     } else if (polytile.adjacentExits(gridPoint)) {
-                        polytile.addTile(gridPoint.x, gridPoint.y, new String[4]);
-                        Pair<Point, Integer> newOffDia = Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX,polytile, tileDiameter);
+                        Tile newTile = new Tile();
+                    newTile.setTileLocation(gridPoint.x, gridPoint.y);
+
+                        polytile.addTile(newTile);
+                        selectedTile = newTile;
+                        Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX,polytile,tileDiameter,canvasCenteredOffset);  // Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX,polytile, tileDiameter);
                         Drawer.clearGraphics(overLayerGFX);
-                        canvasCenteredOffset = newOffDia.getKey();
-                        tileDiameter = newOffDia.getValue();
+                        //  canvasCenteredOffset = newOffDia.getKey();
+                        // tileDiameter = newOffDia.getValue();
                         Drawer.TileDrawer.drawTileSelection(overLayerGFX,Drawer.TileDrawer.getGridPoint(e.getPoint(),canvasCenteredOffset,tileDiameter),tileDiameter,canvasCenteredOffset,Color.CYAN);
+
                         reDrawJList();
                         repaint();
 
                     }
-                }
-            }
-
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                super.mouseWheelMoved(e);
-
-                if (e.getWheelRotation() == 1 && tileDiameter > 1) {
-                    tileDiameter *= .95;
-                    Pair<Point, Integer> ofnt = Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX, polytileList.get(polyJList.isSelectionEmpty() ? 0 : polyJList.getSelectedIndex()), tileDiameter);
-                    canvasCenteredOffset = ofnt.getKey();
-                    if (selectedTile != null)
-                        Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
-                    repaint();
-
-                } else if (e.getWheelRotation() == -1 && tileDiameter * 3 < cP.getWidth() && tileDiameter * 3 < cP.getHeight()) {
-                    tileDiameter *= 1.05;
-                    Pair<Point, Integer> ofnt = Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX, polytileList.get(polyJList.isSelectionEmpty() ? 0 : polyJList.getSelectedIndex()), tileDiameter);
-                    canvasCenteredOffset = ofnt.getKey();
-                    if (selectedTile != null)
-                        Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
-                    repaint();
-
                 }
             }
         };
@@ -409,6 +453,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
 
         cP.addMouseListener(gridListener);
         cP.addMouseWheelListener(gridListener);
+        cP.addMouseMotionListener(gridListener);
         applyButton.addActionListener(tileEditorActionListener);
         removeButton.addActionListener(tileEditorActionListener);
 
@@ -417,7 +462,8 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
 
         JSplitPane wPSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, wP, cP);
         wPSplitPane.setOneTouchExpandable(true);
-        wPSplitPane.setDividerLocation(wP.getWidth()+wPSplitPane.getWidth());
+        wPSplitPane.setDividerLocation(wP.getWidth() + wPSplitPane.getWidth());
+
         add(wPSplitPane);
 
 
@@ -539,7 +585,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
 
         reDrawJList();
         if (!polyJList.isSelectionEmpty())
-            Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX, polytileList.get(polyJList.getSelectedIndex()));
+            Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX, polytileList.get(polyJList.getSelectedIndex()), tileDiameter, canvasCenteredOffset);
 
     }
 
