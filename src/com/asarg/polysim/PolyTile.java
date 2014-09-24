@@ -176,7 +176,7 @@ public class PolyTile {
             }
         }
 
-        return !(tiles.size()-2 == bondCount);
+        return !(tiles.size()-2 <= bondCount);
 
     }
 
