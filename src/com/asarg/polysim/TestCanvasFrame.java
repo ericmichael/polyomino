@@ -4,17 +4,14 @@ package com.asarg.polysim;
 
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
-import java.awt.*;
-import java.awt.event.*;
-import java.net.URL;
-import javax.swing.JFileChooser;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import javax.swing.border.BevelBorder;
 
 public class TestCanvasFrame extends JFrame implements MouseWheelListener, MouseMotionListener, MouseListener,KeyListener, ComponentListener{
 
@@ -23,7 +20,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
     JLabel statusLabel = new JLabel();
     String statusLabelPreviousText = "";
     ActionListener actionListener;
-    TileEditorWindow tileEditorWindow = new TileEditorWindow(800,600);
+    TileEditorWindow tileEditorWindow ;
     ControlButton next = new ControlButton("forward");
     ControlButton prev = new ControlButton("backward");
     ControlButton play = new ControlButton("play");
@@ -511,7 +508,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
     @Override
     public void mouseClicked(MouseEvent e) {
         if(e.getSource() == tc) {
-            Point clicked = tc.getGridPoint(e.getPoint());
+            Point clicked = Drawer.TileDrawer.getGridPoint(e.getPoint(), tc.getOffset(), tc.getTileDiameter());
             Tile clicked_tile = assembly.Grid.get(clicked);
             if(clicked_tile!=null){
                 processFrontierClick(clicked, clicked_tile);

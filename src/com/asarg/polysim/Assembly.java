@@ -10,7 +10,6 @@ import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.awt.*;
 import java.util.*;
-import java.util.List;
 
 @XmlRootElement(name = "Assembly")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -76,7 +75,7 @@ public class Assembly {
         frontier = new Frontier( tileSystem );
     }
     //Finds open glues on assembly grid and puts them in 4 maps.
-    private void getOpenGlues() {
+    public void getOpenGlues() {
         openNorthGlues.clear();
         openEastGlues.clear();
         openSouthGlues.clear();
@@ -99,7 +98,7 @@ public class Assembly {
         }
     }
 
-    private void placePolytile(PolyTile p, int x, int y) {
+    public void placePolytile(PolyTile p, int x, int y) {
         for(Tile t : p.tiles) {
             Point tmp = new Point(t.getLocation());
             tmp.translate(x, y);
@@ -107,7 +106,7 @@ public class Assembly {
         }
     }
 
-    private void removePolytile(PolyTile p, int x, int y) {
+    public void removePolytile(PolyTile p, int x, int y) {
         for(Tile t : p.tiles) {
             Point tmp = new Point(t.getLocation());
             tmp.translate(x, y);
@@ -275,7 +274,7 @@ public class Assembly {
 
     // delete from frontier
 
-    private void cleanUp() {
+    public void cleanUp() {
         frontier.clear();
         possibleAttach.clear();
         openNorthGlues.clear();
@@ -287,7 +286,7 @@ public class Assembly {
     public double attach(){
         FrontierElement fe = frontier.get(frontier.randomSelect());
 
-        fe.setAttachTime(getDistribution());
+        fe.setAttachTime(getDistribution(frontier.getTotalConcentration()));
         placePolytile(fe.getPolyTile(), fe.getOffset().x, fe.getOffset().y);
         frontier.remove(fe);
         attached.add(fe);
