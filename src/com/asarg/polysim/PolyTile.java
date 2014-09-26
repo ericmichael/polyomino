@@ -30,6 +30,8 @@ public class PolyTile {
 
     private String color;
 
+    private Boolean frontier = false;
+
     @XmlTransient
     public HashMap<Point, String> northGlues = new HashMap<Point, String>();
     @XmlTransient
@@ -74,6 +76,9 @@ public class PolyTile {
         color = colr;
         System.out.println("polytile "+polyName+" created with count "+c+" and concentration "+con);
     }
+    public void setFrontier() { frontier = true; }
+
+    public boolean isFrontier() { return frontier; }
 
     public List<Tile> getTiles(){
         return tiles;
@@ -320,9 +325,12 @@ public class PolyTile {
     }
 
     public String toString(){
-        if(polyName!=null){
+        if(frontier){
+            return "Frontier Tile";
+        }else if(polyName!=null){
             return "PolyTile: " + polyName;
-        }else{
+        }
+        else{
             return super.toString();
         }
     }

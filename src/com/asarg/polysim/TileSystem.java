@@ -155,6 +155,7 @@ public class TileSystem {
     }
 
     public boolean loadTileConfiguration(TileConfiguration t) {
+        System.out.println("Option in load tile config" + weightOption);
         if(t == null)
             return false;
         else if(t.getGlueFunction() == null || t.getTiletypes() == null)
@@ -162,6 +163,14 @@ public class TileSystem {
 
         glueFunction = t.getGlueFunction();
         tileTypes = t.getTiletypes();
+
+        System.out.println("Size in load tile config" + tileTypes.size());
+
+        for(PolyTile p : tileTypes) {
+            p.setGlues();
+        }
+        System.out.println("Size after loading tile config" + tileTypes.size());
+
         return true;
     }
 }
