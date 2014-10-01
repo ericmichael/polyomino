@@ -11,7 +11,7 @@ import java.awt.*;
 import java.util.Arrays;
 
 @XmlRootElement
-@XmlType(propOrder = {"location", "color", "glueN", "glueE", "glueS", "glueW"})
+@XmlType(propOrder = {"location", "color", "glueN", "glueE", "glueS", "glueW","label"})
 public class Tile {
 
     public static Point NORTH = new Point(0,1);
