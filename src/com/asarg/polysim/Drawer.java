@@ -206,67 +206,61 @@ public class Drawer {
 
             //Drawing the glues-------------------------------------
 
-            //west glue flipped
-           /* if (westGlue != null && !westGlue.isEmpty()) {
-
-                g.setFont(g.getFont().deriveFont((float)(diameter/8)));
-                Dimension westGluePixelDim = getStringPixelDimension(g,westGlue);
-
-                Rectangle2D r2d = g.getFontMetrics().getStringBounds(westGlue, g);
-                //get string image
-                BufferedImage tBFI = new BufferedImage((int)r2d.getHeight(), westGluePixelDim.width+3, BufferedImage.TYPE_INT_ARGB);
-                Graphics2D tGFX = tBFI.createGraphics();
-                tGFX.setColor(tileColor);
-                tGFX.fillRect(0,0 , (int)r2d.getHeight(), westGluePixelDim.width+3);
-                tGFX.setFont(g.getFont());
-                tGFX.setColor(g.getColor());
-                AffineTransform posNinety = new AffineTransform();
-                posNinety.setToRotation(Math.toRadians(90),0, 0);
-                tGFX.setTransform(posNinety);
-                tGFX.drawString( westGlue, 0, -g.getFontMetrics().getMaxDescent());
-                g.drawImage(tBFI, x + g.getFontMetrics().getMaxDescent(), y + diameter/2 - westGluePixelDim.width/2, null);
-            }*/
             if (westGlue != null && !westGlue.isEmpty()) {
 
-                g.setFont(g.getFont().deriveFont((float)(diameter/8)));
-                Dimension westGluePixelDim = getStringPixelDimension(g,westGlue);
-
-                Rectangle2D r2d = g.getFontMetrics().getStringBounds(westGlue, g);
-                if(r2d.getWidth() > 1 && r2d.getHeight()>1) {
-                    //get string image
-                    BufferedImage tBFI = new BufferedImage((int) r2d.getHeight(), westGluePixelDim.width + 3, BufferedImage.TYPE_INT_ARGB);
-                    Graphics2D tGFX = tBFI.createGraphics();
-                    tGFX.setColor(tileColor);
-                    tGFX.fillRect(0, 0, (int) r2d.getHeight(), westGluePixelDim.width + 3);
-                    tGFX.setFont(g.getFont());
-                    tGFX.setColor(g.getColor());
-                    AffineTransform posNinety = new AffineTransform();
-                    posNinety.setToRotation(Math.toRadians(-90), 0, 0);
-                    tGFX.setTransform(posNinety);
-                    tGFX.drawString(westGlue, -westGluePixelDim.width - 3, westGluePixelDim.height + g.getFontMetrics().getMaxDescent());
-                    g.drawImage(tBFI, x + g.getFontMetrics().getMaxDescent(), y + diameter / 2 - westGluePixelDim.width / 2, null);
-                }
+                g.rotate(Math.PI/2);
+                int verticalMiddleLabel = getStringPixelDimension(g,westGlue).height/2;
+                int horizontalMiddleLabel = getStringPixelDimension(g,westGlue).width/2;
+                g.drawString(westGlue,  y+horizontalMiddleLabel, -x - diameter/50);
+//                g.drawString(westGlue, x + diameter/50, -y+diameter/2 );
+                g.setTransform(gOriginalATransform);
+               ///////////////
+//                g.setFont(g.getFont().deriveFont((float)(diameter/8)));
+//                Dimension westGluePixelDim = getStringPixelDimension(g,westGlue);
+//
+//                Rectangle2D r2d = g.getFontMetrics().getStringBounds(westGlue, g);
+//                if(r2d.getWidth() > 1 && r2d.getHeight()>1) {
+//                    //get string image
+//                    BufferedImage tBFI = new BufferedImage((int) r2d.getHeight(), westGluePixelDim.width + 3, BufferedImage.TYPE_INT_ARGB);
+//                    Graphics2D tGFX = tBFI.createGraphics();
+//                    tGFX.setColor(tileColor);
+//                    tGFX.fillRect(0, 0, (int) r2d.getHeight(), westGluePixelDim.width + 3);
+//                    tGFX.setFont(g.getFont());
+//                    tGFX.setColor(g.getColor());
+//                    AffineTransform posNinety = new AffineTransform();
+//                    posNinety.setToRotation(Math.toRadians(-90), 0, 0);
+//                    tGFX.setTransform(posNinety);
+//                    tGFX.drawString(westGlue, -westGluePixelDim.width - 3, westGluePixelDim.height + g.getFontMetrics().getMaxDescent());
+//                    g.drawImage(tBFI, x + g.getFontMetrics().getMaxDescent(), y + diameter / 2 - westGluePixelDim.width / 2, null);
+//                }
             }
             if (eastGlue != null && !eastGlue.isEmpty()) {
-                g.setFont(g.getFont().deriveFont((float)(diameter/8)));
-                Dimension eastGluePixelDim = getStringPixelDimension(g,eastGlue);
-                Rectangle2D r2d = g.getFontMetrics().getStringBounds(eastGlue, g);
+                g.rotate(Math.PI/2);
+                int verticalMiddleLabel = getStringPixelDimension(g,eastGlue).height/2;
+                int horizontalMiddleLabel = getStringPixelDimension(g,eastGlue).width/2;
+                //g.drawString(eastGlue,  y+diameter/2, -x -diameter + getStringPixelDimension(g,eastGlue).height + diameter/18);
+                g.drawString(eastGlue,  y+horizontalMiddleLabel, -x -diameter + getStringPixelDimension(g,eastGlue).height + diameter/18);
+                g.setTransform(gOriginalATransform);
+                ////////////////
+//                g.setFont(g.getFont().deriveFont((float)(diameter/8)));
+//                Dimension eastGluePixelDim = getStringPixelDimension(g,eastGlue);
+//                Rectangle2D r2d = g.getFontMetrics().getStringBounds(eastGlue, g);
+//
+//                if(r2d.getWidth() > 1 && r2d.getHeight()>1) {
+//                    //get string image
+//                    BufferedImage tBFI = new BufferedImage((int) r2d.getHeight(), eastGluePixelDim.width + 3, BufferedImage.TYPE_INT_ARGB);
+//                    Graphics2D tGFX = tBFI.createGraphics();
+//                    tGFX.setColor(tileColor);
+//                    tGFX.fillRect(0, 0, (int) r2d.getHeight(), eastGluePixelDim.width + 3);
+//                    tGFX.setFont(g.getFont());
+//                    tGFX.setColor(g.getColor());
+//                    AffineTransform negNinety = new AffineTransform();
+//                    negNinety.setToRotation(Math.toRadians(-90), 0, 0);
+//                    tGFX.setTransform(negNinety);
+//                    tGFX.drawString(eastGlue, -eastGluePixelDim.width - 3, eastGluePixelDim.height + g.getFontMetrics().getMaxDescent());
+//                    g.drawImage(tBFI, x + diameter - (int) (r2d.getHeight()), y + diameter / 2 - eastGluePixelDim.width / 2, null);
+//                }
 
-                if(r2d.getWidth() > 1 && r2d.getHeight()>1) {
-                    //get string image
-                    BufferedImage tBFI = new BufferedImage((int) r2d.getHeight(), eastGluePixelDim.width + 3, BufferedImage.TYPE_INT_ARGB);
-                    Graphics2D tGFX = tBFI.createGraphics();
-                    tGFX.setColor(tileColor);
-                    tGFX.fillRect(0, 0, (int) r2d.getHeight(), eastGluePixelDim.width + 3);
-                    tGFX.setFont(g.getFont());
-                    tGFX.setColor(g.getColor());
-                    AffineTransform negNinety = new AffineTransform();
-                    negNinety.setToRotation(Math.toRadians(-90), 0, 0);
-                    tGFX.setTransform(negNinety);
-                    tGFX.drawString(eastGlue, -eastGluePixelDim.width - 3, eastGluePixelDim.height + g.getFontMetrics().getMaxDescent());
-                    g.drawImage(tBFI, x + diameter - (int) (r2d.getHeight()), y + diameter / 2 - eastGluePixelDim.width / 2, null);
-                }
-              
             }
 
             if(southGlue != null && !southGlue.isEmpty())
