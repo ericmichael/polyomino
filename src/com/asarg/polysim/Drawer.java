@@ -155,7 +155,7 @@ public class Drawer {
 
             g.drawString(tileLabel, x + (diameter / 2) - (font.stringWidth(tileLabel)/ 2) , y + (diameter / 2)  );
 
-            //now a black border with thickness based on diameter
+            //now a black border with thickness based on diameter.
             g.drawRect(x, y, diameter, diameter);
 
 
