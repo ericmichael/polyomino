@@ -379,6 +379,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         }
         else return;
 
+        System.out.println(tc.getTileDiameter());
         tc.reset();
         PlaceFrontierOnGrid();
         drawGrid();

@@ -53,78 +53,6 @@ public class Drawer {
 
     }
 
-    public static Dimension getStringPixelDimension(Graphics2D gContext, String string) {
-        Rectangle2D stringBounds = gContext.getFontMetrics().getStringBounds(string, gContext);
-
-        int stringBoundWidth = (int) stringBounds.getWidth();
-        int stringBoundHeight = (int) stringBounds.getHeight();
-        if(stringBoundWidth > 2 && stringBoundWidth > 2) {
-            final BufferedImage tBFI = new BufferedImage(stringBoundWidth, stringBoundHeight, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D tGFX = tBFI.createGraphics();
-            tGFX.setFont(gContext.getFont());
-            tGFX.setColor(Color.WHITE);
-            tGFX.fillRect(0, 0, stringBoundWidth, stringBoundHeight);
-            tGFX.setColor(Color.BLACK);
-            tGFX.drawString(string, 0, stringBoundHeight);
-
-
-            int maxX = 0;
-            int minX = 0;
-            int maxY = 0;
-            int minY = 0;
-
-            //minX scan
-            outerXLoop1:
-            for (int i = 0; i < stringBoundWidth; i++) {
-                for (int j = 0; j < stringBoundHeight; j++) {
-
-                    if (tBFI.getRGB(i, j) == Color.BLACK.getRGB()) {
-
-                        minX = i;
-                        break outerXLoop1;
-                    }
-                }
-            }
-            //maxX scan
-            outerXLoop2:
-            for (int i = stringBoundWidth - 1; i > 0; i--) {
-                for (int j = 0; j < stringBoundHeight; j++) {
-                    if (tBFI.getRGB(i, j) == Color.BLACK.getRGB()) {
-
-                        maxX = i;
-                        break outerXLoop2;
-                    }
-                }
-            }
-            //minY scan
-            outerYLoop1:
-            for (int i = 0; i < stringBoundHeight; i++) {
-                for (int j = 0; j < stringBoundWidth; j++) {
-                    if (tBFI.getRGB(j, i) == Color.BLACK.getRGB()) {
-
-                        minY = i;
-                        break outerYLoop1;
-                    }
-                }
-            }
-
-            //maxY scan
-            outerYLoop2:
-            for (int i = stringBoundHeight - 1; i > 0; i--) {
-                for (int j = 0; j < stringBoundWidth; j++) {
-                    if (tBFI.getRGB(j, i) == Color.BLACK.getRGB()) {
-
-                        maxY = i;
-                        break outerYLoop2;
-                    }
-                }
-            }
-            return  new Dimension(maxX - minX, maxY - minY);
-        }
-        else return new Dimension(1,1);
-    }
-
-
     public static class TileDrawer {
 
         public static Point calculatePolyTileGridDimension(PolyTile polyt)
@@ -159,23 +87,10 @@ public class Drawer {
             return new Point(1+maxX - minX,1+maxY -minY);
 
         }
-        public static Dimension calculatePolyTilePixelXRange(PolyTile polyt)
-        {
-
-
-            return new Dimension(0,0);
-        }
-        public static Dimension calculatePolyTilePixelYRange(PolyTile polyt)
-        {
-
-            return new Dimension(0,0);
-        }
 
         public static void drawTile(Graphics2D g, Tile tile, int x, int y, int diameter) {
 
-
             Rectangle clip = g.getClipBounds();
-
 
             if(x>clip.width + diameter || x < 0 -diameter || y>clip.height + diameter || y < 0 -diameter)
                 return;
@@ -202,100 +117,45 @@ public class Drawer {
             g.setStroke(new BasicStroke(diameter / 25));
 
 
-
-
             //Drawing the glues-------------------------------------
+            // font metrics is used to calculate horizontal and vertical size of the string.
+            // horizontal: stringWidth(string);  vertical: getAscent()?
+            FontMetrics font = g.getFontMetrics();
 
             if (westGlue != null && !westGlue.isEmpty()) {
 
                 g.rotate(Math.PI/2);
-                int verticalMiddleLabel = getStringPixelDimension(g,westGlue).height/2;
-                int horizontalMiddleLabel = getStringPixelDimension(g,westGlue).width/2;
-                g.drawString(westGlue,  y+horizontalMiddleLabel, -x - diameter/50);
-//                g.drawString(westGlue, x + diameter/50, -y+diameter/2 );
+                g.drawString(westGlue, y+ (diameter/2-font.stringWidth(westGlue)/2) , -x  -diameter/20);
                 g.setTransform(gOriginalATransform);
-               ///////////////
-//                g.setFont(g.getFont().deriveFont((float)(diameter/8)));
-//                Dimension westGluePixelDim = getStringPixelDimension(g,westGlue);
-//
-//                Rectangle2D r2d = g.getFontMetrics().getStringBounds(westGlue, g);
-//                if(r2d.getWidth() > 1 && r2d.getHeight()>1) {
-//                    //get string image
-//                    BufferedImage tBFI = new BufferedImage((int) r2d.getHeight(), westGluePixelDim.width + 3, BufferedImage.TYPE_INT_ARGB);
-//                    Graphics2D tGFX = tBFI.createGraphics();
-//                    tGFX.setColor(tileColor);
-//                    tGFX.fillRect(0, 0, (int) r2d.getHeight(), westGluePixelDim.width + 3);
-//                    tGFX.setFont(g.getFont());
-//                    tGFX.setColor(g.getColor());
-//                    AffineTransform posNinety = new AffineTransform();
-//                    posNinety.setToRotation(Math.toRadians(-90), 0, 0);
-//                    tGFX.setTransform(posNinety);
-//                    tGFX.drawString(westGlue, -westGluePixelDim.width - 3, westGluePixelDim.height + g.getFontMetrics().getMaxDescent());
-//                    g.drawImage(tBFI, x + g.getFontMetrics().getMaxDescent(), y + diameter / 2 - westGluePixelDim.width / 2, null);
-//                }
             }
             if (eastGlue != null && !eastGlue.isEmpty()) {
                 g.rotate(Math.PI/2);
-                int verticalMiddleLabel = getStringPixelDimension(g,eastGlue).height/2;
-                int horizontalMiddleLabel = getStringPixelDimension(g,eastGlue).width/2;
-                //g.drawString(eastGlue,  y+diameter/2, -x -diameter + getStringPixelDimension(g,eastGlue).height + diameter/18);
-                g.drawString(eastGlue,  y+horizontalMiddleLabel, -x -diameter + getStringPixelDimension(g,eastGlue).height + diameter/18);
+                g.drawString(eastGlue,  y+(diameter/2-font.stringWidth(eastGlue)/2), -x -diameter +diameter/6 );
                 g.setTransform(gOriginalATransform);
-                ////////////////
-//                g.setFont(g.getFont().deriveFont((float)(diameter/8)));
-//                Dimension eastGluePixelDim = getStringPixelDimension(g,eastGlue);
-//                Rectangle2D r2d = g.getFontMetrics().getStringBounds(eastGlue, g);
-//
-//                if(r2d.getWidth() > 1 && r2d.getHeight()>1) {
-//                    //get string image
-//                    BufferedImage tBFI = new BufferedImage((int) r2d.getHeight(), eastGluePixelDim.width + 3, BufferedImage.TYPE_INT_ARGB);
-//                    Graphics2D tGFX = tBFI.createGraphics();
-//                    tGFX.setColor(tileColor);
-//                    tGFX.fillRect(0, 0, (int) r2d.getHeight(), eastGluePixelDim.width + 3);
-//                    tGFX.setFont(g.getFont());
-//                    tGFX.setColor(g.getColor());
-//                    AffineTransform negNinety = new AffineTransform();
-//                    negNinety.setToRotation(Math.toRadians(-90), 0, 0);
-//                    tGFX.setTransform(negNinety);
-//                    tGFX.drawString(eastGlue, -eastGluePixelDim.width - 3, eastGluePixelDim.height + g.getFontMetrics().getMaxDescent());
-//                    g.drawImage(tBFI, x + diameter - (int) (r2d.getHeight()), y + diameter / 2 - eastGluePixelDim.width / 2, null);
-//                }
 
             }
 
             if(southGlue != null && !southGlue.isEmpty())
             {
-                g.setFont(g.getFont().deriveFont((float)(diameter/8)));
-                Dimension southGluePixelDim = getStringPixelDimension(g, southGlue);
-                g.drawString(southGlue, x + diameter/2 - southGluePixelDim.width/2, y + diameter - southGluePixelDim.height + diameter/50);
-
+                g.drawString(southGlue, x + diameter/2 - font.stringWidth(southGlue)/2, y + diameter - diameter/20);
             }
             if(northGlue != null && !northGlue.isEmpty())
             {
-
-                g.setFont(g.getFont().deriveFont((float)(diameter/8)));
-                Dimension northGluePixelDim = getStringPixelDimension(g, northGlue);
-                g.drawString(northGlue, x + diameter/2 - northGluePixelDim.width/2, y + northGluePixelDim.height + diameter/18) ;
-
+                g.drawString(northGlue, x + diameter/2 - font.stringWidth(northGlue)/2, y + diameter/8) ;
             }
 
 
 
-            //draw tile label
+//            //draw tile label
             g.setFont(g.getFont().deriveFont((float)(diameter/6)));
-            Dimension labelBounds = getStringPixelDimension(g,tileLabel );
+//            // consider the blank space between the render lines and the start of the first baseline pixel of the string
+//            int labelXShift =(int) Math.ceil(((int)Math.ceil(stringBounds.getWidth()) - labelBounds.width) /2);
+//
+//            g.drawString(tileLabel, x + (diameter / 2) - (labelBounds.width/ 2) - labelXShift, y + (diameter / 2) + (labelBounds.height / 2) );
 
-
-            Rectangle2D stringBounds = g.getFontMetrics().getStringBounds(tileLabel, g);
-
-            // consider the blank space between the render lines and the start of the first baseline pixel of the string
-            int labelXShift =(int) Math.ceil(((int)Math.ceil(stringBounds.getWidth()) - labelBounds.width) /2);
-
-            g.drawString(tileLabel, x + (diameter / 2) - (labelBounds.width/ 2) - labelXShift, y + (diameter / 2) + (labelBounds.height / 2) );
-
+            g.drawString(tileLabel, x + (diameter / 2) - (font.stringWidth(tileLabel)/ 2) , y + (diameter / 2)  );
 
             //now a black border with thickness based on diameter
-
             g.drawRect(x, y, diameter, diameter);
 
 
