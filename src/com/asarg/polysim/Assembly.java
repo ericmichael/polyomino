@@ -14,10 +14,10 @@ import java.util.*;
 @XmlRootElement(name = "Assembly")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Assembly {
-    private static final int NORTH = 0;
-    private static final int EAST = 1;
-    private static final int SOUTH = 2;
-    private static final int WEST = 3;
+    static final int NORTH = 0;
+    static final int EAST = 1;
+    static final int SOUTH = 2;
+    static final int WEST = 3;
 
     // tile system, it can be changed so it needs its own class
     @XmlElement(name = "TileSystem")
@@ -291,6 +291,16 @@ public class Assembly {
         frontier.remove(fe);
         attached.add(fe);
 
+        cleanUp();
+        getOpenGlues();
+        return fe.getAttachTime();
+    }
+
+    public double attach(FrontierElement fe){
+        fe.setAttachTime(0);
+        placePolytile(fe.getPolyTile().getCopy(), fe.getOffset().x, fe.getOffset().y);
+        frontier.remove(fe);
+        attached.add(fe);
         cleanUp();
         getOpenGlues();
         return fe.getAttachTime();

@@ -144,7 +144,7 @@ public class Main {
         ts.addGlueFunction("ddeFE","ddeFE",2);
 
         final Assembly assembly = new Assembly(ts);
-        assembly.placeSeed(tetrisF());
+        //assembly.placeSeed(tetrisF());
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
