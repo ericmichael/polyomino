@@ -16,34 +16,11 @@ import java.util.ArrayList;
 public class TestCanvasFrame extends JFrame implements MouseWheelListener, MouseMotionListener, MouseListener,KeyListener, ComponentListener{
 
     TestCanvas canvas;
-    GradientToolbar stepControlToolBar = new GradientToolbar();
-    JLabel statusLabel = new JLabel();
-    String statusLabelPreviousText = "";
+
     ActionListener actionListener;
     TileEditorWindow tileEditorWindow ;
-    ControlButton next = new ControlButton("forward");
-    ControlButton prev = new ControlButton("backward");
-    ControlButton play = new ControlButton("play");
-    ControlButton fastf = new ControlButton("fast-forward");
-    ControlButton fastb = new ControlButton("fast-backward");
-    IconButton optionButton = new IconButton();
-    JMenuBar mainMenu = new JMenuBar();
-    // Menu Bar Items
-    JMenuItem newMenuItem = new JMenuItem("New Assembly");
-    JMenuItem loadAssemblyMenuItem = new JMenuItem("Load");
-    JMenuItem saveAssemblyMenuItem = new JMenuItem("Save");
-    JMenuItem saveAsMenuItem = new JMenuItem("Save as...");
-    JMenuItem closeMenuItem = new JMenuItem("Close");
 
-    JMenuItem importTileSetMenuItem = new JMenuItem("Import Tile Set");
-    JMenuItem tileSetEditorMenuItem = new JMenuItem("Tile Set Editor");
-
-    JMenuItem undoMenuItem = new JMenuItem("Undo");
-    JMenuItem redoMenuItem = new JMenuItem("Redo");
-
-    JMenuItem seedCreatorMenuItem = new JMenuItem("Seed Creator");
-    JMenuItem tileSystemOptionsMenuItem = new JMenuItem("Options");
-
+    GUI mainMenu = new GUI();
     int width;
     int height;
 
@@ -76,97 +53,14 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
 
         addActionListeners();
 
-        addToolBars();
-
-        addMenuBars();
-
-        addStatusBar();
+        this.setJMenuBar(mainMenu);
+        add(mainMenu.stepControlToolBar,BorderLayout.NORTH);
+        add(mainMenu.statusPanel, BorderLayout.SOUTH);
 
         pack();
         setVisible(true);
         placeFrontierOnGrid();
         drawGrid();
-    }
-
-    private void addToolBars(){
-        stepControlToolBar.add(fastb);
-        fastb.setPreferredSize(new Dimension(30, 25));
-        stepControlToolBar.add(prev);
-        prev.setPreferredSize(new Dimension(30, 25));
-        stepControlToolBar.add(play);
-        play.setPreferredSize(new Dimension(30, 25));
-        stepControlToolBar.add(next);
-        next.setPreferredSize(new Dimension(30, 25));
-        stepControlToolBar.add(fastf);
-        fastf.setPreferredSize(new Dimension(30, 25));
-
-        optionButton.setText(String.valueOf('\uf013'));
-        stepControlToolBar.add(optionButton);
-
-        stepControlToolBar.setBorder(new EtchedBorder());
-        stepControlToolBar.setLayout(new FlowLayout(FlowLayout.CENTER));
-        add(stepControlToolBar,BorderLayout.NORTH);
-    }
-
-    private void addMenuBars(){
-        JMenu fileMenu = new JMenu("File");
-        newMenuItem = new JMenuItem("New Assembly");
-        newMenuItem.addActionListener(actionListener);
-        loadAssemblyMenuItem = new JMenuItem("Load");
-        loadAssemblyMenuItem.addActionListener(actionListener);
-        saveAssemblyMenuItem = new JMenuItem("Save");
-        saveAssemblyMenuItem.addActionListener(actionListener);
-        saveAsMenuItem = new JMenuItem("Save as...");
-        saveAsMenuItem.addActionListener(actionListener);
-        closeMenuItem = new JMenuItem("Close");
-        closeMenuItem.addActionListener(actionListener);
-        fileMenu.add(newMenuItem);
-        fileMenu.add(loadAssemblyMenuItem);
-        fileMenu.add(saveAssemblyMenuItem);
-        fileMenu.add(saveAsMenuItem);
-        fileMenu.addSeparator();
-        fileMenu.add(closeMenuItem);
-
-        JMenu toolsMenu = new JMenu("Tools");
-        importTileSetMenuItem = new JMenuItem("Import Tile Set");
-        importTileSetMenuItem.addActionListener(actionListener);
-        tileSetEditorMenuItem = new JMenuItem("Tile Set Editor");
-        tileSetEditorMenuItem.addActionListener(actionListener);
-        toolsMenu.add(importTileSetMenuItem);
-        toolsMenu.add(tileSetEditorMenuItem);
-
-        JMenu editMenu = new JMenu("Edit");
-        undoMenuItem = new JMenuItem("Undo");
-        undoMenuItem.addActionListener(actionListener);
-        redoMenuItem = new JMenuItem("Redo");
-        redoMenuItem.addActionListener(actionListener);
-        editMenu.add(undoMenuItem);
-        editMenu.add(redoMenuItem);
-
-        JMenu tileSystemMenu = new JMenu("Tile System");
-        seedCreatorMenuItem = new JMenuItem("Seed Creator");
-        seedCreatorMenuItem.addActionListener(actionListener);
-        tileSystemOptionsMenuItem = new JMenuItem("Options");
-        tileSystemOptionsMenuItem.addActionListener(actionListener);
-        tileSystemMenu.add(seedCreatorMenuItem);
-        tileSystemMenu.add(tileSystemOptionsMenuItem);
-
-        mainMenu.add(fileMenu);
-        mainMenu.add(editMenu);
-        mainMenu.add(toolsMenu);
-        mainMenu.add(tileSystemMenu);
-        setJMenuBar(mainMenu);
-    }
-
-    private void addStatusBar(){
-        JPanel statusPanel = new JPanel();
-        statusPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
-        add(statusPanel, BorderLayout.SOUTH);
-        statusPanel.setPreferredSize(new Dimension(getWidth(), 24));
-        statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.X_AXIS));
-        statusLabel.setText("");
-        statusLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        statusPanel.add(statusLabel);
     }
 
     private void resetFrontier(){
@@ -176,7 +70,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
 
     private void updateAttachTime(double time){
         String time_str = String.format("%.4f", time);
-        statusLabel.setText("Attachment took " + time_str + "ms");
+        mainMenu.statusLabel.setText("Attachment took " + time_str + "ms");
     }
 
     private void step(int i){
@@ -227,15 +121,15 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         actionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(e.getSource().equals(next)) {
+                if(e.getSource().equals(mainMenu.next)) {
                     if(!frontier.isEmpty()) {
                         step(1);
                     }
-                }else if(e.getSource().equals(prev)) {
+                }else if(e.getSource().equals(mainMenu.prev)) {
                     if(!assembly.getAttached().isEmpty()) {
                         step(-1);
                     }
-                }else if(e.getSource().equals(play)){
+                }else if(e.getSource().equals(mainMenu.play)){
                     while(!frontier.isEmpty()){
                         resetFrontier();
                         assembly.attach();
@@ -249,15 +143,15 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                             System.out.println(ie.getMessage());
                         }
                     }
-                }else if(e.getSource().equals(fastb)){
+                }else if(e.getSource().equals(mainMenu.fastb)){
                     step(-2);
-                }else if(e.getSource().equals(fastf)){
+                }else if(e.getSource().equals(mainMenu.fastf)){
                     step(2);
-                } else if (e.getSource().equals(newMenuItem)) {
+                } else if (e.getSource().equals(mainMenu.newMenuItem)) {
                     System.out.println("new assembly");
                     // creates a new assembly frame when "new assembly button is clicked".
                     TestCanvasFrame tcf = new TestCanvasFrame(800, 600, new Assembly());
-                } else if (e.getSource().equals(loadAssemblyMenuItem)) {
+                } else if (e.getSource().equals(mainMenu.loadAssemblyMenuItem)) {
                     JFileChooser fileChooser = new JFileChooser();
                     fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
                     int result = fileChooser.showOpenDialog(getParent());
@@ -294,7 +188,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                             javax.swing.JOptionPane.showMessageDialog(null, "Failed to load assembly");
                         }
                     }
-                } else if (e.getSource().equals(closeMenuItem)){
+                } else if (e.getSource().equals(mainMenu.closeMenuItem)){
                     int result = JOptionPane.showConfirmDialog(
                             null,
                             "Are you sure you want to exit the application?",
@@ -303,17 +197,28 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
 
                     if (result == JOptionPane.YES_OPTION)
                         System.exit(0);
-                } else if (e.getSource().equals(tileSetEditorMenuItem)){
+                } else if (e.getSource().equals(mainMenu.tileSetEditorMenuItem)){
                     tileEditorWindow.setVisible(true);
                 }
             }
         };
 
-        next.addActionListener(actionListener);
-        prev.addActionListener(actionListener);
-        play.addActionListener(actionListener);
-        fastf.addActionListener(actionListener);
-        fastb.addActionListener(actionListener);
+        mainMenu.next.addActionListener(actionListener);
+        mainMenu.prev.addActionListener(actionListener);
+        mainMenu.play.addActionListener(actionListener);
+        mainMenu.fastf.addActionListener(actionListener);
+        mainMenu.fastb.addActionListener(actionListener);
+        mainMenu.newMenuItem.addActionListener(actionListener);
+        mainMenu.loadAssemblyMenuItem.addActionListener(actionListener);
+        mainMenu.saveAssemblyMenuItem.addActionListener(actionListener);
+        mainMenu.saveAsMenuItem.addActionListener(actionListener);
+        mainMenu.closeMenuItem.addActionListener(actionListener);
+        mainMenu.importTileSetMenuItem.addActionListener(actionListener);
+        mainMenu.tileSetEditorMenuItem.addActionListener(actionListener);
+        mainMenu.undoMenuItem.addActionListener(actionListener);
+        mainMenu.redoMenuItem.addActionListener(actionListener);
+        mainMenu.seedCreatorMenuItem.addActionListener(actionListener);
+        mainMenu.tileSystemOptionsMenuItem.addActionListener(actionListener);
     }
 
 
@@ -379,7 +284,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
     private void removeCurrentFrontierAttachment(){
         if (currentFrontierAttachment != null) {
             assembly.removePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().x, currentFrontierAttachment.getOffset().y);
-            statusLabel.setText(statusLabelPreviousText);
+            mainMenu.statusLabel.setText(mainMenu.statusLabelPreviousText);
         } else {
             assembly.Grid.remove(frontierClickPoint);
         }
@@ -391,7 +296,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
             currentFrontierAttachment = frontierAttachments.get(index);
             double probability = frontier.getProbability(currentFrontierAttachment);
             String status_str = String.format("Probability of Attachment: %.4f", probability);
-            statusLabel.setText(status_str);
+            mainMenu.statusLabel.setText(status_str);
             assembly.placePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().x, currentFrontierAttachment.getOffset().y);
         }
     }
@@ -463,14 +368,14 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         frontierAttachments = null;
         frontierIndex = 0;
         currentFrontierAttachment=null;
-        statusLabel.setText(statusLabelPreviousText);
+        mainMenu.statusLabel.setText(mainMenu.statusLabelPreviousText);
         canvas.reset();
     }
 
     private void processFrontierClick(Point clicked, Tile clicked_tile){
         PolyTile clicked_pt = clicked_tile.getParent();
         if(!frontierClick){
-            statusLabelPreviousText = statusLabel.getText();
+            mainMenu.statusLabelPreviousText = mainMenu.statusLabel.getText();
         }else{
             placeFrontierOnGrid();
         }

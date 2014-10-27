@@ -89,7 +89,7 @@ public class Drawer {
         }
 
         public static void drawTile(Graphics2D g, Tile tile, int x, int y, int diameter) {
-
+            g.setFont(g.getFont().deriveFont((float)(diameter/6)));
             Rectangle clip = g.getClipBounds();
 
             if(x>clip.width + diameter || x < 0 -diameter || y>clip.height + diameter || y < 0 -diameter)
@@ -147,7 +147,7 @@ public class Drawer {
 
 
 //            //draw tile label
-            g.setFont(g.getFont().deriveFont((float)(diameter/6)));
+
 //            // consider the blank space between the render lines and the start of the first baseline pixel of the string
 //            int labelXShift =(int) Math.ceil(((int)Math.ceil(stringBounds.getWidth()) - labelBounds.width) /2);
 //
