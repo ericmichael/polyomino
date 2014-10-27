@@ -5,9 +5,16 @@ import javafx.util.Pair;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -229,6 +236,42 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
                     clearLists();
                     repaint();
 
+                }else if (e.getSource() == exportMenuItem){
+                    //export
+                    System.out.println("export");
+                    TileConfiguration tileConfig = new TileConfiguration();
+                    for (PolyTile polyTile : polytileList) {
+                        tileConfig.addTileType(polyTile);
+                    }
+
+                    //reuse glue functions for now
+                    for (Map.Entry<Pair<String, String>, Integer> glF : tileSystem.getGlueFunction().entrySet()) {
+                        String gLabelL = glF.getKey().getKey();
+                        String gLabelR = glF.getKey().getValue();
+                        int strentgh = glF.getValue();
+                        tileConfig.addGlueFunction(gLabelL, gLabelR, strentgh);
+                    }
+
+                    try {
+                        JFileChooser fc = new JFileChooser();
+                        fc.setFileFilter(new FileNameExtensionFilter(
+                                "XML Document (*.xml)", "xml"));
+                        if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                            File file = fc.getSelectedFile();
+
+                            if(!file.getAbsolutePath().toLowerCase().endsWith(".xml")){
+                                file = new File(file + ".xml");
+                            }
+                            JAXBContext jaxbContext = JAXBContext.newInstance(TileConfiguration.class);
+                            Marshaller marshaller = jaxbContext.createMarshaller();
+                            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                            marshaller.marshal(tileConfig, file);
+                        }
+                    }catch(JAXBException jaxbe){
+
+                    }
+
+
                 } else if (e.getSource() == updateAssemblyMenuItem) {
                     TileConfiguration tileConfig = new TileConfiguration();
                     for (PolyTile polyTile : polytileList) {
@@ -335,7 +378,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
                     }
 
                     lastSelectionIndex = polyJList.getSelectedIndex();
-                    System.out.println("selection changed");
+                    System.out.println("selection changed, pt");
                 }
                 repaint();
             }
