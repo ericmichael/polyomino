@@ -210,6 +210,17 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                         System.exit(0);
                 } else if (e.getSource().equals(mainMenu.tileSetEditorMenuItem)){
                     tileEditorWindow.setVisible(true);
+                } else if (e.getSource().equals(mainMenu.setTemperatureMenuItem)){
+                    String temperatureString = JOptionPane.showInputDialog(null, "Set the system's temperature", "2");
+                    int temperature = Integer.parseInt(temperatureString);
+                    assembly.getTileSystem().setTemperature(temperature);
+                    resetFrontier();
+                    frontier.clear();
+                    canvas.reset();
+                    frontier = assembly.calculateFrontier();
+                    placeFrontierOnGrid();
+                    drawGrid();
+                    System.out.println("Change in temperature detected. Beware of errors.");
                 }
             }
         };
@@ -230,11 +241,11 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         mainMenu.redoMenuItem.addActionListener(actionListener);
         mainMenu.seedCreatorMenuItem.addActionListener(actionListener);
         mainMenu.tileSystemOptionsMenuItem.addActionListener(actionListener);
+        mainMenu.setTemperatureMenuItem.addActionListener(actionListener);
     }
 
 
-    public void drawGrid()
-    {
+    public void drawGrid()    {
         //PlaceFrontierOnGrid();
         canvas.drawGrid(assembly.Grid);
         repaint();
@@ -268,8 +279,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         }
     }
 
-    public void zoomInDraw()
-    {
+    public void zoomInDraw() {
         int tileDiameter = canvas.getTileDiameter();
         if(tileDiameter< width/2)
             canvas.setTileDiameter((int)(tileDiameter*1.25));
@@ -279,8 +289,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         placeFrontierOnGrid();
         drawGrid();
     }
-    public void zoomOutDraw()
-    {
+    public void zoomOutDraw() {
         int tileDiameter = canvas.getTileDiameter();
         if(tileDiameter > 10) {
             canvas.setTileDiameter((int) (tileDiameter * .75));
@@ -292,7 +301,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         drawGrid();
     }
 
-    private void removeCurrentFrontierAttachment(){
+    private void removeCurrentFrontierAttachment() {
         if (currentFrontierAttachment != null) {
             assembly.removePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().x, currentFrontierAttachment.getOffset().y);
             mainMenu.statusLabel.setText(mainMenu.statusLabelPreviousText);
@@ -302,7 +311,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         canvas.reset();
     }
 
-    private void addFrontierAttachment(int index){
+    private void addFrontierAttachment(int index) {
         if( frontierAttachments.size()>0){
             currentFrontierAttachment = frontierAttachments.get(index);
             double probability = frontier.getProbability(currentFrontierAttachment);
@@ -335,8 +344,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
             }
             zoomOutDraw();
         }
-        else if(e.getWheelRotation() == -1)
-        {
+        else if(e.getWheelRotation() == -1) {
             if(frontierClick){
                 removeCurrentFrontierAttachment();
                 if(currentFrontierAttachment==null) {
