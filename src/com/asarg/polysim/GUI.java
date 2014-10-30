@@ -25,6 +25,7 @@ public class GUI extends JMenuBar {
     JMenuItem redoMenuItem = new JMenuItem("Redo");
 
     JMenuItem seedCreatorMenuItem = new JMenuItem("Seed Creator");
+    JMenuItem setTemperatureMenuItem = new JMenuItem("Set Temperature");
     JMenuItem tileSystemOptionsMenuItem = new JMenuItem("Options");
 
     //tool bar items
@@ -52,15 +53,10 @@ public class GUI extends JMenuBar {
     }
     private void addMenuBars(){
         JMenu fileMenu = new JMenu("File");
-        newMenuItem = new JMenuItem("New Assembly");
         newMenuItem.addActionListener(actionListener);
-        loadAssemblyMenuItem = new JMenuItem("Load");
         loadAssemblyMenuItem.addActionListener(actionListener);
-        saveAssemblyMenuItem = new JMenuItem("Save");
         saveAssemblyMenuItem.addActionListener(actionListener);
-        saveAsMenuItem = new JMenuItem("Save as...");
         saveAsMenuItem.addActionListener(actionListener);
-        closeMenuItem = new JMenuItem("Close");
         closeMenuItem.addActionListener(actionListener);
         fileMenu.add(newMenuItem);
         fileMenu.add(loadAssemblyMenuItem);
@@ -70,25 +66,21 @@ public class GUI extends JMenuBar {
         fileMenu.add(closeMenuItem);
 
         JMenu toolsMenu = new JMenu("Tools");
-        importTileSetMenuItem = new JMenuItem("Import Tile Set");
         importTileSetMenuItem.addActionListener(actionListener);
-        tileSetEditorMenuItem = new JMenuItem("Tile Set Editor");
         tileSetEditorMenuItem.addActionListener(actionListener);
+        setTemperatureMenuItem.addActionListener(actionListener);
         toolsMenu.add(importTileSetMenuItem);
         toolsMenu.add(tileSetEditorMenuItem);
+        toolsMenu.add(setTemperatureMenuItem);
 
         JMenu editMenu = new JMenu("Edit");
-        undoMenuItem = new JMenuItem("Undo");
         undoMenuItem.addActionListener(actionListener);
-        redoMenuItem = new JMenuItem("Redo");
         redoMenuItem.addActionListener(actionListener);
         editMenu.add(undoMenuItem);
         editMenu.add(redoMenuItem);
 
         JMenu tileSystemMenu = new JMenu("Tile System");
-        seedCreatorMenuItem = new JMenuItem("Seed Creator");
         seedCreatorMenuItem.addActionListener(actionListener);
-        tileSystemOptionsMenuItem = new JMenuItem("Options");
         tileSystemOptionsMenuItem.addActionListener(actionListener);
         tileSystemMenu.add(seedCreatorMenuItem);
         tileSystemMenu.add(tileSystemOptionsMenuItem);
