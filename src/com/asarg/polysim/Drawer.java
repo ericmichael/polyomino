@@ -92,7 +92,7 @@ public class Drawer {
             g.setFont(g.getFont().deriveFont((float)(diameter/6)));
             Rectangle clip = g.getClipBounds();
 
-            if(x>clip.width + diameter || x < 0 -diameter || y>clip.height + diameter || y < 0 -diameter)
+            if (x > clip.width + diameter || x < 0 -diameter || y > clip.height + diameter || y < 0 -diameter)
                 return;
             AffineTransform gOriginalATransform = g.getTransform();
 
@@ -144,8 +144,6 @@ public class Drawer {
                 g.drawString(northGlue, x + diameter/2 - font.stringWidth(northGlue)/2, y + diameter/8) ;
             }
 
-
-
 //            //draw tile label
 
 //            // consider the blank space between the render lines and the start of the first baseline pixel of the string
@@ -157,12 +155,16 @@ public class Drawer {
 
             //now a black border with thickness based on diameter.
             g.drawRect(x, y, diameter, diameter);
-
-
-
-
         }
 
+        public static void drawHexTile(Graphics2D g, Tile tile, int x, int y, int diameter){
+            Polygon sprite = new Polygon();
+            for(int i=0; i<6; i++) {
+                sprite.addPoint(x+(diameter+10)/2 + (int)((diameter+10)*Math.cos(i*2*Math.PI/6)), y + (int)((diameter+10)*Math.sin(i*2*Math.PI/6)));
+            }
+            g.drawRect(x, y, diameter, diameter);
+            g.drawPolygon(sprite);
+        }
 
         public static void drawTiles(Graphics2D g, Set<Map.Entry<Point, Tile>> tiles, int diameter, Point offset) {
 
@@ -171,7 +173,7 @@ public class Drawer {
                 Tile tile = mep.getValue();
 
                 drawTile(g, tile, pt.x * diameter + offset.x - diameter / 2, -pt.y * diameter + offset.y - diameter / 2, diameter);
-
+                drawHexTile(g, tile, pt.x * diameter + offset.x - diameter / 2, -pt.y * diameter + offset.y - diameter / 2, diameter);
             }
 
          }
