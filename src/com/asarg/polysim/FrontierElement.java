@@ -7,8 +7,10 @@ package com.asarg.polysim;
      and the the direction the tile to be matched is facing.
 */
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.awt.*;
 
+@XmlRootElement
 public class FrontierElement {
     private Point tileWithGlue;
     private Point polytileOffset;

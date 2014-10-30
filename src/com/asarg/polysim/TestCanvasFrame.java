@@ -3,15 +3,21 @@ package com.asarg.polysim;
 
 
 
+import javafx.util.Pair;
+
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class TestCanvasFrame extends JFrame implements MouseWheelListener, MouseMotionListener, MouseListener,KeyListener, ComponentListener{
 
@@ -157,38 +163,43 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                     int result = fileChooser.showOpenDialog(getParent());
                     if (result == JFileChooser.APPROVE_OPTION) {
                         File selectedFile = fileChooser.getSelectedFile();
-                        File tileConfig;
-                        try {
-                            tileConfig = new File(selectedFile.getParentFile() + "tileconfig.xml");
-                        }
-                        catch(Exception exc){
-                            tileConfig = null;
-                        }
+
                         try {
                             JAXBContext jaxbContext = JAXBContext.newInstance(Assembly.class);
                             Unmarshaller unmarshaller;
                             unmarshaller = jaxbContext.createUnmarshaller();
                             assembly = (Assembly) unmarshaller.unmarshal(selectedFile);
-                            if(tileConfig!=null){
-                                TileConfiguration tc;
-
-                                jaxbContext = JAXBContext.newInstance(TileConfiguration.class);
-                                unmarshaller = jaxbContext.createUnmarshaller();
-                                tc = (TileConfiguration) unmarshaller.unmarshal(new File("./Examples/RNG_ATAM/tileconfig.xml"));
-
-                                assembly.getTileSystem().loadTileConfiguration(tc);
-
-                                for(PolyTile p : assembly.getTileSystem().getTileTypes()) {
-                                    p.setGlues();
-                                }
-                            }
 
                             TestCanvasFrame tcf = new TestCanvasFrame(800, 600, assembly);
                         } catch (javax.xml.bind.JAXBException jaxbe) {
                             javax.swing.JOptionPane.showMessageDialog(null, "Failed to load assembly");
                         }
                     }
-                } else if (e.getSource().equals(mainMenu.closeMenuItem)){
+                } else if(e.getSource().equals(mainMenu.saveAsMenuItem)){
+                    //export
+                    System.out.println("export");
+
+                    try {
+                        JFileChooser fc = new JFileChooser();
+                        fc.setFileFilter(new FileNameExtensionFilter(
+                                "XML Document (*.xml)", "xml"));
+                        if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                            File file = fc.getSelectedFile();
+
+                            if(!file.getAbsolutePath().toLowerCase().endsWith(".xml")){
+                                file = new File(file + ".xml");
+                            }
+                            JAXBContext jaxbContext = JAXBContext.newInstance(Assembly.class);
+                            Marshaller marshaller = jaxbContext.createMarshaller();
+                            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                            marshaller.marshal(assembly, file);
+                        }
+                    }catch(JAXBException jaxbe){
+
+                    }
+
+                }
+                else if (e.getSource().equals(mainMenu.closeMenuItem)){
                     int result = JOptionPane.showConfirmDialog(
                             null,
                             "Are you sure you want to exit the application?",

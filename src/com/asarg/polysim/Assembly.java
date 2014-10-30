@@ -46,6 +46,8 @@ public class Assembly {
     @XmlElement(name = "OpenWestGlues")
     @XmlJavaTypeAdapter(OpenGlueXmlAdapter.class)
     HashMap<Point, String> openWestGlues = new HashMap<Point, String>();
+
+    @XmlTransient
     ArrayList<FrontierElement> possibleAttach = new ArrayList<FrontierElement>();
 
     public Assembly(){
