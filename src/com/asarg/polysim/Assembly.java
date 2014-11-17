@@ -6,10 +6,12 @@ import com.asarg.polysim.xml.GridXmlAdapter;
 import com.asarg.polysim.xml.OpenGlueXmlAdapter;
 import javafx.util.Pair;
 
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 @XmlRootElement(name = "Assembly")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -29,22 +31,18 @@ public class Assembly {
     // frontier list: calculated, increased, decreased, and changed here.
     @XmlTransient
     private Frontier frontier;
-    @XmlTransient
-    private ArrayList<FrontierElement> attached = new ArrayList<FrontierElement>();
 
+    @XmlElement(name = "History")
+    private History attached = new History();
 
     //Open glue ends stored by their coordinate
-    @XmlElement(name = "OpenNorthGlues")
-    @XmlJavaTypeAdapter(OpenGlueXmlAdapter.class)
+    @XmlTransient
     HashMap<Point, String> openNorthGlues = new HashMap<Point, String>();
-    @XmlElement(name = "OpenEastGlues")
-    @XmlJavaTypeAdapter(OpenGlueXmlAdapter.class)
+    @XmlTransient
     HashMap<Point, String> openEastGlues = new HashMap<Point, String>();
-    @XmlElement(name = "OpenSouthGlues")
-    @XmlJavaTypeAdapter(OpenGlueXmlAdapter.class)
+    @XmlTransient
     HashMap<Point, String> openSouthGlues = new HashMap<Point, String>();
-    @XmlElement(name = "OpenWestGlues")
-    @XmlJavaTypeAdapter(OpenGlueXmlAdapter.class)
+    @XmlTransient
     HashMap<Point, String> openWestGlues = new HashMap<Point, String>();
 
     @XmlTransient
@@ -113,10 +111,9 @@ public class Assembly {
             Point tmp = new Point(t.getLocation());
             tmp.translate(x, y);
             Tile existing = Grid.get(tmp);
+
             if (existing.samePolyTile(p)) {
-                if (existing.samePolyTile(p)) {
-                    Grid.remove(tmp);
-                } else System.out.println("not removing polytile");
+                Grid.remove(tmp);
             }
         }
     }
@@ -196,8 +193,8 @@ public class Assembly {
         fillPossibleList(t, WEST);
     }
 
-    public ArrayList<FrontierElement> getAttached(){
-        return attached;
+    public List<FrontierElement> getAttached(){
+        return attached.getHistory();
     }
 
     // calculate frontier
@@ -291,7 +288,7 @@ public class Assembly {
         fe.setAttachTime(getDistribution(frontier.getTotalConcentration()));
         placePolytile(fe.getPolyTile(), fe.getOffset().x, fe.getOffset().y);
         frontier.remove(fe);
-        attached.add(fe);
+        attached.getHistory().add(fe);
 
         cleanUp();
         getOpenGlues();
@@ -302,15 +299,15 @@ public class Assembly {
         fe.setAttachTime(0);
         placePolytile(fe.getPolyTile().getCopy(), fe.getOffset().x, fe.getOffset().y);
         frontier.remove(fe);
-        attached.add(fe);
+        attached.getHistory().add(fe);
         cleanUp();
         getOpenGlues();
         return fe.getAttachTime();
     }
 
     public void detach(){
-        if(!attached.isEmpty()) {
-            FrontierElement last = attached.remove(attached.size() - 1);
+        if(!attached.getHistory().isEmpty()) {
+            FrontierElement last = attached.getHistory().remove(attached.getHistory().size() - 1);
             removePolytile(last.getPolyTile(), last.getOffset().x, last.getOffset().y);
             cleanUp();
             getOpenGlues();
@@ -392,5 +389,28 @@ public class Assembly {
         }
 
         return matrixString.toString();
+    }
+
+    public void printDebugInformation(){
+        System.out.println("--- Debug Information ----");
+        System.out.println("Grid Size: " + Grid.size());
+        System.out.println("Frontier Size: " + frontier.size());
+        System.out.println("Attached List Size: " + attached.getHistory().size());
+        System.out.println("Possible Attached List Size: "+ possibleAttach.size());
+        System.out.println("Open North Glues: "+ openNorthGlues.size());
+        System.out.println("Open East Glues: "+ openEastGlues.size());
+        System.out.println("Open South Glues: "+ openSouthGlues.size());
+        System.out.println("Open West Glues: "+ openWestGlues.size());
+
+
+        System.out.println("--------------------------");
+
+        tileSystem.printDebugInformation();
+        frontier.printDebugInformation();
+    }
+
+    public void afterUnmarshal(Unmarshaller u, Object parent){
+        changeTileSystem(getTileSystem());
+        getOpenGlues();
     }
 }

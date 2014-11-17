@@ -7,17 +7,37 @@ package com.asarg.polysim;
      and the the direction the tile to be matched is facing.
 */
 
+import com.asarg.polysim.xml.PointXmlAdapter;
+
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.awt.*;
 
-@XmlRootElement
+@XmlRootElement(name = "FrontierElement")
 public class FrontierElement {
+    @XmlElement(name = "Location")
+    @XmlJavaTypeAdapter(PointXmlAdapter.class)
     private Point tileWithGlue;
+
+    @XmlElement(name = "Offset")
+    @XmlJavaTypeAdapter(PointXmlAdapter.class)
     private Point polytileOffset;
+
+    @XmlElement(name = "PolyTile")
     private PolyTile polyTile;
+
+    @XmlElement(name = "Direction")
     private int direction;
+
+    @XmlElement(name = "IsAttachment")
     private boolean attachment;
+
+    @XmlElement(name = "AttachTime")
     private double attachTime = -1;
+
+    public FrontierElement(){}
 
     public FrontierElement(Point tg, Point poff, PolyTile p,int d ){
         tileWithGlue = tg;
@@ -27,7 +47,7 @@ public class FrontierElement {
         attachment = true;
     }
 
-    public FrontierElement(Point tg, Point poff, PolyTile p,int d, boolean a ){
+    public FrontierElement(Point tg, Point poff, PolyTile p, int d, boolean a ){
         tileWithGlue = tg;
         polytileOffset = poff;
         polyTile = p;
@@ -53,9 +73,12 @@ public class FrontierElement {
         // if both the offset and polytile match, it's the same placement.
         return true;
     }
+
+    @XmlTransient
     public double getAttachTime(){
         return attachTime;
     }
+
     public void setAttachTime(double t){
         attachTime = t;
     }

@@ -21,7 +21,12 @@ public class Tile {
     // each point in coordinates has 4 edges with a label and a direction
     private Point tileLocation;
     // glue labels are 4 field array of strings: 0=N, 1=E, 2=S, 3=W
-    private String[] glueLabels = new String[4];
+
+    private String glueN;
+    private String glueE;
+    private String glueS;
+    private String glueW;
+
     private String label = new String();
     // tiles have an id that references the polyTile they belong to.
     private PolyTile polyTile;
@@ -35,17 +40,17 @@ public class Tile {
 
     public Tile(int x, int y, PolyTile parent)
     {
-        glueLabels[0]=null;
-        glueLabels[1]=null;
-        glueLabels[2]=null;
-        glueLabels[3]=null;
+        glueN=null;
+        glueE=null;
+        glueS=null;
+        glueW=null;
         tileLocation = new Point(x,y);
         polyTile= parent;
 
     }
     public Tile( int x, int y, String[] gl, PolyTile parent) {
         tileLocation = new Point(x, y);
-        glueLabels = gl;
+        changeTileGlue(gl);
         polyTile = parent;
     }
 
@@ -70,12 +75,13 @@ public class Tile {
         return polyTile.getColor();
     }
 
-    public boolean samePolyTile(PolyTile p){
-        return p == polyTile;
-    }
+    public boolean samePolyTile(PolyTile p){ return p.equals(polyTile); }
 
     public void changeTileGlue(String[] gl){
-        glueLabels = gl;
+        setGlueN(gl[0]);
+        setGlueE(gl[1]);
+        setGlueS(gl[2]);
+        setGlueW(gl[3]);
     }
 
     public void setTileLocation(int x, int y){
@@ -89,42 +95,44 @@ public class Tile {
         return tileLocation;
     }
     public void setLocation(Point p) {
-        System.out.println("SDF");
         if(tileLocation!=null)
                tileLocation = p;
         else tileLocation=new Point(p.x, p.y);
     }
 
     public String[] getGlueLabels() {
-        return glueLabels;
+        String glues[] = new String[4];
+        glues[0]= glueN;
+        glues[1]= glueE;
+        glues[2]= glueS;
+        glues[3]= glueW;
+        return glues;
     }
     @XmlElement(name = "NorthGlue")
-    public String getGlueN() {
-        return glueLabels[0];
-    }
+    public String getGlueN() {return glueN;}
     public void setGlueN(String g) {
-        glueLabels[0] = g;
+        glueN = g;
     }
     @XmlElement(name = "EastGlue")
     public String getGlueE() {
-        return glueLabels[1];
+        return glueE;
     }
     public void setGlueE(String g) {
-        glueLabels[1] = g;
+        glueE = g;
     }
     @XmlElement(name = "SouthGlue")
     public String getGlueS() {
-        return glueLabels[2];
+        return glueS;
     }
     public void setGlueS(String g) {
-        glueLabels[2] = g;
+        glueS = g;
     }
     @XmlElement(name = "WestGlue")
     public String getGlueW() {
-        return glueLabels[3];
+        return glueW;
     }
     public void setGlueW(String g) {
-        glueLabels[3] = g;
+        glueW = g;
     }
 
     public boolean equals(Tile toCompare){
@@ -132,7 +140,7 @@ public class Tile {
         if (!tileLocation.equals(toCompare.getLocation()))
             return false;
         //if (!glueLabels.equals(toCompare.getGlueLabels()))
-        if (!Arrays.deepEquals(toCompare.getGlueLabels(), glueLabels))
+        if (!Arrays.deepEquals(toCompare.getGlueLabels(), getGlueLabels()))
             return false;
 
         return true;

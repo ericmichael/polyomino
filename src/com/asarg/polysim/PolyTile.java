@@ -4,6 +4,7 @@ package com.asarg.polysim;
     TODO: Check connected tiles in the polytile and change their strength to infinite
 */
 
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -260,11 +261,11 @@ public class PolyTile {
     public void setConcentration(double c){
         concentration = c;
         count = 0;
-        System.out.println("concentration changed to "+c);
+        //System.out.println("concentration changed to "+c);
     }
     public void setCount(int c){
         count = c;
-        System.out.println("concentration changed to "+c);
+        //System.out.println("concentration changed to "+c);
     }
 
     public void changeName(String n){
@@ -298,28 +299,23 @@ public class PolyTile {
     public boolean equals(PolyTile toCompare){
         // check if the simple polytile data is the same
         if (polyName != null && toCompare.getPolyName() != null) {
-            if (concentration != toCompare.getConcentration())
-                return false;
-            if (!polyName.equals(toCompare.getPolyName()))
-                return false;
-            if (count != toCompare.getCount())
-                return false;
+            if (concentration != toCompare.getConcentration()) return false;
+            if (!polyName.equals(toCompare.getPolyName())) return false;
+            if (count != toCompare.getCount()) return false;
         }
 
         // check if all tiles in the polytile are equal, by looking through their coordinates
         for (Tile t : tiles){
             Point tLoc = t.getLocation();
             Tile t2 = toCompare.getTile((int)tLoc.getX(), (int)tLoc.getY());
-            if (!t.equals(t2))
-                return false;
+            if (!t.equals(t2)) return false;
         }
 
         // the coordinates of both polytiles need to be checked: do the same for the points in the other polytile
         for (Tile t : toCompare.tiles){
             Point tLoc = t.getLocation();
             Tile t2 = this.getTile((int)tLoc.getX(), (int)tLoc.getY());
-            if (!t.equals(t2))
-                return false;
+            if (!t.equals(t2)) return false;
         }
         return true;
     }
@@ -350,5 +346,9 @@ public class PolyTile {
         }
 
         return temp;
+    }
+
+    public void afterUnmarshal(Unmarshaller u, Object parent){
+        setGlues();
     }
 }

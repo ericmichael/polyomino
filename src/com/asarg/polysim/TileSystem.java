@@ -4,9 +4,11 @@ Tile system is meant to be the container where all different types of polytiles 
  Glue function is also called from here.
  */
 
+import com.asarg.polysim.xml.GlueXmlAdapter;
 import javafx.util.Pair;
 
 import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.InvalidObjectException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,11 +24,13 @@ public class TileSystem {
     // temperature of the system, bonds must be of at least this value or they break.
     @XmlAttribute(name = "Temperature")
     private int temperature;
+
     // glue function to determine strength between two labels
-    @XmlTransient
+    @XmlElement(name = "GlueFunction")
+    @XmlJavaTypeAdapter(GlueXmlAdapter.class)
     private HashMap<Pair<String, String>, Integer> glueFunction = new HashMap<Pair<String, String>, Integer>();
     // list of polytiles: data structure should be changed to something that would be of better performance
-    @XmlTransient
+    @XmlElement(name = "TileType")
     private Set<PolyTile> tileTypes = new HashSet<PolyTile>();
     // used to set weight option: 0 = none (assumed equal concentrations), 1 = concentration, 2 = tile count
     @XmlAttribute(name = "WeightingOption")
@@ -172,5 +176,14 @@ public class TileSystem {
         System.out.println("Size after loading tile config" + tileTypes.size());
 
         return true;
+    }
+
+    public void printDebugInformation(){
+        System.out.println("--- Debug Information for TS----");
+        System.out.println("Temperature: " + temperature);
+        System.out.println("Weight Option: " + weightOption);
+        System.out.println("Polytile Types Size: " + tileTypes.size());
+        System.out.println("Glue Function Size:  "+ glueFunction.size());
+        System.out.println("--------------------------");
     }
 }

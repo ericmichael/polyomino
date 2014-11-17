@@ -2,13 +2,13 @@ package com.asarg.polysim;
 
 import javafx.util.Pair;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
- * Created by ctchalk on 8/21/2014.
- */
-public class Frontier extends ArrayList<FrontierElement> {
+public class Frontier extends ArrayList<FrontierElement>{
     private TileSystem tileSystem;
 
     Frontier( TileSystem parent ) {
@@ -118,5 +118,11 @@ public class Frontier extends ArrayList<FrontierElement> {
             }
         }
         return totalConcentration;
+    }
+
+    public void printDebugInformation(){
+        System.out.println("### Frontier Information");
+        System.out.println("Frontier Size: " + this.size());
+        this.tileSystem.printDebugInformation();
     }
 }

@@ -178,6 +178,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                 } else if(e.getSource().equals(mainMenu.saveAsMenuItem)){
                     //export
                     System.out.println("export");
+                    removeFrontierFromGrid();
 
                     try {
                         JFileChooser fc = new JFileChooser();
@@ -193,10 +194,13 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                             Marshaller marshaller = jaxbContext.createMarshaller();
                             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
                             marshaller.marshal(assembly, file);
+                            System.out.println("done");
                         }
                     }catch(JAXBException jaxbe){
-
+                        System.out.println(jaxbe.getMessage());
+                        jaxbe.printStackTrace();
                     }
+                    placeFrontierOnGrid();
 
                 }
                 else if (e.getSource().equals(mainMenu.closeMenuItem)){
