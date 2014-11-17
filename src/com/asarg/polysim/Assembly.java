@@ -3,7 +3,6 @@
  */
 package com.asarg.polysim;
 import com.asarg.polysim.xml.GridXmlAdapter;
-import com.asarg.polysim.xml.OpenGlueXmlAdapter;
 import javafx.util.Pair;
 
 import javax.xml.bind.Unmarshaller;

@@ -1,10 +1,5 @@
 package com.asarg.polysim;
 
-import javafx.util.Pair;
-
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -25,7 +20,6 @@ public class Frontier extends ArrayList<FrontierElement>{
 
     @Override
     public boolean remove(Object o) {
-        FrontierElement frontierElement = (FrontierElement) o;
         return super.remove(o);
     }
 
