@@ -6,182 +6,35 @@
             <GridLocation x="0" y="0"/>
             <Tile>
                 <Location x="0" y="0"/>
-                <Color>5133AB</Color>
+                <Color>FF9933</Color>
+                <NorthGlue>N</NorthGlue>
+                <WestGlue>W</WestGlue>
             </Tile>
-            <ParentPolyTile Label="F" Color="5133AB">
+            <ParentPolyTile Label="seed" Color="5133AB">
                 <Tile>
+                    <Label>seed</Label>
                     <Location x="0" y="0"/>
-                    <Color>5133AB</Color>
-                </Tile>
-                <Tile>
-                    <Location x="0" y="-1"/>
-                    <Color>5133AB</Color>
-                </Tile>
-                <Tile>
-                    <Location x="-1" y="0"/>
-                    <Color>5133AB</Color>
-                </Tile>
-                <Tile>
-                    <Location x="0" y="1"/>
-                    <Color>5133AB</Color>
-                    <WestGlue>b</WestGlue>
-                </Tile>
-                <Tile>
-                    <Location x="1" y="1"/>
-                    <Color>5133AB</Color>
-                    <EastGlue>d</EastGlue>
-                </Tile>
-                <Concentration>-1.0</Concentration>
-                <Count>-1</Count>
-            </ParentPolyTile>
-        </GridTile>
-        <GridTile>
-            <GridLocation x="0" y="-1"/>
-            <Tile>
-                <Location x="0" y="-1"/>
-                <Color>5133AB</Color>
-            </Tile>
-            <ParentPolyTile Label="F" Color="5133AB">
-                <Tile>
-                    <Location x="0" y="0"/>
-                    <Color>5133AB</Color>
-                </Tile>
-                <Tile>
-                    <Location x="0" y="-1"/>
-                    <Color>5133AB</Color>
-                </Tile>
-                <Tile>
-                    <Location x="-1" y="0"/>
-                    <Color>5133AB</Color>
-                </Tile>
-                <Tile>
-                    <Location x="0" y="1"/>
-                    <Color>5133AB</Color>
-                    <WestGlue>b</WestGlue>
-                </Tile>
-                <Tile>
-                    <Location x="1" y="1"/>
-                    <Color>5133AB</Color>
-                    <EastGlue>d</EastGlue>
-                </Tile>
-                <Concentration>-1.0</Concentration>
-                <Count>-1</Count>
-            </ParentPolyTile>
-        </GridTile>
-        <GridTile>
-            <GridLocation x="-1" y="0"/>
-            <Tile>
-                <Location x="-1" y="0"/>
-                <Color>5133AB</Color>
-            </Tile>
-            <ParentPolyTile Label="F" Color="5133AB">
-                <Tile>
-                    <Location x="0" y="0"/>
-                    <Color>5133AB</Color>
-                </Tile>
-                <Tile>
-                    <Location x="0" y="-1"/>
-                    <Color>5133AB</Color>
-                </Tile>
-                <Tile>
-                    <Location x="-1" y="0"/>
-                    <Color>5133AB</Color>
-                </Tile>
-                <Tile>
-                    <Location x="0" y="1"/>
-                    <Color>5133AB</Color>
-                    <WestGlue>b</WestGlue>
-                </Tile>
-                <Tile>
-                    <Location x="1" y="1"/>
-                    <Color>5133AB</Color>
-                    <EastGlue>d</EastGlue>
-                </Tile>
-                <Concentration>-1.0</Concentration>
-                <Count>-1</Count>
-            </ParentPolyTile>
-        </GridTile>
-        <GridTile>
-            <GridLocation x="0" y="1"/>
-            <Tile>
-                <Location x="0" y="1"/>
-                <Color>5133AB</Color>
-                <WestGlue>b</WestGlue>
-            </Tile>
-            <ParentPolyTile Label="F" Color="5133AB">
-                <Tile>
-                    <Location x="0" y="0"/>
-                    <Color>5133AB</Color>
-                </Tile>
-                <Tile>
-                    <Location x="0" y="-1"/>
-                    <Color>5133AB</Color>
-                </Tile>
-                <Tile>
-                    <Location x="-1" y="0"/>
-                    <Color>5133AB</Color>
-                </Tile>
-                <Tile>
-                    <Location x="0" y="1"/>
-                    <Color>5133AB</Color>
-                    <WestGlue>b</WestGlue>
-                </Tile>
-                <Tile>
-                    <Location x="1" y="1"/>
-                    <Color>5133AB</Color>
-                    <EastGlue>d</EastGlue>
-                </Tile>
-                <Concentration>-1.0</Concentration>
-                <Count>-1</Count>
-            </ParentPolyTile>
-        </GridTile>
-        <GridTile>
-            <GridLocation x="1" y="1"/>
-            <Tile>
-                <Location x="1" y="1"/>
-                <Color>5133AB</Color>
-                <EastGlue>d</EastGlue>
-            </Tile>
-            <ParentPolyTile Label="F" Color="5133AB">
-                <Tile>
-                    <Location x="0" y="0"/>
-                    <Color>5133AB</Color>
-                </Tile>
-                <Tile>
-                    <Location x="0" y="-1"/>
-                    <Color>5133AB</Color>
-                </Tile>
-                <Tile>
-                    <Location x="-1" y="0"/>
-                    <Color>5133AB</Color>
-                </Tile>
-                <Tile>
-                    <Location x="0" y="1"/>
-                    <Color>5133AB</Color>
-                    <WestGlue>b</WestGlue>
-                </Tile>
-                <Tile>
-                    <Location x="1" y="1"/>
-                    <Color>5133AB</Color>
-                    <EastGlue>d</EastGlue>
+                    <Color>FF9933</Color>
+                    <NorthGlue>N</NorthGlue>
+                    <WestGlue>W</WestGlue>
                 </Tile>
                 <Concentration>-1.0</Concentration>
                 <Count>-1</Count>
             </ParentPolyTile>
         </GridTile>
     </AssemblyGrid>
-    <OpenNorthGlues/>
-    <OpenEastGlues>
+    <OpenNorthGlues>
         <Glue>
-            <Location x="1" y="1"/>
-            <GlueLabel>d</GlueLabel>
+            <Location x="0" y="0"/>
+            <GlueLabel>N</GlueLabel>
         </Glue>
-    </OpenEastGlues>
+    </OpenNorthGlues>
+    <OpenEastGlues/>
     <OpenSouthGlues/>
     <OpenWestGlues>
         <Glue>
-            <Location x="0" y="1"/>
-            <GlueLabel>b</GlueLabel>
+            <Location x="0" y="0"/>
+            <GlueLabel>W</GlueLabel>
         </Glue>
     </OpenWestGlues>
 </Assembly>
