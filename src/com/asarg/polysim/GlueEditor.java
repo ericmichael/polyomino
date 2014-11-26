@@ -6,17 +6,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 
 public class GlueEditor extends JPanel implements ActionListener {
 
-    private HashMap<Pair<String, String>, Integer> glueFunction;
+    private JPanel boxesPanel = new JPanel();
+    public HashMap<Pair<String, String>, Integer> glueFunction;
 
     GridBagLayout layout = new GridBagLayout();
     GridBagConstraints layoutConstraints = new GridBagConstraints();
+    List<JTextField[]> textFields = new ArrayList<JTextField[]>();
 
     GlueEditor(HashMap<Pair<String, String>, Integer> newGlueFunction) {
+        // boxes panel with scrollbar inside a panel.
         glueFunction = newGlueFunction;
 
         layoutConstraints.gridwidth = 1;
@@ -24,10 +27,14 @@ public class GlueEditor extends JPanel implements ActionListener {
         layoutConstraints.gridy = -1;
         drawLabelBoxes();
 
-        // draw scroll pane
-        JScrollPane scrollPane = new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        boxesPanel.setVisible(true);
+        setLayout(new BorderLayout());
 
-        add(scrollPane);
+        // draw scroll pane
+        JScrollPane scrollPane = new JScrollPane(boxesPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(20);
+        this.add(scrollPane, BorderLayout.CENTER);
+
         setVisible(true);
     }
 
@@ -36,7 +43,7 @@ public class GlueEditor extends JPanel implements ActionListener {
     }
 
     void drawLabelBoxes(){
-        setLayout(layout);
+        boxesPanel.setLayout(layout);
 
         // label lines for existing glue pairs in function
         for (Map.Entry<Pair<String,String>,Integer> entry : glueFunction.entrySet()){
@@ -65,44 +72,44 @@ public class GlueEditor extends JPanel implements ActionListener {
             layoutConstraints.gridy++;
 
             layout.setConstraints(leftParenthesis, layoutConstraints);
-            add(leftParenthesis);
+            boxesPanel.add(leftParenthesis);
 
             layout.setConstraints(glue1, layoutConstraints);
-            add(glue1);
+
+            boxesPanel.add(glue1);
 
             layout.setConstraints(comma, layoutConstraints);
-            add(comma);
+            boxesPanel.add(comma);
 
             layout.setConstraints(glue2, layoutConstraints);
-            add(glue2);
+            boxesPanel.add(glue2);
 
             layout.setConstraints(rightParenthesis, layoutConstraints);
-            add(rightParenthesis);
+            boxesPanel.add(rightParenthesis);
 
             layout.setConstraints(equals, layoutConstraints);
-            add(equals);
+            boxesPanel.add(equals);
 
             layout.setConstraints(glueStrength, layoutConstraints);
-            add(glueStrength);
+            boxesPanel.add(glueStrength);
+
+            // add the text fields to be read to the list (for future access)
+            JTextField[] row = {glue1, glue2, glueStrength};
+            textFields.add(row);
         }
 
         // new glue button
         layoutConstraints.gridy++;
         layoutConstraints.gridx = 1;
+        layoutConstraints.gridwidth = 3;
+        layoutConstraints.fill = GridBagConstraints.BOTH;
         JButton btnNewGluePair = new JButton();
         btnNewGluePair.setText("New");
         layout.setConstraints(btnNewGluePair, layoutConstraints);
-        add(btnNewGluePair);
+        boxesPanel.add(btnNewGluePair);
         btnNewGluePair.addActionListener(this);
         btnNewGluePair.setActionCommand("newGluePair");
 
-        // update glue function button
-        layoutConstraints.gridx = 4;
-        layoutConstraints.gridwidth = 3;
-        JButton btnUpdateGlueFunction = new JButton();
-        btnUpdateGlueFunction.setText("Update");
-        layout.setConstraints(btnUpdateGlueFunction, layoutConstraints);
-        add(btnUpdateGlueFunction);
     }
 
     @Override
@@ -134,28 +141,40 @@ public class GlueEditor extends JPanel implements ActionListener {
             layoutConstraints.gridy++;
 
             layout.setConstraints(leftParenthesis, layoutConstraints);
-            add(leftParenthesis);
+            boxesPanel.add(leftParenthesis);
 
             layout.setConstraints(glue1, layoutConstraints);
-            add(glue1);
+            boxesPanel.add(glue1);
 
             layout.setConstraints(comma, layoutConstraints);
-            add(comma);
+            boxesPanel.add(comma);
 
             layout.setConstraints(glue2, layoutConstraints);
-            add(glue2);
+            boxesPanel.add(glue2);
 
             layout.setConstraints(rightParenthesis, layoutConstraints);
-            add(rightParenthesis);
+            boxesPanel.add(rightParenthesis);
 
             layout.setConstraints(equals, layoutConstraints);
-            add(equals);
+            boxesPanel.add(equals);
 
             layout.setConstraints(glueStrength, layoutConstraints);
-            add(glueStrength);
+            boxesPanel.add(glueStrength);
 
-            revalidate();
-            repaint();
+            JTextField[] row = {glue1, glue2, glueStrength};
+            textFields.add(row);
+            boxesPanel.revalidate();
+            boxesPanel.repaint();
         }
+    }
+    public HashMap<Pair<String, String>, Integer> getNewGlueFunction(){
+        HashMap<Pair<String, String>, Integer> newGlueFunction = new HashMap<Pair<String,String>, Integer>();
+
+        for (JTextField[] row : textFields){
+//            System.out.println(row[0].getText()+' '+row[1].getText()+' '+row[2].getText());
+            newGlueFunction.put( new Pair<String,String>(row[0].getText(),row[1].getText()), Integer.parseInt(row[2].getText()) );
+        }
+        glueFunction = newGlueFunction;
+        return glueFunction;
     }
 }

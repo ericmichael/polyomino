@@ -8,9 +8,7 @@ import javafx.util.Pair;
 
 import javax.xml.bind.annotation.*;
 import java.io.InvalidObjectException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @XmlRootElement(name = "TileSystem")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -59,6 +57,16 @@ public class TileSystem {
     public HashMap<Pair<String, String>, Integer> getGlueFunction()
     {
         return (HashMap<Pair<String, String>, Integer>)glueFunction.clone();
+    }
+
+    // needs some work, it's not maintaining the new glue values further down the process.
+    public void setGlueFunction(HashMap<Pair<String, String>, Integer> newGlueFunction){
+        System.out.println("Changing glue function");
+        glueFunction.clear();
+        for (Map.Entry<Pair<String, String>, Integer> glF : newGlueFunction.entrySet()) {
+//            System.out.println(glF.getKey().getKey() + " " + glF.getKey().getValue()+" "+ glF.getValue()+"added.");
+//            glueFunction.put( new Pair(glF.getKey().getKey(), glF.getKey().getValue()), glF.getValue() );
+        }
     }
     public int getStrength(String label1, String label2) {
         Pair key = new Pair<String, String>(label1, label2);

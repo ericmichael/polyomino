@@ -221,6 +221,44 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
         menubar.add(polyTileMenu);
         setJMenuBar(menubar);
 
+        //////////////////////////////////////
+        // adding of panels
+        addComponentListener(this);
+        //Add panels to TileSet Editor Frame
+
+        bagConstraints.gridy = 0;
+        bagConstraints.gridx = 0;
+        bagConstraints.weightx = .13;
+        bagConstraints.weighty = 1;
+        bagConstraints.fill = GridBagConstraints.BOTH;
+
+        // add(polyTileListPanel, bagConstraints);
+        polyTileEditorPanelGroup.add(polyTileListPanel, BorderLayout.WEST);
+        polyTileListPanel.add(scrollPane);
+        bagConstraints.gridx = 1;
+        bagConstraints.weightx = .75;
+        //  add(polyTilePanel, bagConstraints);
+        polyTileEditorPanelGroup.add(polyTilePanel, BorderLayout.CENTER);
+
+        bagConstraints.gridx = 2;
+        bagConstraints.weightx = .12;
+        //   add(eP,bagConstraints);
+        polyTileEditorPanelGroup.add(gluePanel, BorderLayout.EAST);
+
+        polyTilePanel.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
+
+        // add Editor tabbed panel.
+        westTabbedPane.addTab("PolyTile Editor", polyTileEditorPanelGroup);
+
+        // add Glue Function tabbed panel.
+        final GlueEditor glueEditorTab = new GlueEditor(assembly.getTileSystem().getGlueFunction());
+
+        westTabbedPane.addTab("Glue Editor", glueEditorTab);
+
+        add(westTabbedPane);
+
+        pack();
+
         //Action listener stuff for the menu bar and List
         ActionListener tileEditorActionListener = new ActionListener() {
 
@@ -275,16 +313,22 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
                         tileConfig.addTileType(polyTile);
                     }
 
-                    //reuse glue functions for now
-                    for (Map.Entry<Pair<String, String>, Integer> glF : tileSystem.getGlueFunction().entrySet()) {
+                    // replace the glue function in the assembly with the glue function in the glue editor
+                    // copies value by value since the setGlueFunction method in tilesystem is not working.
+                    for (Map.Entry<Pair<String, String>, Integer> glF : glueEditorTab.getNewGlueFunction().entrySet()) {
                         String gLabelL = glF.getKey().getKey();
                         String gLabelR = glF.getKey().getValue();
-                        int strentgh = glF.getValue();
-                        tileConfig.addGlueFunction(gLabelL, gLabelR, strentgh);
+                        int strength = glF.getValue();
+                        tileConfig.addGlueFunction(gLabelL, gLabelR, strength);
                     }
 
                     tileSystem.loadTileConfiguration(tileConfig);
+
                     assembly.changeTileSystem(tileSystem);
+
+                    for (Map.Entry<Pair<String, String>, Integer> glueF : assembly.getTileSystem().getGlueFunction().entrySet()){
+                        System.out.println(glueF.getKey().getKey()+ " "+glueF.getKey().getValue() +" "+glueF.getValue());
+                    }
                     assembly.cleanUp();
                     assembly.getOpenGlues();
                     assembly.calculateFrontier();
@@ -377,44 +421,6 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
                 repaint();
             }
         });
-
-        addComponentListener(this);
-        //Add panels to TileSet Editor Frame
-
-        bagConstraints.gridy = 0;
-        bagConstraints.gridx = 0;
-        bagConstraints.weightx = .13;
-        bagConstraints.weighty = 1;
-        bagConstraints.fill = GridBagConstraints.BOTH;
-
-        // add(polyTileListPanel, bagConstraints);
-        polyTileEditorPanelGroup.add(polyTileListPanel, BorderLayout.WEST);
-        polyTileListPanel.add(scrollPane);
-        bagConstraints.gridx = 1;
-        bagConstraints.weightx = .75;
-        //  add(polyTilePanel, bagConstraints);
-        polyTileEditorPanelGroup.add(polyTilePanel, BorderLayout.CENTER);
-
-        bagConstraints.gridx = 2;
-        bagConstraints.weightx = .12;
-        //   add(eP,bagConstraints);
-        polyTileEditorPanelGroup.add(gluePanel, BorderLayout.EAST);
-
-        polyTilePanel.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-
-        // add Editor tabbed panel.
-        westTabbedPane.addTab("PolyTile Editor", polyTileEditorPanelGroup);
-
-        // add Glue Function tabbed panel.
-        GlueEditor glueEditorTab = new GlueEditor(assembly.getTileSystem().getGlueFunction());
-
-        westTabbedPane.addTab("Glue Editor", glueEditorTab);
-
-        add(westTabbedPane);
-
-
-        pack();
-
 
         MouseAdapter gridListener = new MouseAdapter() {
             @Override
