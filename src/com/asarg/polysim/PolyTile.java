@@ -42,33 +42,34 @@ public class PolyTile {
     @XmlTransient
     public HashMap<Point, String> westGlues = new HashMap<Point, String>();
 
+    // default color for tiles is cyan for some reason
     public PolyTile() {
         tiles.add(new Tile(0,0, this));
         polyName = "New";
-        setColor("FFFFF");
+        setColor("00FFFF");
     }
     public PolyTile(int c, double con){
         count = c;
         concentration = con;
         System.out.println("polytile with no name created with count "+c+" and concentration "+con);
-        setColor("FFFFF");
+        setColor("00FFFF");
     }
     public PolyTile(String n) {
         polyName = n;
         System.out.println("polytile "+polyName+" with no count or concentration");
-        setColor("FFFFF");
+        setColor("00FFFF");
     }
     public PolyTile(String n, double conc){
         polyName = n;
         concentration = conc;
         System.out.println("polytile "+polyName+" created with no count and concentration "+conc);
-        setColor("FFFFF");
+        setColor("00FFFF");
     }
     public PolyTile(String n, int c){
         polyName = n;
         count = c;
         System.out.println("polytile "+polyName+" created with count "+c+" and no concentration.");
-        setColor("FFFFF");
+        setColor("00FFFF");
     }
     public PolyTile(String n, int c, double con, String colr){
         polyName = n;
