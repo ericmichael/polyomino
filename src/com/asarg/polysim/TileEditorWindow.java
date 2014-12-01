@@ -1,5 +1,7 @@
 package com.asarg.polysim;
 
+import javafx.scene.control.ColorPicker;
+import javafx.scene.paint.*;
 import javafx.util.Pair;
 
 import javax.swing.*;
@@ -10,6 +12,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.awt.*;
+import java.awt.Color;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -186,6 +189,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
         sgPanel.add(sGlueLabelTF);
         wgPanel.add(new JLabel("W."));
         wgPanel.add(wGlueLabelTF);
+
         applyRemovePanel.add(applyButton);
         applyRemovePanel.add(removeButton);
 
@@ -205,6 +209,11 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
         gridBagConstraints.gridy = 6;
         gluePanel.add(applyRemovePanel, gridBagConstraints);
 
+        // Color chooser button
+        JButton btnChooseColor = new JButton("Set Color");
+        btnChooseColor.setActionCommand("setTileColor");
+        gridBagConstraints.gridy = 7;
+        gluePanel.add(btnChooseColor, gridBagConstraints);
 
         //create a menu bar-------------------------------
         JMenuBar menubar = new JMenuBar();
@@ -387,7 +396,20 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
 
                         }
                     }
+                }
+                else if (e.getActionCommand().equals("setTileColor")) {
+                    System.out.println("changing color");
+                    Color chosenColor = JColorChooser.showDialog(null,"Choose Color", Color.CYAN);
+                    PolyTile selectedPolytile = polytileList.get(polyJList.isSelectionEmpty() ? 0 : polyJList.getSelectedIndex() );
+//                    System.out.println("#"+Integer.toHexString(chosenColor.getRGB()));
+                    String colorHex = Integer.toHexString(chosenColor.getRGB() & 0x00ffffff);
+                    System.out.println(colorHex);
+                    selectedPolytile.setColor(colorHex);
 
+                    //from apply button listener
+                    Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX, polytileList.get(polyJList.isSelectionEmpty() ? 0 : polyJList.getSelectedIndex()), tileDiameter, canvasCenteredOffset);
+                    reDrawJList();
+                    repaint();
 
                 }
             }
@@ -398,6 +420,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
         exportMenuItem.addActionListener(tileEditorActionListener);
         updateAssemblyMenuItem.addActionListener(tileEditorActionListener);
         removePolyTileMenuItem.addActionListener(tileEditorActionListener);
+        btnChooseColor.addActionListener(tileEditorActionListener);
 
         polyJList.addListSelectionListener(new ListSelectionListener() {
             @Override

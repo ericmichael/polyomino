@@ -180,8 +180,6 @@ public class Drawer {
 
         public static void drawTileSelection(Graphics2D g, Point location, int diameter, Point offset, Color color)
         {
-
-
             clearGraphics(g);
 
             g.setColor(color);
@@ -199,6 +197,7 @@ public class Drawer {
             }
 
         }
+
         public static Pair<Point, Integer> drawCenteredPolyTile(Graphics2D g, PolyTile pt)
         {
             Point polyDim = calculatePolyTileGridDimension(pt);
