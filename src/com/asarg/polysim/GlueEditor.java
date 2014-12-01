@@ -172,7 +172,9 @@ public class GlueEditor extends JPanel implements ActionListener {
 
         for (JTextField[] row : textFields){
 //            System.out.println(row[0].getText()+' '+row[1].getText()+' '+row[2].getText());
-            newGlueFunction.put( new Pair<String,String>(row[0].getText(),row[1].getText()), Integer.parseInt(row[2].getText()) );
+            if (!row[0].getText().isEmpty() && !row[1].getText().isEmpty() && !row[2].getText().isEmpty() )
+                newGlueFunction.put( new Pair<String,String>(row[0].getText(),row[1].getText()), Integer.parseInt(row[2].getText()) );
+
         }
         glueFunction = newGlueFunction;
         return glueFunction;
