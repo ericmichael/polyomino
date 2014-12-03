@@ -154,7 +154,15 @@ public class Drawer {
             g.drawString(tileLabel, x + (diameter / 2) - (font.stringWidth(tileLabel)/ 2) , y + (diameter / 2)  );
 
             //now a black border with thickness based on diameter.
+            if ( tile.getParent().isFrontier() ){
+                // float array sets the spacing between dashes (by controlling how big they are).
+                Stroke dashed = new BasicStroke(diameter/25,BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,0,new float[]{4},0);
+                g.setStroke(dashed);
+            }
+
             g.drawRect(x, y, diameter, diameter);
+
+            g.setStroke(new BasicStroke(diameter / 25));
         }
 
         public static void drawHexTile(Graphics2D g, Tile tile, int x, int y, int diameter){

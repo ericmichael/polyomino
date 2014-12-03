@@ -78,7 +78,7 @@ public class PolyTile {
         color = colr;
         System.out.println("polytile "+polyName+" created with count "+c+" and concentration "+con);
     }
-    public void setFrontier() { frontier = true; }
+    public void setFrontier() { frontier = true; setColor("EEEEEE"); }
 
     public boolean isFrontier() { return frontier; }
 
