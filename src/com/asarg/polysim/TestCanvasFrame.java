@@ -44,6 +44,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
     int frontierIndex = 0;
     FrontierElement currentFrontierAttachment = null;
     Point frontierClickPoint = null;
+    private int stepsPerDraw = 10;
 
     public TestCanvasFrame(int w, int h, final Assembly assembly)
     {
@@ -156,10 +157,10 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                             while (!frontier.isEmpty()){
                                 if (stop)
                                     break;
-                                play(10);
+                                play(stepsPerDraw);
 //                                step(1);
                                 try{
-                                    sleep(10);
+                                    sleep(7);
                                 } catch(InterruptedException ex) {}
                             }
                             System.out.println("PLAY BUTTON!");
@@ -246,6 +247,11 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                     placeFrontierOnGrid();
                     drawGrid();
                     System.out.println("Change in temperature detected. Beware of errors.");
+                } else if (e.getSource().equals(mainMenu.setStepsPerDrawMenuItem) ){
+                    String stepsPerDrawString = JOptionPane.showInputDialog(null,
+                            "Set how many steps to calculate before drawing when the play button is pressed.",
+                            stepsPerDraw);
+                    stepsPerDraw = Integer.parseInt(stepsPerDrawString);
                 }
             }
         };
@@ -263,11 +269,12 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         mainMenu.closeMenuItem.addActionListener(actionListener);
         mainMenu.importTileSetMenuItem.addActionListener(actionListener);
         mainMenu.tileSetEditorMenuItem.addActionListener(actionListener);
-        mainMenu.undoMenuItem.addActionListener(actionListener);
-        mainMenu.redoMenuItem.addActionListener(actionListener);
+//        mainMenu.undoMenuItem.addActionListener(actionListener);
+//        mainMenu.redoMenuItem.addActionListener(actionListener);
         mainMenu.seedCreatorMenuItem.addActionListener(actionListener);
         mainMenu.tileSystemOptionsMenuItem.addActionListener(actionListener);
         mainMenu.setTemperatureMenuItem.addActionListener(actionListener);
+        mainMenu.setStepsPerDrawMenuItem.addActionListener(actionListener);
     }
 
 

@@ -21,12 +21,13 @@ public class GUI extends JMenuBar {
     JMenuItem importTileSetMenuItem = new JMenuItem("Import Tile Set");
     JMenuItem tileSetEditorMenuItem = new JMenuItem("Tile Set Editor");
 
-    JMenuItem undoMenuItem = new JMenuItem("Undo");
-    JMenuItem redoMenuItem = new JMenuItem("Redo");
+//    JMenuItem undoMenuItem = new JMenuItem("Undo");
+//    JMenuItem redoMenuItem = new JMenuItem("Redo");
 
     JMenuItem seedCreatorMenuItem = new JMenuItem("Seed Creator");
     JMenuItem setTemperatureMenuItem = new JMenuItem("Set Temperature");
     JMenuItem tileSystemOptionsMenuItem = new JMenuItem("Options");
+    JMenuItem setStepsPerDrawMenuItem = new JMenuItem("Set Steps Per Draw");
 
     //tool bar items
     ControlButton next = new ControlButton("forward");
@@ -69,16 +70,18 @@ public class GUI extends JMenuBar {
         JMenu toolsMenu = new JMenu("Tools");
         importTileSetMenuItem.addActionListener(actionListener);
         tileSetEditorMenuItem.addActionListener(actionListener);
-        setTemperatureMenuItem.addActionListener(actionListener);
         toolsMenu.add(importTileSetMenuItem);
         toolsMenu.add(tileSetEditorMenuItem);
-        toolsMenu.add(setTemperatureMenuItem);
 
         JMenu editMenu = new JMenu("Edit");
-        undoMenuItem.addActionListener(actionListener);
-        redoMenuItem.addActionListener(actionListener);
-        editMenu.add(undoMenuItem);
-        editMenu.add(redoMenuItem);
+//        undoMenuItem.addActionListener(actionListener);
+//        redoMenuItem.addActionListener(actionListener);
+        setTemperatureMenuItem.addActionListener(actionListener);
+        setStepsPerDrawMenuItem.addActionListener(actionListener);
+//        editMenu.add(undoMenuItem);
+//        editMenu.add(redoMenuItem);
+        editMenu.add(setTemperatureMenuItem);
+        editMenu.add(setStepsPerDrawMenuItem);
 
         JMenu tileSystemMenu = new JMenu("Tile System");
         seedCreatorMenuItem.addActionListener(actionListener);
