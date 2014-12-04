@@ -23,6 +23,8 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
 
     TestCanvas canvas;
 
+    private boolean stop = false;
+
     ActionListener actionListener;
     TileEditorWindow tileEditorWindow ;
 
@@ -118,6 +120,17 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         }
     }
 
+    private void play(int steps){
+        for (int i = 0; i < steps; i++){
+            resetFrontier();
+            updateAttachTime(assembly.attach());
+            frontier = assembly.calculateFrontier();
+        }
+        canvas.reset();
+        placeFrontierOnGrid();
+        drawGrid();
+    }
+
     private void addActionListeners(){
         canvas.addMouseWheelListener(this);
         canvas.addMouseListener(this);
@@ -136,19 +149,27 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                         step(-1);
                     }
                 }else if(e.getSource().equals(mainMenu.play)){
-                    while(!frontier.isEmpty()){
-                        resetFrontier();
-                        assembly.attach();
-                        canvas.reset();
-                        frontier = assembly.calculateFrontier();
-                        placeFrontierOnGrid();
-                        drawGrid();
-                        try {
-                            Thread.sleep(1000);
-                        }catch(InterruptedException ie) {
-                            System.out.println(ie.getMessage());
+                    Thread playThread = new Thread(){
+                        @Override
+                        public void run() {
+                            stop = false;
+                            while (!frontier.isEmpty()){
+                                if (stop)
+                                    break;
+                                play(10);
+//                                step(1);
+                                try{
+                                    sleep(10);
+                                } catch(InterruptedException ex) {}
+                            }
+                            System.out.println("PLAY BUTTON!");
                         }
-                    }
+                    };
+                    playThread.start();
+//
+                }else if(e.getSource().equals(mainMenu.stop)){
+                    stop = true;
+                    System.out.println("STOP!");
                 }else if(e.getSource().equals(mainMenu.fastb)){
                     step(-2);
                 }else if(e.getSource().equals(mainMenu.fastf)){
@@ -232,6 +253,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         mainMenu.next.addActionListener(actionListener);
         mainMenu.prev.addActionListener(actionListener);
         mainMenu.play.addActionListener(actionListener);
+        mainMenu.stop.addActionListener(actionListener);
         mainMenu.fastf.addActionListener(actionListener);
         mainMenu.fastb.addActionListener(actionListener);
         mainMenu.newMenuItem.addActionListener(actionListener);

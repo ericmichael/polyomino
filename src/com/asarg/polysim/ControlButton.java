@@ -10,6 +10,8 @@ public class ControlButton extends IconButton {
         this.setPreferredSize(new Dimension(30,30));
         if(type.equals("play")){
             setText(String.valueOf('\uf04b'));
+        }else if(type.equals("stop")){
+            setText(String.valueOf('\uf04c'));
         }else if(type.equals("forward")){
             setText(String.valueOf('\uf051'));
         }else if(type.equals("backward")){

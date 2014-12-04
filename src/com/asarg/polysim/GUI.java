@@ -32,6 +32,7 @@ public class GUI extends JMenuBar {
     ControlButton next = new ControlButton("forward");
     ControlButton prev = new ControlButton("backward");
     ControlButton play = new ControlButton("play");
+    ControlButton stop = new ControlButton("stop");
     ControlButton fastf = new ControlButton("fast-forward");
     ControlButton fastb = new ControlButton("fast-backward");
     IconButton optionButton = new IconButton();
@@ -97,6 +98,8 @@ public class GUI extends JMenuBar {
         stepControlToolBar.add(prev);
         prev.setPreferredSize(new Dimension(30, 25));
         stepControlToolBar.add(play);
+        play.setPreferredSize(new Dimension(30, 25));
+        stepControlToolBar.add(stop);
         play.setPreferredSize(new Dimension(30, 25));
         stepControlToolBar.add(next);
         next.setPreferredSize(new Dimension(30, 25));
