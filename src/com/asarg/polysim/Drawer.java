@@ -180,6 +180,7 @@ public class Drawer {
                 Point pt = mep.getKey();
                 Tile tile = mep.getValue();
 
+//                System.out.println(pt.toString()+" "+offset.x+" "+offset.y);
                 drawTile(g, tile, pt.x * diameter + offset.x - diameter / 2, -pt.y * diameter + offset.y - diameter / 2, diameter);
 //                drawHexTile(g, tile, pt.x * diameter + offset.x - diameter / 2, -pt.y * diameter + offset.y - diameter / 2, diameter);
             }
@@ -204,6 +205,15 @@ public class Drawer {
                 drawTile(g, t, t.getLocation().x * diameter + offset.x - diameter / 2, -t.getLocation().y * diameter + offset.y - diameter / 2, diameter);
             }
 
+        }
+
+        // used in when needed to paint a single polytile at some grid location
+        // location = from the tile grid (0,0) etc; offset = from the canvas (400, 300) or whatever.
+        public static void drawNewPolyTile(Graphics2D g, List<Tile> tiles, int diameter, Point location, Point offset) {
+            for (Tile t : tiles) {
+//                System.out.println(t.getLocation());
+                drawTile(g, t, (location.x+t.getLocation().x) * diameter + offset.x - diameter / 2, -(location.y+t.getLocation().y) * diameter + offset.y - diameter / 2, diameter);
+            }
         }
 
         public static Pair<Point, Integer> drawCenteredPolyTile(Graphics2D g, PolyTile pt)
@@ -289,8 +299,6 @@ public class Drawer {
 
         public static Point getGridPoint(Point canvasPoint, Point offset, int diameter)
         {
-
-
             return new Point((int)Math.round((canvasPoint.x-offset.x)/(double)diameter),(int) Math.round((-canvasPoint.y +offset.y)/(double)diameter));
         }
 

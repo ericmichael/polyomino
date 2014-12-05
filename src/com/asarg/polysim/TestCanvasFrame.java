@@ -122,14 +122,24 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
     }
 
     private void play(int steps){
-        for (int i = 0; i < steps; i++){
+        if (steps == 1){
             resetFrontier();
             updateAttachTime(assembly.attach());
             frontier = assembly.calculateFrontier();
+            placeFrontierOnGrid();
+            // get the latest attached frontier element
+            paintPolytile(assembly.getAttached().get(assembly.getAttached().size() - 1));
         }
-        canvas.reset();
-        placeFrontierOnGrid();
-        drawGrid();
+        else {
+            for (int i = 0; i < steps; i++) {
+                resetFrontier();
+                updateAttachTime(assembly.attach());
+                frontier = assembly.calculateFrontier();
+            }
+//            canvas.reset();
+            placeFrontierOnGrid();
+            drawGrid();
+        }
     }
 
     private void addActionListeners(){
@@ -163,7 +173,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                                     sleep(7);
                                 } catch(InterruptedException ex) {}
                             }
-                            System.out.println("PLAY BUTTON!");
+                            System.out.println("PLAY!");
                         }
                     };
                     playThread.start();
@@ -281,7 +291,31 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
     public void drawGrid()    {
         //PlaceFrontierOnGrid();
         canvas.drawGrid(assembly.Grid);
-        repaint();
+        canvas.repaint();
+    }
+
+    public void paintPolytile(FrontierElement attachedFrontierElement){
+        canvas.drawTileOnGrid(attachedFrontierElement);
+        PolyTile attached = attachedFrontierElement.getPolyTile();
+        // find the rectangle to repaint (highest x, highest y)*diameter centered on polytile location
+        int highestX =0, highestY=0, lowX =0, lowY =0;
+        for (Tile t : attached.getTiles()){
+            if (t.getLocation().x > highestX)
+                highestX = t.getLocation().x;
+            if (t.getLocation().y > highestY)
+                highestY = t.getLocation().y;
+
+            if (t.getLocation().x < lowX)
+                lowX = t.getLocation().x;
+            if (t.getLocation().y < lowY)
+                lowY = t.getLocation().y;
+        }
+        int x = (attachedFrontierElement.getOffset().x+lowX)*canvas.getTileDiameter()+canvas.getOffset().x - canvas.getTileDiameter()/2;
+        int y = (-attachedFrontierElement.getOffset().y+highestY)*canvas.getTileDiameter()+canvas.getOffset().y - canvas.getTileDiameter()/2;
+        int w = canvas.getTileDiameter();
+        int h = canvas.getTileDiameter();
+        canvas.paintImmediately(x,y,w,h);
+//        repaint();
     }
 
     private PolyTile getFrontierPolyTile(){

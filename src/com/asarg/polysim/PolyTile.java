@@ -27,7 +27,6 @@ public class PolyTile {
     private int polyID;
     // tileID increases every time a new tile is created, changes are not accounted for.
     //          (delete one, that number is lost forever)
-    private static int tileID = 0;
 
     private String color;
 
@@ -132,21 +131,8 @@ public class PolyTile {
     }
     public boolean breaksChain(Point gridPoint)
     {
-
-
           boolean breaksChain=false;
 
-
-
-     /*   for(Tile tile : tiles)
-        {
-            if(tiles.size() > 2) {
-                    if (!adjacentExistsExc(tile.getLocation(), gridPoint)) {
-                       return true;
-                }
-            }
-
-        }*/
         HashSet<Point> checkedPoints = new HashSet<Point>();
         checkedPoints.add(gridPoint);
         int bondCount  = 0;
@@ -186,10 +172,6 @@ public class PolyTile {
         return !(tiles.size()-2 <= bondCount);
 
     }
-
-
-
-
 
     public void setColor(String color){
         this.color = color;
@@ -257,7 +239,6 @@ public class PolyTile {
     public double getConcentration(){return concentration;}
     public int getCount(){return count;}
     public String getPolyName(){return polyName;}
-
 
     public void setConcentration(double c){
         concentration = c;

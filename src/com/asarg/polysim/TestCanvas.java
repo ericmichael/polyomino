@@ -69,8 +69,13 @@ public class TestCanvas extends JPanel {
 
         Drawer.TileDrawer.drawTiles(cg2d, hmpt.entrySet(), tileDiameter, center);
 
-        repaint();
+    }
 
+    public void drawTileOnGrid(FrontierElement attached){
+//        System.out.println(attached.getLocation());
+//        System.out.println(attached.getOffset());
+//        System.out.println(center);
+        Drawer.TileDrawer.drawNewPolyTile(cg2d, attached.getPolyTile().getTiles(), tileDiameter, attached.getLocation(), center);
     }
 
     @Override
