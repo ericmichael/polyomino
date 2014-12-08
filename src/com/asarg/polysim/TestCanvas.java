@@ -60,7 +60,7 @@ public class TestCanvas extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         this.setBackground(Color.WHITE);
-        Graphics2D g2 = (Graphics2D) g;
+        canvasBFI.setAccelerationPriority(1);
         g.drawImage(canvasBFI, 0, 0, null);
     }
 

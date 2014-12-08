@@ -136,7 +136,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                 updateAttachTime(assembly.attach());
                 frontier = assembly.calculateFrontier();
             }
-//            canvas.reset();
+            canvas.reset();
             placeFrontierOnGrid();
             drawGrid();
         }
@@ -169,9 +169,9 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                                     break;
                                 play(stepsPerDraw);
 //                                step(1);
-                                try{
-                                    sleep(7);
-                                } catch(InterruptedException ex) {}
+//                                try{
+//                                    sleep(7);
+//                                } catch(InterruptedException ex) {}
                             }
                             System.out.println("PLAY!");
                         }
@@ -296,26 +296,26 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
 
     public void paintPolytile(FrontierElement attachedFrontierElement){
         canvas.drawTileOnGrid(attachedFrontierElement);
-        PolyTile attached = attachedFrontierElement.getPolyTile();
-        // find the rectangle to repaint (highest x, highest y)*diameter centered on polytile location
-        int highestX =0, highestY=0, lowX =0, lowY =0;
-        for (Tile t : attached.getTiles()){
-            if (t.getLocation().x > highestX)
-                highestX = t.getLocation().x;
-            if (t.getLocation().y > highestY)
-                highestY = t.getLocation().y;
-
-            if (t.getLocation().x < lowX)
-                lowX = t.getLocation().x;
-            if (t.getLocation().y < lowY)
-                lowY = t.getLocation().y;
-        }
-        int x = (attachedFrontierElement.getOffset().x+lowX)*canvas.getTileDiameter()+canvas.getOffset().x - canvas.getTileDiameter()/2;
-        int y = (-attachedFrontierElement.getOffset().y+highestY)*canvas.getTileDiameter()+canvas.getOffset().y - canvas.getTileDiameter()/2;
-        int w = canvas.getTileDiameter();
-        int h = canvas.getTileDiameter();
-        canvas.paintImmediately(x,y,w,h);
-//        repaint();
+//        PolyTile attached = attachedFrontierElement.getPolyTile();
+//        // find the rectangle to repaint (highest x, highest y)*diameter centered on polytile location
+//        int highestX =0, highestY=0, lowX =0, lowY =0;
+//        for (Tile t : attached.getTiles()){
+//            if (t.getLocation().x > highestX)
+//                highestX = t.getLocation().x;
+//            if (t.getLocation().y > highestY)
+//                highestY = t.getLocation().y;
+//
+//            if (t.getLocation().x < lowX)
+//                lowX = t.getLocation().x;
+//            if (t.getLocation().y < lowY)
+//                lowY = t.getLocation().y;
+//        }
+//        int x = (attachedFrontierElement.getOffset().x+lowX)*canvas.getTileDiameter()+canvas.getOffset().x - canvas.getTileDiameter()/2;
+//        int y = (-attachedFrontierElement.getOffset().y+highestY)*canvas.getTileDiameter()+canvas.getOffset().y - canvas.getTileDiameter()/2;
+//        int w = canvas.getTileDiameter();
+//        int h = canvas.getTileDiameter();
+//        canvas.repaint(x,y,w,h);
+        canvas.repaint();
     }
 
     private PolyTile getFrontierPolyTile(){
@@ -455,7 +455,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         frontierIndex = 0;
         currentFrontierAttachment=null;
         mainMenu.statusLabel.setText(mainMenu.statusLabelPreviousText);
-        canvas.reset();
+//        canvas.reset();
     }
 
     private void processFrontierClick(Point clicked, Tile clicked_tile){
@@ -478,7 +478,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                     frontierAttachments.add(fe);
                 }
             }
-            drawGrid();
+//            drawGrid();
         }
 
     }
