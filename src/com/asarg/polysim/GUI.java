@@ -27,7 +27,6 @@ public class GUI extends JMenuBar {
     JMenuItem seedCreatorMenuItem = new JMenuItem("Seed Creator");
     JMenuItem setTemperatureMenuItem = new JMenuItem("Set Temperature");
     JMenuItem tileSystemOptionsMenuItem = new JMenuItem("Options");
-    JMenuItem setStepsPerDrawMenuItem = new JMenuItem("Set Steps Per Draw");
 
     //tool bar items
     ControlButton next = new ControlButton("forward");
@@ -77,11 +76,9 @@ public class GUI extends JMenuBar {
 //        undoMenuItem.addActionListener(actionListener);
 //        redoMenuItem.addActionListener(actionListener);
         setTemperatureMenuItem.addActionListener(actionListener);
-        setStepsPerDrawMenuItem.addActionListener(actionListener);
 //        editMenu.add(undoMenuItem);
 //        editMenu.add(redoMenuItem);
         editMenu.add(setTemperatureMenuItem);
-        editMenu.add(setStepsPerDrawMenuItem);
 
         JMenu tileSystemMenu = new JMenu("Tile System");
         seedCreatorMenuItem.addActionListener(actionListener);

@@ -44,7 +44,6 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
     int frontierIndex = 0;
     FrontierElement currentFrontierAttachment = null;
     Point frontierClickPoint = null;
-    private int stepsPerDraw = 10;
 
     public TestCanvasFrame(int w, int h, final Assembly assembly)
     {
@@ -121,25 +120,14 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         }
     }
 
-    private void play(int steps){
-        if (steps == 1){
-            resetFrontier();
-            updateAttachTime(assembly.attach());
-            frontier = assembly.calculateFrontier();
-            placeFrontierOnGrid();
-            // get the latest attached frontier element
-            paintPolytile(assembly.getAttached().get(assembly.getAttached().size() - 1));
-        }
-        else {
-            for (int i = 0; i < steps; i++) {
-                resetFrontier();
-                updateAttachTime(assembly.attach());
-                frontier = assembly.calculateFrontier();
-            }
-            canvas.reset();
-            placeFrontierOnGrid();
-            drawGrid();
-        }
+    private void play(){
+        resetFrontier();
+        updateAttachTime(assembly.attach());
+        frontier = assembly.calculateFrontier();
+        placeFrontierOnGrid();
+        // get the latest attached frontier element
+        paintPolytile(assembly.getAttached().get(assembly.getAttached().size() - 1));
+
     }
 
     private void addActionListeners(){
@@ -165,19 +153,18 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                         public void run() {
                             stop = false;
                             while (!frontier.isEmpty()){
-                                if (stop)
+                                if (stop) {
+                                    // draw the entire grid when stopping, to see the frontier of the items.
+                                    drawGrid();
                                     break;
-                                play(stepsPerDraw);
-//                                step(1);
-//                                try{
-//                                    sleep(7);
-//                                } catch(InterruptedException ex) {}
+                                }
+                                play();
                             }
                             System.out.println("PLAY!");
                         }
                     };
                     playThread.start();
-//
+
                 }else if(e.getSource().equals(mainMenu.stop)){
                     stop = true;
                     System.out.println("STOP!");
@@ -257,11 +244,6 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                     placeFrontierOnGrid();
                     drawGrid();
                     System.out.println("Change in temperature detected. Beware of errors.");
-                } else if (e.getSource().equals(mainMenu.setStepsPerDrawMenuItem) ){
-                    String stepsPerDrawString = JOptionPane.showInputDialog(null,
-                            "Set how many steps to calculate before drawing when the play button is pressed.",
-                            stepsPerDraw);
-                    stepsPerDraw = Integer.parseInt(stepsPerDrawString);
                 }
             }
         };
@@ -284,7 +266,6 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         mainMenu.seedCreatorMenuItem.addActionListener(actionListener);
         mainMenu.tileSystemOptionsMenuItem.addActionListener(actionListener);
         mainMenu.setTemperatureMenuItem.addActionListener(actionListener);
-        mainMenu.setStepsPerDrawMenuItem.addActionListener(actionListener);
     }
 
 
@@ -296,6 +277,8 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
 
     public void paintPolytile(FrontierElement attachedFrontierElement){
         canvas.drawTileOnGrid(attachedFrontierElement);
+        // commented code is to get the square of the new polytile painted(to avoid painting all)
+        // needs work and may not be needed at all.
 //        PolyTile attached = attachedFrontierElement.getPolyTile();
 //        // find the rectangle to repaint (highest x, highest y)*diameter centered on polytile location
 //        int highestX =0, highestY=0, lowX =0, lowY =0;

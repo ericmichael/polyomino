@@ -71,11 +71,13 @@ public class TestCanvas extends JPanel {
 
     }
 
+    // draws the given polytile onto the loaded graphics object (alternative to drawGrid which draws the
+        //entire grid)
     public void drawTileOnGrid(FrontierElement attached){
 //        System.out.println(attached.getLocation());
 //        System.out.println(attached.getOffset());
 //        System.out.println(center);
-        Drawer.TileDrawer.drawNewPolyTile(cg2d, attached.getPolyTile().getTiles(), tileDiameter, attached.getLocation(), center);
+        Drawer.TileDrawer.drawNewPolyTile(cg2d, attached.getPolyTile().getTiles(), tileDiameter, attached.getOffset(), center);
     }
 
     @Override
