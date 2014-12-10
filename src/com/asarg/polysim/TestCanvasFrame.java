@@ -331,8 +331,10 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
 
     public void zoomInDraw() {
         int tileDiameter = canvas.getTileDiameter();
-        if(tileDiameter< width/2)
-            canvas.setTileDiameter((int)(tileDiameter*1.25));
+        if(tileDiameter < getWidth()) {
+            System.out.println(getWidth() + " " + tileDiameter);
+            canvas.setTileDiameter((int) (tileDiameter * 1.5));
+        }
         else return;
 
         canvas.reset();
@@ -341,7 +343,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
     }
     public void zoomOutDraw() {
         int tileDiameter = canvas.getTileDiameter();
-        if(tileDiameter > 10) {
+        if(tileDiameter > 2) {
             canvas.setTileDiameter((int) (tileDiameter * .75));
         }
         else return;
@@ -525,6 +527,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
         }
         else if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
             exitFrontierMode();
+            canvas.reset();
             frontier = assembly.calculateFrontier();
             placeFrontierOnGrid();
             drawGrid();
