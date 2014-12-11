@@ -1,8 +1,9 @@
 package com.asarg.polysim.examples;
 
-import com.asarg.polysim.TestCanvasFrame;
+import com.asarg.polysim.SimulationWindow;
 import com.asarg.polysim.TileSystem;
 import com.asarg.polysim.Assembly;
+import com.asarg.polysim.Workspace;
 import com.asarg.polysim.models.datam.*;
 /**
  * Created by ericmartinez on 8/20/14.
@@ -45,6 +46,7 @@ public class RNGDominoSimulation {
 
     public static void main(String args[]){
         RNGDominoSimulation dsim = new RNGDominoSimulation(2);
-        TestCanvasFrame tcf = new TestCanvasFrame(800,600, dsim.assembly);
+        Workspace w = new Workspace(dsim.assembly);
+        //SimulationWindow tcf = new SimulationWindow(800,600, dsim.assembly);
     }
 }

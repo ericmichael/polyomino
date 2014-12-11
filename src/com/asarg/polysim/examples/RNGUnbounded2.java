@@ -1,6 +1,5 @@
 package com.asarg.polysim.examples;
 
-import com.asarg.polysim.SimulationWindow;
 import com.asarg.polysim.TileSystem;
 import com.asarg.polysim.*;
 import com.asarg.polysim.models.atam.*;
@@ -13,7 +12,7 @@ import java.io.File;
 /**
  * Created by ericmartinez on 8/19/14.
  */
-public class RNGUnboundedSimulation {
+public class RNGUnbounded2 {
     public static ATAMTile rngWL(){
         ATAMTile poly = new ATAMTile("Wl");
         poly.setGlues("wl", "ul", null, null);
@@ -143,7 +142,7 @@ public class RNGUnboundedSimulation {
     private TileSystem ts;
     private Assembly assembly;
 
-    public RNGUnboundedSimulation(int temperature) throws JAXBException {
+    public RNGUnbounded2(int temperature) throws JAXBException {
         //ts = new TileSystem(temperature, TileSystem.CONCENTRATION);
         TileConfiguration tc;
 
@@ -161,9 +160,8 @@ public class RNGUnboundedSimulation {
     }
 
     public static void main(String args[]) throws JAXBException {
-        RNGUnboundedSimulation rngsim = new RNGUnboundedSimulation(2);
+        RNGUnbounded2 rngsim = new RNGUnbounded2(2);
         System.out.println("POLYTILE COUNT" + rngsim.assembly.getTileSystem().getTileTypes().size());
         Workspace w = new Workspace(rngsim.assembly);
-        //SimulationWindow tcf = new SimulationWindow(800,600, rngsim.assembly);
     }
 }

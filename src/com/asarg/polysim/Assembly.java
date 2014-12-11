@@ -14,7 +14,7 @@ import java.util.List;
 
 @XmlRootElement(name = "Assembly")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Assembly {
+public class Assembly extends Observable{
     static final int NORTH = 0;
     static final int EAST = 1;
     static final int SOUTH = 2;
@@ -57,7 +57,13 @@ public class Assembly {
     public void changeTileSystem(TileSystem newTS){
         System.out.println("WARNING: CHANGING THE TILE SYSTEM, PREPARE FOR ERRORS!");
         tileSystem = newTS;
+        cleanUp();
+        getOpenGlues();
         frontier.changeTileSystem(newTS);
+        calculateFrontier();
+        setChanged();
+        notifyObservers(this);
+        System.out.println("Frontier: "+ frontier.size());
     }
 
     public void changeTileConfiguration(TileConfiguration tc){
@@ -196,6 +202,9 @@ public class Assembly {
         return attached.getHistory();
     }
 
+    public Frontier getFrontier(){
+        return frontier;
+    }
     // calculate frontier
 
     public Frontier calculateFrontier() {
@@ -282,37 +291,69 @@ public class Assembly {
     }
 
     public double attach(){
-        FrontierElement fe = frontier.get(frontier.randomSelect());
+        if(!frontier.isEmpty()) {
+            FrontierElement fe = frontier.get(frontier.randomSelect());
+            attach(fe);
+            calculateFrontier();
+            setChanged();
+            notifyObservers(this);
+            return fe.getAttachTime();
+        } else return -1.0;
+    }
 
+    public double attach(FrontierElement fe){
+        double time = attachP(fe);
+        setChanged();
+        notifyObservers(this);
+        return time;
+    }
+
+    private double attachP(FrontierElement fe){
         fe.setAttachTime(getDistribution(frontier.getTotalConcentration()));
         placePolytile(fe.getPolyTile(), fe.getOffset().x, fe.getOffset().y);
         frontier.remove(fe);
         attached.getHistory().add(fe);
-
         cleanUp();
         getOpenGlues();
         return fe.getAttachTime();
     }
 
-    public double attach(FrontierElement fe){
-        fe.setAttachTime(0);
-        placePolytile(fe.getPolyTile().getCopy(), fe.getOffset().x, fe.getOffset().y);
-        frontier.remove(fe);
-        attached.getHistory().add(fe);
-        cleanUp();
-        getOpenGlues();
-        return fe.getAttachTime();
+    public double attachAll(){
+        double last = -1.0;
+        while(!frontier.isEmpty()){
+            FrontierElement fe = frontier.get(frontier.randomSelect());
+            last = attachP(fe);
+            calculateFrontier();
+        }
+        setChanged();
+        notifyObservers(this);
+        return last;
     }
 
     public void detach(){
         if(!attached.getHistory().isEmpty()) {
             FrontierElement last = attached.getHistory().remove(attached.getHistory().size() - 1);
-            removePolytile(last.getPolyTile(), last.getOffset().x, last.getOffset().y);
-            cleanUp();
-            getOpenGlues();
+            detach(last);
+            setChanged();
+            notifyObservers(this);
         }
     }
 
+    private void detach(FrontierElement fe){
+        removePolytile(fe.getPolyTile(), fe.getOffset().x, fe.getOffset().y);
+        cleanUp();
+        getOpenGlues();
+    }
+
+    public void detachAll(){
+        while(!attached.getHistory().isEmpty()){
+            FrontierElement last = attached.getHistory().remove(attached.getHistory().size() - 1);
+            detach(last);
+            calculateFrontier();
+        }
+        setChanged();
+        notifyObservers(this);
+    }
 
     public void placeSeed(PolyTile t){
         if(Grid.size() == 0)

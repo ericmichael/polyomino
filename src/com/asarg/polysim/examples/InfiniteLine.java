@@ -5,7 +5,7 @@ package com.asarg.polysim.examples;
  */
 import com.asarg.polysim.*;
 import com.asarg.polysim.models.atam.*;
-import com.asarg.polysim.TestCanvasFrame;
+import com.asarg.polysim.SimulationWindow;
 import com.asarg.polysim.TileSystem;
 
 public class InfiniteLine {
@@ -36,6 +36,7 @@ public class InfiniteLine {
 
     public static void main(String args[]){
         InfiniteLine asim = new InfiniteLine(2);
-        TestCanvasFrame tcf = new TestCanvasFrame(800,600, asim.assembly);
+        Workspace w = new Workspace(asim.assembly);
+        //SimulationWindow tcf = new SimulationWindow(800,600, asim.assembly);
     }
 }

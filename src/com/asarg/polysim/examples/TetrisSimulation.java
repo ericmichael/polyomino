@@ -4,7 +4,6 @@ import com.asarg.polysim.*;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 
@@ -147,6 +146,7 @@ public class TetrisSimulation {
     public static void main(String args[]) throws JAXBException {
 
         TetrisSimulation tetris = new TetrisSimulation(2);
-        TestCanvasFrame tcf = new TestCanvasFrame(800,600, tetris.assembly);
+        Workspace w = new Workspace(tetris.assembly);
+        //SimulationWindow tcf = new SimulationWindow(800,600, tetris.assembly);
     }
 }

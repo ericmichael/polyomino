@@ -158,7 +158,8 @@ public class Main {
                 } catch (Exception e) {
                     // If Nimbus is not available, you can set the GUI to another look and feel.
                 }*/
-                TestCanvasFrame tcf = new TestCanvasFrame(800,600,assembly);
+                Workspace w = new Workspace(assembly);
+                //SimulationWindow tcf = new SimulationWindow(800,600, assembly);
             }
         });
 

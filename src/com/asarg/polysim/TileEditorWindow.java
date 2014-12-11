@@ -1,7 +1,5 @@
 package com.asarg.polysim;
 
-import javafx.scene.control.ColorPicker;
-import javafx.scene.paint.*;
 import javafx.util.Pair;
 
 import javax.swing.*;
@@ -16,11 +14,10 @@ import java.awt.Color;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
-public class TileEditorWindow extends JFrame implements ComponentListener {
+public class TileEditorWindow extends JFrame implements ComponentListener, Observer{
 
 
     Assembly assembly;
@@ -89,11 +86,11 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
 
     int lastSelectionIndex = -1;
 
-    TileEditorWindow(int width, int height, Assembly assem) {
+    TileEditorWindow(int width, int height, Workspace workspace) {
 
         polyTileEditorPanelGroup.setLayout(new BorderLayout());
 
-        this.assembly = assem;
+        this.assembly = workspace.assembly;
         this.tileSystem = this.assembly.getTileSystem();
         setLayout(new BorderLayout());
         GridBagConstraints bagConstraints = new GridBagConstraints();
@@ -547,6 +544,12 @@ public class TileEditorWindow extends JFrame implements ComponentListener {
 
         initilizeLists();
 
+    }
+
+    public void update(Observable o, Object arg) {
+        System.out.println("TEW something changed: " + arg);
+        assembly = (Assembly) arg;
+        tileSystem = this.assembly.getTileSystem();
     }
     
     public void setTileData(Tile tile) {
