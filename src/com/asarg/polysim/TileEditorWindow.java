@@ -327,18 +327,9 @@ public class TileEditorWindow extends JFrame implements ComponentListener, Obser
                         int strength = glF.getValue();
                         tileConfig.addGlueFunction(gLabelL, gLabelR, strength);
                     }
-
                     tileSystem.loadTileConfiguration(tileConfig);
 
                     assembly.changeTileSystem(tileSystem);
-
-                    for (Map.Entry<Pair<String, String>, Integer> glueF : assembly.getTileSystem().getGlueFunction().entrySet()){
-                        System.out.println(glueF.getKey().getKey()+ " "+glueF.getKey().getValue() +" "+glueF.getValue());
-                    }
-                    assembly.cleanUp();
-                    assembly.getOpenGlues();
-                    assembly.calculateFrontier();
-
                 }
                 else if(e.getSource() == removePolyTileMenuItem)
                 {
@@ -547,9 +538,14 @@ public class TileEditorWindow extends JFrame implements ComponentListener, Obser
     }
 
     public void update(Observable o, Object arg) {
-        System.out.println("TEW something changed: " + arg);
-        assembly = (Assembly) arg;
-        tileSystem = this.assembly.getTileSystem();
+        Pair<String, FrontierElement> pair = (Pair<String, FrontierElement>) arg;
+        assembly = (Assembly) o;
+        String msg = pair.getKey();
+        FrontierElement fe = pair.getValue();
+
+        if(msg.equals("Tile System")){
+            tileSystem = this.assembly.getTileSystem();
+        }
     }
     
     public void setTileData(Tile tile) {

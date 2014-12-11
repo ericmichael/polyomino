@@ -107,9 +107,7 @@ public class GUI extends JMenuBar{
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("something happened");
             if(e.getSource().equals(next)) {
-                System.out.println("step");
                 window.step(1);
             }
             else if(e.getSource().equals(prev))

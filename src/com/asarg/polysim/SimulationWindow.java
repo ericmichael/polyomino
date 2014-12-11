@@ -9,6 +9,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Observer;
 import java.util.Observable;
+import javafx.util.Pair;
 
 public class SimulationWindow extends JFrame implements MouseWheelListener, MouseMotionListener, MouseListener, ComponentListener, Observer{
 
@@ -104,12 +105,37 @@ public class SimulationWindow extends JFrame implements MouseWheelListener, Mous
     }
 
     public void update(Observable o, Object arg) {
-        resetFrontier();
-        assembly = (Assembly) arg;
-        canvas.reset();
-        frontier = assembly.calculateFrontier();
-        placeFrontierOnGrid();
-        drawGrid();
+        Pair<String, FrontierElement> pair = (Pair<String, FrontierElement>) arg;
+        assembly = (Assembly) o;
+        String msg = pair.getKey();
+        FrontierElement fe = pair.getValue();
+
+        if(msg.equals("attach")){
+            paintPolytile(fe);
+            frontier = assembly.calculateFrontier();
+            placeFrontierOnGrid();
+        }else if(msg.equals("detach")){
+            resetFrontier();
+            frontier = assembly.calculateFrontier();
+            System.out.println("My Frontier size: " + frontier.size());
+            canvas.reset();
+            placeFrontierOnGrid();
+            drawGrid();
+        }else if(msg.equals("refresh")){
+            resetFrontier();
+            frontier = assembly.calculateFrontier();
+            canvas.reset();
+            placeFrontierOnGrid();
+            drawGrid();
+
+        }else if(msg.equals("Tile System")){
+            resetFrontier();
+            frontier = assembly.calculateFrontier();
+            canvas.reset();
+            placeFrontierOnGrid();
+            drawGrid();
+        }
+
     }
 
 

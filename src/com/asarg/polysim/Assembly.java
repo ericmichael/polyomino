@@ -55,14 +55,17 @@ public class Assembly extends Observable{
 
     //change tile system stub
     public void changeTileSystem(TileSystem newTS){
+        printDebugInformation();
+        tileSystem.printDebugInformation();
         System.out.println("WARNING: CHANGING THE TILE SYSTEM, PREPARE FOR ERRORS!");
+        newTS.printDebugInformation();
         tileSystem = newTS;
         cleanUp();
         getOpenGlues();
         frontier.changeTileSystem(newTS);
         calculateFrontier();
         setChanged();
-        notifyObservers(this);
+        notifyObservers(new Pair<String, FrontierElement>("Tile System", null));
         System.out.println("Frontier: "+ frontier.size());
     }
 
@@ -296,7 +299,7 @@ public class Assembly extends Observable{
             attach(fe);
             calculateFrontier();
             setChanged();
-            notifyObservers(this);
+            notifyObservers(new Pair<String, FrontierElement>("attach", fe));
             return fe.getAttachTime();
         } else return -1.0;
     }
@@ -304,7 +307,7 @@ public class Assembly extends Observable{
     public double attach(FrontierElement fe){
         double time = attachP(fe);
         setChanged();
-        notifyObservers(this);
+        notifyObservers(new Pair<String, FrontierElement>("attach", fe));
         return time;
     }
 
@@ -326,7 +329,7 @@ public class Assembly extends Observable{
             calculateFrontier();
         }
         setChanged();
-        notifyObservers(this);
+        notifyObservers(new Pair<String, FrontierElement>("refresh", null));
         return last;
     }
 
@@ -335,7 +338,7 @@ public class Assembly extends Observable{
             FrontierElement last = attached.getHistory().remove(attached.getHistory().size() - 1);
             detach(last);
             setChanged();
-            notifyObservers(this);
+            notifyObservers(new Pair<String, FrontierElement>("detach", last));
         }
     }
 
@@ -352,7 +355,7 @@ public class Assembly extends Observable{
             calculateFrontier();
         }
         setChanged();
-        notifyObservers(this);
+        notifyObservers(new Pair<String, FrontierElement>("refresh", null));
     }
 
     public void placeSeed(PolyTile t){
