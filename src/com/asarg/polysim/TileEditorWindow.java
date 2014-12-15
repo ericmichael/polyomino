@@ -1,5 +1,6 @@
 package com.asarg.polysim;
 
+import com.asarg.polysim.adapters.graphics.raster.Drawer;
 import javafx.util.Pair;
 
 import javax.swing.*;
@@ -86,7 +87,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener, Obser
 
     int lastSelectionIndex = -1;
 
-    TileEditorWindow(int width, int height, Workspace workspace) {
+    TileEditorWindow(int width, int height, final Workspace workspace) {
 
         polyTileEditorPanelGroup.setLayout(new BorderLayout());
 
@@ -314,6 +315,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener, Obser
 
 
                 } else if (e.getSource() == updateAssemblyMenuItem) {
+                    workspace.window.resetFrontier();
                     TileConfiguration tileConfig = new TileConfiguration();
                     for (PolyTile polyTile : polytileList) {
                         tileConfig.addTileType(polyTile);

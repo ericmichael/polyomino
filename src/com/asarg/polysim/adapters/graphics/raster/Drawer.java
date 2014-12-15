@@ -1,11 +1,11 @@
-package com.asarg.polysim;
+package com.asarg.polysim.adapters.graphics.raster;
 
+import com.asarg.polysim.PolyTile;
+import com.asarg.polysim.Tile;
 import javafx.util.Pair;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;

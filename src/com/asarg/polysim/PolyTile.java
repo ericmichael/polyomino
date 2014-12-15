@@ -17,7 +17,7 @@ import java.util.List;
 public class PolyTile {
     // tiles that make up the shape of the polytile.
     @XmlElement(name = "Tile")
-    protected List<Tile> tiles = new ArrayList<Tile>();
+    public List<Tile> tiles = new ArrayList<Tile>();
     // polytiles have a concentration or a count. Initialized to -1 to use as "not set" exception.
     private double concentration = -1;
     private int count = -1;

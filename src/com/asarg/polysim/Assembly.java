@@ -58,12 +58,13 @@ public class Assembly extends Observable{
         printDebugInformation();
         tileSystem.printDebugInformation();
         System.out.println("WARNING: CHANGING THE TILE SYSTEM, PREPARE FOR ERRORS!");
-        newTS.printDebugInformation();
         tileSystem = newTS;
         cleanUp();
         getOpenGlues();
         frontier.changeTileSystem(newTS);
         calculateFrontier();
+        printDebugInformation();
+        tileSystem.printDebugInformation();
         setChanged();
         notifyObservers(new Pair<String, FrontierElement>("Tile System", null));
         System.out.println("Frontier: "+ frontier.size());
@@ -337,6 +338,7 @@ public class Assembly extends Observable{
         if(!attached.getHistory().isEmpty()) {
             FrontierElement last = attached.getHistory().remove(attached.getHistory().size() - 1);
             detach(last);
+            calculateFrontier();
             setChanged();
             notifyObservers(new Pair<String, FrontierElement>("detach", last));
         }
@@ -352,7 +354,7 @@ public class Assembly extends Observable{
         while(!attached.getHistory().isEmpty()){
             FrontierElement last = attached.getHistory().remove(attached.getHistory().size() - 1);
             detach(last);
-            calculateFrontier();
+
         }
         setChanged();
         notifyObservers(new Pair<String, FrontierElement>("refresh", null));

@@ -1,5 +1,9 @@
-package com.asarg.polysim;
+package com.asarg.polysim.adapters.graphics.raster;
 
+
+import com.asarg.polysim.FrontierElement;
+import com.asarg.polysim.Tile;
+import com.asarg.polysim.adapters.graphics.raster.Drawer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +21,7 @@ public class TestCanvas extends JPanel {
     private int w;
     private int h;
 
-    TestCanvas(int w, int h) {
+    public TestCanvas(int w, int h) {
         center = new Point(w / 2, h / 2);
         canvasBFI = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         cg2d = canvasBFI.createGraphics();
@@ -28,7 +32,7 @@ public class TestCanvas extends JPanel {
         this.w = w;
         this.h = h;
     }
-    TestCanvas()
+    public TestCanvas()
     {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         canvasBFI = new BufferedImage(screenSize.width, screenSize.height, BufferedImage.TYPE_INT_ARGB);
