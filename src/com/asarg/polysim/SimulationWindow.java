@@ -255,6 +255,12 @@ public class SimulationWindow extends JFrame implements MouseWheelListener, Mous
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
+        if (!mainMenu.stopped){
+            System.out.println("Do not drag while playing!");
+            JOptionPane.showMessageDialog(null,"Do not drag while playing!\nAssembly must be paused.");
+            return;
+        }
+
         if(e.getWheelRotation() == 1)
         {
             if(frontierClick){
