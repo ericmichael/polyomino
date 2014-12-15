@@ -62,9 +62,17 @@ public class TileEditorWindow extends JFrame implements ComponentListener, Obser
     JTextField sGlueLabelTF = new JTextField(5);
     JTextField wGlueLabelTF = new JTextField(5);
     JTextField polyTileLabelTF = new JTextField(5);
+    JLabel nGlueLabel = new JLabel("N.");
+    JLabel eGlueLabel = new JLabel("E.");
+    JLabel sGlueLabel = new JLabel("S.");
+    JLabel wGlueLabel = new JLabel("W.");
+    JLabel tileLabel = new JLabel("Tile Label:");
+    JLabel glueTextLabel = new JLabel("-Glues Labels-");
 
     JButton applyButton = new JButton("Set");
     JButton removeButton = new JButton("Remove");
+    JButton btnChooseColor = new JButton("Set Color");
+
 
 
     //Components
@@ -175,17 +183,17 @@ public class TileEditorWindow extends JFrame implements ComponentListener, Obser
         JPanel wgPanel = new JPanel();
         JPanel applyRemovePanel = new JPanel();
 
-        tlPanel.add(new JLabel("Tile Label:"));
+        tlPanel.add(tileLabel);
         tlPanel.add(tileLabelTF);
 
 
-        ngPanel.add(new JLabel("N."));
+        ngPanel.add(nGlueLabel);
         ngPanel.add(nGlueLabelTF);
-        egPanel.add(new JLabel("E."));
+        egPanel.add(eGlueLabel);
         egPanel.add(eGlueLabelTF);
-        sgPanel.add(new JLabel("S."));
+        sgPanel.add(sGlueLabel);
         sgPanel.add(sGlueLabelTF);
-        wgPanel.add(new JLabel("W."));
+        wgPanel.add(wGlueLabel);
         wgPanel.add(wGlueLabelTF);
 
         applyRemovePanel.add(applyButton);
@@ -195,7 +203,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener, Obser
         gridBagConstraints.gridy = 0;
         gluePanel.add(tlPanel, gridBagConstraints);
         gridBagConstraints.gridy = 1;
-        gluePanel.add(new JLabel("-Glues Labels-"), gridBagConstraints);
+        gluePanel.add(glueTextLabel, gridBagConstraints);
         gridBagConstraints.gridy = 2;
         gluePanel.add(ngPanel, gridBagConstraints);
         gridBagConstraints.gridy = 3;
@@ -208,7 +216,6 @@ public class TileEditorWindow extends JFrame implements ComponentListener, Obser
         gluePanel.add(applyRemovePanel, gridBagConstraints);
 
         // Color chooser button
-        JButton btnChooseColor = new JButton("Set Color");
         btnChooseColor.setActionCommand("setTileColor");
         gridBagConstraints.gridy = 7;
         gluePanel.add(btnChooseColor, gridBagConstraints);
@@ -429,6 +436,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener, Obser
                     }
 
                     lastSelectionIndex = polyJList.getSelectedIndex();
+                    setTileDataEnabled(false);
                     System.out.println("selection changed, pt");
                 }
                 repaint();
@@ -510,9 +518,10 @@ public class TileEditorWindow extends JFrame implements ComponentListener, Obser
 
                         reDrawJList();
                         repaint();
+                        setTileDataEnabled(true);
 
                     }
-                }
+                }else{ setTileDataEnabled(false); }
             }
         };
 
@@ -536,6 +545,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener, Obser
 
 
         initilizeLists();
+        setTileDataEnabled(false);
 
     }
 
@@ -560,12 +570,33 @@ public class TileEditorWindow extends JFrame implements ComponentListener, Obser
     }
 
     public void displayTileData(Tile tile) {
-        if (selectedTile != null)
+        if (selectedTile != null) {
+            setTileDataEnabled(true);
             tileLabelTF.setText(tile.getLabel());
+        }else{
+            setTileDataEnabled(false);
+        }
         nGlueLabelTF.setText(tile.getGlueN());
         eGlueLabelTF.setText(tile.getGlueE());
         sGlueLabelTF.setText(tile.getGlueS());
         wGlueLabelTF.setText(tile.getGlueW());
+    }
+
+    public void setTileDataEnabled(boolean enabled){
+        tileLabel.setEnabled(enabled);
+        tileLabelTF.setEnabled(enabled);
+        nGlueLabelTF.setEnabled(enabled);
+        eGlueLabelTF.setEnabled(enabled);
+        sGlueLabelTF.setEnabled(enabled);
+        wGlueLabelTF.setEnabled(enabled);
+        applyButton.setEnabled(enabled);
+        removeButton.setEnabled(enabled);
+        btnChooseColor.setEnabled(enabled);
+        nGlueLabel.setEnabled(enabled);
+        eGlueLabel.setEnabled(enabled);
+        sGlueLabel.setEnabled(enabled);
+        wGlueLabel.setEnabled(enabled);
+        glueTextLabel.setEnabled(enabled);
     }
 
     public void newPolyTile() {
