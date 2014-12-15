@@ -298,6 +298,11 @@ public class SimulationWindow extends JFrame implements MouseWheelListener, Mous
 
     @Override
     public void mouseDragged(MouseEvent e) {
+        if (!mainMenu.stopped){
+            System.out.println("Do not drag while playing!");
+            JOptionPane.showMessageDialog(null,"Do not drag while playing!\nAssembly must be paused.");
+            return;
+        }
         canvas.translateOffset(e.getX() - lastMouseXY.x, e.getY() - lastMouseXY.y);
         lastMouseXY=e.getPoint();
         canvas.reset();
