@@ -1,4 +1,4 @@
-VersaTile Self-Assembly Simulator
+VersaTile Self-Assembly Simulator - [Download the latest release](https://github.com/ericmichael/polyomino/releases)
 =========
 
 VersaTile is a cross-platform simulator for various models of algorithmic self-assembly.
