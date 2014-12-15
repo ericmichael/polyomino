@@ -115,6 +115,7 @@ public class GUI extends JMenuBar{
                         while (!window.frontier.isEmpty()){
                             if (stopped) {
                                 // draw the entire grid when stopping, to see the frontier of the items.
+                                window.placeFrontierOnGrid();
                                 window.drawGrid();
                                 break;
                             }

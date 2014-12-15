@@ -78,23 +78,23 @@ public class SimulationWindow extends JFrame implements MouseWheelListener, Mous
     }
 
     public void step(int i){
+        step(i, true);
+    }
+
+    public void step(int i, boolean notify){
         resetFrontier();
 
         switch(i){
-            case 1: updateAttachTime(assembly.attach()); break;
-            case 2: updateAttachTime(assembly.attachAll()); break;
-            case -1: assembly.detach(); break;
-            case -2: assembly.detachAll(); break;
+            case 1: updateAttachTime(assembly.attach(notify)); break;
+            case 2: updateAttachTime(assembly.attachAll(notify)); break;
+            case -1: assembly.detach(notify); break;
+            case -2: assembly.detachAll(notify); break;
 
         }
     }
 
     public void play(){
-        updateAttachTime(assembly.attach(false));
-        frontier = assembly.getFrontier();
-        for(FrontierElement new_fe : frontier){
-            paintPolytile(new_fe);
-        }
+        step(1, false);
         //get the latest attached frontier element
         paintPolytile(assembly.getAttached().get(assembly.getAttached().size() - 1));
 
