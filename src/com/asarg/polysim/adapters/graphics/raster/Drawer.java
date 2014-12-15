@@ -192,7 +192,8 @@ public class Drawer {
             clearGraphics(g);
 
             g.setColor(color);
-            g.setStroke(new BasicStroke(diameter / 25));
+            Stroke dashed = new BasicStroke(diameter/25,BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,0,new float[]{4},0);
+            g.setStroke(dashed);
             g.drawRect( location.x * diameter + offset.x - diameter / 2, -location.y * diameter + offset.y - diameter / 2, diameter ,diameter);
 
         }

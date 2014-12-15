@@ -484,6 +484,7 @@ public class TileEditorWindow extends JFrame implements ComponentListener, Obser
                 if(!polyJList.isSelectionEmpty())
                     Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX,polytileList.get(polyJList.getSelectedIndex()),tileDiameter, canvasCenteredOffset);
                 Drawer.clearGraphics(overLayerGFX);
+                Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
                 repaint();
             }
 
