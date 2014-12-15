@@ -234,7 +234,7 @@ public class TestCanvasFrame extends JFrame implements MouseWheelListener, Mouse
                 } else if (e.getSource().equals(mainMenu.tileSetEditorMenuItem)){
                     tileEditorWindow.setVisible(true);
                 } else if (e.getSource().equals(mainMenu.setTemperatureMenuItem)){
-                    String temperatureString = JOptionPane.showInputDialog(null, "Set the system's temperature", "2");
+                    String temperatureString = JOptionPane.showInputDialog(null, "Set the system's temperature", assembly.getTileSystem().getTemperature());
                     int temperature = Integer.parseInt(temperatureString);
                     assembly.getTileSystem().setTemperature(temperature);
                     resetFrontier();
