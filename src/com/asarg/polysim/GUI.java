@@ -117,6 +117,7 @@ public class GUI extends JMenuBar{
                     @Override
                     public void run() {
                         stopped = false;
+                        window.resetFrontier();
                         while (!window.frontier.isEmpty()){
                             if (stopped) {
                                 // draw the entire grid when stopping, to see the frontier of the items.
@@ -125,7 +126,6 @@ public class GUI extends JMenuBar{
                             }
                             window.play();
                         }
-                        System.out.println("PLAY!");
                     }
                 };
                 playThread.start();

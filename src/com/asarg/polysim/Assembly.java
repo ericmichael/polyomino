@@ -295,12 +295,18 @@ public class Assembly extends Observable{
     }
 
     public double attach(){
+        return attach(true);
+    }
+
+    public double attach(boolean notify){
         if(!frontier.isEmpty()) {
             FrontierElement fe = frontier.get(frontier.randomSelect());
-            attach(fe);
+            attachP(fe);
             calculateFrontier();
-            setChanged();
-            notifyObservers(new Pair<String, FrontierElement>("attach", fe));
+            if(notify) {
+                setChanged();
+                notifyObservers(new Pair<String, FrontierElement>("attach", fe));
+            }
             return fe.getAttachTime();
         } else return -1.0;
     }

@@ -90,11 +90,12 @@ public class SimulationWindow extends JFrame implements MouseWheelListener, Mous
     }
 
     public void play(){
-        resetFrontier();
-        updateAttachTime(assembly.attach());
-        frontier = assembly.calculateFrontier();
-        placeFrontierOnGrid();
-        // get the latest attached frontier element
+        updateAttachTime(assembly.attach(false));
+        frontier = assembly.getFrontier();
+        for(FrontierElement new_fe : frontier){
+            paintPolytile(new_fe);
+        }
+        //get the latest attached frontier element
         paintPolytile(assembly.getAttached().get(assembly.getAttached().size() - 1));
 
     }
