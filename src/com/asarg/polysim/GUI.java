@@ -30,12 +30,7 @@ public class GUI extends JMenuBar{
     JMenuItem importTileSetMenuItem = new JMenuItem("Import Tile Set");
     JMenuItem tileSetEditorMenuItem = new JMenuItem("Tile Set Editor");
 
-//    JMenuItem undoMenuItem = new JMenuItem("Undo");
-//    JMenuItem redoMenuItem = new JMenuItem("Redo");
-
-    JMenuItem seedCreatorMenuItem = new JMenuItem("Seed Creator");
     JMenuItem setTemperatureMenuItem = new JMenuItem("Set Temperature");
-    JMenuItem tileSystemOptionsMenuItem = new JMenuItem("Options");
 
     //tool bar items
     ControlButton next = new ControlButton("forward");
@@ -44,14 +39,13 @@ public class GUI extends JMenuBar{
     ControlButton stop = new ControlButton("stop");
     ControlButton fastf = new ControlButton("fast-forward");
     ControlButton fastb = new ControlButton("fast-backward");
-    IconButton optionButton = new IconButton();
 
     // status panel
     JPanel statusPanel;
     JLabel statusLabel = new JLabel();
     String statusLabelPreviousText = "";
 
-    boolean stopped;
+    boolean stopped = true;
 
     KeyListener keyListener = new KeyListener(){
         @Override
@@ -124,7 +118,8 @@ public class GUI extends JMenuBar{
                                 window.drawGrid();
                                 break;
                             }
-                            window.play();
+                            else
+                                window.play();
                         }
                     }
                 };
@@ -199,7 +194,8 @@ public class GUI extends JMenuBar{
             } else if (e.getSource().equals(tileSetEditorMenuItem)){
                 window.tileEditorWindow.setVisible(true);
             } else if (e.getSource().equals(setTemperatureMenuItem)){
-                String temperatureString = JOptionPane.showInputDialog(null, "Set the system's temperature", "2");
+                String temperatureString = JOptionPane.showInputDialog(null, "Set the system's temperature",
+                        window.assembly.getTileSystem().getTemperature());
                 int temperature = Integer.parseInt(temperatureString);
                 window.assembly.getTileSystem().setTemperature(temperature);
                 window.resetFrontier();
@@ -218,7 +214,6 @@ public class GUI extends JMenuBar{
         addMenuBars();
         addToolBars();
         addStatusBar();
-        //addActionListeners();
         System.out.println("window" + this.window);
         window.addKeyListener(keyListener);
         setVisible(true);
@@ -246,23 +241,12 @@ public class GUI extends JMenuBar{
         toolsMenu.add(tileSetEditorMenuItem);
 
         JMenu editMenu = new JMenu("Edit");
-//        undoMenuItem.addActionListener(actionListener);
-//        redoMenuItem.addActionListener(actionListener);
         setTemperatureMenuItem.addActionListener(actionListener);
-//        editMenu.add(undoMenuItem);
-//        editMenu.add(redoMenuItem);
         editMenu.add(setTemperatureMenuItem);
-
-        JMenu tileSystemMenu = new JMenu("Tile System");
-        seedCreatorMenuItem.addActionListener(actionListener);
-        tileSystemOptionsMenuItem.addActionListener(actionListener);
-        tileSystemMenu.add(seedCreatorMenuItem);
-        tileSystemMenu.add(tileSystemOptionsMenuItem);
 
         this.add(fileMenu);
         this.add(editMenu);
         this.add(toolsMenu);
-        this.add(tileSystemMenu);
     }
 
     private void addToolBars(){
@@ -286,9 +270,6 @@ public class GUI extends JMenuBar{
         stop.addActionListener(actionListener);
         next.addActionListener(actionListener);
         fastf.addActionListener(actionListener);
-
-        optionButton.setText(String.valueOf('\uf013'));
-        stepControlToolBar.add(optionButton);
 
         stepControlToolBar.setBorder(new EtchedBorder());
         stepControlToolBar.setLayout(new FlowLayout(FlowLayout.CENTER));
