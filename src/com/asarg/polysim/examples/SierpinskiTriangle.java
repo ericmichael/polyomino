@@ -1,18 +1,14 @@
-package com.asarg.polysim;
+package com.asarg.polysim.examples;
 
-import javax.swing.*;
+import com.asarg.polysim.*;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
-import java.util.Random;
 
-public class TetrisSimulation {
+public class SierpinskiTriangle {
 
-    public static double calculateExpDistribution(Random r, double p) {
-        return -(Math.log(r.nextDouble()) / p);
-    }
     public static String[] blankGlues() {
         String label[] = new String[4];
         label[0] = null;
@@ -57,17 +53,17 @@ public class TetrisSimulation {
     }
 
     public static PolyTile tetrisX() {
-        String glue[] = {"x", "x", "e", "x"};
-        String glue2[] = {"x", "x", "x", "ddeFE"};
-        String allX[] = {"x","x","x","x"};
+        String blank[] = blankGlues();
+        String glue[] = {null, null, "e", null};
+        String glue2[] = {null, null, null, "d"};
 
         PolyTile poly = new PolyTile("X");
 
         poly.setColor("8C0095");
 
-        poly.addTile(0, 0, allX);
-        poly.addTile(-1, 0, allX.clone());
-        poly.addTile(1, 0, allX.clone());
+        poly.addTile(0, 0, blankGlues());
+        poly.addTile(-1, 0, blankGlues());
+        poly.addTile(1, 0, blankGlues());
         poly.addTile(0, 1, glue2);
         poly.addTile(0, -1, glue);
 
@@ -76,7 +72,7 @@ public class TetrisSimulation {
 
     public static PolyTile tetrisF() {
         String[] gleft = {null, null, null, "b"};
-        String[] gright = {null, "ddeFE", null, null};
+        String[] gright = {null, "d", null, null};
 
         PolyTile tetrisF = new PolyTile("F");
 
@@ -97,7 +93,6 @@ public class TetrisSimulation {
         PolyTile tetris = new PolyTile("I");
 
         tetris.setColor("AC193D");
-
 
         tetris.addTile(0, 0, blankGlues());
         tetris.addTile(0, 1, blankGlues());
@@ -122,57 +117,36 @@ public class TetrisSimulation {
         return tetris;
     }
 
+    public Assembly loadAssembly() throws JAXBException {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Assembly.class);
+        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+        Assembly a = (Assembly) unmarshaller.unmarshal(new File("./Examples/TETRIS_ATAM/assembly.xml"));
+        jaxbContext = JAXBContext.newInstance(TileConfiguration.class);
+        unmarshaller = jaxbContext.createUnmarshaller();
+        TileConfiguration tc = (TileConfiguration) unmarshaller.unmarshal(new File("./Examples/TETRIS_ATAM/tileconfig.xml"));
+
+        TileSystem ts = new TileSystem(2);
+        ts.loadTileConfiguration(tc);
+
+        for(PolyTile p : ts.getTileTypes())
+            p.setGlues();
+
+        a.changeTileSystem(ts);
+
+        return a;
+    }
+
+    public TileSystem ts;
+    public Assembly assembly;
+
+    public SierpinskiTriangle(int temperature) throws JAXBException {
+        assembly = loadAssembly();
+    }
 
     public static void main(String args[]) throws JAXBException {
 
-        TileSystem ts = new TileSystem(2);
-
-        ts.addPolyTile(tetrisF());
-        ts.addPolyTile(tetrisI());
-        ts.addPolyTile(tetrisL());
-        ts.addPolyTile(tetrisU());
-        ts.addPolyTile(tetrisV());
-        ts.addPolyTile(tetrisX());
-
-        ts.addGlueFunction("a","a",2);
-        ts.addGlueFunction("b","b",2);
-        ts.addGlueFunction("c","c",2);
-        ts.addGlueFunction("d","d",2);
-        ts.addGlueFunction("e","e",2);
-        ts.addGlueFunction("f","f",2);
-        ts.addGlueFunction("x","x",2);
-        ts.addGlueFunction("ddeFE","ddeFE",2);
-
-        final Assembly assembly = new Assembly(ts);
-        //assembly.placeSeed(tetrisF());
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-               /* try {
-                   for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                        if ("Nimbus".equals(info.getName())) {
-                            UIManager.setLookAndFeel(info.getClassName());
-                            break;
-                        }
-                    }
-                } catch (Exception e) {
-                    // If Nimbus is not available, you can set the GUI to another look and feel.
-                }*/
-                Workspace w = new Workspace(assembly);
-                //SimulationWindow tcf = new SimulationWindow(800,600, assembly);
-            }
-        });
-
-
-
-
-        JAXBContext jaxbContext = JAXBContext.newInstance(TileSystem.class);
-        Marshaller marshaller = jaxbContext.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-
-        marshaller.marshal(ts, new File("./output.xml"));
-
-
+        SierpinskiTriangle tetris = new SierpinskiTriangle(2);
+        Workspace w = new Workspace(tetris.assembly);
+        //SimulationWindow tcf = new SimulationWindow(800,600, tetris.assembly);
     }
 }

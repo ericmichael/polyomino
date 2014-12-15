@@ -15,3 +15,13 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+/.DS_Store
+/src/.DS_Store
+/src/com/.DS_Store
+/src/com/asarg/.DS_Store
+/src/com/asarg/polysim/.DS_Store
+
+/src/com/asarg/polysim/resources/.DS_Store
+
+/src/META-INF/MANIFEST.MF
