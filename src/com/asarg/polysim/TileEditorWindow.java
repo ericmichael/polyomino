@@ -406,8 +406,13 @@ public class TileEditorWindow extends JFrame implements ComponentListener, Obser
                     //from apply button listener
                     Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX, polytileList.get(polyJList.isSelectionEmpty() ? 0 : polyJList.getSelectedIndex()), tileDiameter, canvasCenteredOffset);
                     reDrawJList();
-                    repaint();
 
+                    //redraw selected tile
+                    displayTileData(selectedTile);
+                    Drawer.clearGraphics(overLayerGFX);
+                    Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
+
+                    repaint();
                 }
             }
         };
@@ -641,13 +646,11 @@ public class TileEditorWindow extends JFrame implements ComponentListener, Obser
             iconList.add(new ImageIcon(toolkit.createImage(iconDrawSpace.getSource())));
 
 
-
         }
         iconList.toArray(icons);
         polyJList.setListData(icons);
+
         polyJList.setSelectedIndex(selectedIndex);
-
-
     }
 
     public void initilizeLists() {
