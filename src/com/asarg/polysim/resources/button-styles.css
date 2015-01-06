@@ -1,0 +1,10 @@
+.toolbar-btn{
+    -fx-background-color: none;
+    -fx-font-family: FontAwesome;
+
+}
+
+.toolbar-btn .text{
+    -fx-font-size: 16.0;
+    -fx-fill: #5e5e5e;
+}

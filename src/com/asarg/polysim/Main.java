@@ -1,35 +1,40 @@
 package com.asarg.polysim;
 
-import javax.swing.*;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import java.io.File;
-import java.util.Random;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.scene.text.Font;
+import javafx.application.Application;
 
-public class Main {
+public class Main extends Application {
+    static {
+        Font.loadFont(Main.class.getResource("resources/fontawesome.ttf").toExternalForm(), 10);
+    }
 
-    public static void main(String args[]) throws JAXBException {
+    public static void main(String args[]) {
+        Application.launch(Main.class, (java.lang.String[])null);
+    }
 
+    @Override
+    public void start(Stage primaryStage) {
+        //Workspace w = new Workspace();
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    Main.class.getResource("mainwindow.fxml")
+            );
+            BorderPane page = (BorderPane) loader.load();
+            SimulationController controller = (SimulationController) loader.getController();
+            controller.setStage(primaryStage);
+            Scene scene = new Scene(page);
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("Untitled");
+            primaryStage.show();
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-               /* try {
-                   for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                        if ("Nimbus".equals(info.getName())) {
-                            UIManager.setLookAndFeel(info.getClassName());
-                            break;
-                        }
-                    }
-                } catch (Exception e) {
-                    // If Nimbus is not available, you can set the GUI to another look and feel.
-                }*/
-                Assembly asm = new Assembly();
-                Workspace w = new Workspace(asm);
-            }
-        });
-
+        } catch (Exception ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
