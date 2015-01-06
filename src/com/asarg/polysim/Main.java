@@ -1,13 +1,14 @@
 package com.asarg.polysim;
 
+import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.text.Font;
-import javafx.application.Application;
 
 public class Main extends Application {
     static {

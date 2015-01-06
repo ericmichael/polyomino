@@ -5,7 +5,6 @@ import com.asarg.polysim.adapters.graphics.raster.TestCanvas;
 import javafx.embed.swing.SwingNode;
 import javafx.util.Pair;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;

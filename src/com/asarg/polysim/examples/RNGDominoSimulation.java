@@ -1,10 +1,9 @@
 package com.asarg.polysim.examples;
 
-import com.asarg.polysim.SimulationWindow;
-import com.asarg.polysim.TileSystem;
 import com.asarg.polysim.Assembly;
+import com.asarg.polysim.TileSystem;
 import com.asarg.polysim.Workspace;
-import com.asarg.polysim.models.datam.*;
+import com.asarg.polysim.models.datam.daTAMTile;
 /**
  * Created by ericmartinez on 8/20/14.
  */

@@ -1,7 +1,6 @@
 package com.asarg.polysim.models.hextam;
 
 import com.asarg.polysim.models.datam.daTAMTile;
-import com.asarg.polysim.xml.PairXmlAdapter;
 
 /**
  * Created by ericmartinez on 8/20/14.

@@ -1,18 +1,16 @@
 package com.asarg.polysim;
 
 
-
+import com.asarg.polysim.adapters.graphics.raster.Drawer;
+import com.asarg.polysim.adapters.graphics.raster.TestCanvas;
+import javafx.util.Pair;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Observer;
 import java.util.Observable;
-
-import com.asarg.polysim.adapters.graphics.raster.Drawer;
-import com.asarg.polysim.adapters.graphics.raster.TestCanvas;
-import javafx.util.Pair;
+import java.util.Observer;
 
 public class SimulationWindow extends JFrame implements MouseWheelListener, MouseMotionListener, MouseListener, ComponentListener, Observer{
 

@@ -3,7 +3,6 @@ package com.asarg.polysim.adapters.graphics.raster;
 
 import com.asarg.polysim.FrontierElement;
 import com.asarg.polysim.Tile;
-import com.asarg.polysim.adapters.graphics.raster.Drawer;
 
 import javax.swing.*;
 import java.awt.*;

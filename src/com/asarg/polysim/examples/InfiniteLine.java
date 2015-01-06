@@ -3,10 +3,12 @@ package com.asarg.polysim.examples;
 /**
  * Created by Mario on 8/22/2014.
  */
-import com.asarg.polysim.*;
-import com.asarg.polysim.models.atam.*;
-import com.asarg.polysim.SimulationWindow;
+
+import com.asarg.polysim.Assembly;
+import com.asarg.polysim.PolyTile;
 import com.asarg.polysim.TileSystem;
+import com.asarg.polysim.Workspace;
+import com.asarg.polysim.models.atam.ATAMTile;
 
 public class InfiniteLine {
     private TileSystem ts;

@@ -1,31 +1,19 @@
 package com.asarg.polysim;
 
 import com.asarg.polysim.adapters.graphics.raster.TestCanvas;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.text.Font;
+import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import javafx.stage.FileChooser;
-import javafx.embed.swing.SwingNode;
-import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
-import javax.swing.*;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * Created by ericmartinez on 1/5/15.

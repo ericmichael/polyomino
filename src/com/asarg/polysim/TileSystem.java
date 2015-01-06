@@ -10,7 +10,10 @@ import javafx.util.Pair;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.InvalidObjectException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @XmlRootElement(name = "TileSystem")
 @XmlAccessorType(XmlAccessType.FIELD)

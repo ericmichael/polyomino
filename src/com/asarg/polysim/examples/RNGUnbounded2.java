@@ -1,8 +1,10 @@
 package com.asarg.polysim.examples;
 
+import com.asarg.polysim.Assembly;
+import com.asarg.polysim.TileConfiguration;
 import com.asarg.polysim.TileSystem;
-import com.asarg.polysim.*;
-import com.asarg.polysim.models.atam.*;
+import com.asarg.polysim.Workspace;
+import com.asarg.polysim.models.atam.ATAMTile;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;

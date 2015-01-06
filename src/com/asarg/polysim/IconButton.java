@@ -3,10 +3,11 @@ package com.asarg.polysim;
 /**
  * Created by ericmartinez on 8/22/14.
  */
+
 import javax.swing.*;
 import java.awt.*;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class IconButton extends JButton {
     public IconButton() {

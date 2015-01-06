@@ -2,8 +2,9 @@ package com.asarg.polysim.models.datam;
 
 import com.asarg.polysim.PolyTile;
 import com.asarg.polysim.Tile;
-import java.util.Iterator;
+
 import java.awt.*;
+import java.util.Iterator;
 
 /**
  * Created by ericmartinez on 8/19/14.

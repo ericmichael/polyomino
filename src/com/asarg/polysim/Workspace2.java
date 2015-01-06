@@ -1,8 +1,7 @@
 package com.asarg.polysim;
 
-import com.asarg.polysim.adapters.graphics.raster.TestCanvas;
-import java.util.ArrayList;
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Created by ericmartinez on 12/11/14.

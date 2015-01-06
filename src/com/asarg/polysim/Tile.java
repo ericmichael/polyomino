@@ -2,10 +2,14 @@ package com.asarg.polysim;/*Tile class
 information for single tiles (not to be confused with polytiles).
 Should store a location and an id.
 */
+
 import com.asarg.polysim.xml.PointXmlAdapter;
 
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.awt.*;
 import java.util.Arrays;
