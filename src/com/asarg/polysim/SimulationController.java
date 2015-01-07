@@ -6,10 +6,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -48,7 +45,9 @@ public class SimulationController implements Initializable {
     @FXML
     Button btn_ff;
     @FXML
-    Button btn_settings;
+    ToggleButton btn_settings;
+    @FXML
+    Button btn_help;
     @FXML
     Label lbl_left_status;
     @FXML
@@ -64,8 +63,10 @@ public class SimulationController implements Initializable {
         btn_f.setText(String.valueOf('\uf051'));
         btn_ff.setText(String.valueOf('\uf050'));
         btn_settings.setText(String.valueOf('\uf013'));
+        btn_help.setText(String.valueOf('\uf059'));
         inspector.managedProperty().bind(inspector.visibleProperty());
         inspector.setVisible(false);
+        btn_settings.setSelected(false);
 
         tabPane.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<Tab>() {
@@ -177,6 +178,7 @@ public class SimulationController implements Initializable {
     public void toggle_settings() {
         inspecting = !inspecting;
         inspector.setVisible(inspecting);
+        btn_settings.setSelected(inspecting);
     }
 
 

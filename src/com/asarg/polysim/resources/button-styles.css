@@ -2,15 +2,44 @@
     -fx-background-color: linear-gradient(to bottom, #fafafa, #d2d2d2);
 }
 
-.toolbar-btn{
+.toolbar-ctrl-btn{
     -fx-background-color: none;
     -fx-font-family: FontAwesome;
+}
 
+.toolbar-ctrl-btn .text{
+    -fx-font-size: 16.0;
+    -fx-fill: #5e5e5e;
+}
+
+
+.toolbar-ctrl-btn:selected .text,
+.toolbar-ctrl-btn:pressed .text{
+    -fx-font-size: 16.0;
+    -fx-fill: linear-gradient(to bottom, #007bf3, #007ef7);
+}
+
+.toolbar-btn {
+    -fx-font-size: 16.0;
+    -fx-background-color: #fcfcfc;
+    -fx-font-family: FontAwesome;
 }
 
 .toolbar-btn .text{
-    -fx-font-size: 16.0;
-    -fx-fill: #5e5e5e;
+    -fx-fill: #424242;
+}
+
+.toolbar-btn:selected .text{
+    -fx-fill: #ffffff;
+}
+
+.toolbar-btn:selected{
+    -fx-background-color: #6f6f6f;
+}
+
+
+.help .text{
+    -fx-fill: #ffd950;
 }
 
 .footer {
