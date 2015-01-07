@@ -77,7 +77,7 @@
     <center>
         <StackPane>
             <children>
-                <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                <AnchorPane fx:id="helpPane" prefHeight="200.0" prefWidth="200.0">
                     <children>
                         <HBox AnchorPane.rightAnchor="39.0" AnchorPane.topAnchor="0.0">
                             <children>

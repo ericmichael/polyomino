@@ -1,6 +1,8 @@
 package com.asarg.polysim;
 
 import com.asarg.polysim.adapters.graphics.raster.TestCanvas;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -10,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
@@ -33,6 +36,8 @@ public class SimulationController implements Initializable {
     @FXML
     StackPane inspector;
     @FXML
+    AnchorPane helpPane;
+    @FXML
     BorderPane borderPane;
     @FXML
     Button btn_fb;
@@ -54,6 +59,7 @@ public class SimulationController implements Initializable {
     Label lbl_right_status;
 
     private boolean inspecting = false;
+    private SimpleBooleanProperty showHelp = new SimpleBooleanProperty(true);
 
     @Override // This method is called by the FXMLLoader when initialization is complete
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
@@ -66,6 +72,7 @@ public class SimulationController implements Initializable {
         btn_help.setText(String.valueOf('\uf059'));
         inspector.managedProperty().bind(inspector.visibleProperty());
         inspector.setVisible(false);
+        helpPane.visibleProperty().bind(showHelp);
         btn_settings.setSelected(false);
 
         tabPane.getSelectionModel().selectedItemProperty().addListener(
@@ -73,11 +80,15 @@ public class SimulationController implements Initializable {
                     @Override
                     public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
                         if (t1 != null) {
+                            showHelp.setValue(false);
+
                             SimulationNode current = (SimulationNode) t1.getContent();
                             if (current != null) {
                                 lbl_left_status.textProperty().bind(current.left_status);
                                 lbl_right_status.textProperty().bind(current.right_status);
                             }
+                        }else {
+                            showHelp.setValue(true);
                         }
                     }
                 }
@@ -94,7 +105,6 @@ public class SimulationController implements Initializable {
 
             public void handle(javafx.scene.input.KeyEvent t) {
                 SimulationNode cn = currentSimulationNode(); //current simulationnode in tab
-
                 if (cn != null) {
                     if (enter.match(t)) {
                         if (cn.currentFrontierAttachment != null) {
@@ -112,9 +122,9 @@ public class SimulationController implements Initializable {
                     } else if (pgdown.match(t)) {
                         cn.zoomOutDraw();
                     } else if (left.match(t)) {
-                        cn.step(-1, true);
+                        backward();
                     } else if (right.match(t)) {
-                        cn.step(1, true);
+                        forward();
                     } else if (escape.match(t)) {
                         cn.exitFrontierMode();
                         cn.getCanvas().reset();
@@ -184,8 +194,13 @@ public class SimulationController implements Initializable {
 
     @FXML
     public void newMenuItem() {
+        Assembly asm = new Assembly();
         Tab tab = new Tab();
         tab.setText("Untitled");
+        final TestCanvas blankCanvas = new TestCanvas(800, 600);
+        final SimulationNode simulationNode = new SimulationNode(asm, blankCanvas);
+        simulationNode.drawGrid();
+        tab.setContent(simulationNode);
         tabPane.getTabs().add(tab);
     }
 
