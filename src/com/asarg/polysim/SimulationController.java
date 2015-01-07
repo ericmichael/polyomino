@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -74,6 +75,7 @@ public class SimulationController implements Initializable {
         inspector.setVisible(false);
         helpPane.visibleProperty().bind(showHelp);
         btn_settings.setSelected(false);
+        tabPane.setDisable(true);
 
         tabPane.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<Tab>() {
@@ -81,6 +83,7 @@ public class SimulationController implements Initializable {
                     public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
                         if (t1 != null) {
                             showHelp.setValue(false);
+                            tabPane.setDisable(false);
 
                             SimulationNode current = (SimulationNode) t1.getContent();
                             if (current != null) {
@@ -88,14 +91,13 @@ public class SimulationController implements Initializable {
                                 lbl_right_status.textProperty().bind(current.right_status);
                             }
                         }else {
+                            tabPane.setDisable(true);
                             showHelp.setValue(true);
                         }
                     }
                 }
         );
-
-        //TODO: Fix this grossness
-        borderPane.setOnKeyPressed(new EventHandler<javafx.scene.input.KeyEvent>() {
+        borderPane.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             final KeyCombination enter = new KeyCodeCombination(KeyCode.ENTER);
             final KeyCombination pgup = new KeyCodeCombination(KeyCode.PAGE_UP);
             final KeyCombination pgdown = new KeyCodeCombination(KeyCode.PAGE_DOWN);
@@ -103,7 +105,8 @@ public class SimulationController implements Initializable {
             final KeyCombination right = new KeyCodeCombination(KeyCode.RIGHT);
             final KeyCombination escape = new KeyCodeCombination(KeyCode.ESCAPE);
 
-            public void handle(javafx.scene.input.KeyEvent t) {
+            @Override
+            public void handle(KeyEvent t) {
                 SimulationNode cn = currentSimulationNode(); //current simulationnode in tab
                 if (cn != null) {
                     if (enter.match(t)) {
@@ -116,21 +119,23 @@ public class SimulationController implements Initializable {
                             cn.placeFrontierOnGrid();
                             cn.exitFrontierMode();
                             cn.drawGrid();
+                            t.consume();
                         }
                     } else if (pgup.match(t)) {
-                        cn.zoomInDraw();
+                        cn.zoomInDraw(); t.consume();
                     } else if (pgdown.match(t)) {
-                        cn.zoomOutDraw();
+                        cn.zoomOutDraw(); t.consume();
                     } else if (left.match(t)) {
-                        backward();
+                        backward(); t.consume();
                     } else if (right.match(t)) {
-                        forward();
+                        forward(); t.consume();
                     } else if (escape.match(t)) {
                         cn.exitFrontierMode();
                         cn.getCanvas().reset();
                         cn.frontier = cn.assembly.calculateFrontier();
                         cn.placeFrontierOnGrid();
                         cn.drawGrid();
+                        t.consume();
                     }
                 }
             }
