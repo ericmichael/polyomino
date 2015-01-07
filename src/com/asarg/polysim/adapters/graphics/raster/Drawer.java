@@ -300,6 +300,7 @@ public class Drawer {
 
         public static Point getGridPoint(Point canvasPoint, Point offset, int diameter)
         {
+            Point p = new Point((int)Math.round((canvasPoint.x-offset.x)/(double)diameter),(int) Math.round((-canvasPoint.y +offset.y)/(double)diameter));
             return new Point((int)Math.round((canvasPoint.x-offset.x)/(double)diameter),(int) Math.round((-canvasPoint.y +offset.y)/(double)diameter));
         }
 

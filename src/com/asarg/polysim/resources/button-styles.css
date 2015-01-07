@@ -1,3 +1,7 @@
+.toolbar {
+    -fx-background-color: linear-gradient(to bottom, #fafafa, #d2d2d2);
+}
+
 .toolbar-btn{
     -fx-background-color: none;
     -fx-font-family: FontAwesome;
@@ -7,4 +11,12 @@
 .toolbar-btn .text{
     -fx-font-size: 16.0;
     -fx-fill: #5e5e5e;
+}
+
+.footer {
+    -fx-background-color: #f4f4f4;
+}
+.footer .label .text{
+    -fx-font-size: 11.0px;
+    -fx-fill: #777;
 }

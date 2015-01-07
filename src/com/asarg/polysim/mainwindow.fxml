@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import java.net.URL?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.asarg.polysim.SimulationController">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.asarg.polysim.SimulationController">
   <stylesheets>
     <URL value="@resources/button-styles.css" />
   </stylesheets>
@@ -38,46 +39,58 @@
                 </Menu>
               </menus>
             </MenuBar>
-            <ToolBar prefHeight="40.0" prefWidth="200.0">
-              <items>
-                  <HBox>
-                     <children>
-                      <Button fx:id="btn_fb" mnemonicParsing="false" onAction="#fast_backward" styleClass="toolbar-btn" text="b" />
-                        <Button fx:id="btn_b" mnemonicParsing="false" onAction="#backward" styleClass="toolbar-btn" text="b" />
-                        <Button fx:id="btn_play" mnemonicParsing="false" onAction="#forward" styleClass="toolbar-btn" text="b" />
-                        <Button fx:id="btn_f" mnemonicParsing="false" onAction="#forward" styleClass="toolbar-btn" text="b" />
-                        <Button fx:id="btn_ff" mnemonicParsing="false" onAction="#fast_forward" styleClass="toolbar-btn" text="b" />
-                     </children>
-                  </HBox>
-                  <Region prefHeight="30.0" prefWidth="401.0" />
+            <HBox alignment="CENTER_LEFT" styleClass="toolbar">
+               <children>
+                  <Region prefHeight="30.0" prefWidth="29.0" HBox.hgrow="ALWAYS" />
+                <Button fx:id="btn_fb" mnemonicParsing="false" onAction="#fast_backward" styleClass="toolbar-btn" text="b" />
+                  <Button fx:id="btn_b" mnemonicParsing="false" onAction="#backward" styleClass="toolbar-btn" text="b" />
+                  <Button fx:id="btn_play" mnemonicParsing="false" onAction="#play" styleClass="toolbar-btn" text="b" />
+                  <Button fx:id="btn_f" mnemonicParsing="false" onAction="#forward" styleClass="toolbar-btn" text="b" />
+                  <Button fx:id="btn_ff" mnemonicParsing="false" onAction="#fast_forward" styleClass="toolbar-btn" text="b" />
+                  <Region prefHeight="30.0" prefWidth="29.0" HBox.hgrow="ALWAYS" />
                   <Button fx:id="btn_settings" mnemonicParsing="false" onAction="#toggle_settings" prefHeight="30.0" prefWidth="0.0" styleClass="toolbar-btn" text="s" />
-              </items>
-            </ToolBar>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" top="5.0" />
+               </padding>
+            </HBox>
          </children>
       </VBox>
    </top>
    <center>
       <StackPane>
          <children>
-            <Pane prefHeight="307.0" prefWidth="400.0">
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <Label layoutX="92.0" layoutY="25.0" text="Welcome to VersaTile">
-                     <font>
-                        <Font name="Helvetica Neue Thin" size="24.0" />
-                     </font>
-                  </Label>
-                  <Hyperlink alignment="CENTER" layoutX="207.0" layoutY="69.0" text="Getting Started" textAlignment="RIGHT" />
-                  <Hyperlink alignment="CENTER" layoutX="209.0" layoutY="93.0" text="Video Tutorials" textAlignment="RIGHT" />
-                  <Label alignment="CENTER" layoutX="243.0" layoutY="117.0" text="Examples" textAlignment="RIGHT" />
-                  <Hyperlink alignment="CENTER" layoutX="189.0" layoutY="133.0" text="Sierpinski Triangle" textAlignment="RIGHT" />
+                  <HBox AnchorPane.rightAnchor="39.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Region prefHeight="304.0" prefWidth="124.0" HBox.hgrow="ALWAYS" />
+                        <VBox alignment="TOP_RIGHT" HBox.hgrow="NEVER">
+                           <children>
+                              <Label text="Welcome to VersaTile">
+                                 <font>
+                                    <Font name="Helvetica Neue Thin" size="24.0" />
+                                 </font>
+                              </Label>
+                              <Hyperlink text="Getting Started" textAlignment="RIGHT" />
+                              <Hyperlink text="Video Tutorials" textAlignment="RIGHT" />
+                              <Label text="Examples" textAlignment="RIGHT" />
+                              <Hyperlink text="Sierpinski Triangle" textAlignment="RIGHT" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" right="20.0" top="10.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </HBox>
                </children>
-            </Pane>
+            </AnchorPane>
             <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
          </children>
       </StackPane>
    </center>
    <right>
-      <StackPane>
+      <StackPane fx:id="inspector" prefHeight="324.0" prefWidth="216.0">
          <children>
             <TabPane fx:id="assembly_inspector" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
               <tabs>
@@ -93,6 +106,25 @@
       </StackPane>
    </right>
    <bottom>
-      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <HBox alignment="CENTER" styleClass="footer" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="lbl_left_status">
+               <padding>
+                  <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Label>
+            <Region prefHeight="30.0" prefWidth="12.0" HBox.hgrow="ALWAYS" />
+            <Label fx:id="lbl_right_status">
+               <padding>
+                  <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Label>
+         </children></HBox>
    </bottom>
 </BorderPane>
