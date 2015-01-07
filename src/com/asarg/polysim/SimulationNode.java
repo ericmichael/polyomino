@@ -54,10 +54,6 @@ public class SimulationNode extends SwingNode implements Observer {
             @Override
             public void handle(MouseEvent e) {
                 Point point = new Point((int) e.getX(), (int) e.getY());
-                System.out.println(point.toString());
-                System.out.println(e.getSource().toString());
-                System.out.println(this.toString());
-                System.out.println("yes");
                 Point clicked = Drawer.TileDrawer.getGridPoint(point, getCanvas().getOffset(), getCanvas().getTileDiameter());
                 Tile clicked_tile = assembly.Grid.get(clicked);
                 if (clicked_tile != null) {

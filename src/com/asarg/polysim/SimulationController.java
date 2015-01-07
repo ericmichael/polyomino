@@ -138,10 +138,6 @@ public class SimulationController implements Initializable {
 
     }
 
-    private void updateAttachTime(double time) {
-        String time_str = String.format("%.4f", time);
-    }
-
     public void setStage(Stage stage) {
         this.stage = stage;
     }
