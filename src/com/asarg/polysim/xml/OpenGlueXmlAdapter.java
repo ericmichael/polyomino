@@ -15,7 +15,7 @@ public class OpenGlueXmlAdapter extends XmlAdapter<OpenGlueXmlAdapter.HashMapXml
     @Override
     public HashMap<Point, String> unmarshal(HashMapXml v) throws Exception {
         HashMap<Point, String> hashMap = new HashMap<Point, String>();
-        for(EntryXml entry : v.Glue) {
+        for (EntryXml entry : v.Glue) {
             hashMap.put(entry.point, entry.glue);
         }
         return hashMap;
@@ -24,7 +24,7 @@ public class OpenGlueXmlAdapter extends XmlAdapter<OpenGlueXmlAdapter.HashMapXml
     @Override
     public HashMapXml marshal(HashMap<Point, String> v) throws Exception {
         HashMapXml hashMapXml = new HashMapXml();
-        for(Map.Entry<Point, String> entry : v.entrySet()) {
+        for (Map.Entry<Point, String> entry : v.entrySet()) {
             EntryXml entryXml = new EntryXml();
             entryXml.point = entry.getKey();
             entryXml.glue = entry.getValue();

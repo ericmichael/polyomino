@@ -9,6 +9,13 @@ import java.io.File;
 
 public class SierpinskiTriangle {
 
+    public TileSystem ts;
+    public Assembly assembly;
+
+    public SierpinskiTriangle(int temperature) throws JAXBException {
+        assembly = loadAssembly();
+    }
+
     public static String[] blankGlues() {
         String label[] = new String[4];
         label[0] = null;
@@ -117,6 +124,13 @@ public class SierpinskiTriangle {
         return tetris;
     }
 
+    public static void main(String args[]) throws JAXBException {
+
+        SierpinskiTriangle tetris = new SierpinskiTriangle(2);
+        Workspace w = new Workspace(tetris.assembly);
+        //SimulationWindow tcf = new SimulationWindow(800,600, tetris.assembly);
+    }
+
     public Assembly loadAssembly() throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(Assembly.class);
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
@@ -128,25 +142,11 @@ public class SierpinskiTriangle {
         TileSystem ts = new TileSystem(2);
         ts.loadTileConfiguration(tc);
 
-        for(PolyTile p : ts.getTileTypes())
+        for (PolyTile p : ts.getTileTypes())
             p.setGlues();
 
         a.changeTileSystem(ts);
 
         return a;
-    }
-
-    public TileSystem ts;
-    public Assembly assembly;
-
-    public SierpinskiTriangle(int temperature) throws JAXBException {
-        assembly = loadAssembly();
-    }
-
-    public static void main(String args[]) throws JAXBException {
-
-        SierpinskiTriangle tetris = new SierpinskiTriangle(2);
-        Workspace w = new Workspace(tetris.assembly);
-        //SimulationWindow tcf = new SimulationWindow(800,600, tetris.assembly);
     }
 }

@@ -32,7 +32,7 @@ public class IconButton extends JButton {
     protected void paintComponent(Graphics g) {
         if (getModel().isPressed()) {
             setForeground(Color.black);
-        }else {
+        } else {
             setForeground(new Color(0x5e5e5e));
         }
         super.paintComponent(g);

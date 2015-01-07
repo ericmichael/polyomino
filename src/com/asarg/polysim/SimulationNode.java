@@ -23,7 +23,10 @@ import java.util.Observer;
  */
 public class SimulationNode extends SwingNode implements Observer {
     public Assembly assembly;
-
+    public StringProperty left_status = new SimpleStringProperty("");
+    public StringProperty left_previous_status = new SimpleStringProperty("");
+    public StringProperty right_status = new SimpleStringProperty("");
+    public StringProperty right_previous_status = new SimpleStringProperty("");
     Frontier frontier;
     PolyTile frontierTile;
     boolean frontierClick = false;
@@ -31,18 +34,9 @@ public class SimulationNode extends SwingNode implements Observer {
     int frontierIndex = 0;
     FrontierElement currentFrontierAttachment = null;
     Point frontierClickPoint = null;
-
     Point lastMouseXY = new Point(800, 600);
     int dragCount = 0;
-
     private boolean stopped = true;
-
-    public StringProperty left_status = new SimpleStringProperty("");
-    public StringProperty left_previous_status = new SimpleStringProperty("");
-
-    public StringProperty right_status = new SimpleStringProperty("");
-    public StringProperty right_previous_status = new SimpleStringProperty("");
-
 
 
     public SimulationNode() {
@@ -143,7 +137,7 @@ public class SimulationNode extends SwingNode implements Observer {
                     return;
                 }
                 getCanvas().translateOffset(x - lastMouseXY.x, y - lastMouseXY.y);
-                lastMouseXY=point;
+                lastMouseXY = point;
                 getCanvas().reset();
                 drawGrid();
 
@@ -151,14 +145,12 @@ public class SimulationNode extends SwingNode implements Observer {
         });
     }
 
-
+    public TestCanvas getCanvas() {
+        return (TestCanvas) getContent();
+    }
 
     public void setCanvas(TestCanvas tc) {
         setContent(tc);
-    }
-
-    public TestCanvas getCanvas() {
-        return (TestCanvas) getContent();
     }
 
     public void drawGrid() {

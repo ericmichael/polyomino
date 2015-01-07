@@ -37,9 +37,10 @@ public class FrontierElement {
     @XmlElement(name = "AttachTime")
     private double attachTime = -1;
 
-    public FrontierElement(){}
+    public FrontierElement() {
+    }
 
-    public FrontierElement(Point tg, Point poff, PolyTile p,int d ){
+    public FrontierElement(Point tg, Point poff, PolyTile p, int d) {
         tileWithGlue = tg;
         polytileOffset = poff;
         polyTile = p;
@@ -47,7 +48,7 @@ public class FrontierElement {
         attachment = true;
     }
 
-    public FrontierElement(Point tg, Point poff, PolyTile p, int d, boolean a ){
+    public FrontierElement(Point tg, Point poff, PolyTile p, int d, boolean a) {
         tileWithGlue = tg;
         polytileOffset = poff;
         polyTile = p;
@@ -55,19 +56,33 @@ public class FrontierElement {
         attachment = a;
     }
 
-    public Point getLocation(){return tileWithGlue;}
-    public Point getOffset(){return polytileOffset;}
-    public PolyTile getPolyTile(){return polyTile;}
-    public int getDirection(){return direction;}
-    public boolean checkAttachment(){return attachment;}
+    public Point getLocation() {
+        return tileWithGlue;
+    }
 
-    public boolean equals(FrontierElement ele2){
+    public Point getOffset() {
+        return polytileOffset;
+    }
+
+    public PolyTile getPolyTile() {
+        return polyTile;
+    }
+
+    public int getDirection() {
+        return direction;
+    }
+
+    public boolean checkAttachment() {
+        return attachment;
+    }
+
+    public boolean equals(FrontierElement ele2) {
         // check offset to see if they are the same.
-        if ( !ele2.getOffset().equals(polytileOffset))
+        if (!ele2.getOffset().equals(polytileOffset))
             return false;
 
         // check polytile to see if they are the same.
-        if ( !ele2.getPolyTile().equals(polyTile))
+        if (!ele2.getPolyTile().equals(polyTile))
             return false;
 
         // if both the offset and polytile match, it's the same placement.
@@ -75,11 +90,11 @@ public class FrontierElement {
     }
 
     @XmlTransient
-    public double getAttachTime(){
+    public double getAttachTime() {
         return attachTime;
     }
 
-    public void setAttachTime(double t){
+    public void setAttachTime(double t) {
         attachTime = t;
     }
 }

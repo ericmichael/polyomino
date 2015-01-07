@@ -31,17 +31,28 @@ public class SimulationController implements Initializable {
     Stage stage;
 
     //FXML Components
-    @FXML TabPane tabPane;
-    @FXML StackPane inspector;
-    @FXML BorderPane borderPane;
-    @FXML Button btn_fb;
-    @FXML Button btn_b;
-    @FXML Button btn_play;
-    @FXML Button btn_f;
-    @FXML Button btn_ff;
-    @FXML Button btn_settings;
-    @FXML Label lbl_left_status;
-    @FXML Label lbl_right_status;
+    @FXML
+    TabPane tabPane;
+    @FXML
+    StackPane inspector;
+    @FXML
+    BorderPane borderPane;
+    @FXML
+    Button btn_fb;
+    @FXML
+    Button btn_b;
+    @FXML
+    Button btn_play;
+    @FXML
+    Button btn_f;
+    @FXML
+    Button btn_ff;
+    @FXML
+    Button btn_settings;
+    @FXML
+    Label lbl_left_status;
+    @FXML
+    Label lbl_right_status;
 
     private boolean inspecting = false;
 
@@ -83,11 +94,11 @@ public class SimulationController implements Initializable {
             public void handle(javafx.scene.input.KeyEvent t) {
                 SimulationNode cn = currentSimulationNode(); //current simulationnode in tab
 
-                if(cn!=null){
-                    if(enter.match(t)) {
+                if (cn != null) {
+                    if (enter.match(t)) {
                         if (cn.currentFrontierAttachment != null) {
                             FrontierElement fe = new FrontierElement(cn.currentFrontierAttachment.getLocation(),
-                                    cn.currentFrontierAttachment.getOffset(),cn.currentFrontierAttachment.getPolyTile(),4);
+                                    cn.currentFrontierAttachment.getOffset(), cn.currentFrontierAttachment.getPolyTile(), 4);
                             cn.resetFrontier();
                             cn.assembly.attach(fe);
                             cn.frontier = cn.assembly.calculateFrontier();
@@ -95,20 +106,15 @@ public class SimulationController implements Initializable {
                             cn.exitFrontierMode();
                             cn.drawGrid();
                         }
-                    }
-                    else if(pgup.match(t)) {
+                    } else if (pgup.match(t)) {
                         cn.zoomInDraw();
-                    }
-                    else if(pgdown.match(t)) {
+                    } else if (pgdown.match(t)) {
                         cn.zoomOutDraw();
-                    }
-                    else if(left.match(t)) {
+                    } else if (left.match(t)) {
                         cn.step(-1, true);
-                    }
-                    else if(right.match(t)) {
+                    } else if (right.match(t)) {
                         cn.step(1, true);
-                    }
-                    else if(escape.match(t)) {
+                    } else if (escape.match(t)) {
                         cn.exitFrontierMode();
                         cn.getCanvas().reset();
                         cn.frontier = cn.assembly.calculateFrontier();
@@ -121,50 +127,61 @@ public class SimulationController implements Initializable {
 
     }
 
-    private void updateAttachTime(double time){
+    private void updateAttachTime(double time) {
         String time_str = String.format("%.4f", time);
     }
 
-    public void setStage(Stage stage){ this.stage = stage; }
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
 
-    private SimulationNode currentSimulationNode(){
+    private SimulationNode currentSimulationNode() {
         try {
             return (SimulationNode) tabPane.getSelectionModel().getSelectedItem().getContent();
-        }catch(NullPointerException npe){
-            return (SimulationNode)null;
+        } catch (NullPointerException npe) {
+            return (SimulationNode) null;
         }
     }
 
-    @FXML public void forward(){
+    @FXML
+    public void forward() {
         SimulationNode current = currentSimulationNode();
-        if(current!=null) current.forward();
-    }
-    @FXML public void fast_forward(){
-        SimulationNode current = currentSimulationNode();
-        if(current!=null) current.fast_forward();
-    }
-    @FXML public void backward(){
-        SimulationNode current = currentSimulationNode();
-        if(current!=null) current.backward();
-    }
-    @FXML public void fast_backward(){
-        SimulationNode current = currentSimulationNode();
-        if(current!=null) current.fast_backward();
+        if (current != null) current.forward();
     }
 
-    @FXML public void play(){
+    @FXML
+    public void fast_forward() {
         SimulationNode current = currentSimulationNode();
-        if(current!=null) current.play();
+        if (current != null) current.fast_forward();
     }
 
-    @FXML public void toggle_settings(){
+    @FXML
+    public void backward() {
+        SimulationNode current = currentSimulationNode();
+        if (current != null) current.backward();
+    }
+
+    @FXML
+    public void fast_backward() {
+        SimulationNode current = currentSimulationNode();
+        if (current != null) current.fast_backward();
+    }
+
+    @FXML
+    public void play() {
+        SimulationNode current = currentSimulationNode();
+        if (current != null) current.play();
+    }
+
+    @FXML
+    public void toggle_settings() {
         inspecting = !inspecting;
         inspector.setVisible(inspecting);
     }
 
 
     @FXML
-    public void newMenuItem(){
+    public void newMenuItem() {
         Tab tab = new Tab();
         tab.setText("Untitled");
         tabPane.getTabs().add(tab);
@@ -175,7 +192,7 @@ public class SimulationController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Assembly...");
         File selectedFile = fileChooser.showOpenDialog(stage);
-        if (selectedFile!=null) {
+        if (selectedFile != null) {
 
             try {
                 JAXBContext jaxbContext = JAXBContext.newInstance(Assembly.class);
@@ -185,7 +202,7 @@ public class SimulationController implements Initializable {
 
                 Tab tab = new Tab();
                 tab.setText(selectedFile.getName());
-                final TestCanvas blankCanvas = new TestCanvas(800,600);
+                final TestCanvas blankCanvas = new TestCanvas(800, 600);
                 final SimulationNode simulationNode = new SimulationNode(assembly, blankCanvas);
                 simulationNode.drawGrid();
                 tab.setContent(simulationNode);

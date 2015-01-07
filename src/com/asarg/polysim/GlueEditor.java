@@ -13,12 +13,11 @@ import java.util.Map;
 
 public class GlueEditor extends JPanel implements ActionListener {
 
-    private JPanel boxesPanel = new JPanel();
     public HashMap<Pair<String, String>, Integer> glueFunction;
-
     GridBagLayout layout = new GridBagLayout();
     GridBagConstraints layoutConstraints = new GridBagConstraints();
     List<JTextField[]> textFields = new ArrayList<JTextField[]>();
+    private JPanel boxesPanel = new JPanel();
 
     GlueEditor(HashMap<Pair<String, String>, Integer> newGlueFunction) {
         // boxes panel with scrollbar inside a panel.
@@ -40,15 +39,15 @@ public class GlueEditor extends JPanel implements ActionListener {
         setVisible(true);
     }
 
-    void setGlueFunction(HashMap<Pair<String, String>, Integer> newGlueFunction){
+    void setGlueFunction(HashMap<Pair<String, String>, Integer> newGlueFunction) {
         glueFunction = newGlueFunction;
     }
 
-    void drawLabelBoxes(){
+    void drawLabelBoxes() {
         boxesPanel.setLayout(layout);
 
         // label lines for existing glue pairs in function
-        for (Map.Entry<Pair<String,String>,Integer> entry : glueFunction.entrySet()){
+        for (Map.Entry<Pair<String, String>, Integer> entry : glueFunction.entrySet()) {
             JLabel leftParenthesis = new JLabel(" ( ");
             JTextField glue1 = new JTextField();
             JLabel comma = new JLabel(" , ");
@@ -116,7 +115,7 @@ public class GlueEditor extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("newGluePair")){
+        if (e.getActionCommand().equals("newGluePair")) {
             layoutConstraints.gridwidth = 1;
             layoutConstraints.gridx = 1;
             layoutConstraints.gridx = GridBagConstraints.RELATIVE;
@@ -169,13 +168,14 @@ public class GlueEditor extends JPanel implements ActionListener {
             boxesPanel.repaint();
         }
     }
-    public HashMap<Pair<String, String>, Integer> getNewGlueFunction(){
-        HashMap<Pair<String, String>, Integer> newGlueFunction = new HashMap<Pair<String,String>, Integer>();
 
-        for (JTextField[] row : textFields){
+    public HashMap<Pair<String, String>, Integer> getNewGlueFunction() {
+        HashMap<Pair<String, String>, Integer> newGlueFunction = new HashMap<Pair<String, String>, Integer>();
+
+        for (JTextField[] row : textFields) {
 //            System.out.println(row[0].getText()+' '+row[1].getText()+' '+row[2].getText());
-            if (!row[0].getText().isEmpty() && !row[1].getText().isEmpty() && !row[2].getText().isEmpty() )
-                newGlueFunction.put( new Pair<String,String>(row[0].getText(),row[1].getText()), Integer.parseInt(row[2].getText()) );
+            if (!row[0].getText().isEmpty() && !row[1].getText().isEmpty() && !row[2].getText().isEmpty())
+                newGlueFunction.put(new Pair<String, String>(row[0].getText(), row[1].getText()), Integer.parseInt(row[2].getText()));
 
         }
         glueFunction = newGlueFunction;

@@ -12,18 +12,18 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-public class SimulationWindow extends JFrame implements MouseWheelListener, MouseMotionListener, MouseListener, ComponentListener, Observer{
+public class SimulationWindow extends JFrame implements MouseWheelListener, MouseMotionListener, MouseListener, ComponentListener, Observer {
 
     TestCanvas canvas;
 
 
-    TileEditorWindow tileEditorWindow ;
+    TileEditorWindow tileEditorWindow;
 
     GUI mainMenu;
     int width;
     int height;
 
-    Point lastMouseXY = new Point(width,height);
+    Point lastMouseXY = new Point(width, height);
     int dragCount = 0;
 
     Assembly assembly;
@@ -37,8 +37,7 @@ public class SimulationWindow extends JFrame implements MouseWheelListener, Mous
     FrontierElement currentFrontierAttachment = null;
     Point frontierClickPoint = null;
 
-    public SimulationWindow(int w, int h, final Workspace workspace)
-    {
+    public SimulationWindow(int w, int h, final Workspace workspace) {
         tileEditorWindow = workspace.createEditorWindow();
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         width = w;
@@ -56,7 +55,7 @@ public class SimulationWindow extends JFrame implements MouseWheelListener, Mous
         addGUIAndActionListeners();
 
         this.setJMenuBar(mainMenu);
-        add(mainMenu.stepControlToolBar,BorderLayout.NORTH);
+        add(mainMenu.stepControlToolBar, BorderLayout.NORTH);
         add(mainMenu.statusPanel, BorderLayout.SOUTH);
 
         pack();
@@ -65,40 +64,48 @@ public class SimulationWindow extends JFrame implements MouseWheelListener, Mous
         drawGrid();
     }
 
-    public void resetFrontier(){
+    public void resetFrontier() {
         exitFrontierMode();
         removeFrontierFromGrid();
     }
 
-    private void updateAttachTime(double time){
+    private void updateAttachTime(double time) {
         String time_str = String.format("%.4f", time);
         mainMenu.statusLabel.setText("Last Attachment took " + time_str + "ms");
     }
 
-    public void step(int i){
+    public void step(int i) {
         step(i, true);
     }
 
-    public void step(int i, boolean notify){
+    public void step(int i, boolean notify) {
         resetFrontier();
 
-        switch(i){
-            case 1: updateAttachTime(assembly.attach(notify)); break;
-            case 2: updateAttachTime(assembly.attachAll(notify)); break;
-            case -1: assembly.detach(notify); break;
-            case -2: assembly.detachAll(notify); break;
+        switch (i) {
+            case 1:
+                updateAttachTime(assembly.attach(notify));
+                break;
+            case 2:
+                updateAttachTime(assembly.attachAll(notify));
+                break;
+            case -1:
+                assembly.detach(notify);
+                break;
+            case -2:
+                assembly.detachAll(notify);
+                break;
 
         }
     }
 
-    public void play(){
+    public void play() {
         step(1, false);
         //get the latest attached frontier element
         paintPolytile(assembly.getAttached().get(assembly.getAttached().size() - 1));
 
     }
 
-    private void addGUIAndActionListeners(){
+    private void addGUIAndActionListeners() {
         mainMenu = new GUI(this);
         canvas.addMouseWheelListener(this);
         canvas.addMouseListener(this);
@@ -112,7 +119,7 @@ public class SimulationWindow extends JFrame implements MouseWheelListener, Mous
         String msg = pair.getKey();
         FrontierElement fe = pair.getValue();
 
-        if(msg.equals("attach")){
+        if (msg.equals("attach")) {
             frontier = assembly.getFrontier();
             placeFrontierOnGrid();
             drawGrid();
@@ -122,21 +129,21 @@ public class SimulationWindow extends JFrame implements MouseWheelListener, Mous
 //                paintPolytile(new_fe);
 //            }
 //            placeFrontierOnGrid();
-        }else if(msg.equals("detach")){
+        } else if (msg.equals("detach")) {
             resetFrontier();
             frontier = assembly.getFrontier();
             System.out.println("My Frontier size: " + frontier.size());
             canvas.reset();
             placeFrontierOnGrid();
             drawGrid();
-        }else if(msg.equals("refresh")){
+        } else if (msg.equals("refresh")) {
             resetFrontier();
             frontier = assembly.calculateFrontier();
             canvas.reset();
             placeFrontierOnGrid();
             drawGrid();
 
-        }else if(msg.equals("Tile System")){
+        } else if (msg.equals("Tile System")) {
             resetFrontier();
             frontier = assembly.getFrontier();
             canvas.reset();
@@ -147,13 +154,13 @@ public class SimulationWindow extends JFrame implements MouseWheelListener, Mous
     }
 
 
-    public void drawGrid()    {
+    public void drawGrid() {
         //PlaceFrontierOnGrid();
         canvas.drawGrid(assembly.Grid);
         canvas.repaint();
     }
 
-    public void paintPolytile(FrontierElement attachedFrontierElement){
+    public void paintPolytile(FrontierElement attachedFrontierElement) {
         canvas.drawTileOnGrid(attachedFrontierElement);
         // commented code is to get the square of the new polytile painted(to avoid painting all)
         // needs work and may not be needed at all.
@@ -179,52 +186,51 @@ public class SimulationWindow extends JFrame implements MouseWheelListener, Mous
         canvas.repaint();
     }
 
-    private PolyTile getFrontierPolyTile(){
-        if(frontierTile==null){
+    private PolyTile getFrontierPolyTile() {
+        if (frontierTile == null) {
             frontierTile = new PolyTile("");
             frontierTile.setColor("428bca");
-            String glues[]= {null, null, null, null};
-            frontierTile.addTile(0,0, glues);
+            String glues[] = {null, null, null, null};
+            frontierTile.addTile(0, 0, glues);
             frontierTile.setFrontier();
             return frontierTile;
-        }else return frontierTile;
+        } else return frontierTile;
     }
 
     public void placeFrontierOnGrid() {
-        if (assembly.Grid.isEmpty()){
-            for (PolyTile pt: assembly.getTileSystem().getTileTypes()){
-                frontier.add(new FrontierElement(new Point(0,0), new Point(0,0), pt, 4));
+        if (assembly.Grid.isEmpty()) {
+            for (PolyTile pt : assembly.getTileSystem().getTileTypes()) {
+                frontier.add(new FrontierElement(new Point(0, 0), new Point(0, 0), pt, 4));
             }
         }
-        for (FrontierElement fe : frontier){
-            assembly.Grid.put(fe.getLocation(), getFrontierPolyTile().getTile(0,0));
+        for (FrontierElement fe : frontier) {
+            assembly.Grid.put(fe.getLocation(), getFrontierPolyTile().getTile(0, 0));
         }
     }
 
-    public void removeFrontierFromGrid(){
-        for (FrontierElement fe : frontier){
+    public void removeFrontierFromGrid() {
+        for (FrontierElement fe : frontier) {
             assembly.Grid.remove(fe.getLocation());
         }
     }
 
     public void zoomInDraw() {
         int tileDiameter = canvas.getTileDiameter();
-        if(tileDiameter < getWidth()) {
+        if (tileDiameter < getWidth()) {
             System.out.println(getWidth() + " " + tileDiameter);
             canvas.setTileDiameter((int) (tileDiameter * 1.5));
-        }
-        else return;
+        } else return;
 
         canvas.reset();
         placeFrontierOnGrid();
         drawGrid();
     }
+
     public void zoomOutDraw() {
         int tileDiameter = canvas.getTileDiameter();
-        if(tileDiameter > 2) {
+        if (tileDiameter > 2) {
             canvas.setTileDiameter((int) (tileDiameter * .75));
-        }
-        else return;
+        } else return;
 
         canvas.reset();
         placeFrontierOnGrid();
@@ -242,7 +248,7 @@ public class SimulationWindow extends JFrame implements MouseWheelListener, Mous
     }
 
     private void addFrontierAttachment(int index) {
-        if( frontierAttachments.size()>0){
+        if (frontierAttachments.size() > 0) {
             currentFrontierAttachment = frontierAttachments.get(index);
             double probability = frontier.getProbability(currentFrontierAttachment);
             String status_str = String.format("Probability of Attachment: %.4f", probability);
@@ -253,25 +259,24 @@ public class SimulationWindow extends JFrame implements MouseWheelListener, Mous
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        if (!mainMenu.stopped){
+        if (!mainMenu.stopped) {
             System.out.println("Do not drag while playing!");
-            JOptionPane.showMessageDialog(null,"Do not drag while playing!\nAssembly must be paused.");
+            JOptionPane.showMessageDialog(null, "Do not drag while playing!\nAssembly must be paused.");
             return;
         }
 
-        if(e.getWheelRotation() == 1)
-        {
-            if(frontierClick){
+        if (e.getWheelRotation() == 1) {
+            if (frontierClick) {
                 removeCurrentFrontierAttachment();
-                if(currentFrontierAttachment==null){
-                    frontierIndex=0;
+                if (currentFrontierAttachment == null) {
+                    frontierIndex = 0;
                     addFrontierAttachment(frontierIndex);
 
-                }else if(frontierIndex > 0){
-                    frontierIndex-=1;
+                } else if (frontierIndex > 0) {
+                    frontierIndex -= 1;
                     addFrontierAttachment(frontierIndex);
-                }else {
-                    frontierIndex=frontierAttachments.size()-1;
+                } else {
+                    frontierIndex = frontierAttachments.size() - 1;
                     addFrontierAttachment(frontierIndex);
                 }
 
@@ -279,19 +284,17 @@ public class SimulationWindow extends JFrame implements MouseWheelListener, Mous
                 return;
             }
             zoomOutDraw();
-        }
-        else if(e.getWheelRotation() == -1) {
-            if(frontierClick){
+        } else if (e.getWheelRotation() == -1) {
+            if (frontierClick) {
                 removeCurrentFrontierAttachment();
-                if(currentFrontierAttachment==null) {
-                    frontierIndex=0;
+                if (currentFrontierAttachment == null) {
+                    frontierIndex = 0;
                     addFrontierAttachment(frontierIndex);
-                }
-                else if(frontierIndex+1 < frontierAttachments.size()){
-                    frontierIndex+=1;
+                } else if (frontierIndex + 1 < frontierAttachments.size()) {
+                    frontierIndex += 1;
                     addFrontierAttachment(frontierIndex);
-                }else{
-                    frontierIndex=0;
+                } else {
+                    frontierIndex = 0;
                     addFrontierAttachment(0);
                 }
                 drawGrid();
@@ -303,13 +306,13 @@ public class SimulationWindow extends JFrame implements MouseWheelListener, Mous
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (!mainMenu.stopped){
+        if (!mainMenu.stopped) {
             System.out.println("Do not drag while playing!");
-            JOptionPane.showMessageDialog(null,"Do not drag while playing!\nAssembly must be paused.");
+            JOptionPane.showMessageDialog(null, "Do not drag while playing!\nAssembly must be paused.");
             return;
         }
         canvas.translateOffset(e.getX() - lastMouseXY.x, e.getY() - lastMouseXY.y);
-        lastMouseXY=e.getPoint();
+        lastMouseXY = e.getPoint();
         canvas.reset();
         drawGrid();
     }
@@ -319,31 +322,31 @@ public class SimulationWindow extends JFrame implements MouseWheelListener, Mous
 
     }
 
-    public void exitFrontierMode(){
-        if(currentFrontierAttachment!=null) {
+    public void exitFrontierMode() {
+        if (currentFrontierAttachment != null) {
             assembly.removePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().x, currentFrontierAttachment.getOffset().y);
         }
         frontierClick = false;
         frontierClickPoint = null;
         frontierAttachments = null;
         frontierIndex = 0;
-        currentFrontierAttachment=null;
+        currentFrontierAttachment = null;
         mainMenu.statusLabel.setText(mainMenu.statusLabelPreviousText);
 //        canvas.reset();
     }
 
-    private void processFrontierClick(Point clicked, Tile clicked_tile){
+    private void processFrontierClick(Point clicked, Tile clicked_tile) {
         PolyTile clicked_pt = clicked_tile.getParent();
-        if(!frontierClick){
+        if (!frontierClick) {
             mainMenu.statusLabelPreviousText = mainMenu.statusLabel.getText();
-        }else{
+        } else {
             placeFrontierOnGrid();
         }
         frontierClick = clicked_pt.isFrontier();
-        if(frontierClick) {
+        if (frontierClick) {
             //kick me out of any previous frontier state
             exitFrontierMode();
-            frontierClick=true;
+            frontierClick = true;
             frontierClickPoint = clicked;
             frontierAttachments = new ArrayList<FrontierElement>();
             frontierIndex = 0;
@@ -359,10 +362,10 @@ public class SimulationWindow extends JFrame implements MouseWheelListener, Mous
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if(e.getSource() == canvas) {
+        if (e.getSource() == canvas) {
             Point clicked = Drawer.TileDrawer.getGridPoint(e.getPoint(), canvas.getOffset(), canvas.getTileDiameter());
             Tile clicked_tile = assembly.Grid.get(clicked);
-            if(clicked_tile!=null){
+            if (clicked_tile != null) {
                 processFrontierClick(clicked, clicked_tile);
             }
 

@@ -18,7 +18,7 @@ public class GridXmlAdapter extends XmlAdapter<GridXmlAdapter.HashMapXml, HashMa
     @Override
     public HashMap<Point, Tile> unmarshal(HashMapXml v) throws Exception {
         HashMap<Point, Tile> hashMap = new HashMap<Point, Tile>();
-        for(EntryXml entry : v.GridTile) {
+        for (EntryXml entry : v.GridTile) {
             entry.tile.setParent(entry.parent);
             hashMap.put(entry.point, entry.tile);
         }
@@ -28,7 +28,7 @@ public class GridXmlAdapter extends XmlAdapter<GridXmlAdapter.HashMapXml, HashMa
     @Override
     public HashMapXml marshal(HashMap<Point, Tile> v) throws Exception {
         HashMapXml hashMapXml = new HashMapXml();
-        for(Map.Entry<Point, Tile> entry : v.entrySet()) {
+        for (Map.Entry<Point, Tile> entry : v.entrySet()) {
             EntryXml entryXml = new EntryXml();
             entryXml.point = entry.getKey();
             entryXml.tile = entry.getValue();

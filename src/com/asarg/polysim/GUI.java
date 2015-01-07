@@ -16,7 +16,7 @@ import java.awt.event.KeyListener;
 import java.io.File;
 
 
-public class GUI extends JMenuBar{
+public class GUI extends JMenuBar {
     SimulationWindow window;
     GradientToolbar stepControlToolBar = new GradientToolbar();
 
@@ -46,91 +46,37 @@ public class GUI extends JMenuBar{
     String statusLabelPreviousText = "";
 
     boolean stopped = true;
-
-    KeyListener keyListener = new KeyListener(){
-        @Override
-        public void keyTyped(KeyEvent e) {
-
-        }
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-            System.out.println("key pressed");
-            if(e.getKeyCode() == KeyEvent.VK_PAGE_UP)
-            {
-                window.zoomInDraw();
-            }else if(e.getKeyCode() == KeyEvent.VK_PAGE_DOWN)
-            {
-                window.zoomOutDraw();
-            }
-            else if(e.getKeyCode() == KeyEvent.VK_RIGHT)
-            {
-                window.step(1);
-            }
-            else if(e.getKeyCode() == KeyEvent.VK_LEFT)
-            {
-                window.step(-1);
-            }
-            else if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
-                window.exitFrontierMode();
-                window.canvas.reset();
-                window.frontier = window.assembly.calculateFrontier();
-                window.placeFrontierOnGrid();
-                window.drawGrid();
-            }
-            else if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-                if (window.currentFrontierAttachment != null) {
-                    FrontierElement fe = new FrontierElement(window.currentFrontierAttachment.getLocation(),
-                            window.currentFrontierAttachment.getOffset(),window.currentFrontierAttachment.getPolyTile(),4);
-                    window.resetFrontier();
-                    window.assembly.attach(fe);
-                    window.frontier = window.assembly.calculateFrontier();
-                    window.placeFrontierOnGrid();
-                    window.exitFrontierMode();
-                    window.drawGrid();
-                }
-            }
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-
-        }
-    };
-
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if(e.getSource().equals(next)) {
+            if (e.getSource().equals(next)) {
                 window.step(1);
-            }
-            else if(e.getSource().equals(prev))
+            } else if (e.getSource().equals(prev))
                 window.step(-1);
-            else if(e.getSource().equals(play)){
-                Thread playThread = new Thread(){
+            else if (e.getSource().equals(play)) {
+                Thread playThread = new Thread() {
                     @Override
                     public void run() {
                         stopped = false;
                         window.resetFrontier();
-                        while (!window.frontier.isEmpty()){
+                        while (!window.frontier.isEmpty()) {
                             if (stopped) {
                                 // draw the entire grid when stopping, to see the frontier of the items.
                                 window.placeFrontierOnGrid();
                                 window.drawGrid();
                                 break;
-                            }
-                            else
+                            } else
                                 window.play();
                         }
                     }
                 };
                 playThread.start();
 
-            }else if(e.getSource().equals(stop))
+            } else if (e.getSource().equals(stop))
                 stopped = true;
-            else if(e.getSource().equals(fastb))
+            else if (e.getSource().equals(fastb))
                 window.step(-2);
-            else if(e.getSource().equals(fastf))
+            else if (e.getSource().equals(fastf))
                 window.step(2);
             else if (e.getSource().equals(newMenuItem)) {
                 System.out.println("new assembly");
@@ -155,7 +101,7 @@ public class GUI extends JMenuBar{
                         javax.swing.JOptionPane.showMessageDialog(null, "Failed to load assembly");
                     }
                 }
-            } else if(e.getSource().equals(saveAsMenuItem)){
+            } else if (e.getSource().equals(saveAsMenuItem)) {
                 //export
                 System.out.println("export");
                 window.removeFrontierFromGrid();
@@ -167,7 +113,7 @@ public class GUI extends JMenuBar{
                     if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
                         File file = fc.getSelectedFile();
 
-                        if(!file.getAbsolutePath().toLowerCase().endsWith(".xml")){
+                        if (!file.getAbsolutePath().toLowerCase().endsWith(".xml")) {
                             file = new File(file + ".xml");
                         }
                         JAXBContext jaxbContext = JAXBContext.newInstance(Assembly.class);
@@ -176,14 +122,13 @@ public class GUI extends JMenuBar{
                         marshaller.marshal(window.assembly, file);
                         System.out.println("done");
                     }
-                }catch(JAXBException jaxbe){
+                } catch (JAXBException jaxbe) {
                     System.out.println(jaxbe.getMessage());
                     jaxbe.printStackTrace();
                 }
                 window.placeFrontierOnGrid();
 
-            }
-            else if (e.getSource().equals(closeMenuItem)){
+            } else if (e.getSource().equals(closeMenuItem)) {
                 int result = JOptionPane.showConfirmDialog(
                         null,
                         "Are you sure you want to exit the application?",
@@ -192,9 +137,9 @@ public class GUI extends JMenuBar{
 
                 if (result == JOptionPane.YES_OPTION)
                     System.exit(0);
-            } else if (e.getSource().equals(tileSetEditorMenuItem)){
+            } else if (e.getSource().equals(tileSetEditorMenuItem)) {
                 window.tileEditorWindow.setVisible(true);
-            } else if (e.getSource().equals(setTemperatureMenuItem)){
+            } else if (e.getSource().equals(setTemperatureMenuItem)) {
                 String temperatureString = JOptionPane.showInputDialog(null, "Set the system's temperature",
                         window.assembly.getTileSystem().getTemperature());
                 int temperature = Integer.parseInt(temperatureString);
@@ -209,6 +154,48 @@ public class GUI extends JMenuBar{
             }
         }
     };
+    KeyListener keyListener = new KeyListener() {
+        @Override
+        public void keyTyped(KeyEvent e) {
+
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            System.out.println("key pressed");
+            if (e.getKeyCode() == KeyEvent.VK_PAGE_UP) {
+                window.zoomInDraw();
+            } else if (e.getKeyCode() == KeyEvent.VK_PAGE_DOWN) {
+                window.zoomOutDraw();
+            } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                window.step(1);
+            } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                window.step(-1);
+            } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                window.exitFrontierMode();
+                window.canvas.reset();
+                window.frontier = window.assembly.calculateFrontier();
+                window.placeFrontierOnGrid();
+                window.drawGrid();
+            } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (window.currentFrontierAttachment != null) {
+                    FrontierElement fe = new FrontierElement(window.currentFrontierAttachment.getLocation(),
+                            window.currentFrontierAttachment.getOffset(), window.currentFrontierAttachment.getPolyTile(), 4);
+                    window.resetFrontier();
+                    window.assembly.attach(fe);
+                    window.frontier = window.assembly.calculateFrontier();
+                    window.placeFrontierOnGrid();
+                    window.exitFrontierMode();
+                    window.drawGrid();
+                }
+            }
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+
+        }
+    };
 
     public GUI(SimulationWindow sim) {
         window = sim;
@@ -221,7 +208,8 @@ public class GUI extends JMenuBar{
         System.out.println("adding menu bar");
 
     }
-    private void addMenuBars(){
+
+    private void addMenuBars() {
         JMenu fileMenu = new JMenu("File");
         newMenuItem.addActionListener(actionListener);
         loadAssemblyMenuItem.addActionListener(actionListener);
@@ -250,7 +238,7 @@ public class GUI extends JMenuBar{
         this.add(toolsMenu);
     }
 
-    private void addToolBars(){
+    private void addToolBars() {
         stepControlToolBar.add(fastb);
         stepControlToolBar.add(prev);
         stepControlToolBar.add(play);
@@ -276,7 +264,7 @@ public class GUI extends JMenuBar{
         stepControlToolBar.setLayout(new FlowLayout(FlowLayout.CENTER));
     }
 
-    private void addStatusBar(){
+    private void addStatusBar() {
         statusPanel = new JPanel();
         statusPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
         statusPanel.setPreferredSize(new Dimension(getWidth(), 24));

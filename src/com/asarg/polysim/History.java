@@ -9,15 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @XmlRootElement(name = "History")
-@XmlAccessorType (XmlAccessType.FIELD)
-public class History
-{
-    public History(){
-        history = new ArrayList<FrontierElement>();
-    }
-
+@XmlAccessorType(XmlAccessType.FIELD)
+public class History {
     @XmlElement(name = "HistoryElement")
     private List<FrontierElement> history = null;
+
+    public History() {
+        history = new ArrayList<FrontierElement>();
+    }
 
     public List<FrontierElement> getHistory() {
         return history;

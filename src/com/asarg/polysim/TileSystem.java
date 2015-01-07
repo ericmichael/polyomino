@@ -41,33 +41,39 @@ public class TileSystem {
     private int totalCount = 0;
     private double totalConcentration = 0;
 
-    public TileSystem() { }
+    public TileSystem() {
+    }
 
-    public TileSystem(int temp){ temperature = temp; weightOption = UNIFORMDISTRIBUTION; }
+    public TileSystem(int temp) {
+        temperature = temp;
+        weightOption = UNIFORMDISTRIBUTION;
+    }
 
-    public TileSystem(int temp, int wO){ temperature = temp; weightOption = wO; }
+    public TileSystem(int temp, int wO) {
+        temperature = temp;
+        weightOption = wO;
+    }
 
     public void addGlueFunction(String label1, String label2, int temp) {
         glueFunction.put(new Pair<String, String>(label1, label2), temp);
-        if(!label1.equals(label2)) {
+        if (!label1.equals(label2)) {
             glueFunction.put(new Pair<String, String>(label2, label1), temp);
         }
     }
 
     public void removeGlueFunction(String label1, String label2) {
         glueFunction.remove(new Pair<String, String>(label1, label2));
-        if(!label1.equals(label2)) {
+        if (!label1.equals(label2)) {
             glueFunction.remove(new Pair<String, String>(label2, label1));
         }
     }
 
-    public HashMap<Pair<String, String>, Integer> getGlueFunction()
-    {
-        return (HashMap<Pair<String, String>, Integer>)glueFunction.clone();
+    public HashMap<Pair<String, String>, Integer> getGlueFunction() {
+        return (HashMap<Pair<String, String>, Integer>) glueFunction.clone();
     }
 
     // needs some work, it's not maintaining the new glue values further down the process.
-    public void setGlueFunction(HashMap<Pair<String, String>, Integer> newGlueFunction){
+    public void setGlueFunction(HashMap<Pair<String, String>, Integer> newGlueFunction) {
         System.out.println("Changing glue function");
         glueFunction.clear();
         for (Map.Entry<Pair<String, String>, Integer> glF : newGlueFunction.entrySet()) {
@@ -75,67 +81,66 @@ public class TileSystem {
 //            glueFunction.put( new Pair(glF.getKey().getKey(), glF.getKey().getValue()), glF.getValue() );
         }
     }
+
     public int getStrength(String label1, String label2) {
         Pair key = new Pair<String, String>(label1, label2);
 
-        if(glueFunction.containsKey(key)){
+        if (glueFunction.containsKey(key)) {
             return glueFunction.get(key);
-        }
-        else return 0;
+        } else return 0;
     }
 
     // add polytile to tiletypes
-    public void addPolyTile(PolyTile p) throws IllegalStateException{
+    public void addPolyTile(PolyTile p) throws IllegalStateException {
         // check that the polytile to be added fits in with the weight model.
-            // if equal concentration, nothing needs to be done, as all tiles will be assumed to be of equal
-            // concentration.
-  
-        if ( weightOption == CONCENTRATION ){
-            if ( p.getConcentration() > -1)
+        // if equal concentration, nothing needs to be done, as all tiles will be assumed to be of equal
+        // concentration.
+
+        if (weightOption == CONCENTRATION) {
+            if (p.getConcentration() > -1)
                 tileTypes.add(p);
             else {
                 throw new IllegalStateException("polytile does not fit weight model, " +
                         "You must set a concentration for it.");
             }
-        }
-        else if (weightOption == COUNT){
+        } else if (weightOption == COUNT) {
             if (p.getCount() > -1) {
                 tileTypes.add(p);
                 totalCount += p.getCount();
-            }
-            else {
+            } else {
                 throw new IllegalStateException("polytile does not fit weight model, " +
                         "You must set a concentration for it.");
             }
-        }
-
-        else
+        } else
             tileTypes.add(p);
     }
 
-    public int getTemperature(){
+    public int getTemperature() {
         return temperature;
     }
-    public void setTemperature(int s){
+
+    public void setTemperature(int s) {
         temperature = s;
     }
 
-    public int getWeightOption() { return weightOption; }
-    public void setWeightOption(int x) throws InvalidObjectException{
+    public int getWeightOption() {
+        return weightOption;
+    }
+
+    public void setWeightOption(int x) throws InvalidObjectException {
         // when the weight option is changed, a check should be made on all polytiles and see that they all
         //  have the required variable set. Otherwise, pop up an error telling the user to fix their variables.
-        if ( x == CONCENTRATION) {
-            for (PolyTile p : tileTypes){
-                if ( p.getConcentration() < 0) {
+        if (x == CONCENTRATION) {
+            for (PolyTile p : tileTypes) {
+                if (p.getConcentration() < 0) {
                     // TODO: we can either change the value to a default or return all polytiles that do not match
                     //  the weight option.
                     throw new InvalidObjectException("Polytile " + p.getPolyName() + " does not have a set concentration.");
                 }
             }
-        }
-        else if ( x == COUNT) {
-            for (PolyTile p : tileTypes){
-                if ( p.getCount() < 0) {
+        } else if (x == COUNT) {
+            for (PolyTile p : tileTypes) {
+                if (p.getCount() < 0) {
                     // TODO: we can either change the value to a default or return all polytiles that do not match
                     //  the weight option.
                     throw new InvalidObjectException("Polytile " + p.getPolyName() + " does not have a set count.");
@@ -146,10 +151,10 @@ public class TileSystem {
     }
 
     // loops over the polytiles in the system, reads their concentration and count, and gets
-        // their total.
+    // their total.
     public int getTotalCount() {
         int tCount = 0;
-        for (PolyTile p : tileTypes){
+        for (PolyTile p : tileTypes) {
             tCount += p.getCount();
         }
         totalCount = tCount;
@@ -158,7 +163,7 @@ public class TileSystem {
 
     public double getTotalConcentration() {
         double tConc = 0;
-        for (PolyTile p : tileTypes){
+        for (PolyTile p : tileTypes) {
             tConc += p.getConcentration();
         }
         totalConcentration = tConc;
@@ -171,9 +176,9 @@ public class TileSystem {
 
     public boolean loadTileConfiguration(TileConfiguration t) {
         System.out.println("Option in load tile config" + weightOption);
-        if(t == null)
+        if (t == null)
             return false;
-        else if(t.getGlueFunction() == null || t.getTiletypes() == null)
+        else if (t.getGlueFunction() == null || t.getTiletypes() == null)
             return false;
 
         glueFunction = t.getGlueFunction();
@@ -181,7 +186,7 @@ public class TileSystem {
 
         System.out.println("Size in load tile config" + tileTypes.size());
 
-        for(PolyTile p : tileTypes) {
+        for (PolyTile p : tileTypes) {
             p.setGlues();
         }
         System.out.println("Size after loading tile config" + tileTypes.size());
@@ -189,12 +194,12 @@ public class TileSystem {
         return true;
     }
 
-    public void printDebugInformation(){
+    public void printDebugInformation() {
         System.out.println("--- Debug Information for TS----");
         System.out.println("Temperature: " + temperature);
         System.out.println("Weight Option: " + weightOption);
         System.out.println("Polytile Types Size: " + tileTypes.size());
-        System.out.println("Glue Function Size:  "+ glueFunction.size());
+        System.out.println("Glue Function Size:  " + glueFunction.size());
         System.out.println("--------------------------");
     }
 }

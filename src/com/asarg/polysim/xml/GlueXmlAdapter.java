@@ -15,7 +15,7 @@ public class GlueXmlAdapter extends XmlAdapter<GlueXmlAdapter.HashMapXml, HashMa
     @Override
     public HashMap<Pair<String, String>, Integer> unmarshal(HashMapXml v) throws Exception {
         HashMap<Pair<String, String>, Integer> hashMap = new HashMap<Pair<String, String>, Integer>();
-        for(EntryXml entry : v.Function) {
+        for (EntryXml entry : v.Function) {
             hashMap.put(entry.labels, entry.strength);
         }
         return hashMap;
@@ -24,7 +24,7 @@ public class GlueXmlAdapter extends XmlAdapter<GlueXmlAdapter.HashMapXml, HashMa
     @Override
     public HashMapXml marshal(HashMap<Pair<String, String>, Integer> v) throws Exception {
         HashMapXml hashMapXml = new HashMapXml();
-        for(Map.Entry<Pair<String, String>, Integer> entry : v.entrySet()) {
+        for (Map.Entry<Pair<String, String>, Integer> entry : v.entrySet()) {
             EntryXml entryXml = new EntryXml();
             entryXml.labels = entry.getKey();
             entryXml.strength = entry.getValue();

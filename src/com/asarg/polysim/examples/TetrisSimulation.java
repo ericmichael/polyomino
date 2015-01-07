@@ -13,6 +13,7 @@ public class TetrisSimulation {
     public static double calculateExpDistribution(Random r, double p) {
         return -(Math.log(r.nextDouble()) / p);
     }
+
     public static String[] blankGlues() {
         String label[] = new String[4];
         label[0] = null;
@@ -59,7 +60,7 @@ public class TetrisSimulation {
     public static PolyTile tetrisX() {
         String glue[] = {"x", "x", "e", "x"};
         String glue2[] = {"x", "x", "x", "ddeFE"};
-        String allX[] = {"x","x","x","x"};
+        String allX[] = {"x", "x", "x", "x"};
 
         PolyTile poly = new PolyTile("X");
 
@@ -134,14 +135,14 @@ public class TetrisSimulation {
         ts.addPolyTile(tetrisV());
         ts.addPolyTile(tetrisX());
 
-        ts.addGlueFunction("a","a",2);
-        ts.addGlueFunction("b","b",2);
-        ts.addGlueFunction("c","c",2);
-        ts.addGlueFunction("d","d",2);
-        ts.addGlueFunction("e","e",2);
-        ts.addGlueFunction("f","f",2);
-        ts.addGlueFunction("x","x",2);
-        ts.addGlueFunction("ddeFE","ddeFE",2);
+        ts.addGlueFunction("a", "a", 2);
+        ts.addGlueFunction("b", "b", 2);
+        ts.addGlueFunction("c", "c", 2);
+        ts.addGlueFunction("d", "d", 2);
+        ts.addGlueFunction("e", "e", 2);
+        ts.addGlueFunction("f", "f", 2);
+        ts.addGlueFunction("x", "x", 2);
+        ts.addGlueFunction("ddeFE", "ddeFE", 2);
 
         final Assembly assembly = new Assembly(ts);
         //assembly.placeSeed(tetrisF());
@@ -162,8 +163,6 @@ public class TetrisSimulation {
                 //SimulationWindow tcf = new SimulationWindow(800,600, assembly);
             }
         });
-
-
 
 
         JAXBContext jaxbContext = JAXBContext.newInstance(TileSystem.class);

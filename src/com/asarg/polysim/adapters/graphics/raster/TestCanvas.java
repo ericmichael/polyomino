@@ -12,11 +12,11 @@ import java.util.HashMap;
 public class TestCanvas extends JPanel {
 
 
-    private int tileDiameter = 50;
-    private Point center;
     BufferedImage canvasBFI;
     Graphics2D cg2d;
     Dimension res = new Dimension();
+    private int tileDiameter = 50;
+    private Point center;
     private int w;
     private int h;
 
@@ -31,27 +31,26 @@ public class TestCanvas extends JPanel {
         this.w = w;
         this.h = h;
     }
-    public TestCanvas()
-    {
+
+    public TestCanvas() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         canvasBFI = new BufferedImage(screenSize.width, screenSize.height, BufferedImage.TYPE_INT_ARGB);
         cg2d = canvasBFI.createGraphics();
         cg2d.setComposite(AlphaComposite.Src);
         cg2d.setColor(Color.black);
-        res.setSize(screenSize.width,screenSize.height);
+        res.setSize(screenSize.width, screenSize.height);
         cg2d.setClip(0, 0, screenSize.width, screenSize.height);
 
 
     }
 
 
-
     @Override
-    public void setSize(int width, int height)
-    {
-        super.setSize(width,height);
-        center = new Point(width/2, height/2);
+    public void setSize(int width, int height) {
+        super.setSize(width, height);
+        center = new Point(width / 2, height / 2);
     }
+
     public void reset() {
 
         Drawer.clearGraphics(cg2d);
@@ -75,8 +74,8 @@ public class TestCanvas extends JPanel {
     }
 
     // draws the given polytile onto the loaded graphics object (alternative to drawGrid which draws the
-        //entire grid)
-    public void drawTileOnGrid(FrontierElement attached){
+    //entire grid)
+    public void drawTileOnGrid(FrontierElement attached) {
 //        System.out.println(attached.getLocation());
 //        System.out.println(attached.getOffset());
 //        System.out.println(center);
@@ -87,21 +86,24 @@ public class TestCanvas extends JPanel {
     public Dimension getPreferredSize() {
         return new Dimension(800, 600);
     }
-    public void setTileDiameter(int td)
-    {
-        tileDiameter = td;
-    }
-    public int getTileDiameter()
-    {
+
+    public int getTileDiameter() {
 
 
         return tileDiameter;
     }
-    public void translateOffset(int x, int y)
-    {
+
+    public void setTileDiameter(int td) {
+        tileDiameter = td;
+    }
+
+    public void translateOffset(int x, int y) {
         center.translate(x, y);
     }
-    public final Point getOffset(){ return center;}
+
+    public final Point getOffset() {
+        return center;
+    }
 
 
 }
