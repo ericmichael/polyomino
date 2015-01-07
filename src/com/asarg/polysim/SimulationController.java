@@ -193,7 +193,7 @@ public class SimulationController implements Initializable {
         Assembly asm = new Assembly();
         Tab tab = new Tab();
         tab.setText("Untitled");
-        final TestCanvas blankCanvas = new TestCanvas(800, 600);
+        final TestCanvas blankCanvas = new TestCanvas((int) tabPane.getWidth(), (int) tabPane.getHeight());
         final SimulationNode simulationNode = new SimulationNode(asm, blankCanvas);
         simulationNode.drawGrid();
         tab.setContent(simulationNode);
@@ -215,7 +215,7 @@ public class SimulationController implements Initializable {
 
                 Tab tab = new Tab();
                 tab.setText(selectedFile.getName());
-                final TestCanvas blankCanvas = new TestCanvas(800, 600);
+                final TestCanvas blankCanvas = new TestCanvas((int) tabPane.getWidth(), (int) tabPane.getHeight());
                 final SimulationNode simulationNode = new SimulationNode(assembly, blankCanvas);
                 simulationNode.drawGrid();
                 tab.setContent(simulationNode);
