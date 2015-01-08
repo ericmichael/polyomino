@@ -1,13 +1,24 @@
 package com.asarg.polysim;
 
+import com.asarg.polysim.adapters.graphics.raster.Drawer;
 import com.asarg.polysim.adapters.graphics.raster.TestCanvas;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -17,9 +28,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -35,6 +49,8 @@ public class SimulationController implements Initializable {
     TabPane tabPane;
     @FXML
     StackPane inspector;
+    @FXML
+    AnchorPane assemblyInspectorPane;
     @FXML
     AnchorPane helpPane;
     @FXML
@@ -67,6 +83,8 @@ public class SimulationController implements Initializable {
     Label lbl_left_status;
     @FXML
     Label lbl_right_status;
+    @FXML
+    ListView listview_polytiles;
 
     private boolean inspecting = false;
     private SimpleBooleanProperty showHelp = new SimpleBooleanProperty(true);
@@ -85,21 +103,28 @@ public class SimulationController implements Initializable {
         helpPane.visibleProperty().bind(showHelp);
         btn_settings.setSelected(false);
         tabPane.setDisable(true);
+        btn_settings.setDisable(true);
+        choice_weight.setItems(FXCollections.observableArrayList("Uniform", "Concentration", "Count"));
 
-        field_temperature.focusedProperty().addListener(new ChangeListener<Boolean>()
-        {
+        listview_polytiles.setCellFactory(new Callback<ListView<PolyTile>, ListCell<PolyTile>>() {
+                @Override
+                public ListCell<PolyTile> call(ListView<PolyTile> list) {
+                    return new PolyTileCell();
+                }
+            }
+        );
+
+        field_temperature.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
-            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
-            {
-                if (!newPropertyValue)
-                {
-                    try{
+            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue) {
+                if (!newPropertyValue) {
+                    try {
                         int temperature = (Integer.parseInt(field_temperature.getText()));
-                        if(temperature>0){
+                        if (temperature > 0) {
                             currentSimulationNode().setTemperature(temperature);
                         }
                         return;
-                    }catch(Exception e){
+                    } catch (Exception e) {
 
                     }
                     field_temperature.setText("" + currentSimulationNode().getTemperature());
@@ -107,6 +132,15 @@ public class SimulationController implements Initializable {
             }
         });
 
+        choice_weight.getSelectionModel().selectedIndexProperty().addListener(
+            new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                    currentSimulationNode().setWeightOption(newValue.intValue());
+                    choice_weight.getSelectionModel().select(currentSimulationNode().getWeightOption());
+                }
+            }
+        );
         tabPane.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<Tab>() {
                     @Override
@@ -119,15 +153,26 @@ public class SimulationController implements Initializable {
                             menu_save.setDisable(false);
                             menu_save_as.setDisable(false);
 
+                            btn_settings.setDisable(false);
+
                             SimulationNode current = (SimulationNode) t1.getContent();
                             if (current != null) {
                                 lbl_left_status.textProperty().bind(current.left_status);
                                 lbl_right_status.textProperty().bind(current.right_status);
                                 field_temperature.setText(""+ currentSimulationNode().getTemperature());
+                                choice_weight.getSelectionModel().select(current.getWeightOption());
+                                listview_polytiles.setItems(current.getTileSet());
+                                System.out.println(listview_polytiles.getItems().size());
+                                System.out.println(current.getTileSet().size());
+
+                                if(current.getFile()==null) { menu_save.setDisable(true); }
+                                else menu_save.setDisable(false);
                             }
                         }else {
                             tabPane.setDisable(true);
                             showHelp.setValue(true);
+
+                            btn_settings.setDisable(true);
 
                             menu_import_tile_config.setDisable(true);
                             menu_save.setDisable(true);
@@ -180,6 +225,25 @@ public class SimulationController implements Initializable {
             }
         });
 
+    }
+
+    static class PolyTileCell extends ListCell<PolyTile> {
+        @Override
+        public void updateItem(PolyTile pt, boolean empty) {
+            super.updateItem(pt, empty);
+            if (pt != null) {
+
+                BufferedImage iconDrawSpace = new BufferedImage(140, 140, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D iconDrawSpaceGraphics = iconDrawSpace.createGraphics();
+                iconDrawSpaceGraphics.setClip(0, 0, 140, 140);
+                Drawer.TileDrawer.drawCenteredPolyTile(iconDrawSpaceGraphics, pt);
+                WritableImage ptImage = SwingFXUtils.toFXImage(iconDrawSpace, null);
+                ImageView view = new ImageView();
+                view.setImage(ptImage);
+                setAlignment(Pos.CENTER);
+                setGraphic(view);
+            }
+        }
     }
 
     public void setStage(Stage stage) {
@@ -245,6 +309,31 @@ public class SimulationController implements Initializable {
     }
 
     @FXML
+    public void saveAsMenuItem(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save As...");
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("XML", "*.xml"));
+
+        File selectedFile = fileChooser.showSaveDialog(stage);
+        if (selectedFile != null) {
+            if(currentSimulationNode().saveAs(selectedFile)){
+                tabPane.getSelectionModel().getSelectedItem().setText(selectedFile.getName());
+                menu_save.setDisable(false);
+            }
+        }
+    }
+
+    @FXML
+    public void saveMenuItem(){
+        currentSimulationNode().save();
+    }
+
+    @FXML
+    public void quitMenuItem(){
+        Platform.exit();
+    }
+
+    @FXML
     public void importTileConfigMenuItem() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Tile Configuration...");
@@ -252,7 +341,7 @@ public class SimulationController implements Initializable {
         if (selectedFile != null) {
 
             try {
-                JAXBContext jaxbContext = JAXBContext.newInstance(Assembly.class);
+                JAXBContext jaxbContext = JAXBContext.newInstance(TileConfiguration.class);
                 Unmarshaller unmarshaller;
                 unmarshaller = jaxbContext.createUnmarshaller();
                 TileConfiguration tc = (TileConfiguration) unmarshaller.unmarshal(selectedFile);
@@ -281,7 +370,7 @@ public class SimulationController implements Initializable {
                 Tab tab = new Tab();
                 tab.setText(selectedFile.getName());
                 final TestCanvas blankCanvas = new TestCanvas((int) tabPane.getWidth(), (int) tabPane.getHeight());
-                final SimulationNode simulationNode = new SimulationNode(assembly, blankCanvas);
+                final SimulationNode simulationNode = new SimulationNode(assembly, blankCanvas, selectedFile);
                 simulationNode.drawGrid();
                 tab.setContent(simulationNode);
                 tabPane.getTabs().add(tab);

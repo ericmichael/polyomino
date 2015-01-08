@@ -5,15 +5,16 @@ Tile system is meant to be the container where all different types of polytiles 
  */
 
 import com.asarg.polysim.xml.GlueXmlAdapter;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.InvalidObjectException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+
+import javafx.collections.ObservableSet;
 
 @XmlRootElement(name = "TileSystem")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -31,8 +32,11 @@ public class TileSystem {
     @XmlJavaTypeAdapter(GlueXmlAdapter.class)
     private HashMap<Pair<String, String>, Integer> glueFunction = new HashMap<Pair<String, String>, Integer>();
     // list of polytiles: data structure should be changed to something that would be of better performance
+    private List<PolyTile> tileTypes = new ArrayList<PolyTile>();
     @XmlElement(name = "TileType")
-    private Set<PolyTile> tileTypes = new HashSet<PolyTile>();
+    private ObservableList<PolyTile> observableTileTypes = FXCollections.observableArrayList(tileTypes);
+
+
     // used to set weight option: 0 = none (assumed equal concentrations), 1 = concentration, 2 = tile count
     @XmlAttribute(name = "WeightingOption")
     private int weightOption;
@@ -98,21 +102,21 @@ public class TileSystem {
 
         if (weightOption == CONCENTRATION) {
             if (p.getConcentration() > -1)
-                tileTypes.add(p);
+                observableTileTypes.add(p);
             else {
                 throw new IllegalStateException("polytile does not fit weight model, " +
                         "You must set a concentration for it.");
             }
         } else if (weightOption == COUNT) {
             if (p.getCount() > -1) {
-                tileTypes.add(p);
+                observableTileTypes.add(p);
                 totalCount += p.getCount();
             } else {
                 throw new IllegalStateException("polytile does not fit weight model, " +
                         "You must set a concentration for it.");
             }
         } else
-            tileTypes.add(p);
+            observableTileTypes.add(p);
     }
 
     public int getTemperature() {
@@ -131,7 +135,7 @@ public class TileSystem {
         // when the weight option is changed, a check should be made on all polytiles and see that they all
         //  have the required variable set. Otherwise, pop up an error telling the user to fix their variables.
         if (x == CONCENTRATION) {
-            for (PolyTile p : tileTypes) {
+            for (PolyTile p : observableTileTypes) {
                 if (p.getConcentration() < 0) {
                     // TODO: we can either change the value to a default or return all polytiles that do not match
                     //  the weight option.
@@ -139,7 +143,7 @@ public class TileSystem {
                 }
             }
         } else if (x == COUNT) {
-            for (PolyTile p : tileTypes) {
+            for (PolyTile p : observableTileTypes) {
                 if (p.getCount() < 0) {
                     // TODO: we can either change the value to a default or return all polytiles that do not match
                     //  the weight option.
@@ -154,7 +158,7 @@ public class TileSystem {
     // their total.
     public int getTotalCount() {
         int tCount = 0;
-        for (PolyTile p : tileTypes) {
+        for (PolyTile p : observableTileTypes) {
             tCount += p.getCount();
         }
         totalCount = tCount;
@@ -163,15 +167,15 @@ public class TileSystem {
 
     public double getTotalConcentration() {
         double tConc = 0;
-        for (PolyTile p : tileTypes) {
+        for (PolyTile p : observableTileTypes) {
             tConc += p.getConcentration();
         }
         totalConcentration = tConc;
         return totalConcentration;
     }
 
-    public Set<PolyTile> getTileTypes() {
-        return tileTypes;
+    public ObservableList<PolyTile> getTileTypes() {
+        return observableTileTypes;
     }
 
     public boolean loadTileConfiguration(TileConfiguration t) {
@@ -182,14 +186,14 @@ public class TileSystem {
             return false;
 
         glueFunction = t.getGlueFunction();
-        tileTypes = t.getTiletypes();
+        observableTileTypes = t.getTiletypes();
 
-        System.out.println("Size in load tile config" + tileTypes.size());
+        System.out.println("Size in load tile config" + observableTileTypes.size());
 
-        for (PolyTile p : tileTypes) {
+        for (PolyTile p : observableTileTypes) {
             p.setGlues();
         }
-        System.out.println("Size after loading tile config" + tileTypes.size());
+        System.out.println("Size after loading tile config" + observableTileTypes.size());
 
         return true;
     }
@@ -198,7 +202,7 @@ public class TileSystem {
         System.out.println("--- Debug Information for TS----");
         System.out.println("Temperature: " + temperature);
         System.out.println("Weight Option: " + weightOption);
-        System.out.println("Polytile Types Size: " + tileTypes.size());
+        System.out.println("Polytile Types Size: " + observableTileTypes.size());
         System.out.println("Glue Function Size:  " + glueFunction.size());
         System.out.println("--------------------------");
     }

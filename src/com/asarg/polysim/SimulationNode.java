@@ -6,6 +6,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingNode;
@@ -15,10 +17,16 @@ import javafx.scene.input.ScrollEvent;
 import javafx.util.Pair;
 
 import javax.swing.*;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import java.awt.*;
+import java.io.File;
+import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
 /**
  * Created by ericmartinez on 1/5/15.
@@ -29,6 +37,7 @@ public class SimulationNode extends SwingNode implements Observer {
     public StringProperty left_previous_status = new SimpleStringProperty("");
     public StringProperty right_status = new SimpleStringProperty("");
     public StringProperty right_previous_status = new SimpleStringProperty("");
+    private File file;
     Frontier frontier;
     PolyTile frontierTile;
     boolean frontierClick = false;
@@ -141,6 +150,53 @@ public class SimulationNode extends SwingNode implements Observer {
 
             }
         });
+    }
+
+    public SimulationNode(Assembly asm, TestCanvas tc, File file){
+        this(asm, tc);
+        this.file = file;
+    }
+
+    public File getFile(){
+        return file;
+    }
+
+    public void setFile(File file){
+        this.file = file;
+    }
+
+    public boolean save(){
+        if(file!=null){
+            removeFrontierFromGrid();
+            try {
+                JAXBContext jaxbContext = JAXBContext.newInstance(Assembly.class);
+                Marshaller marshaller = jaxbContext.createMarshaller();
+                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                marshaller.marshal(assembly, file);
+                placeFrontierOnGrid();
+                return true;
+            } catch (JAXBException jaxbe) {
+                placeFrontierOnGrid();
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public boolean saveAs(File f){
+        removeFrontierFromGrid();
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(Assembly.class);
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            marshaller.marshal(assembly, f);
+            file = f;
+            placeFrontierOnGrid();
+            return true;
+        } catch (JAXBException jaxbe) {
+            placeFrontierOnGrid();
+            return false;
+        }
     }
 
     public TestCanvas getCanvas() {
@@ -334,6 +390,23 @@ public class SimulationNode extends SwingNode implements Observer {
     }
 
     public int getTemperature(){return assembly.getTileSystem().getTemperature();}
+
+    public ObservableList<PolyTile> getTileSet(){
+        return assembly.getTileSystem().getTileTypes();
+    }
+
+    public void setWeightOption(int option){
+       TileSystem ts = assembly.getTileSystem();
+       int old_option = ts.getWeightOption();
+       try {
+           ts.setWeightOption(option);
+           assembly.changeTileSystem(ts);
+       }catch(InvalidObjectException ioe){
+
+       }
+    }
+
+    public int getWeightOption(){return assembly.getTileSystem().getWeightOption(); }
 
     public void placeFrontierOnGrid() {
         if (assembly.Grid.isEmpty()) {

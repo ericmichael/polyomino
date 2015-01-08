@@ -1,6 +1,8 @@
 package com.asarg.polysim;
 
 import com.asarg.polysim.xml.GlueXmlAdapter;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -8,9 +10,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @XmlRootElement(name = "TileConfiguration")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -22,8 +22,9 @@ public class TileConfiguration {
     private HashMap<Pair<String, String>, Integer> glueFunction = new HashMap<Pair<String, String>, Integer>();
 
     //Tile Types is the list of PolyTiles
+    private List<PolyTile> tileTypes = new ArrayList<PolyTile>();
     @XmlElement(name = "TileType")
-    private Set<PolyTile> tileTypes = new HashSet<PolyTile>();
+    private ObservableList<PolyTile> observableTileTypes = FXCollections.observableArrayList(tileTypes);
 
     public TileConfiguration() {
     }
@@ -33,14 +34,14 @@ public class TileConfiguration {
     }
 
     public void addTileType(PolyTile p) {
-        tileTypes.add(p);
+        observableTileTypes.add(p);
     }
 
     public HashMap<Pair<String, String>, Integer> getGlueFunction() {
         return glueFunction;
     }
 
-    public Set<PolyTile> getTiletypes() {
-        return tileTypes;
+    public ObservableList<PolyTile> getTiletypes() {
+        return observableTileTypes;
     }
 }

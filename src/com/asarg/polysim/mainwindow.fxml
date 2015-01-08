@@ -22,12 +22,12 @@
                             <items>
                                 <MenuItem mnemonicParsing="false" onAction="#newMenuItem" text="New Assembly" />
                                 <MenuItem mnemonicParsing="false" onAction="#loadMenuItem" text="Load" />
-                                <MenuItem fx:id="menu_save" disable="true" mnemonicParsing="false" text="Save" />
-                                <MenuItem fx:id="menu_save_as" disable="true" mnemonicParsing="false" text="Save As..." />
+                                <MenuItem fx:id="menu_save" disable="true" mnemonicParsing="false" onAction="#saveMenuItem" text="Save" />
+                                <MenuItem fx:id="menu_save_as" disable="true" mnemonicParsing="false" onAction="#saveAsMenuItem" text="Save As..." />
                                 <SeparatorMenuItem mnemonicParsing="false" />
                                 <MenuItem mnemonicParsing="false" text="Preferences..." />
                                 <SeparatorMenuItem mnemonicParsing="false" />
-                                <MenuItem mnemonicParsing="false" text="Quit" />
+                                <MenuItem mnemonicParsing="false" onAction="#quitMenuItem" text="Quit" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Tools">
@@ -109,7 +109,7 @@
     <right>
         <StackPane fx:id="inspector" prefHeight="301.0" prefWidth="174.0">
          <children>
-            <AnchorPane>
+            <AnchorPane fx:id="assemblyInspectorPane">
                <children>
                   <TabPane layoutX="7.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <tabs>
@@ -156,7 +156,10 @@
                       </Tab>
                       <Tab text="Tile Set">
                         <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <ListView fx:id="listview_polytiles" prefHeight="200.0" prefWidth="200.0" />
+                                 </children></AnchorPane>
                         </content>
                       </Tab>
                     </tabs>

@@ -1,6 +1,7 @@
 package test.com.asarg.polysim; 
 
 import com.asarg.polysim.PolyTile;
+import javafx.collections.ObservableList;
 import org.junit.Test;
 import org.junit.Before; 
 import org.junit.After;
@@ -92,7 +93,7 @@ public void testAddPolyTile() throws Exception {
     p.addTile(0,0, emptyGlues);
     ts.addPolyTile(p);
 
-    Set<PolyTile> testPolyTileList = ts.getTileTypes();
+    ObservableList<PolyTile> testPolyTileList = ts.getTileTypes();
     assertTrue("Polytile list should contain the added polytile",testPolyTileList.contains(p));
     //TODO: figure out if we want to return a reference to the object or a deep copy of the object (tile type list)
     assertSame("Polytile list is the same object as the one returned.", testPolyTileList, ts.getTileTypes());
