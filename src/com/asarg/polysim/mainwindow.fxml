@@ -111,7 +111,7 @@
          <children>
             <AnchorPane fx:id="assemblyInspectorPane">
                <children>
-                  <TabPane layoutX="7.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TabPane layoutX="7.0" prefHeight="301.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <tabs>
                       <Tab text="System">
                         <content>
@@ -156,9 +156,9 @@
                       </Tab>
                       <Tab text="Tile Set">
                         <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="269.0" prefWidth="200.0">
                                  <children>
-                                    <ListView fx:id="listview_polytiles" prefHeight="200.0" prefWidth="200.0" />
+                                    <ListView fx:id="listview_polytiles" prefHeight="270.0" prefWidth="200.0" AnchorPane.bottomAnchor="-90.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children></AnchorPane>
                         </content>
                       </Tab>
