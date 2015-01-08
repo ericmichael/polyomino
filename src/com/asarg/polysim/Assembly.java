@@ -64,12 +64,18 @@ public class Assembly extends Observable {
         cleanUp();
         getOpenGlues();
         frontier.changeTileSystem(newTS);
+        frontier.clear();
         calculateFrontier();
         printDebugInformation();
         tileSystem.printDebugInformation();
         setChanged();
         notifyObservers(new Pair<String, FrontierElement>("Tile System", null));
         System.out.println("Frontier: " + frontier.size());
+    }
+
+    public void changeTemperature(int temperature){
+        tileSystem.setTemperature(temperature);
+        changeTileSystem(tileSystem);
     }
 
     public void changeTileConfiguration(TileConfiguration tc) {

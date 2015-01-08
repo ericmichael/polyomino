@@ -1,7 +1,6 @@
 package com.asarg.polysim;
 
 import com.asarg.polysim.adapters.graphics.raster.TestCanvas;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -51,9 +50,19 @@ public class SimulationController implements Initializable {
     @FXML
     Button btn_ff;
     @FXML
+    TextField field_temperature;
+    @FXML
+    ChoiceBox choice_weight;
+    @FXML
     ToggleButton btn_settings;
     @FXML
     Button btn_help;
+    @FXML
+    MenuItem menu_save;
+    @FXML
+    MenuItem menu_save_as;
+    @FXML
+    MenuItem menu_import_tile_config;
     @FXML
     Label lbl_left_status;
     @FXML
@@ -77,6 +86,27 @@ public class SimulationController implements Initializable {
         btn_settings.setSelected(false);
         tabPane.setDisable(true);
 
+        field_temperature.focusedProperty().addListener(new ChangeListener<Boolean>()
+        {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
+            {
+                if (!newPropertyValue)
+                {
+                    try{
+                        int temperature = (Integer.parseInt(field_temperature.getText()));
+                        if(temperature>0){
+                            currentSimulationNode().setTemperature(temperature);
+                        }
+                        return;
+                    }catch(Exception e){
+
+                    }
+                    field_temperature.setText("" + currentSimulationNode().getTemperature());
+                }
+            }
+        });
+
         tabPane.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<Tab>() {
                     @Override
@@ -85,14 +115,23 @@ public class SimulationController implements Initializable {
                             showHelp.setValue(false);
                             tabPane.setDisable(false);
 
+                            menu_import_tile_config.setDisable(false);
+                            menu_save.setDisable(false);
+                            menu_save_as.setDisable(false);
+
                             SimulationNode current = (SimulationNode) t1.getContent();
                             if (current != null) {
                                 lbl_left_status.textProperty().bind(current.left_status);
                                 lbl_right_status.textProperty().bind(current.right_status);
+                                field_temperature.setText(""+ currentSimulationNode().getTemperature());
                             }
                         }else {
                             tabPane.setDisable(true);
                             showHelp.setValue(true);
+
+                            menu_import_tile_config.setDisable(true);
+                            menu_save.setDisable(true);
+                            menu_save_as.setDisable(true);
                         }
                     }
                 }
@@ -203,6 +242,27 @@ public class SimulationController implements Initializable {
         simulationNode.drawGrid();
         tab.setContent(simulationNode);
         tabPane.getTabs().add(tab);
+    }
+
+    @FXML
+    public void importTileConfigMenuItem() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Tile Configuration...");
+        File selectedFile = fileChooser.showOpenDialog(stage);
+        if (selectedFile != null) {
+
+            try {
+                JAXBContext jaxbContext = JAXBContext.newInstance(Assembly.class);
+                Unmarshaller unmarshaller;
+                unmarshaller = jaxbContext.createUnmarshaller();
+                TileConfiguration tc = (TileConfiguration) unmarshaller.unmarshal(selectedFile);
+
+                currentSimulationNode().updateTileConfiguration(tc);
+
+            } catch (javax.xml.bind.JAXBException jaxbe) {
+                javax.swing.JOptionPane.showMessageDialog(null, "Failed to tile configuration");
+            }
+        }
     }
 
     @FXML

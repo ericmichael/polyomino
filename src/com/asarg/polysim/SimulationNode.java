@@ -2,6 +2,8 @@ package com.asarg.polysim;
 
 import com.asarg.polysim.adapters.graphics.raster.Drawer;
 import com.asarg.polysim.adapters.graphics.raster.TestCanvas;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.concurrent.Service;
@@ -322,6 +324,17 @@ public class SimulationNode extends SwingNode implements Observer {
         getCanvas().repaint();
     }
 
+    public void updateTileConfiguration(TileConfiguration tc){
+        assembly.changeTileConfiguration(tc);
+    }
+
+    public void setTemperature(int temperature){
+        resetFrontier();
+        assembly.changeTemperature(temperature);
+    }
+
+    public int getTemperature(){return assembly.getTileSystem().getTemperature();}
+
     public void placeFrontierOnGrid() {
         if (assembly.Grid.isEmpty()) {
             for (PolyTile pt : assembly.getTileSystem().getTileTypes()) {
@@ -411,15 +424,17 @@ public class SimulationNode extends SwingNode implements Observer {
             placeFrontierOnGrid();
             drawGrid();
         } else if (msg.equals("refresh")) {
+            System.out.println("reset");
             resetFrontier();
             frontier = assembly.calculateFrontier();
+            frontier.printDebugInformation();
             getCanvas().reset();
             placeFrontierOnGrid();
             drawGrid();
 
         } else if (msg.equals("Tile System")) {
-            resetFrontier();
-            frontier = assembly.getFrontier();
+            //resetFrontier();
+            frontier = assembly.calculateFrontier();
             getCanvas().reset();
             placeFrontierOnGrid();
             drawGrid();

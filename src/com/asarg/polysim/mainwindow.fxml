@@ -22,8 +22,8 @@
                             <items>
                                 <MenuItem mnemonicParsing="false" onAction="#newMenuItem" text="New Assembly" />
                                 <MenuItem mnemonicParsing="false" onAction="#loadMenuItem" text="Load" />
-                                <MenuItem mnemonicParsing="false" text="Save" />
-                                <MenuItem mnemonicParsing="false" text="Save As..." />
+                                <MenuItem fx:id="menu_save" disable="true" mnemonicParsing="false" text="Save" />
+                                <MenuItem fx:id="menu_save_as" disable="true" mnemonicParsing="false" text="Save As..." />
                                 <SeparatorMenuItem mnemonicParsing="false" />
                                 <MenuItem mnemonicParsing="false" text="Preferences..." />
                                 <SeparatorMenuItem mnemonicParsing="false" />
@@ -32,7 +32,7 @@
                         </Menu>
                         <Menu mnemonicParsing="false" text="Tools">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="Import Tile Set" />
+                                <MenuItem fx:id="menu_import_tile_config" disable="true" mnemonicParsing="false" onAction="#importTileConfigMenuItem" text="Import Tile Set" />
                                 <MenuItem mnemonicParsing="false" text="Tile Set Editor" />
                             </items>
                         </Menu>
@@ -75,7 +75,7 @@
         </VBox>
     </top>
     <center>
-        <StackPane>
+        <StackPane prefHeight="304.0" prefWidth="371.0">
             <children>
                 <AnchorPane fx:id="helpPane" prefHeight="200.0" prefWidth="200.0">
                     <children>
@@ -107,19 +107,63 @@
         </StackPane>
     </center>
     <right>
-        <StackPane fx:id="inspector" prefHeight="324.0" prefWidth="216.0">
-            <children>
-                <TabPane fx:id="assembly_inspector" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <StackPane fx:id="inspector" prefHeight="301.0" prefWidth="174.0">
+         <children>
+            <AnchorPane>
+               <children>
+                  <TabPane layoutX="7.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <tabs>
-                        <Tab text="Untitled Tab 1">
-                            <content>
-                                <AnchorPane prefHeight="200.0" prefWidth="200.0" />
-                            </content>
-                        </Tab>
-                        <Tab text="Untitled Tab 2" />
+                      <Tab text="System">
+                        <content>
+                          <AnchorPane>
+                                 <children>
+                                    <VBox layoutY="14.0">
+                                       <children>
+                                          <HBox alignment="CENTER">
+                                             <children>
+                                                <Label text="Temperature" />
+                                                <Region prefHeight="26.0" prefWidth="26.0" HBox.hgrow="ALWAYS" />
+                                                <TextField fx:id="field_temperature" prefHeight="26.0" prefWidth="65.0" />
+                                             </children>
+                                             <opaqueInsets>
+                                                <Insets />
+                                             </opaqueInsets>
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                          </HBox>
+                                          <Separator prefWidth="200.0">
+                                             <VBox.margin>
+                                                <Insets bottom="10.0" top="10.0" />
+                                             </VBox.margin>
+                                          </Separator>
+                                          <Label text="Weight Option">
+                                             <VBox.margin>
+                                                <Insets bottom="10.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <ChoiceBox fx:id="choice_weight" prefWidth="200.0" />
+                                          <Separator layoutX="10.0" layoutY="46.0" prefWidth="200.0">
+                                             <VBox.margin>
+                                                <Insets bottom="10.0" top="10.0" />
+                                             </VBox.margin>
+                                          </Separator>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                      <Tab text="Tile Set">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                      </Tab>
                     </tabs>
-                </TabPane>
-            </children>
+                  </TabPane>
+               </children>
+            </AnchorPane>
+         </children>
         </StackPane>
     </right>
     <bottom>
