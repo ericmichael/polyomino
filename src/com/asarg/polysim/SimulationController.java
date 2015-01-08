@@ -19,10 +19,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -109,7 +106,23 @@ public class SimulationController implements Initializable {
         listview_polytiles.setCellFactory(new Callback<ListView<PolyTile>, ListCell<PolyTile>>() {
                 @Override
                 public ListCell<PolyTile> call(ListView<PolyTile> list) {
-                    return new PolyTileCell();
+                    final ListCell<PolyTile> ptCell = new PolyTileCell();
+                    ptCell.setOnDragDetected(new EventHandler<MouseEvent>() {
+                        public void handle(MouseEvent event) {
+                            /* drag was detected, start a drag-and-drop gesture*/
+                            /* allow any transfer mode */
+                            Dragboard db = ptCell.startDragAndDrop(TransferMode.ANY);
+
+                            /* Put a string on a dragboard */
+                            ClipboardContent content = new ClipboardContent();
+                            //content.putString(ptCell.getGraphic());
+                            ImageView temp = (ImageView) ptCell.getGraphic();
+                            content.putImage(temp.getImage());
+                            db.setContent(content);
+                            event.consume();
+                        }
+                    });
+                    return ptCell;
                 }
             }
         );
