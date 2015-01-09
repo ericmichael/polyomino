@@ -12,9 +12,7 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingNode;
 import javafx.event.EventHandler;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
+import javafx.scene.input.*;
 import javafx.util.Pair;
 
 import javax.swing.*;
@@ -154,6 +152,8 @@ public class SimulationNode extends SwingNode implements Observer {
 
         setOnDragExited(new EventHandler<DragEvent>() {
             public void handle(DragEvent event) {
+                System.out.println("exited");
+
             /* mouse moved away, remove the graphical cues */
                 if(currentFrontierAttachment!=null) {
                     Point loc = currentFrontierAttachment.getOffset();
@@ -168,16 +168,36 @@ public class SimulationNode extends SwingNode implements Observer {
             }
         });
 
+        setOnDragDropped(new EventHandler<DragEvent>() {
+            public void handle(DragEvent event) {
+                System.out.println("dropped");
+                /* data dropped */
+                /* if there is a string data on dragboard, read it and use it */
+                Dragboard db = event.getDragboard();
+                boolean success = false;
+                if (db.hasContent(SimulationController.polyTileFormat)) {
+                    currentFrontierAttachment=null;
+                    assembly.cleanUp();
+                    assembly.getOpenGlues();
+                    frontier = assembly.calculateFrontier();
+                    success = true;
+                }
+        /* let the source know whether the string was successfully
+         * transferred and used */
+                event.setDropCompleted(success);
+
+                event.consume();
+            }
+        });
+
         setOnDragOver(new EventHandler<DragEvent>() {
             public void handle(DragEvent event) {
+                System.out.println("over");
+
                 /* the drag-and-drop gesture entered the target */
                 /* show to the user that it is an actual gesture target */
                 if (event.getGestureSource() != this && event.getDragboard().hasContent(SimulationController.polyTileFormat)) {
-                    System.out.println("Frontier Size: "+ frontier.size());
-                    System.out.println("Grid SIZE: " + assembly.pointsInGrid().size());
-                    System.out.println("Removing frontier from grid...");
                     removeFrontierFromGrid();
-                    System.out.println("Grid SIZE: " + assembly.pointsInGrid().size());
 
                     if(currentFrontierAttachment!=null) {
                         Point loc = currentFrontierAttachment.getOffset();
@@ -200,6 +220,7 @@ public class SimulationNode extends SwingNode implements Observer {
                         currentFrontierAttachment = fe;
                         assembly.placePolytile(dropped, (int) spot.getX(), (int) spot.getY());
                         drawGrid();
+                        event.acceptTransferModes(TransferMode.COPY);
                     }else{
                         drawGrid();
                     }
@@ -292,7 +313,9 @@ public class SimulationNode extends SwingNode implements Observer {
 
     public void removeFrontierFromGrid() {
         for (FrontierElement fe : frontier) {
-            assembly.Grid.remove(fe.getLocation());
+            //if frontier tile
+            if(assembly.Grid.get(fe.getLocation())==getFrontierPolyTile().getTile(0,0))
+                assembly.Grid.remove(fe.getLocation());
         }
     }
 
