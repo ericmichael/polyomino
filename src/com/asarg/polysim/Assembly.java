@@ -57,8 +57,6 @@ public class Assembly extends Observable {
 
     //change tile system stub
     public void changeTileSystem(TileSystem newTS) {
-        printDebugInformation();
-        tileSystem.printDebugInformation();
         System.out.println("WARNING: CHANGING THE TILE SYSTEM, PREPARE FOR ERRORS!");
         tileSystem = newTS;
         cleanUp();
@@ -67,7 +65,6 @@ public class Assembly extends Observable {
         frontier.clear();
         calculateFrontier();
         printDebugInformation();
-        tileSystem.printDebugInformation();
         setChanged();
         notifyObservers(new Pair<String, FrontierElement>("Tile System", null));
         System.out.println("Frontier: " + frontier.size());
@@ -120,18 +117,24 @@ public class Assembly extends Observable {
     }
 
     public void removePolytile(PolyTile p, int x, int y) {
+        boolean polytilePresent = true;
         for (Tile t : p.tiles) {
             Point tmp = new Point(t.getLocation());
             tmp.translate(x, y);
             Tile existing = Grid.get(tmp);
 
-            if (existing.samePolyTile(p)) {
+            if(existing == null) polytilePresent = false;
+        }
+        if(polytilePresent) {
+            for (Tile t : p.tiles) {
+                Point tmp = new Point(t.getLocation());
+                tmp.translate(x, y);
                 Grid.remove(tmp);
             }
         }
     }
 
-    private boolean geometryCheckSuccess(PolyTile p, int x, int y) {
+    public boolean geometryCheckSuccess(PolyTile p, int x, int y) {
         for (Tile t : p.tiles) {
             if (Grid.containsKey(new Point(x + t.getLocation().x, y + t.getLocation().y))) {
                 return false;

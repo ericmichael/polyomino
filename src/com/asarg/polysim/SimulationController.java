@@ -85,6 +85,7 @@ public class SimulationController implements Initializable {
 
     private boolean inspecting = false;
     private SimpleBooleanProperty showHelp = new SimpleBooleanProperty(true);
+    public static final DataFormat polyTileFormat = new DataFormat("PolyTile");
 
     @Override // This method is called by the FXMLLoader when initialization is complete
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
@@ -117,8 +118,9 @@ public class SimulationController implements Initializable {
                             ClipboardContent content = new ClipboardContent();
                             //content.putString(ptCell.getGraphic());
                             ImageView temp = (ImageView) ptCell.getGraphic();
-                            content.putImage(temp.getImage());
+                            content.put(polyTileFormat, ptCell.getIndex());
                             db.setContent(content);
+                            db.setDragView(temp.getImage());
                             event.consume();
                         }
                     });
@@ -175,8 +177,6 @@ public class SimulationController implements Initializable {
                                 field_temperature.setText(""+ currentSimulationNode().getTemperature());
                                 choice_weight.getSelectionModel().select(current.getWeightOption());
                                 listview_polytiles.setItems(current.getTileSet());
-                                System.out.println(listview_polytiles.getItems().size());
-                                System.out.println(current.getTileSet().size());
 
                                 if(current.getFile()==null) { menu_save.setDisable(true); }
                                 else menu_save.setDisable(false);

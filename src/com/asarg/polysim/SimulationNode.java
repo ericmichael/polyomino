@@ -12,6 +12,7 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingNode;
 import javafx.event.EventHandler;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.util.Pair;
@@ -57,7 +58,7 @@ public class SimulationNode extends SwingNode implements Observer {
     public SimulationNode(Assembly asm, TestCanvas tc) {
         this.assembly = asm;
         assembly.addObserver(this);
-        frontier = assembly.calculateFrontier();
+        frontier = assembly.getFrontier();
         placeFrontierOnGrid();
         setCanvas(tc);
 
@@ -148,6 +149,63 @@ public class SimulationNode extends SwingNode implements Observer {
                 getCanvas().reset();
                 drawGrid();
 
+            }
+        });
+
+        setOnDragExited(new EventHandler<DragEvent>() {
+            public void handle(DragEvent event) {
+            /* mouse moved away, remove the graphical cues */
+                if(currentFrontierAttachment!=null) {
+                    Point loc = currentFrontierAttachment.getOffset();
+                    assembly.removePolytile(currentFrontierAttachment.getPolyTile(), (int) loc.getX(), (int) loc.getY());
+                    currentFrontierAttachment=null;
+                }
+                getCanvas().reset();
+                placeFrontierOnGrid();
+                drawGrid();
+
+                event.consume();
+            }
+        });
+
+        setOnDragOver(new EventHandler<DragEvent>() {
+            public void handle(DragEvent event) {
+                /* the drag-and-drop gesture entered the target */
+                /* show to the user that it is an actual gesture target */
+                if (event.getGestureSource() != this && event.getDragboard().hasContent(SimulationController.polyTileFormat)) {
+                    System.out.println("Frontier Size: "+ frontier.size());
+                    System.out.println("Grid SIZE: " + assembly.pointsInGrid().size());
+                    System.out.println("Removing frontier from grid...");
+                    removeFrontierFromGrid();
+                    System.out.println("Grid SIZE: " + assembly.pointsInGrid().size());
+
+                    if(currentFrontierAttachment!=null) {
+                        Point loc = currentFrontierAttachment.getOffset();
+                        assembly.removePolytile(currentFrontierAttachment.getPolyTile(), (int) loc.getX(), (int) loc.getY());
+                        currentFrontierAttachment=null;
+                    }
+                    getCanvas().reset();
+
+
+                    Integer index = (Integer) event.getDragboard().getContent(SimulationController.polyTileFormat);
+                    PolyTile dropped = getTileSet().get(index.intValue());
+                    Point point = new Point((int) event.getX(), (int) event.getY());
+                    Point spot = Drawer.TileDrawer.getGridPoint(point, getCanvas().getOffset(), getCanvas().getTileDiameter());
+                    FrontierElement fe = new FrontierElement(spot, spot, dropped, 0);
+
+                    //translate to spot
+
+                    //check if passes geometry check
+                    if(assembly.geometryCheckSuccess(dropped, (int) spot.getX(), (int) spot.getY())){
+                        currentFrontierAttachment = fe;
+                        assembly.placePolytile(dropped, (int) spot.getX(), (int) spot.getY());
+                        drawGrid();
+                    }else{
+                        drawGrid();
+                    }
+                }
+
+                event.consume();
             }
         });
     }
@@ -400,7 +458,9 @@ public class SimulationNode extends SwingNode implements Observer {
        int old_option = ts.getWeightOption();
        try {
            ts.setWeightOption(option);
+           removeFrontierFromGrid();
            assembly.changeTileSystem(ts);
+           frontier = assembly.getFrontier();
        }catch(InvalidObjectException ioe){
 
        }
@@ -507,7 +567,7 @@ public class SimulationNode extends SwingNode implements Observer {
 
         } else if (msg.equals("Tile System")) {
             //resetFrontier();
-            frontier = assembly.calculateFrontier();
+            frontier = assembly.getFrontier();
             getCanvas().reset();
             placeFrontierOnGrid();
             drawGrid();
