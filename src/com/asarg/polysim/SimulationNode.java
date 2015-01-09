@@ -371,12 +371,18 @@ public class SimulationNode extends SwingNode implements Observer {
 
     public void forward() {
         step(1, true);
-        updateAttachTime(assembly.getAttached().get(-1).getAttachTime());
+        java.util.List<FrontierElement> attached = assembly.getAttached();
+        if(!attached.isEmpty()) {
+            updateAttachTime(attached.get(attached.size() - 1).getAttachTime());
+        }
     }
 
     public void fast_forward() {
         step(2, true);
-        updateAttachTime(assembly.getAttached().get(-1).getAttachTime());
+        java.util.List<FrontierElement> attached = assembly.getAttached();
+        if(!assembly.getAttached().isEmpty()) {
+            updateAttachTime(attached.get(attached.size() - 1).getAttachTime());
+        }
     }
 
     public void backward() {
