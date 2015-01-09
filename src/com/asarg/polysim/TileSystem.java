@@ -12,9 +12,10 @@ import javafx.util.Pair;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.InvalidObjectException;
-import java.util.*;
-
-import javafx.collections.ObservableSet;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @XmlRootElement(name = "TileSystem")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -179,21 +180,21 @@ public class TileSystem {
     }
 
     public boolean loadTileConfiguration(TileConfiguration t) {
-        System.out.println("Option in load tile config" + weightOption);
+        System.out.println("Option in load tile config " + weightOption);
         if (t == null)
             return false;
         else if (t.getGlueFunction() == null || t.getTiletypes() == null)
             return false;
 
         glueFunction = t.getGlueFunction();
-        observableTileTypes = t.getTiletypes();
+        observableTileTypes.addAll(t.getTiletypes());
 
-        System.out.println("Size in load tile config" + observableTileTypes.size());
+        System.out.println("Size in load tile config " + observableTileTypes.size());
 
         for (PolyTile p : observableTileTypes) {
             p.setGlues();
         }
-        System.out.println("Size after loading tile config" + observableTileTypes.size());
+        System.out.println("Size after loading tile config " + observableTileTypes.size());
 
         return true;
     }

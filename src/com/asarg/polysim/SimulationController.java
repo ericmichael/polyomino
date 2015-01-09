@@ -7,13 +7,15 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
@@ -297,8 +299,36 @@ public class SimulationController implements Initializable {
 
     @FXML
     public void play() {
-        SimulationNode current = currentSimulationNode();
-        if (current != null) current.play();
+        final SimulationNode current = currentSimulationNode();
+        if (current != null){
+            if (current.stopped) {
+                btn_play.setText(String.valueOf('\uf04c'));
+                Service<Void> service = new Service<Void>() {
+                    @Override
+                    protected Task<Void> createTask() {
+                        return new Task<Void>() {
+                            @Override
+                            protected Void call() throws Exception {
+                                current.play();
+                                return null;
+                            }
+                        };
+                    }
+
+                    @Override
+                    protected void succeeded() {
+                        //Called when finished without exception
+                        current.stopped = true;
+                        btn_play.setText(String.valueOf('\uf04b'));
+                    }
+                };
+                service.start(); // starts Thread
+            } else {
+                current.stopped = true;
+                btn_play.setText(String.valueOf('\uf04b'));
+            }
+
+        }
     }
 
     @FXML

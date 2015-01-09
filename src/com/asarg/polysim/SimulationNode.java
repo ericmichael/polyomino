@@ -2,14 +2,9 @@ package com.asarg.polysim;
 
 import com.asarg.polysim.adapters.graphics.raster.Drawer;
 import com.asarg.polysim.adapters.graphics.raster.TestCanvas;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
 import javafx.embed.swing.SwingNode;
 import javafx.event.EventHandler;
 import javafx.scene.input.*;
@@ -25,7 +20,6 @@ import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Set;
 
 /**
  * Created by ericmartinez on 1/5/15.
@@ -46,8 +40,7 @@ public class SimulationNode extends SwingNode implements Observer {
     Point frontierClickPoint = null;
     Point lastMouseXY = new Point(800, 600);
     int dragCount = 0;
-    private boolean stopped = true;
-
+    public boolean stopped = true;
 
     public SimulationNode() {
         super();
@@ -378,10 +371,12 @@ public class SimulationNode extends SwingNode implements Observer {
 
     public void forward() {
         step(1, true);
+        updateAttachTime(assembly.getAttached().get(-1).getAttachTime());
     }
 
     public void fast_forward() {
         step(2, true);
+        updateAttachTime(assembly.getAttached().get(-1).getAttachTime());
     }
 
     public void backward() {
@@ -393,40 +388,24 @@ public class SimulationNode extends SwingNode implements Observer {
     }
 
     public void play() {
-        if (stopped) {
-            Service<Void> service = new Service<Void>() {
-                @Override
-                protected Task<Void> createTask() {
-                    return new Task<Void>() {
-                        @Override
-                        protected Void call() throws Exception {
-                            stopped = false;
-                            resetFrontier();
-                            while (!frontier.isEmpty()) {
-                                if (stopped) {
-                                    // draw the entire grid when stopping, to see the frontier of the items.
-                                    placeFrontierOnGrid();
-                                    drawGrid();
-                                    break;
-                                } else
-                                    playHelper();
-                            }
-                            return null;
-                        }
-                    };
-                }
-
-                @Override
-                protected void succeeded() {
-                    //Called when finished without exception
-                    stopped = true;
-                }
-            };
-            service.start(); // starts Thread
-        } else {
-            stopped = true;
+        stopped = false;
+        boolean anyAttached = false;
+        resetFrontier();
+        while (!frontier.isEmpty()) {
+            if (stopped) {
+                // draw the entire grid when stopping, to see the frontier of the items.
+                placeFrontierOnGrid();
+                drawGrid();
+                break;
+            } else {
+                anyAttached=true;
+                playHelper();
+            }
         }
-
+        if(anyAttached){
+            updateAttachTime(assembly.getAttached().get(-1).getAttachTime());
+        }
+        //return null;
     }
 
     private void playHelper() {
@@ -542,10 +521,10 @@ public class SimulationNode extends SwingNode implements Observer {
 
         switch (i) {
             case 1:
-                updateAttachTime(assembly.attach(notify));
+                assembly.attach(notify);
                 break;
             case 2:
-                updateAttachTime(assembly.attachAll(notify));
+                assembly.attachAll(notify);
                 break;
             case -1:
                 assembly.detach(notify);
