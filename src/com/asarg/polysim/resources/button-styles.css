@@ -1,3 +1,21 @@
+.inspector-primary-label .text{
+    -fx-fill: #424242;
+    -fx-font-weight: bold;
+}
+
+.btn-danger{
+    -fx-background-color: #d9534f;
+}
+
+.btn-danger:hover{
+    -fx-background-color:#c9302c;
+}
+
+.btn-danger .text{
+    -fx-fill: #fff;
+}
+
+
 .toolbar {
     -fx-background-color: linear-gradient(to bottom, #fafafa, #d2d2d2);
 }

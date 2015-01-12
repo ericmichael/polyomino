@@ -12,8 +12,11 @@ import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
@@ -26,7 +29,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 
 import javax.xml.bind.JAXBContext;
@@ -34,8 +39,11 @@ import javax.xml.bind.Unmarshaller;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by ericmartinez on 1/5/15.
@@ -78,6 +86,8 @@ public class SimulationController implements Initializable {
     MenuItem menu_save_as;
     @FXML
     MenuItem menu_import_tile_config;
+    @FXML
+    MenuItem menu_tile_editor;
     @FXML
     Label lbl_left_status;
     @FXML
@@ -169,6 +179,7 @@ public class SimulationController implements Initializable {
                             menu_import_tile_config.setDisable(false);
                             menu_save.setDisable(false);
                             menu_save_as.setDisable(false);
+                            menu_tile_editor.setDisable(false);
 
                             btn_settings.setDisable(false);
 
@@ -192,6 +203,7 @@ public class SimulationController implements Initializable {
                             menu_import_tile_config.setDisable(true);
                             menu_save.setDisable(true);
                             menu_save_as.setDisable(true);
+                            menu_tile_editor.setDisable(true);
                         }
                     }
                 }
@@ -240,25 +252,6 @@ public class SimulationController implements Initializable {
             }
         });
 
-    }
-
-    static class PolyTileCell extends ListCell<PolyTile> {
-        @Override
-        public void updateItem(PolyTile pt, boolean empty) {
-            super.updateItem(pt, empty);
-            if (pt != null) {
-
-                BufferedImage iconDrawSpace = new BufferedImage(140, 140, BufferedImage.TYPE_INT_ARGB);
-                Graphics2D iconDrawSpaceGraphics = iconDrawSpace.createGraphics();
-                iconDrawSpaceGraphics.setClip(0, 0, 140, 140);
-                Drawer.TileDrawer.drawCenteredPolyTile(iconDrawSpaceGraphics, pt);
-                WritableImage ptImage = SwingFXUtils.toFXImage(iconDrawSpace, null);
-                ImageView view = new ImageView();
-                view.setImage(ptImage);
-                setAlignment(Pos.CENTER);
-                setGraphic(view);
-            }
-        }
     }
 
     public void setStage(Stage stage) {
@@ -394,6 +387,23 @@ public class SimulationController implements Initializable {
             } catch (javax.xml.bind.JAXBException jaxbe) {
                 javax.swing.JOptionPane.showMessageDialog(null, "Failed to tile configuration");
             }
+        }
+    }
+
+    @FXML
+    public void tileEditorMenuItem(){
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("tileeditorwindow.fxml"));
+
+        try {
+            Parent root1 = (Parent) loader.load();
+            TileEditorController editorController = loader.<TileEditorController>getController();
+            editorController.setTileConfiguration(currentSimulationNode().assembly.getTileSystem().getTileConfiguration());
+            Stage stage = new Stage();
+            stage.setTitle("Tile Editor");
+            stage.setScene(new Scene(root1));
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(TileEditorController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -199,6 +199,21 @@ public class TileSystem {
         return true;
     }
 
+    public TileConfiguration getTileConfiguration(){
+        TileConfiguration tileConfig = new TileConfiguration();
+        for (PolyTile polyTile : observableTileTypes) {
+            tileConfig.addTileType(polyTile);
+        }
+
+        for (Map.Entry<Pair<String, String>, Integer> glF : glueFunction.entrySet()) {
+            String gLabelL = glF.getKey().getKey();
+            String gLabelR = glF.getKey().getValue();
+            int strength = glF.getValue();
+            tileConfig.addGlueFunction(gLabelL, gLabelR, strength);
+        }
+        return tileConfig;
+    }
+
     public void printDebugInformation() {
         System.out.println("--- Debug Information for TS----");
         System.out.println("Temperature: " + temperature);
