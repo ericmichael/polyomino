@@ -110,8 +110,8 @@ public class TileEditorController implements Initializable {
     //Listeners
     ChangeListener<String> listener_label = new ChangeListener<String>() {
         @Override
-        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-            if(oldValue!=newValue) {
+        public void changed(ObservableValue<? extends String> observable, String oldValue, final String newValue) {
+            if(newValue!=null) {
                 Tile selected = canvas.getSelectedTileProperty().get();
                 if (selected != null) {
                     canvas.getSelectedTileProperty().get().setLabel(newValue);
@@ -122,7 +122,7 @@ public class TileEditorController implements Initializable {
                         @Override
                         public void run() {
                             field_tile_label.requestFocus();
-                            field_tile_label.positionCaret(field_tile_label.getText().length());
+                            field_tile_label.positionCaret(newValue.length());
                         }
                     });
                 }
@@ -133,19 +133,21 @@ public class TileEditorController implements Initializable {
     ChangeListener<String> listener_north_glue = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-            Tile selected = canvas.getSelectedTileProperty().get();
-            if(selected!=null) {
-                canvas.getSelectedTileProperty().get().setGlueN(newValue);
-                redrawPolyTile(selected);
-                updateable.set(true);
+            if(newValue!=null) {
+                Tile selected = canvas.getSelectedTileProperty().get();
+                if (selected != null) {
+                    canvas.getSelectedTileProperty().get().setGlueN(newValue);
+                    redrawPolyTile(selected);
+                    updateable.set(true);
 
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        field_north_glue.requestFocus();
-                        field_north_glue.positionCaret(field_north_glue.getText().length());
-                    }
-                });
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            field_north_glue.requestFocus();
+                            field_north_glue.positionCaret(field_north_glue.getText().length());
+                        }
+                    });
+                }
             }
         }
     };
@@ -153,19 +155,21 @@ public class TileEditorController implements Initializable {
     ChangeListener<String> listener_south_glue = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-            Tile selected = canvas.getSelectedTileProperty().get();
-            if(selected!=null) {
-                canvas.getSelectedTileProperty().get().setGlueS(newValue);
-                redrawPolyTile(selected);
-                updateable.set(true);
+            if(newValue!=null) {
+                Tile selected = canvas.getSelectedTileProperty().get();
+                if (selected != null) {
+                    canvas.getSelectedTileProperty().get().setGlueS(newValue);
+                    redrawPolyTile(selected);
+                    updateable.set(true);
 
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        field_south_glue.requestFocus();
-                        field_south_glue.positionCaret(field_south_glue.getText().length());
-                    }
-                });
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            field_south_glue.requestFocus();
+                            field_south_glue.positionCaret(field_south_glue.getText().length());
+                        }
+                    });
+                }
             }
         }
     };
@@ -173,19 +177,21 @@ public class TileEditorController implements Initializable {
     ChangeListener<String> listener_east_glue = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-            Tile selected = canvas.getSelectedTileProperty().get();
-            if(selected!=null) {
-                canvas.getSelectedTileProperty().get().setGlueE(newValue);
-                redrawPolyTile(selected);
-                updateable.set(true);
+            if(newValue!=null) {
+                Tile selected = canvas.getSelectedTileProperty().get();
+                if (selected != null) {
+                    canvas.getSelectedTileProperty().get().setGlueE(newValue);
+                    redrawPolyTile(selected);
+                    updateable.set(true);
 
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        field_east_glue.requestFocus();
-                        field_east_glue.positionCaret(field_east_glue.getText().length());
-                    }
-                });
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            field_east_glue.requestFocus();
+                            field_east_glue.positionCaret(field_east_glue.getText().length());
+                        }
+                    });
+                }
             }
         }
     };
@@ -193,19 +199,21 @@ public class TileEditorController implements Initializable {
     ChangeListener<String> listener_west_glue = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-            Tile selected = canvas.getSelectedTileProperty().get();
-            if(selected!=null) {
-                canvas.getSelectedTileProperty().get().setGlueW(newValue);
-                redrawPolyTile(selected);
-                updateable.set(true);
+            if(newValue!=null) {
+                Tile selected = canvas.getSelectedTileProperty().get();
+                if (selected != null) {
+                    canvas.getSelectedTileProperty().get().setGlueW(newValue);
+                    redrawPolyTile(selected);
+                    updateable.set(true);
 
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        field_west_glue.requestFocus();
-                        field_west_glue.positionCaret(field_west_glue.getText().length());
-                    }
-                });
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            field_west_glue.requestFocus();
+                            field_west_glue.positionCaret(field_west_glue.getText().length());
+                        }
+                    });
+                }
             }
         }
     };
@@ -277,7 +285,7 @@ public class TileEditorController implements Initializable {
 
         Platform.runLater(new Runnable() {
             @Override
-            public void run(){
+            public void run() {
                 canvas.resize((int) ptAnchorPane.getWidth(), (int) ptAnchorPane.getHeight());
             }
         });
@@ -449,7 +457,13 @@ public class TileEditorController implements Initializable {
         listview_polytiles.getItems().remove(index);
         listview_polytiles.getItems().add(index, pt);
         listview_polytiles.getSelectionModel().select(index);
-        if(selected!=null) canvas.selectTile(selected);
+        if(selected!=null){
+            canvas.selectTile(selected);
+            removeTileListeners();
+            setTileData(selected);
+            enableTileData();
+            addTileListeners();
+        }
     }
 
     public void deleteSelectedPolyTile(){

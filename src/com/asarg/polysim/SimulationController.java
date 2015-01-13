@@ -208,6 +208,31 @@ public class SimulationController implements Initializable {
                     }
                 }
         );
+
+        tabPane.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                if(newValue!=null) {
+                    if(currentSimulationNode()!=null) {
+                        currentSimulationNode().getCanvas().resize((int) tabPane.getWidth(), (int) tabPane.getHeight());
+                        currentSimulationNode().drawGrid();
+                    }
+                }
+            }
+        });
+
+        tabPane.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                if(newValue!=null) {
+                    if(currentSimulationNode()!=null) {
+                        currentSimulationNode().getCanvas().resize((int) tabPane.getWidth(), (int) tabPane.getHeight());
+                        currentSimulationNode().drawGrid();
+                    }
+                }
+            }
+        });
+
         borderPane.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             final KeyCombination enter = new KeyCodeCombination(KeyCode.ENTER);
             final KeyCombination pgup = new KeyCodeCombination(KeyCode.PAGE_UP);

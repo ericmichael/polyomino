@@ -18,11 +18,20 @@ public class PolyTileCell extends ListCell<PolyTile> {
     public void updateItem(PolyTile pt, boolean empty) {
         super.updateItem(pt, empty);
         if (pt != null) {
-
             BufferedImage iconDrawSpace = new BufferedImage(140, 140, BufferedImage.TYPE_INT_ARGB);
             Graphics2D iconDrawSpaceGraphics = iconDrawSpace.createGraphics();
             iconDrawSpaceGraphics.setClip(0, 0, 140, 140);
             Drawer.TileDrawer.drawCenteredPolyTile(iconDrawSpaceGraphics, pt);
+            WritableImage ptImage = SwingFXUtils.toFXImage(iconDrawSpace, null);
+            ImageView view = new ImageView();
+            view.setImage(ptImage);
+            setAlignment(Pos.CENTER);
+            setGraphic(view);
+        }
+        else{
+            BufferedImage iconDrawSpace = new BufferedImage(140, 140, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D iconDrawSpaceGraphics = iconDrawSpace.createGraphics();
+            iconDrawSpaceGraphics.setClip(0, 0, 140, 140);
             WritableImage ptImage = SwingFXUtils.toFXImage(iconDrawSpace, null);
             ImageView view = new ImageView();
             view.setImage(ptImage);

@@ -44,6 +44,18 @@ public class TestCanvas extends JPanel {
 
     }
 
+    @Override
+    public void resize(int w, int h){
+        super.resize(w, h);
+        center = new Point(w / 2, h / 2);
+        canvasBFI = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        cg2d = canvasBFI.createGraphics();
+        cg2d.setComposite(AlphaComposite.Src);
+        cg2d.setColor(Color.black);
+        res.setSize(w, h);
+        cg2d.setClip(0, 0, w, h);
+    }
+
 
     @Override
     public void setSize(int width, int height) {
@@ -52,9 +64,7 @@ public class TestCanvas extends JPanel {
     }
 
     public void reset() {
-
         Drawer.clearGraphics(cg2d);
-
     }
 
 
