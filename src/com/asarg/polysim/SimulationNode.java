@@ -132,8 +132,7 @@ public class SimulationNode extends SwingNode implements Observer {
                 int x = (int) e.getX();
                 int y = (int) e.getY();
                 if (!stopped) {
-                    System.out.println("Do not drag while playing!");
-                    JOptionPane.showMessageDialog(null, "Do not drag while playing!\nAssembly must be paused.");
+                    stopped = true;
                     return;
                 }
                 getCanvas().translateOffset(x - lastMouseXY.x, y - lastMouseXY.y);
