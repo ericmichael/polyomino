@@ -93,7 +93,7 @@ public class SimulationController implements Initializable {
     @FXML
     Label lbl_right_status;
     @FXML
-    ListView listview_polytiles;
+    ListView<PolyTile> listview_polytiles;
 
     private boolean inspecting = false;
     private SimpleBooleanProperty showHelp = new SimpleBooleanProperty(true);
@@ -390,14 +390,19 @@ public class SimulationController implements Initializable {
         }
     }
 
-    @FXML
-    public void tileEditorMenuItem(){
+    private void launchTileEditor(){
+        launchTileEditor(-1);
+    }
+
+    private void launchTileEditor(int i){
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("tileeditorwindow.fxml"));
 
         try {
             Parent root1 = (Parent) loader.load();
             TileEditorController editorController = loader.<TileEditorController>getController();
             editorController.setTileConfiguration(currentSimulationNode().assembly.getTileSystem().getTileConfiguration());
+            if(i!=-1) editorController.selectPolyTileIndex(i);
+            editorController.setSimulationNode(currentSimulationNode());
             Stage stage = new Stage();
             stage.setTitle("Tile Editor");
             stage.setScene(new Scene(root1));
@@ -405,6 +410,11 @@ public class SimulationController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(TileEditorController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @FXML
+    public void tileEditorMenuItem(){
+        launchTileEditor();
     }
 
     @FXML
@@ -433,5 +443,22 @@ public class SimulationController implements Initializable {
                 javax.swing.JOptionPane.showMessageDialog(null, "Failed to load assembly");
             }
         }
+    }
+
+    private void deleteSelectedPolyTile(){
+        int index = listview_polytiles.getSelectionModel().getSelectedIndex();
+        if(index>=0) listview_polytiles.getItems().remove(index);
+    }
+
+
+    @FXML
+    public void editPolyTileMenuItem(){
+        int i = listview_polytiles.getSelectionModel().getSelectedIndex();
+        launchTileEditor(i);
+    }
+
+    @FXML
+    public void deletePolyTileMenuItem(){
+        deleteSelectedPolyTile();
     }
 }

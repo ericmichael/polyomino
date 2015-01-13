@@ -55,6 +55,7 @@ public class Assembly extends Observable {
         frontier = new Frontier(tileSystem);
     }
 
+
     //change tile system stub
     public void changeTileSystem(TileSystem newTS) {
         System.out.println("WARNING: CHANGING THE TILE SYSTEM, PREPARE FOR ERRORS!");

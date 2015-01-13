@@ -4,6 +4,7 @@ import com.asarg.polysim.adapters.graphics.raster.Drawer;
 import com.asarg.polysim.adapters.graphics.raster.TestCanvas;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingNode;
 import javafx.event.EventHandler;
@@ -148,10 +149,10 @@ public class SimulationNode extends SwingNode implements Observer {
                 System.out.println("exited");
 
             /* mouse moved away, remove the graphical cues */
-                if(currentFrontierAttachment!=null) {
+                if (currentFrontierAttachment != null) {
                     Point loc = currentFrontierAttachment.getOffset();
                     assembly.removePolytile(currentFrontierAttachment.getPolyTile(), (int) loc.getX(), (int) loc.getY());
-                    currentFrontierAttachment=null;
+                    currentFrontierAttachment = null;
                 }
                 getCanvas().reset();
                 placeFrontierOnGrid();
@@ -169,7 +170,7 @@ public class SimulationNode extends SwingNode implements Observer {
                 Dragboard db = event.getDragboard();
                 boolean success = false;
                 if (db.hasContent(SimulationController.polyTileFormat)) {
-                    currentFrontierAttachment=null;
+                    currentFrontierAttachment = null;
                     assembly.cleanUp();
                     assembly.getOpenGlues();
                     frontier = assembly.calculateFrontier();
@@ -192,10 +193,10 @@ public class SimulationNode extends SwingNode implements Observer {
                 if (event.getGestureSource() != this && event.getDragboard().hasContent(SimulationController.polyTileFormat)) {
                     removeFrontierFromGrid();
 
-                    if(currentFrontierAttachment!=null) {
+                    if (currentFrontierAttachment != null) {
                         Point loc = currentFrontierAttachment.getOffset();
                         assembly.removePolytile(currentFrontierAttachment.getPolyTile(), (int) loc.getX(), (int) loc.getY());
-                        currentFrontierAttachment=null;
+                        currentFrontierAttachment = null;
                     }
                     getCanvas().reset();
 
@@ -209,12 +210,12 @@ public class SimulationNode extends SwingNode implements Observer {
                     //translate to spot
 
                     //check if passes geometry check
-                    if(assembly.geometryCheckSuccess(dropped, (int) spot.getX(), (int) spot.getY())){
+                    if (assembly.geometryCheckSuccess(dropped, (int) spot.getX(), (int) spot.getY())) {
                         currentFrontierAttachment = fe;
                         assembly.placePolytile(dropped, (int) spot.getX(), (int) spot.getY());
                         drawGrid();
                         event.acceptTransferModes(TransferMode.COPY);
-                    }else{
+                    } else {
                         drawGrid();
                     }
                 }
@@ -575,6 +576,7 @@ public class SimulationNode extends SwingNode implements Observer {
 
         } else if (msg.equals("Tile System")) {
             //resetFrontier();
+
             frontier = assembly.getFrontier();
             getCanvas().reset();
             placeFrontierOnGrid();

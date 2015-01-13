@@ -103,7 +103,11 @@
                         </HBox>
                     </children>
                 </AnchorPane>
-                <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                      <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
             </children>
         </StackPane>
     </center>
@@ -162,7 +166,15 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="269.0" prefWidth="200.0">
                                  <children>
-                                    <ListView fx:id="listview_polytiles" prefHeight="270.0" prefWidth="200.0" AnchorPane.bottomAnchor="-90.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <ListView fx:id="listview_polytiles" prefHeight="270.0" prefWidth="200.0" AnchorPane.bottomAnchor="-90.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <contextMenu>
+                                          <ContextMenu>
+                                            <items>
+                                              <MenuItem mnemonicParsing="false" onAction="#editPolyTileMenuItem" text="Edit" />
+                                                <MenuItem mnemonicParsing="false" onAction="#deletePolyTileMenuItem" text="Delete" />
+                                            </items>
+                                          </ContextMenu>
+                                       </contextMenu></ListView>
                                  </children></AnchorPane>
                         </content>
                       </Tab>

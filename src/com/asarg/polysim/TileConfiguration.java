@@ -36,7 +36,8 @@ public class TileConfiguration {
     }
 
     public void addTileType(PolyTile p) {
-        observableTileTypes.add(p);
+        if(!observableTileTypes.contains(p))
+            observableTileTypes.add(p);
     }
 
     public HashMap<Pair<String, String>, Integer> getGlueFunction() {

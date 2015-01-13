@@ -2,6 +2,7 @@ package com.asarg.polysim.adapters.graphics.raster;
 
 import com.asarg.polysim.PolyTile;
 import com.asarg.polysim.Tile;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.util.Pair;
 
 import javax.swing.*;
@@ -19,7 +20,7 @@ public class EditorCanvas extends JPanel {
     Point canvasCenteredOffset = new Point(0, 0);
     int tileDiameter = 1;
 
-    Tile selectedTile = null;
+    SimpleObjectProperty<Tile> selectedTile = new SimpleObjectProperty<Tile>(null);
 
     PolyTile pt;
     //canvas stuff
@@ -38,14 +39,12 @@ public class EditorCanvas extends JPanel {
         this.height=height;
         this.width=width;
 
-
+        resize((int) width, (int) height);
         MouseAdapter gridListener = new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 lastXY = e.getPoint();
-
-
             }
 
             @Override
@@ -57,16 +56,16 @@ public class EditorCanvas extends JPanel {
 
                     Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX, pt, tileDiameter, canvasCenteredOffset);
                     //   canvasCenteredOffset = ofnt.getKey();
-                    if (selectedTile != null)
-                        Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
+                    if (selectedTile.get() != null)
+                        Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.get().getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
                     repaint();
 
                 } else if (e.getWheelRotation() == -1 && tileDiameter * 3 < getWidth() && tileDiameter * 3 < getHeight()) {
                     tileDiameter = (int) Math.ceil(tileDiameter * 1.05);
                     Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX, pt, tileDiameter, canvasCenteredOffset);
                     //  canvasCenteredOffset = ofnt.getKey();
-                    if (selectedTile != null)
-                        Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
+                    if (selectedTile.get() != null)
+                        Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.get().getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
                     repaint();
 
                 }
@@ -78,7 +77,8 @@ public class EditorCanvas extends JPanel {
                 lastXY.setLocation(e.getPoint());
                 Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX, pt, tileDiameter, canvasCenteredOffset);
                 Drawer.clearGraphics(overLayerGFX);
-                Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
+                if(selectedTile.get()!=null)
+                    Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.get().getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
                 repaint();
             }
 
@@ -89,18 +89,13 @@ public class EditorCanvas extends JPanel {
                     Point gridPoint = Drawer.TileDrawer.getGridPoint(e.getPoint(), canvasCenteredOffset, tileDiameter);
                     Tile tile = pt.getTile(gridPoint.x, gridPoint.y);
                     if (tile != null) {
-                        selectedTile = tile;
-                        if (selectedTile != null) {
-                            Drawer.clearGraphics(overLayerGFX);
-                            Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
-                            repaint();
-                        }
+                        selectTile(tile);
                     } else if (pt.adjacentExits(gridPoint)) {
                         Tile newTile = new Tile();
                         newTile.setTileLocation(gridPoint.x, gridPoint.y);
 
                         pt.addTile(newTile);
-                        selectedTile = newTile;
+                        selectedTile.set(newTile);
                         Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX, pt, tileDiameter, canvasCenteredOffset);  // Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX,polytile, tileDiameter);
                         Drawer.clearGraphics(overLayerGFX);
                         //  canvasCenteredOffset = newOffDia.getKey();
@@ -117,12 +112,28 @@ public class EditorCanvas extends JPanel {
         addMouseMotionListener(gridListener);
     }
 
+    public PolyTile getPolyTile(){ return pt; }
+
     public void setPolyTile(PolyTile pt){
-        this.pt = pt;
-        drawPolyTile();
+        if(this.pt!=pt) {
+            this.pt = pt;
+            selectedTile.set(null);
+            drawPolyTile();
+        }
     }
 
-    public Tile getSelectedTile(){ return selectedTile; }
+    public SimpleObjectProperty<Tile> getSelectedTileProperty(){ return selectedTile; }
+
+    public void selectTile(Tile tile){
+        selectTileHelper(tile);
+        selectedTile.set(tile);
+    }
+
+    private void selectTileHelper(Tile tile){
+        Drawer.clearGraphics(overLayerGFX);
+        Drawer.TileDrawer.drawTileSelection(overLayerGFX, tile.getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
+        repaint();
+    }
 
     public void drawPolyTile(){
 
@@ -131,17 +142,28 @@ public class EditorCanvas extends JPanel {
         canvasCenteredOffset = ppi.getKey();
         tileDiameter = ppi.getValue();
         Drawer.clearGraphics(overLayerGFX);
+
+        if (selectedTile.get() != null) {
+            Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.get().getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
+        }
+
+        repaint();
     }
 
     @Override
     public void resize(int width, int height){
+        resetBlank(width, height);
+        if(pt!=null) drawPolyTile();
+    }
+
+    public void resetBlank(int width, int height){
         polyTileCanvas = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         polyTileCanvasGFX = polyTileCanvas.createGraphics();
         polyTileCanvasGFX.setClip(0, 0, width, height);
         overLayer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         overLayerGFX = overLayer.createGraphics();
         overLayerGFX.setClip(0, 0, width, height);
-        drawPolyTile();
+        repaint();
     }
 
     @Override

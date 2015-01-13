@@ -11,10 +11,23 @@
     -fx-background-color:#c9302c;
 }
 
-.btn-danger .text{
+.btn-danger .text,
+.btn-success .text{
     -fx-fill: #fff;
 }
 
+.btn-success{
+    -fx-background-color: #5cb85c;
+}
+
+.btn-success:hover{
+    -fx-background-color: #449d44;
+}
+
+.large-btn {
+    -fx-border-radius: 0;
+    -fx-background-radius: none;
+}
 
 .toolbar {
     -fx-background-color: linear-gradient(to bottom, #fafafa, #d2d2d2);

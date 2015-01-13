@@ -103,21 +103,26 @@ public class TileSystem {
 
         if (weightOption == CONCENTRATION) {
             if (p.getConcentration() > -1)
-                observableTileTypes.add(p);
+                if(!observableTileTypes.contains(p))
+                    observableTileTypes.add(p);
             else {
                 throw new IllegalStateException("polytile does not fit weight model, " +
                         "You must set a concentration for it.");
             }
         } else if (weightOption == COUNT) {
             if (p.getCount() > -1) {
-                observableTileTypes.add(p);
-                totalCount += p.getCount();
+                if(!observableTileTypes.contains(p)) {
+                    observableTileTypes.add(p);
+                    totalCount += p.getCount();
+                }
             } else {
                 throw new IllegalStateException("polytile does not fit weight model, " +
                         "You must set a concentration for it.");
             }
-        } else
-            observableTileTypes.add(p);
+        } else {
+            if(!observableTileTypes.contains(p))
+                observableTileTypes.add(p);
+        }
     }
 
     public int getTemperature() {
@@ -187,6 +192,7 @@ public class TileSystem {
             return false;
 
         glueFunction = t.getGlueFunction();
+
         observableTileTypes.addAll(t.getTiletypes());
 
         System.out.println("Size in load tile config " + observableTileTypes.size());
