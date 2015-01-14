@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
-public class TestCanvas extends JPanel {
+public class SimulationCanvas extends JPanel {
 
 
     BufferedImage canvasBFI;
@@ -20,7 +20,7 @@ public class TestCanvas extends JPanel {
     private int w;
     private int h;
 
-    public TestCanvas(int w, int h) {
+    public SimulationCanvas(int w, int h) {
         center = new Point(w / 2, h / 2);
         canvasBFI = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         cg2d = canvasBFI.createGraphics();
@@ -32,7 +32,7 @@ public class TestCanvas extends JPanel {
         this.h = h;
     }
 
-    public TestCanvas() {
+    public SimulationCanvas() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         canvasBFI = new BufferedImage(screenSize.width, screenSize.height, BufferedImage.TYPE_INT_ARGB);
         cg2d = canvasBFI.createGraphics();

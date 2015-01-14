@@ -1,6 +1,6 @@
 package com.asarg.polysim;
 
-import com.asarg.polysim.adapters.graphics.raster.TestCanvas;
+import com.asarg.polysim.adapters.graphics.raster.SimulationCanvas;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -435,7 +435,7 @@ public class SimulationController implements Initializable {
         Tab tab = new Tab();
         if (f != null) tab.setText(f.getName());
         else tab.setText("Untitled");
-        final TestCanvas blankCanvas = new TestCanvas((int) tabPane.getWidth(), (int) tabPane.getHeight());
+        final SimulationCanvas blankCanvas = new SimulationCanvas((int) tabPane.getWidth(), (int) tabPane.getHeight());
         final SimulationNode simulationNode = new SimulationNode(assembly, blankCanvas, f);
         simulationNode.drawGrid();
         tab.setContent(simulationNode);

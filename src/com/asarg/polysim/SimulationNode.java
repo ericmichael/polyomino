@@ -1,7 +1,7 @@
 package com.asarg.polysim;
 
 import com.asarg.polysim.adapters.graphics.raster.Drawer;
-import com.asarg.polysim.adapters.graphics.raster.TestCanvas;
+import com.asarg.polysim.adapters.graphics.raster.SimulationCanvas;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
@@ -45,7 +45,7 @@ public class SimulationNode extends SwingNode implements Observer {
         super();
     }
 
-    public SimulationNode(Assembly asm, TestCanvas tc) {
+    public SimulationNode(Assembly asm, SimulationCanvas tc) {
         this.assembly = asm;
         assembly.addObserver(this);
         frontier = assembly.getFrontier();
@@ -222,7 +222,7 @@ public class SimulationNode extends SwingNode implements Observer {
         });
     }
 
-    public SimulationNode(Assembly asm, TestCanvas tc, File file) {
+    public SimulationNode(Assembly asm, SimulationCanvas tc, File file) {
         this(asm, tc);
         this.file = file;
     }
@@ -269,11 +269,11 @@ public class SimulationNode extends SwingNode implements Observer {
         }
     }
 
-    public TestCanvas getCanvas() {
-        return (TestCanvas) getContent();
+    public SimulationCanvas getCanvas() {
+        return (SimulationCanvas) getContent();
     }
 
-    public void setCanvas(TestCanvas tc) {
+    public void setCanvas(SimulationCanvas tc) {
         setContent(tc);
     }
 
