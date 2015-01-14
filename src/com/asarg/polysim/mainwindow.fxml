@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import java.lang.String?>
 <?import java.net.URL?>
-
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.asarg.polysim.SimulationController">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8"
+            fx:controller="com.asarg.polysim.SimulationController">
     <stylesheets>
-        <URL value="@resources/button-styles.css" />
+        <URL value="@resources/button-styles.css"/>
     </stylesheets>
     <top>
         <VBox BorderPane.alignment="CENTER">
@@ -21,55 +19,64 @@
                     <menus>
                         <Menu mnemonicParsing="false" text="File">
                             <items>
-                                <MenuItem mnemonicParsing="false" onAction="#newMenuItem" text="New Assembly" />
-                                <MenuItem mnemonicParsing="false" onAction="#loadMenuItem" text="Load" />
-                                <MenuItem fx:id="menu_save" disable="true" mnemonicParsing="false" onAction="#saveMenuItem" text="Save" />
-                                <MenuItem fx:id="menu_save_as" disable="true" mnemonicParsing="false" onAction="#saveAsMenuItem" text="Save As..." />
-                                <SeparatorMenuItem mnemonicParsing="false" />
-                                <MenuItem mnemonicParsing="false" text="Preferences..." />
-                                <SeparatorMenuItem mnemonicParsing="false" />
-                                <MenuItem mnemonicParsing="false" onAction="#quitMenuItem" text="Quit" />
+                                <MenuItem mnemonicParsing="false" onAction="#newMenuItem" text="New Assembly"/>
+                                <MenuItem mnemonicParsing="false" onAction="#loadMenuItem" text="Load"/>
+                                <MenuItem fx:id="menu_save" disable="true" mnemonicParsing="false"
+                                          onAction="#saveMenuItem" text="Save"/>
+                                <MenuItem fx:id="menu_save_as" disable="true" mnemonicParsing="false"
+                                          onAction="#saveAsMenuItem" text="Save As..."/>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
+                                <MenuItem mnemonicParsing="false" text="Preferences..."/>
+                                <SeparatorMenuItem mnemonicParsing="false"/>
+                                <MenuItem mnemonicParsing="false" onAction="#quitMenuItem" text="Quit"/>
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Tools">
                             <items>
-                                <MenuItem fx:id="menu_import_tile_config" disable="true" mnemonicParsing="false" onAction="#importTileConfigMenuItem" text="Import Tile Set" />
-                                <MenuItem fx:id="menu_tile_editor" disable="true" mnemonicParsing="false" onAction="#tileEditorMenuItem" text="Tile Set Editor" />
+                                <MenuItem fx:id="menu_import_tile_config" disable="true" mnemonicParsing="false"
+                                          onAction="#importTileConfigMenuItem" text="Import Tile Set"/>
+                                <MenuItem fx:id="menu_tile_editor" disable="true" mnemonicParsing="false"
+                                          onAction="#tileEditorMenuItem" text="Tile Set Editor"/>
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Help">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="About" />
+                                <MenuItem mnemonicParsing="false" text="About"/>
                             </items>
                         </Menu>
                     </menus>
                 </MenuBar>
                 <HBox alignment="CENTER_LEFT" styleClass="toolbar">
                     <children>
-                        <Region prefHeight="30.0" prefWidth="29.0" HBox.hgrow="ALWAYS" />
-                        <Button fx:id="btn_fb" mnemonicParsing="false" onAction="#fast_backward" styleClass="toolbar-ctrl-btn" text="b" />
-                        <Button fx:id="btn_b" mnemonicParsing="false" onAction="#backward" styleClass="toolbar-ctrl-btn" text="b" />
-                        <Button fx:id="btn_play" mnemonicParsing="false" onAction="#play" styleClass="toolbar-ctrl-btn" text="b" />
-                        <Button fx:id="btn_f" mnemonicParsing="false" onAction="#forward" styleClass="toolbar-ctrl-btn" text="b" />
-                        <Button fx:id="btn_ff" mnemonicParsing="false" onAction="#fast_forward" styleClass="toolbar-ctrl-btn" text="b" />
-                        <Region prefHeight="30.0" prefWidth="29.0" HBox.hgrow="ALWAYS" />
-                  <Button fx:id="btn_help" mnemonicParsing="false" styleClass="toolbar-ctrl-btn" text="h">
-                     <HBox.margin>
-                        <Insets left="8.0" />
-                     </HBox.margin>
-                  </Button>
-                  <ToggleButton fx:id="btn_settings" mnemonicParsing="false" onAction="#toggle_settings" text="s">
-                     <HBox.margin>
-                        <Insets left="8.0" />
-                     </HBox.margin>
-                     <styleClass>
-                        <String fx:value="toolbar-ctrl-btn" />
-                        <String fx:value="toggle" />
-                     </styleClass>
-                  </ToggleButton>
+                        <Region prefHeight="30.0" prefWidth="29.0" HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="btn_fb" mnemonicParsing="false" onAction="#fast_backward"
+                                styleClass="toolbar-ctrl-btn" text="b"/>
+                        <Button fx:id="btn_b" mnemonicParsing="false" onAction="#backward" styleClass="toolbar-ctrl-btn"
+                                text="b"/>
+                        <Button fx:id="btn_play" mnemonicParsing="false" onAction="#play" styleClass="toolbar-ctrl-btn"
+                                text="b"/>
+                        <Button fx:id="btn_f" mnemonicParsing="false" onAction="#forward" styleClass="toolbar-ctrl-btn"
+                                text="b"/>
+                        <Button fx:id="btn_ff" mnemonicParsing="false" onAction="#fast_forward"
+                                styleClass="toolbar-ctrl-btn" text="b"/>
+                        <Region prefHeight="30.0" prefWidth="29.0" HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="btn_help" mnemonicParsing="false" styleClass="toolbar-ctrl-btn" text="h">
+                            <HBox.margin>
+                                <Insets left="8.0"/>
+                            </HBox.margin>
+                        </Button>
+                        <ToggleButton fx:id="btn_settings" mnemonicParsing="false" onAction="#toggle_settings" text="s">
+                            <HBox.margin>
+                                <Insets left="8.0"/>
+                            </HBox.margin>
+                            <styleClass>
+                                <String fx:value="toolbar-ctrl-btn"/>
+                                <String fx:value="toggle"/>
+                            </styleClass>
+                        </ToggleButton>
                     </children>
                     <padding>
-                        <Insets bottom="5.0" top="5.0" />
+                        <Insets bottom="5.0" top="5.0"/>
                     </padding>
                 </HBox>
             </children>
@@ -82,107 +89,119 @@
                     <children>
                         <HBox AnchorPane.rightAnchor="39.0" AnchorPane.topAnchor="0.0">
                             <children>
-                                <Region prefHeight="304.0" prefWidth="124.0" HBox.hgrow="ALWAYS" />
+                                <Region prefHeight="304.0" prefWidth="124.0" HBox.hgrow="ALWAYS"/>
                                 <VBox alignment="TOP_RIGHT" HBox.hgrow="NEVER">
                                     <children>
                                         <Label text="Welcome to VersaTile">
                                             <font>
-                                                <Font name="Helvetica Neue Thin" size="24.0" />
+                                                <Font name="Helvetica Neue Thin" size="24.0"/>
                                             </font>
                                         </Label>
-                                        <Hyperlink text="Getting Started" textAlignment="RIGHT" />
-                                        <Hyperlink text="Video Tutorials" textAlignment="RIGHT" />
-                                        <Label text="Examples" textAlignment="RIGHT" />
-                                        <Hyperlink text="Sierpinski Triangle" textAlignment="RIGHT" />
+                                        <Hyperlink text="Getting Started" textAlignment="RIGHT"/>
+                                        <Hyperlink text="Video Tutorials" textAlignment="RIGHT"/>
+                                        <Label text="Examples" textAlignment="RIGHT"/>
+                                        <Hyperlink text="Sierpinski Triangle" textAlignment="RIGHT"/>
                                     </children>
                                     <padding>
-                                        <Insets bottom="10.0" right="20.0" top="10.0" />
+                                        <Insets bottom="10.0" right="20.0" top="10.0"/>
                                     </padding>
                                 </VBox>
                             </children>
                         </HBox>
                     </children>
                 </AnchorPane>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0">
-               <children>
-                      <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-               </children>
-            </AnchorPane>
+                <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                    <children>
+                        <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0"
+                                 AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+                    </children>
+                </AnchorPane>
             </children>
         </StackPane>
     </center>
     <right>
         <StackPane fx:id="inspector" prefHeight="301.0" prefWidth="174.0">
-         <children>
-            <AnchorPane fx:id="assemblyInspectorPane">
-               <children>
-                  <TabPane layoutX="7.0" prefHeight="301.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <tabs>
-                      <Tab text="System">
-                        <content>
-                          <AnchorPane>
-                                 <children>
-                                    <VBox layoutY="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0">
-                                       <children>
-                                          <HBox alignment="CENTER">
-                                             <children>
-                                                <Label text="Temperature" />
-                                                <Region prefHeight="26.0" prefWidth="26.0" HBox.hgrow="ALWAYS" />
-                                                <TextField fx:id="field_temperature" prefHeight="26.0" prefWidth="65.0" />
-                                             </children>
-                                             <opaqueInsets>
-                                                <Insets />
-                                             </opaqueInsets>
-                                             <VBox.margin>
-                                                <Insets />
-                                             </VBox.margin>
-                                          </HBox>
-                                          <Separator prefWidth="200.0">
-                                             <VBox.margin>
-                                                <Insets bottom="10.0" top="10.0" />
-                                             </VBox.margin>
-                                          </Separator>
-                                          <Label text="Weight Option">
-                                             <VBox.margin>
-                                                <Insets bottom="10.0" />
-                                             </VBox.margin>
-                                          </Label>
-                                          <ChoiceBox fx:id="choice_weight" prefWidth="200.0" />
-                                          <Separator layoutX="10.0" layoutY="46.0" prefWidth="200.0">
-                                             <VBox.margin>
-                                                <Insets bottom="10.0" top="10.0" />
-                                             </VBox.margin>
-                                          </Separator>
-                                       </children>
-                                       <padding>
-                                          <Insets left="10.0" right="10.0" />
-                                       </padding>
-                                    </VBox>
-                                 </children>
-                              </AnchorPane>
-                        </content>
-                      </Tab>
-                      <Tab text="Tile Set">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="269.0" prefWidth="200.0">
-                                 <children>
-                                    <ListView fx:id="listview_polytiles" prefHeight="270.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                       <contextMenu>
-                                          <ContextMenu>
-                                            <items>
-                                              <MenuItem mnemonicParsing="false" onAction="#editPolyTileMenuItem" text="Edit" />
-                                                <MenuItem mnemonicParsing="false" onAction="#deletePolyTileMenuItem" text="Delete" />
-                                            </items>
-                                          </ContextMenu>
-                                       </contextMenu></ListView>
-                                 </children></AnchorPane>
-                        </content>
-                      </Tab>
-                    </tabs>
-                  </TabPane>
-               </children>
-            </AnchorPane>
-         </children>
+            <children>
+                <AnchorPane fx:id="assemblyInspectorPane">
+                    <children>
+                        <TabPane layoutX="7.0" prefHeight="301.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE"
+                                 AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <tabs>
+                                <Tab text="System">
+                                    <content>
+                                        <AnchorPane>
+                                            <children>
+                                                <VBox layoutY="14.0" AnchorPane.leftAnchor="0.0"
+                                                      AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0">
+                                                    <children>
+                                                        <HBox alignment="CENTER">
+                                                            <children>
+                                                                <Label text="Temperature"/>
+                                                                <Region prefHeight="26.0" prefWidth="26.0"
+                                                                        HBox.hgrow="ALWAYS"/>
+                                                                <TextField fx:id="field_temperature" prefHeight="26.0"
+                                                                           prefWidth="65.0"/>
+                                                            </children>
+                                                            <opaqueInsets>
+                                                                <Insets/>
+                                                            </opaqueInsets>
+                                                            <VBox.margin>
+                                                                <Insets/>
+                                                            </VBox.margin>
+                                                        </HBox>
+                                                        <Separator prefWidth="200.0">
+                                                            <VBox.margin>
+                                                                <Insets bottom="10.0" top="10.0"/>
+                                                            </VBox.margin>
+                                                        </Separator>
+                                                        <Label text="Weight Option">
+                                                            <VBox.margin>
+                                                                <Insets bottom="10.0"/>
+                                                            </VBox.margin>
+                                                        </Label>
+                                                        <ChoiceBox fx:id="choice_weight" prefWidth="200.0"/>
+                                                        <Separator layoutX="10.0" layoutY="46.0" prefWidth="200.0">
+                                                            <VBox.margin>
+                                                                <Insets bottom="10.0" top="10.0"/>
+                                                            </VBox.margin>
+                                                        </Separator>
+                                                    </children>
+                                                    <padding>
+                                                        <Insets left="10.0" right="10.0"/>
+                                                    </padding>
+                                                </VBox>
+                                            </children>
+                                        </AnchorPane>
+                                    </content>
+                                </Tab>
+                                <Tab text="Tile Set">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="269.0" prefWidth="200.0">
+                                            <children>
+                                                <ListView fx:id="listview_polytiles" prefHeight="270.0"
+                                                          prefWidth="200.0" AnchorPane.bottomAnchor="0.0"
+                                                          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                    <contextMenu>
+                                                        <ContextMenu>
+                                                            <items>
+                                                                <MenuItem mnemonicParsing="false"
+                                                                          onAction="#editPolyTileMenuItem" text="Edit"/>
+                                                                <MenuItem mnemonicParsing="false"
+                                                                          onAction="#deletePolyTileMenuItem"
+                                                                          text="Delete"/>
+                                                            </items>
+                                                        </ContextMenu>
+                                                    </contextMenu>
+                                                </ListView>
+                                            </children>
+                                        </AnchorPane>
+                                    </content>
+                                </Tab>
+                            </tabs>
+                        </TabPane>
+                    </children>
+                </AnchorPane>
+            </children>
         </StackPane>
     </right>
     <bottom>
@@ -190,19 +209,19 @@
             <children>
                 <Label fx:id="lbl_left_status">
                     <padding>
-                        <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                        <Insets bottom="5.0" left="15.0" right="15.0" top="5.0"/>
                     </padding>
                     <HBox.margin>
-                        <Insets />
+                        <Insets/>
                     </HBox.margin>
                 </Label>
-                <Region prefHeight="30.0" prefWidth="12.0" HBox.hgrow="ALWAYS" />
+                <Region prefHeight="30.0" prefWidth="12.0" HBox.hgrow="ALWAYS"/>
                 <Label fx:id="lbl_right_status">
                     <padding>
-                        <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                        <Insets bottom="5.0" left="15.0" right="15.0" top="5.0"/>
                     </padding>
                     <HBox.margin>
-                        <Insets />
+                        <Insets/>
                     </HBox.margin>
                 </Label>
             </children>

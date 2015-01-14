@@ -4,14 +4,12 @@ import com.asarg.polysim.adapters.graphics.raster.Drawer;
 import com.asarg.polysim.adapters.graphics.raster.TestCanvas;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingNode;
 import javafx.event.EventHandler;
 import javafx.scene.input.*;
 import javafx.util.Pair;
 
-import javax.swing.*;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -31,7 +29,7 @@ public class SimulationNode extends SwingNode implements Observer {
     public StringProperty left_previous_status = new SimpleStringProperty("");
     public StringProperty right_status = new SimpleStringProperty("");
     public StringProperty right_previous_status = new SimpleStringProperty("");
-    private File file;
+    public boolean stopped = true;
     Frontier frontier;
     PolyTile frontierTile;
     boolean frontierClick = false;
@@ -41,7 +39,7 @@ public class SimulationNode extends SwingNode implements Observer {
     Point frontierClickPoint = null;
     Point lastMouseXY = new Point(800, 600);
     int dragCount = 0;
-    public boolean stopped = true;
+    private File file;
 
     public SimulationNode() {
         super();
@@ -224,21 +222,21 @@ public class SimulationNode extends SwingNode implements Observer {
         });
     }
 
-    public SimulationNode(Assembly asm, TestCanvas tc, File file){
+    public SimulationNode(Assembly asm, TestCanvas tc, File file) {
         this(asm, tc);
         this.file = file;
     }
 
-    public File getFile(){
+    public File getFile() {
         return file;
     }
 
-    public void setFile(File file){
+    public void setFile(File file) {
         this.file = file;
     }
 
-    public boolean save(){
-        if(file!=null){
+    public boolean save() {
+        if (file != null) {
             removeFrontierFromGrid();
             try {
                 JAXBContext jaxbContext = JAXBContext.newInstance(Assembly.class);
@@ -255,7 +253,7 @@ public class SimulationNode extends SwingNode implements Observer {
         return false;
     }
 
-    public boolean saveAs(File f){
+    public boolean saveAs(File f) {
         removeFrontierFromGrid();
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(Assembly.class);
@@ -307,7 +305,7 @@ public class SimulationNode extends SwingNode implements Observer {
     public void removeFrontierFromGrid() {
         for (FrontierElement fe : frontier) {
             //if frontier tile
-            if(assembly.Grid.get(fe.getLocation())==getFrontierPolyTile().getTile(0,0))
+            if (assembly.Grid.get(fe.getLocation()) == getFrontierPolyTile().getTile(0, 0))
                 assembly.Grid.remove(fe.getLocation());
         }
     }
@@ -372,7 +370,7 @@ public class SimulationNode extends SwingNode implements Observer {
     public void forward() {
         step(1, true);
         java.util.List<FrontierElement> attached = assembly.getAttached();
-        if(!attached.isEmpty()) {
+        if (!attached.isEmpty()) {
             updateAttachTime(attached.get(attached.size() - 1).getAttachTime());
         }
     }
@@ -380,7 +378,7 @@ public class SimulationNode extends SwingNode implements Observer {
     public void fast_forward() {
         step(2, true);
         java.util.List<FrontierElement> attached = assembly.getAttached();
-        if(!assembly.getAttached().isEmpty()) {
+        if (!assembly.getAttached().isEmpty()) {
             updateAttachTime(attached.get(attached.size() - 1).getAttachTime());
         }
     }
@@ -404,11 +402,11 @@ public class SimulationNode extends SwingNode implements Observer {
                 drawGrid();
                 break;
             } else {
-                anyAttached=true;
+                anyAttached = true;
                 playHelper();
             }
         }
-        if(anyAttached){
+        if (anyAttached) {
             updateAttachTime(assembly.getAttached().get(-1).getAttachTime());
         }
         //return null;
@@ -446,35 +444,39 @@ public class SimulationNode extends SwingNode implements Observer {
         getCanvas().repaint();
     }
 
-    public void updateTileConfiguration(TileConfiguration tc){
+    public void updateTileConfiguration(TileConfiguration tc) {
         assembly.changeTileConfiguration(tc);
     }
 
-    public void setTemperature(int temperature){
+    public int getTemperature() {
+        return assembly.getTileSystem().getTemperature();
+    }
+
+    public void setTemperature(int temperature) {
         resetFrontier();
         assembly.changeTemperature(temperature);
     }
 
-    public int getTemperature(){return assembly.getTileSystem().getTemperature();}
-
-    public ObservableList<PolyTile> getTileSet(){
+    public ObservableList<PolyTile> getTileSet() {
         return assembly.getTileSystem().getTileTypes();
     }
 
-    public void setWeightOption(int option){
-       TileSystem ts = assembly.getTileSystem();
-       int old_option = ts.getWeightOption();
-       try {
-           ts.setWeightOption(option);
-           removeFrontierFromGrid();
-           assembly.changeTileSystem(ts);
-           frontier = assembly.getFrontier();
-       }catch(InvalidObjectException ioe){
-
-       }
+    public int getWeightOption() {
+        return assembly.getTileSystem().getWeightOption();
     }
 
-    public int getWeightOption(){return assembly.getTileSystem().getWeightOption(); }
+    public void setWeightOption(int option) {
+        TileSystem ts = assembly.getTileSystem();
+        int old_option = ts.getWeightOption();
+        try {
+            ts.setWeightOption(option);
+            removeFrontierFromGrid();
+            assembly.changeTileSystem(ts);
+            frontier = assembly.getFrontier();
+        } catch (InvalidObjectException ioe) {
+
+        }
+    }
 
     public void placeFrontierOnGrid() {
         if (assembly.Grid.isEmpty()) {

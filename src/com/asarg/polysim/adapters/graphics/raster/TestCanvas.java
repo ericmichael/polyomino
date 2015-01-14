@@ -45,7 +45,7 @@ public class TestCanvas extends JPanel {
     }
 
     @Override
-    public void resize(int w, int h){
+    public void resize(int w, int h) {
         super.resize(w, h);
         center = new Point(w / 2, h / 2);
         canvasBFI = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);

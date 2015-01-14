@@ -27,8 +27,7 @@ public class PolyTileCell extends ListCell<PolyTile> {
             view.setImage(ptImage);
             setAlignment(Pos.CENTER);
             setGraphic(view);
-        }
-        else{
+        } else {
             BufferedImage iconDrawSpace = new BufferedImage(140, 140, BufferedImage.TYPE_INT_ARGB);
             Graphics2D iconDrawSpaceGraphics = iconDrawSpace.createGraphics();
             iconDrawSpaceGraphics.setClip(0, 0, 140, 140);

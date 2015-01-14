@@ -103,15 +103,15 @@ public class TileSystem {
 
         if (weightOption == CONCENTRATION) {
             if (p.getConcentration() > -1)
-                if(!observableTileTypes.contains(p))
+                if (!observableTileTypes.contains(p))
                     observableTileTypes.add(p);
-            else {
-                throw new IllegalStateException("polytile does not fit weight model, " +
-                        "You must set a concentration for it.");
-            }
+                else {
+                    throw new IllegalStateException("polytile does not fit weight model, " +
+                            "You must set a concentration for it.");
+                }
         } else if (weightOption == COUNT) {
             if (p.getCount() > -1) {
-                if(!observableTileTypes.contains(p)) {
+                if (!observableTileTypes.contains(p)) {
                     observableTileTypes.add(p);
                     totalCount += p.getCount();
                 }
@@ -120,7 +120,7 @@ public class TileSystem {
                         "You must set a concentration for it.");
             }
         } else {
-            if(!observableTileTypes.contains(p))
+            if (!observableTileTypes.contains(p))
                 observableTileTypes.add(p);
         }
     }
@@ -205,7 +205,7 @@ public class TileSystem {
         return true;
     }
 
-    public TileConfiguration getTileConfiguration(){
+    public TileConfiguration getTileConfiguration() {
         TileConfiguration tileConfig = new TileConfiguration();
         for (PolyTile polyTile : observableTileTypes) {
             tileConfig.addTileType(polyTile);

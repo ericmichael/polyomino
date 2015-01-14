@@ -1,10 +1,11 @@
 package com.asarg.polysim.examples;
 
 import com.asarg.polysim.Assembly;
+import com.asarg.polysim.SimulationApplication;
 import com.asarg.polysim.TileConfiguration;
 import com.asarg.polysim.TileSystem;
-import com.asarg.polysim.Workspace;
 import com.asarg.polysim.models.atam.ATAMTile;
+import javafx.application.Application;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -14,11 +15,11 @@ import java.io.File;
 /**
  * Created by ericmartinez on 8/19/14.
  */
-public class RNGUnboundedSimulation {
+public class RNGUnboundedSimulation extends SimulationApplication {
     private TileSystem ts;
-    private Assembly assembly;
 
-    public RNGUnboundedSimulation(int temperature) throws JAXBException {
+    public RNGUnboundedSimulation() throws JAXBException {
+        super();
         //ts = new TileSystem(temperature, TileSystem.CONCENTRATION);
         TileConfiguration tc;
 
@@ -186,9 +187,6 @@ public class RNGUnboundedSimulation {
     }
 
     public static void main(String args[]) throws JAXBException {
-        RNGUnboundedSimulation rngsim = new RNGUnboundedSimulation(2);
-        System.out.println("POLYTILE COUNT" + rngsim.assembly.getTileSystem().getTileTypes().size());
-        Workspace w = new Workspace(rngsim.assembly);
-        //SimulationWindow tcf = new SimulationWindow(800,600, rngsim.assembly);
+        Application.launch(RNGUnboundedSimulation.class, (java.lang.String[]) null);
     }
 }

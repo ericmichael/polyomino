@@ -71,7 +71,7 @@ public class Assembly extends Observable {
         System.out.println("Frontier: " + frontier.size());
     }
 
-    public void changeTemperature(int temperature){
+    public void changeTemperature(int temperature) {
         tileSystem.setTemperature(temperature);
         changeTileSystem(tileSystem);
     }
@@ -124,9 +124,9 @@ public class Assembly extends Observable {
             tmp.translate(x, y);
             Tile existing = Grid.get(tmp);
 
-            if(existing == null) polytilePresent = false;
+            if (existing == null) polytilePresent = false;
         }
-        if(polytilePresent) {
+        if (polytilePresent) {
             for (Tile t : p.tiles) {
                 Point tmp = new Point(t.getLocation());
                 tmp.translate(x, y);

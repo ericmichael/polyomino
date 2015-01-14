@@ -1,19 +1,19 @@
 package com.asarg.polysim.examples;
 
 import com.asarg.polysim.Assembly;
-import com.asarg.polysim.Workspace;
+import com.asarg.polysim.SimulationApplication;
 import com.asarg.polysim.models.hextam.hexTAMTile;
 import com.asarg.polysim.models.hextam.hexTileSystem;
+import javafx.application.Application;
 
 /**
  * Created by ericmartinez on 8/20/14.
  */
-public class RNGHexSimulation {
+public class RNGHexSimulation extends SimulationApplication {
     private hexTileSystem ts;
-    private Assembly assembly;
 
-    public RNGHexSimulation(int temperature) {
-        ts = new hexTileSystem(temperature);
+    public RNGHexSimulation() {
+        ts = new hexTileSystem(2);
         ts.addPolyTile(choiceTile());
         ts.addPolyTile(seedTile());
 
@@ -46,8 +46,6 @@ public class RNGHexSimulation {
     }
 
     public static void main(String args[]) {
-        RNGHexSimulation hsim = new RNGHexSimulation(2);
-        Workspace w = new Workspace(hsim.assembly);
-        //SimulationWindow tcf = new SimulationWindow(800,600, hsim.assembly);
+        Application.launch(RNGHexSimulation.class, (java.lang.String[]) null);
     }
 }

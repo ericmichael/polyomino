@@ -1,17 +1,47 @@
-package com.asarg.polysim;
+package com.asarg.polysim.examples;
 
-import javax.swing.*;
+import com.asarg.polysim.Assembly;
+import com.asarg.polysim.PolyTile;
+import com.asarg.polysim.SimulationApplication;
+import com.asarg.polysim.TileSystem;
+import javafx.application.Application;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
-import java.util.Random;
 
-public class TetrisSimulation {
+public class TetrisSimulation extends SimulationApplication {
 
-    public static double calculateExpDistribution(Random r, double p) {
-        return -(Math.log(r.nextDouble()) / p);
+    public TetrisSimulation() throws JAXBException {
+        TileSystem ts = new TileSystem(2);
+
+        ts.addPolyTile(tetrisF());
+        ts.addPolyTile(tetrisI());
+        ts.addPolyTile(tetrisL());
+        ts.addPolyTile(tetrisU());
+        ts.addPolyTile(tetrisV());
+        ts.addPolyTile(tetrisX());
+
+        ts.addGlueFunction("a", "a", 2);
+        ts.addGlueFunction("b", "b", 2);
+        ts.addGlueFunction("c", "c", 2);
+        ts.addGlueFunction("d", "d", 2);
+        ts.addGlueFunction("e", "e", 2);
+        ts.addGlueFunction("f", "f", 2);
+        ts.addGlueFunction("x", "x", 2);
+        ts.addGlueFunction("ddeFE", "ddeFE", 2);
+
+        assembly = new Assembly(ts);
+        //assembly.placeSeed(tetrisF());
+
+        JAXBContext jaxbContext = JAXBContext.newInstance(TileSystem.class);
+        Marshaller marshaller = jaxbContext.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
+        marshaller.marshal(ts, new File("./output.xml"));
     }
 
     public static String[] blankGlues() {
@@ -125,53 +155,6 @@ public class TetrisSimulation {
 
 
     public static void main(String args[]) throws JAXBException {
-
-        TileSystem ts = new TileSystem(2);
-
-        ts.addPolyTile(tetrisF());
-        ts.addPolyTile(tetrisI());
-        ts.addPolyTile(tetrisL());
-        ts.addPolyTile(tetrisU());
-        ts.addPolyTile(tetrisV());
-        ts.addPolyTile(tetrisX());
-
-        ts.addGlueFunction("a", "a", 2);
-        ts.addGlueFunction("b", "b", 2);
-        ts.addGlueFunction("c", "c", 2);
-        ts.addGlueFunction("d", "d", 2);
-        ts.addGlueFunction("e", "e", 2);
-        ts.addGlueFunction("f", "f", 2);
-        ts.addGlueFunction("x", "x", 2);
-        ts.addGlueFunction("ddeFE", "ddeFE", 2);
-
-        final Assembly assembly = new Assembly(ts);
-        //assembly.placeSeed(tetrisF());
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-               /* try {
-                   for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                        if ("Nimbus".equals(info.getName())) {
-                            UIManager.setLookAndFeel(info.getClassName());
-                            break;
-                        }
-                    }
-                } catch (Exception e) {
-                    // If Nimbus is not available, you can set the GUI to another look and feel.
-                }*/
-                Workspace w = new Workspace(assembly);
-                //SimulationWindow tcf = new SimulationWindow(800,600, assembly);
-            }
-        });
-
-
-        JAXBContext jaxbContext = JAXBContext.newInstance(TileSystem.class);
-        Marshaller marshaller = jaxbContext.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-
-        marshaller.marshal(ts, new File("./output.xml"));
-
-
+        Application.launch(TetrisSimulation.class, (java.lang.String[]) null);
     }
 }

@@ -6,16 +6,17 @@ package com.asarg.polysim.examples;
 
 import com.asarg.polysim.Assembly;
 import com.asarg.polysim.PolyTile;
+import com.asarg.polysim.SimulationApplication;
 import com.asarg.polysim.TileSystem;
-import com.asarg.polysim.Workspace;
 import com.asarg.polysim.models.atam.ATAMTile;
+import javafx.application.Application;
 
-public class InfiniteLine {
+public class InfiniteLine extends SimulationApplication {
     private TileSystem ts;
-    private Assembly assembly;
 
-    public InfiniteLine(int temperature) {
-        ts = new TileSystem(temperature);
+    public InfiniteLine() {
+        super();
+        ts = new TileSystem(2);
 
         ts.addGlueFunction("a", "a", 2);
         assembly = new Assembly(ts);
@@ -37,8 +38,6 @@ public class InfiniteLine {
     }
 
     public static void main(String args[]) {
-        InfiniteLine asim = new InfiniteLine(2);
-        Workspace w = new Workspace(asim.assembly);
-        //SimulationWindow tcf = new SimulationWindow(800,600, asim.assembly);
+        Application.launch(InfiniteLine.class, (java.lang.String[]) null);
     }
 }

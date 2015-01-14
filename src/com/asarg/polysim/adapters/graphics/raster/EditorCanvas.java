@@ -34,10 +34,10 @@ public class EditorCanvas extends JPanel {
     //Canvas panning
     Point lastXY = null;
 
-    public EditorCanvas(double width, double height){
+    public EditorCanvas(double width, double height) {
         super();
-        this.height=height;
-        this.width=width;
+        this.height = height;
+        this.width = width;
 
         resize((int) width, (int) height);
         MouseAdapter gridListener = new MouseAdapter() {
@@ -77,7 +77,7 @@ public class EditorCanvas extends JPanel {
                 lastXY.setLocation(e.getPoint());
                 Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX, pt, tileDiameter, canvasCenteredOffset);
                 Drawer.clearGraphics(overLayerGFX);
-                if(selectedTile.get()!=null)
+                if (selectedTile.get() != null)
                     Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.get().getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
                 repaint();
             }
@@ -85,7 +85,7 @@ public class EditorCanvas extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if (pt!=null) {
+                if (pt != null) {
                     Point gridPoint = Drawer.TileDrawer.getGridPoint(e.getPoint(), canvasCenteredOffset, tileDiameter);
                     Tile tile = pt.getTile(gridPoint.x, gridPoint.y);
                     if (tile != null) {
@@ -112,30 +112,34 @@ public class EditorCanvas extends JPanel {
         addMouseMotionListener(gridListener);
     }
 
-    public PolyTile getPolyTile(){ return pt; }
+    public PolyTile getPolyTile() {
+        return pt;
+    }
 
-    public void setPolyTile(PolyTile pt){
-        if(this.pt!=pt) {
+    public void setPolyTile(PolyTile pt) {
+        if (this.pt != pt) {
             this.pt = pt;
             selectedTile.set(null);
             drawPolyTile();
         }
     }
 
-    public SimpleObjectProperty<Tile> getSelectedTileProperty(){ return selectedTile; }
+    public SimpleObjectProperty<Tile> getSelectedTileProperty() {
+        return selectedTile;
+    }
 
-    public void selectTile(Tile tile){
+    public void selectTile(Tile tile) {
         selectTileHelper(tile);
         selectedTile.set(tile);
     }
 
-    private void selectTileHelper(Tile tile){
+    private void selectTileHelper(Tile tile) {
         Drawer.clearGraphics(overLayerGFX);
         Drawer.TileDrawer.drawTileSelection(overLayerGFX, tile.getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
         repaint();
     }
 
-    public void drawPolyTile(){
+    public void drawPolyTile() {
 
         Drawer.clearGraphics(overLayerGFX);
         Pair<Point, Integer> ppi = Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX, pt);
@@ -151,12 +155,12 @@ public class EditorCanvas extends JPanel {
     }
 
     @Override
-    public void resize(int width, int height){
+    public void resize(int width, int height) {
         resetBlank(width, height);
-        if(pt!=null) drawPolyTile();
+        if (pt != null) drawPolyTile();
     }
 
-    public void resetBlank(int width, int height){
+    public void resetBlank(int width, int height) {
         polyTileCanvas = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         polyTileCanvasGFX = polyTileCanvas.createGraphics();
         polyTileCanvasGFX.setClip(0, 0, width, height);
@@ -167,7 +171,7 @@ public class EditorCanvas extends JPanel {
     }
 
     @Override
-    public void paintComponent(Graphics g){
+    public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.drawImage(polyTileCanvas, 0, 0, null);
         g2.drawImage(overLayer, 0, 0, null);

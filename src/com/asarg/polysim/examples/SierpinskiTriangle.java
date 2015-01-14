@@ -1,18 +1,19 @@
 package com.asarg.polysim.examples;
 
 import com.asarg.polysim.*;
+import javafx.application.Application;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 
-public class SierpinskiTriangle {
+public class SierpinskiTriangle extends SimulationApplication {
 
     public TileSystem ts;
-    public Assembly assembly;
 
-    public SierpinskiTriangle(int temperature) throws JAXBException {
+    public SierpinskiTriangle() throws JAXBException {
+        super();
         assembly = loadAssembly();
     }
 
@@ -125,10 +126,7 @@ public class SierpinskiTriangle {
     }
 
     public static void main(String args[]) throws JAXBException {
-
-        SierpinskiTriangle tetris = new SierpinskiTriangle(2);
-        Workspace w = new Workspace(tetris.assembly);
-        //SimulationWindow tcf = new SimulationWindow(800,600, tetris.assembly);
+        Application.launch(SierpinskiTriangle.class, (java.lang.String[]) null);
     }
 
     public Assembly loadAssembly() throws JAXBException {

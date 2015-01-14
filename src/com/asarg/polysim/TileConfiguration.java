@@ -36,7 +36,7 @@ public class TileConfiguration {
     }
 
     public void addTileType(PolyTile p) {
-        if(!observableTileTypes.contains(p))
+        if (!observableTileTypes.contains(p))
             observableTileTypes.add(p);
     }
 

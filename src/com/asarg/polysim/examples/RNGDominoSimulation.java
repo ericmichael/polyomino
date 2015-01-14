@@ -1,19 +1,20 @@
 package com.asarg.polysim.examples;
 
 import com.asarg.polysim.Assembly;
+import com.asarg.polysim.SimulationApplication;
 import com.asarg.polysim.TileSystem;
-import com.asarg.polysim.Workspace;
 import com.asarg.polysim.models.datam.daTAMTile;
+import javafx.application.Application;
 
 /**
  * Created by ericmartinez on 8/20/14.
  */
-public class RNGDominoSimulation {
+public class RNGDominoSimulation extends SimulationApplication {
     private TileSystem ts;
-    private Assembly assembly;
 
-    public RNGDominoSimulation(int temperature) {
-        ts = new TileSystem(temperature);
+    public RNGDominoSimulation() {
+        super();
+        ts = new TileSystem(2);
         ts.addPolyTile(dR());
         ts.addPolyTile(dCoin());
 
@@ -45,8 +46,6 @@ public class RNGDominoSimulation {
     }
 
     public static void main(String args[]) {
-        RNGDominoSimulation dsim = new RNGDominoSimulation(2);
-        Workspace w = new Workspace(dsim.assembly);
-        //SimulationWindow tcf = new SimulationWindow(800,600, dsim.assembly);
+        Application.launch(RNGDominoSimulation.class, (java.lang.String[]) null);
     }
 }

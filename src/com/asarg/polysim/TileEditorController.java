@@ -1,10 +1,8 @@
 package com.asarg.polysim;
 
-import com.asarg.polysim.adapters.graphics.raster.Drawer;
 import com.asarg.polysim.adapters.graphics.raster.EditorCanvas;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -15,7 +13,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -35,7 +32,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -111,7 +107,7 @@ public class TileEditorController implements Initializable {
     ChangeListener<String> listener_label = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, final String newValue) {
-            if(newValue!=null) {
+            if (newValue != null) {
                 Tile selected = canvas.getSelectedTileProperty().get();
                 if (selected != null) {
                     canvas.getSelectedTileProperty().get().setLabel(newValue);
@@ -133,7 +129,7 @@ public class TileEditorController implements Initializable {
     ChangeListener<String> listener_north_glue = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-            if(newValue!=null) {
+            if (newValue != null) {
                 Tile selected = canvas.getSelectedTileProperty().get();
                 if (selected != null) {
                     canvas.getSelectedTileProperty().get().setGlueN(newValue);
@@ -155,7 +151,7 @@ public class TileEditorController implements Initializable {
     ChangeListener<String> listener_south_glue = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-            if(newValue!=null) {
+            if (newValue != null) {
                 Tile selected = canvas.getSelectedTileProperty().get();
                 if (selected != null) {
                     canvas.getSelectedTileProperty().get().setGlueS(newValue);
@@ -177,7 +173,7 @@ public class TileEditorController implements Initializable {
     ChangeListener<String> listener_east_glue = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-            if(newValue!=null) {
+            if (newValue != null) {
                 Tile selected = canvas.getSelectedTileProperty().get();
                 if (selected != null) {
                     canvas.getSelectedTileProperty().get().setGlueE(newValue);
@@ -199,7 +195,7 @@ public class TileEditorController implements Initializable {
     ChangeListener<String> listener_west_glue = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-            if(newValue!=null) {
+            if (newValue != null) {
                 Tile selected = canvas.getSelectedTileProperty().get();
                 if (selected != null) {
                     canvas.getSelectedTileProperty().get().setGlueW(newValue);
@@ -217,36 +213,6 @@ public class TileEditorController implements Initializable {
             }
         }
     };
-
-    public static class Glue{
-        private SimpleStringProperty glueA;
-        private SimpleStringProperty glueB;
-        private SimpleStringProperty strength;
-
-        private Glue(String g1, String g2, String str){
-            glueA = new SimpleStringProperty(g1);
-            glueB = new SimpleStringProperty(g2);
-            strength = new SimpleStringProperty(str);
-        }
-
-        public String getGlueA(){ return glueA.get(); }
-
-        public String getGlueB(){ return glueB.get(); }
-
-        public String getStrength(){ return strength.get(); }
-
-        public void setGlueA(String a){ glueA.set(a); }
-        public void setGlueB(String b){ glueB.set(b); }
-        public void setStrength(String str){
-            try{
-                int i = Integer.parseInt(str);
-                if(i>=0) strength.set(str);
-            }catch(NumberFormatException npe){
-
-            }
-
-        }
-    }
 
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
@@ -266,7 +232,7 @@ public class TileEditorController implements Initializable {
         ptAnchorPane.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if(canvas.getHeight()>0)
+                if (canvas.getHeight() > 0)
                     canvas.resize(newValue.intValue(), canvas.getHeight());
                 else
                     canvas.resize(newValue.intValue(), 600);
@@ -276,7 +242,7 @@ public class TileEditorController implements Initializable {
         ptAnchorPane.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if(canvas.getWidth()>0)
+                if (canvas.getWidth() > 0)
                     canvas.resize(canvas.getWidth(), newValue.intValue());
                 else
                     canvas.resize(400, newValue.intValue());
@@ -368,47 +334,47 @@ public class TileEditorController implements Initializable {
         table_gluetable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Glue>() {
             @Override
             public void changed(ObservableValue<? extends Glue> observable, Glue oldValue, Glue newValue) {
-                if(newValue!=null){
+                if (newValue != null) {
                     btn_delete_row.visibleProperty().set(true);
-                }else{
+                } else {
                     btn_delete_row.visibleProperty().set(false);
                 }
             }
         });
     }
 
-    public void selectPolyTileIndex(int i){
+    public void selectPolyTileIndex(int i) {
         listview_polytiles.getSelectionModel().select(i);
     }
 
-    public void setTileConfiguration(TileConfiguration tc){
+    public void setTileConfiguration(TileConfiguration tc) {
         this.tc = tc;
-        if(this.tc!=null){
+        if (this.tc != null) {
             listview_polytiles.setItems(tc.getTiletypes());
             for (Map.Entry<Pair<String, String>, Integer> glF : tc.getGlueFunction().entrySet()) {
                 String gLabelL = glF.getKey().getKey();
                 String gLabelR = glF.getKey().getValue();
                 int strength = glF.getValue();
-                Glue g = new Glue(gLabelL, gLabelR, ""+strength);
+                Glue g = new Glue(gLabelL, gLabelR, "" + strength);
                 glueData.add(g);
             }
         }
     }
 
-    public void setSimulationNode(SimulationNode current){
+    public void setSimulationNode(SimulationNode current) {
         this.current = current;
     }
 
-    private void setTileData(Tile t){
+    private void setTileData(Tile t) {
         field_tile_label.setText(t.getLabel());
         field_north_glue.setText(t.getGlueN());
         field_east_glue.setText(t.getGlueE());
         field_south_glue.setText(t.getGlueS());
         field_west_glue.setText(t.getGlueW());
-        colorpicker_color.setValue(Color.valueOf("0x"+ t.getParent().getColor()));
+        colorpicker_color.setValue(Color.valueOf("0x" + t.getParent().getColor()));
     }
 
-    private void disableTileData(){
+    private void disableTileData() {
         field_tile_label.setDisable(true);
         field_north_glue.setDisable(true);
         field_east_glue.setDisable(true);
@@ -422,9 +388,9 @@ public class TileEditorController implements Initializable {
         field_south_glue.setText(null);
         colorpicker_color.setValue(Color.WHITE);
         btn_delete_tile.setDisable(true);
-    };
+    }
 
-    private void enableTileData(){
+    private void enableTileData() {
         field_tile_label.setDisable(false);
         field_north_glue.setDisable(false);
         field_east_glue.setDisable(false);
@@ -432,9 +398,11 @@ public class TileEditorController implements Initializable {
         field_south_glue.setDisable(false);
         colorpicker_color.setDisable(false);
         btn_delete_tile.setDisable(false);
-    };
+    }
 
-    private void addTileListeners(){
+    ;
+
+    private void addTileListeners() {
         field_tile_label.textProperty().addListener(listener_label);
         field_north_glue.textProperty().addListener(listener_north_glue);
         field_south_glue.textProperty().addListener(listener_south_glue);
@@ -442,7 +410,9 @@ public class TileEditorController implements Initializable {
         field_west_glue.textProperty().addListener(listener_west_glue);
     }
 
-    private void removeTileListeners(){
+    ;
+
+    private void removeTileListeners() {
         field_tile_label.textProperty().removeListener(listener_label);
         field_north_glue.textProperty().removeListener(listener_north_glue);
         field_south_glue.textProperty().removeListener(listener_south_glue);
@@ -450,14 +420,14 @@ public class TileEditorController implements Initializable {
         field_west_glue.textProperty().removeListener(listener_west_glue);
     }
 
-    private void redrawPolyTile(Tile selected){
+    private void redrawPolyTile(Tile selected) {
         canvas.drawPolyTile();
         int index = listview_polytiles.getSelectionModel().getSelectedIndex();
         PolyTile pt = canvas.getPolyTile();
         listview_polytiles.getItems().remove(index);
         listview_polytiles.getItems().add(index, pt);
         listview_polytiles.getSelectionModel().select(index);
-        if(selected!=null){
+        if (selected != null) {
             canvas.selectTile(selected);
             removeTileListeners();
             setTileData(selected);
@@ -466,23 +436,27 @@ public class TileEditorController implements Initializable {
         }
     }
 
-    public void deleteSelectedPolyTile(){
+    public void deleteSelectedPolyTile() {
         int index = listview_polytiles.getSelectionModel().getSelectedIndex();
-        if(index>=0) {listview_polytiles.getItems().remove(index); updateable.set(true);};
+        if (index >= 0) {
+            listview_polytiles.getItems().remove(index);
+            updateable.set(true);
+        }
+        ;
     }
 
-    private void addListeners(){
+    private void addListeners() {
         addTileListeners();
 
         listview_polytiles.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<PolyTile>() {
             @Override
             public void changed(ObservableValue<? extends PolyTile> observable, PolyTile oldValue, PolyTile newValue) {
-                if(newValue!=null) {
+                if (newValue != null) {
                     canvas.setPolyTile(newValue);
                     menu_delete.setDisable(false);
                     context_menu_delete.setDisable(false);
                     disableTileData();
-                }else {
+                } else {
                     menu_delete.setDisable(true);
                     context_menu_delete.setDisable(true);
                     disableTileData();
@@ -493,9 +467,10 @@ public class TileEditorController implements Initializable {
         listview_polytiles.setOnKeyReleased(new EventHandler<KeyEvent>() {
             final KeyCombination backspace = new KeyCodeCombination(KeyCode.BACK_SPACE);
             final KeyCombination delete = new KeyCodeCombination(KeyCode.DELETE);
+
             @Override
             public void handle(KeyEvent event) {
-                if(backspace.match(event) || delete.match(event)){
+                if (backspace.match(event) || delete.match(event)) {
                     deleteSelectedPolyTile();
                     updateable.set(true);
                 }
@@ -505,14 +480,14 @@ public class TileEditorController implements Initializable {
         canvas.getSelectedTileProperty().addListener(new ChangeListener<Tile>() {
             @Override
             public void changed(ObservableValue<? extends Tile> observable, Tile oldValue, final Tile newValue) {
-                if(newValue==null){
+                if (newValue == null) {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
                             disableTileData();
                         }
                     });
-                }else {
+                } else {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
@@ -531,12 +506,12 @@ public class TileEditorController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 PolyTile pt = listview_polytiles.getSelectionModel().getSelectedItem();
-                if(pt!=null) {
-                    Color color  = colorpicker_color.getValue();
-                    pt.setColor(String.format( "%02X%02X%02X",
-                            (int)( color.getRed() * 255 ),
-                            (int)( color.getGreen() * 255 ),
-                            (int)( color.getBlue() * 255 ) ));
+                if (pt != null) {
+                    Color color = colorpicker_color.getValue();
+                    pt.setColor(String.format("%02X%02X%02X",
+                            (int) (color.getRed() * 255),
+                            (int) (color.getGreen() * 255),
+                            (int) (color.getBlue() * 255)));
                     redrawPolyTile(canvas.getSelectedTileProperty().get());
                     updateable.set(true);
 
@@ -565,7 +540,7 @@ public class TileEditorController implements Initializable {
             public void handle(ActionEvent event) {
                 String glue1 = field_glue_1.getText().trim();
                 String glue2 = field_glue_2.getText().trim();
-                if(!glue1.isEmpty() && !glue2.isEmpty()){
+                if (!glue1.isEmpty() && !glue2.isEmpty()) {
                     Glue g = new Glue(glue1, glue2, field_strength.getText().trim());
                     table_gluetable.getItems().add(g);
                     Pair<String, String> p = new Pair<String, String>(g.getGlueA(), g.getGlueB());
@@ -603,7 +578,7 @@ public class TileEditorController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 PolyTile toAdd = new PolyTile();
-                listview_polytiles.getItems().add(0,toAdd);
+                listview_polytiles.getItems().add(0, toAdd);
                 listview_polytiles.getSelectionModel().select(0);
             }
         });
@@ -628,7 +603,7 @@ public class TileEditorController implements Initializable {
         menu_clear_glues.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                for (Iterator<Glue> iterator = table_gluetable.getItems().iterator(); iterator.hasNext();) {
+                for (Iterator<Glue> iterator = table_gluetable.getItems().iterator(); iterator.hasNext(); ) {
                     Glue g = iterator.next();
                     iterator.remove();
                     Pair<String, String> p = new Pair<String, String>(g.getGlueA(), g.getGlueB());
@@ -647,12 +622,12 @@ public class TileEditorController implements Initializable {
 
                 File selectedFile = fileChooser.showSaveDialog(null);
                 if (selectedFile != null) {
-                    try{
+                    try {
                         JAXBContext jaxbContext = JAXBContext.newInstance(TileConfiguration.class);
                         Marshaller marshaller = jaxbContext.createMarshaller();
                         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
                         marshaller.marshal(tc, selectedFile);
-                    }catch(JAXBException jxb){
+                    } catch (JAXBException jxb) {
 
                     }
                 }
@@ -663,7 +638,7 @@ public class TileEditorController implements Initializable {
         menu_close.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Stage stage  = (Stage) ptAnchorPane.getScene().getWindow();
+                Stage stage = (Stage) ptAnchorPane.getScene().getWindow();
                 // do what you have to do
                 stage.close();
             }
@@ -682,5 +657,47 @@ public class TileEditorController implements Initializable {
             }
         });
 
+    }
+
+    public static class Glue {
+        private SimpleStringProperty glueA;
+        private SimpleStringProperty glueB;
+        private SimpleStringProperty strength;
+
+        private Glue(String g1, String g2, String str) {
+            glueA = new SimpleStringProperty(g1);
+            glueB = new SimpleStringProperty(g2);
+            strength = new SimpleStringProperty(str);
+        }
+
+        public String getGlueA() {
+            return glueA.get();
+        }
+
+        public void setGlueA(String a) {
+            glueA.set(a);
+        }
+
+        public String getGlueB() {
+            return glueB.get();
+        }
+
+        public void setGlueB(String b) {
+            glueB.set(b);
+        }
+
+        public String getStrength() {
+            return strength.get();
+        }
+
+        public void setStrength(String str) {
+            try {
+                int i = Integer.parseInt(str);
+                if (i >= 0) strength.set(str);
+            } catch (NumberFormatException npe) {
+
+            }
+
+        }
     }
 }
