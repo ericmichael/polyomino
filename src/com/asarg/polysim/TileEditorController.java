@@ -30,6 +30,7 @@ import javafx.util.Pair;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.soap.Text;
 import java.io.File;
 import java.net.URL;
 import java.util.Iterator;
@@ -68,6 +69,10 @@ public class TileEditorController implements Initializable {
     @FXML
     TextField field_west_glue;
     @FXML
+    TextField field_concentration;
+    @FXML
+    TextField field_count;
+    @FXML
     TextField field_glue_1;
     @FXML
     TextField field_glue_2;
@@ -77,6 +82,8 @@ public class TileEditorController implements Initializable {
     ColorPicker colorpicker_color;
     @FXML
     Button btn_delete_tile;
+    @FXML
+    Button btn_delete_polytile;
     @FXML
     Button btn_add_glue;
     @FXML
@@ -103,7 +110,83 @@ public class TileEditorController implements Initializable {
     ObservableList<Glue> glueData;
     SimpleBooleanProperty updateable = new SimpleBooleanProperty(false);
 
+    ChangeListener<Boolean> listener_pt_field_focus = new ChangeListener<Boolean>() {
+        @Override
+        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+            if(!newValue) {
+                final PolyTile selected = listview_polytiles.getSelectionModel().getSelectedItem();
+                double concentration = selected.getConcentration();
+                int count = selected.getCount();
+                if (concentration < 0) field_concentration.setText("");
+
+                if (count < 0) field_count.setText("");
+            }
+        }
+    };
+
     //Listeners
+    ChangeListener<String> listener_concentration = new ChangeListener<String>() {
+        @Override
+        public void changed(ObservableValue<? extends String> observable, String oldValue, final String newValue) {
+            if (newValue != null) {
+                final PolyTile selected = listview_polytiles.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    if(newValue.trim().equals("")){
+                        selected.setConcentration(-1.0);
+                    }else{
+                        try {
+                            double d = Double.parseDouble(newValue);
+                            if(d<0) selected.setConcentration(-1.0);
+                            else selected.setConcentration(d);
+                        }catch(NumberFormatException npe){
+                            selected.setConcentration(-1.0);
+                        }
+                    }
+                    updateable.set(true);
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            field_concentration.requestFocus();
+                            field_concentration.positionCaret(newValue.length());
+                        }
+                    });
+                }
+            }
+        }
+    };
+
+    ChangeListener<String> listener_count = new ChangeListener<String>() {
+        @Override
+        public void changed(ObservableValue<? extends String> observable, String oldValue, final String newValue) {
+            if (newValue != null) {
+                final PolyTile selected = listview_polytiles.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    if(newValue.trim().equals("")){
+                        selected.setCount(-1);
+                    }else{
+                        try {
+                            int i = Integer.parseInt(newValue);
+                            if(i<0) selected.setCount(-1);
+                            else selected.setCount(i);
+                        }catch(NumberFormatException npe){
+                            selected.setCount(-1);
+                        }
+                    }
+                    updateable.set(true);
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            field_count.requestFocus();
+                            field_count.positionCaret(newValue.length());
+                        }
+                    });
+                }
+            }
+        }
+    };
+
     ChangeListener<String> listener_label = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, final String newValue) {
@@ -262,6 +345,7 @@ public class TileEditorController implements Initializable {
         btn_update_assembly.managedProperty().bind(btn_update_assembly.visibleProperty());
         btn_update_assembly.visibleProperty().bind(updateable);
         disableTileData();
+        disablePolyTileData();
         addListeners();
         accordion.setExpandedPane(tileEditorPane);
 
@@ -371,7 +455,6 @@ public class TileEditorController implements Initializable {
         field_east_glue.setText(t.getGlueE());
         field_south_glue.setText(t.getGlueS());
         field_west_glue.setText(t.getGlueW());
-        colorpicker_color.setValue(Color.valueOf("0x" + t.getParent().getColor()));
     }
 
     private void disableTileData() {
@@ -380,13 +463,11 @@ public class TileEditorController implements Initializable {
         field_east_glue.setDisable(true);
         field_west_glue.setDisable(true);
         field_south_glue.setDisable(true);
-        colorpicker_color.setDisable(true);
         field_tile_label.setText(null);
         field_north_glue.setText(null);
         field_east_glue.setText(null);
         field_west_glue.setText(null);
         field_south_glue.setText(null);
-        colorpicker_color.setValue(Color.WHITE);
         btn_delete_tile.setDisable(true);
     }
 
@@ -396,11 +477,49 @@ public class TileEditorController implements Initializable {
         field_east_glue.setDisable(false);
         field_west_glue.setDisable(false);
         field_south_glue.setDisable(false);
-        colorpicker_color.setDisable(false);
         btn_delete_tile.setDisable(false);
     }
 
-    ;
+    private void enablePolyTileData(){
+        field_concentration.setDisable(false);
+        field_count.setDisable(false);
+        colorpicker_color.setDisable(false);
+        btn_delete_polytile.setDisable(false);
+    }
+
+    private void setPolyTileData(PolyTile pt){
+        if(pt.getConcentration()<0)
+            field_concentration.setText("");
+        else field_concentration.setText(""+pt.getConcentration());
+
+        if(pt.getCount()<0)
+            field_count.setText("");
+        else field_count.setText(""+pt.getCount());
+
+        colorpicker_color.setValue(Color.valueOf("0x" + pt.getColor()));
+    }
+
+    private void disablePolyTileData(){
+        field_concentration.setDisable(true);
+        field_count.setDisable(true);
+        colorpicker_color.setDisable(true);
+        colorpicker_color.setValue(Color.WHITE);
+        btn_delete_polytile.setDisable(true);
+    }
+
+    private void addPolyTileListeners(){
+        field_concentration.textProperty().addListener(listener_concentration);
+        field_count.textProperty().addListener(listener_count);
+        field_concentration.focusedProperty().addListener(listener_pt_field_focus);
+        field_count.focusedProperty().addListener(listener_pt_field_focus);
+    }
+
+    private void removePolyTileListeners(){
+        field_concentration.textProperty().removeListener(listener_concentration);
+        field_count.textProperty().removeListener(listener_count);
+        field_concentration.focusedProperty().removeListener(listener_pt_field_focus);
+        field_count.focusedProperty().removeListener(listener_pt_field_focus);
+    }
 
     private void addTileListeners() {
         field_tile_label.textProperty().addListener(listener_label);
@@ -455,11 +574,17 @@ public class TileEditorController implements Initializable {
                     canvas.setPolyTile(newValue);
                     menu_delete.setDisable(false);
                     context_menu_delete.setDisable(false);
+                    removePolyTileListeners();
                     disableTileData();
+                    setPolyTileData(newValue);
+                    enablePolyTileData();
+                    addPolyTileListeners();
                 } else {
                     menu_delete.setDisable(true);
                     context_menu_delete.setDisable(true);
+                    removePolyTileListeners();
                     disableTileData();
+                    disablePolyTileData();
                 }
             }
         });
