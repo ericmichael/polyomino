@@ -580,9 +580,11 @@ public class TileEditorController implements Initializable {
                     enablePolyTileData();
                     addPolyTileListeners();
                 } else {
+                    canvas.setPolyTile(null);
                     menu_delete.setDisable(true);
                     context_menu_delete.setDisable(true);
                     removePolyTileListeners();
+                    removeTileListeners();
                     disableTileData();
                     disablePolyTileData();
                 }
@@ -654,8 +656,23 @@ public class TileEditorController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 Tile selectedTile = canvas.getSelectedTileProperty().get();
-                canvas.getPolyTile().removeTile(selectedTile.getLocation().x, selectedTile.getLocation().y);
-                redrawPolyTile(null);
+                PolyTile pt = canvas.getPolyTile();
+                if(pt.tiles.size()>1) {
+                    pt.removeTile(selectedTile.getLocation().x, selectedTile.getLocation().y);
+                    redrawPolyTile(null);
+                }
+                else{
+                    listview_polytiles.getItems().remove(pt);
+                }
+                updateable.set(true);
+            }
+        });
+
+        btn_delete_polytile.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                PolyTile selected = listview_polytiles.getSelectionModel().getSelectedItem();
+                if(selected!=null) listview_polytiles.getItems().remove(selected);
                 updateable.set(true);
             }
         });

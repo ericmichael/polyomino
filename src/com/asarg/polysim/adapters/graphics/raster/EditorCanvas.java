@@ -120,7 +120,8 @@ public class EditorCanvas extends JPanel {
         if (this.pt != pt) {
             this.pt = pt;
             selectedTile.set(null);
-            drawPolyTile();
+            if(pt!=null) drawPolyTile();
+            else clearPolyTile();
         }
     }
 
@@ -154,6 +155,12 @@ public class EditorCanvas extends JPanel {
         repaint();
     }
 
+    public void clearPolyTile(){
+        Drawer.clearGraphics(overLayerGFX);
+        Drawer.clearGraphics(polyTileCanvasGFX);
+        repaint();
+    }
+
     @Override
     public void resize(int width, int height) {
         resetBlank(width, height);
@@ -169,6 +176,7 @@ public class EditorCanvas extends JPanel {
         overLayerGFX.setClip(0, 0, width, height);
         repaint();
     }
+
 
     @Override
     public void paintComponent(Graphics g) {
