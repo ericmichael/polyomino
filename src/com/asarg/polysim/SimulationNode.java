@@ -100,7 +100,7 @@ public class SimulationNode extends SwingNode implements Observer {
                             drawGrid();
                             return;
                         }
-                        zoomOutDraw();
+                        zoomInDraw();
                     } else {
                         if (frontierClick) {
                             removeCurrentFrontierAttachment();
@@ -117,7 +117,7 @@ public class SimulationNode extends SwingNode implements Observer {
                             drawGrid();
                             return;
                         }
-                        zoomInDraw();
+                        zoomOutDraw();
                     }
                 }
             }
