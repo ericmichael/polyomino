@@ -133,7 +133,7 @@ public class Assembly extends Observable {
                 pt.addTile(0,0, t.getGlueLabels());
                 if(c!=null) {
                     try {
-                        pt.setColor(String.format("%02x%02x%02x", c.getRed(), c.getGreen(), c.getBlue()));
+                        pt.setColor(String.format("%02x%02x%02x", c.getRed()*255, c.getGreen()*255, c.getBlue()*255));
                     } catch (NullPointerException npe) {
                     }
                 }
