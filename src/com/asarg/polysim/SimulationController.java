@@ -27,6 +27,7 @@ import javafx.util.Callback;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -448,15 +449,12 @@ public class SimulationController implements Initializable {
         fileChooser.setTitle("Open Assembly...");
         File selectedFile = fileChooser.showOpenDialog(stage);
         if (selectedFile != null) {
-
             try {
-                JAXBContext jaxbContext = JAXBContext.newInstance(Assembly.class);
-                Unmarshaller unmarshaller;
-                unmarshaller = jaxbContext.createUnmarshaller();
-                Assembly assembly = (Assembly) unmarshaller.unmarshal(selectedFile);
-
-                loadAssembly(assembly);
+                Assembly assembly = Assembly.LoadAssembly(selectedFile);
+                loadAssembly(assembly, selectedFile);
             } catch (javax.xml.bind.JAXBException jaxbe) {
+                javax.swing.JOptionPane.showMessageDialog(null, "Failed to load assembly");
+            } catch (FileNotFoundException fnfe){
                 javax.swing.JOptionPane.showMessageDialog(null, "Failed to load assembly");
             }
         }
