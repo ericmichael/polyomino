@@ -309,6 +309,6 @@
         </HBox>
     </children>
     <stylesheets>
-        <URL value="@resources/button-styles.css" />
+        <URL value="@resources/default-theme.css" />
     </stylesheets>
 </VBox>
