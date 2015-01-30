@@ -137,7 +137,7 @@ public class SimulationNode extends SwingNode implements Observer {
                 lastMouseXY = point;
                 getCanvas().reset();
                 drawGrid();
-
+                placeFrontierOnGrid();
             }
         });
 
