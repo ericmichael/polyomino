@@ -107,7 +107,7 @@ public class Assembly extends Observable {
                     c = new Color(red, green, blue);
                 }else{
                     javafx.scene.paint.Color c2 = javafx.scene.paint.Color.web(colorStr);
-                    c = new Color((int) c2.getRed(), (int) c2.getGreen(), (int) c2.getBlue());
+                    c = new Color((int) (c2.getRed()*255), (int) (c2.getGreen()*255), (int) (c2.getBlue()*255));
                 }
             }
             else if(line.contains("CREATE")){
@@ -133,7 +133,9 @@ public class Assembly extends Observable {
                 pt.addTile(0,0, t.getGlueLabels());
                 if(c!=null) {
                     try {
-                        pt.setColor(String.format("%02x%02x%02x", c.getRed()*255, c.getGreen()*255, c.getBlue()*255));
+                        String rgb = Integer.toHexString(c.getRGB());
+                        rgb = rgb.substring(2, rgb.length());
+                        pt.setColor(rgb);
                     } catch (NullPointerException npe) {
                     }
                 }
