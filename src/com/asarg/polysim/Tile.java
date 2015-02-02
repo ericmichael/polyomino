@@ -57,7 +57,7 @@ public class Tile {
     }
 
     public String getLabel() {
-        if (label.isEmpty()) return polyTile.getPolyName();
+        if (label.isEmpty() && polyTile!=null) return polyTile.getPolyName();
         else return label;
     }
 

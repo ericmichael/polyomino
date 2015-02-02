@@ -684,13 +684,17 @@ public class TileEditorController implements Initializable {
                 String glue2 = field_glue_2.getText().trim();
                 if (!glue1.isEmpty() && !glue2.isEmpty()) {
                     Glue g = new Glue(glue1, glue2, field_strength.getText().trim());
-                    table_gluetable.getItems().add(g);
                     Pair<String, String> p = new Pair<String, String>(g.getGlueA(), g.getGlueB());
-                    tc.getGlueFunction().put(p, Integer.parseInt(g.getStrength()));
+                    Pair<String, String> p2 = new Pair<String, String>(g.getGlueB(), g.getGlueA());
+                    if(!tc.getGlueFunction().containsKey(p) && !tc.getGlueFunction().containsKey(p2)) {
+                        table_gluetable.getItems().add(g);
+                        tc.getGlueFunction().put(p, Integer.parseInt(g.getStrength()));
+                        updateable.set(true);
+
+                    }
                     field_glue_1.clear();
                     field_glue_2.clear();
                     field_strength.clear();
-                    updateable.set(true);
                 }
 
             }

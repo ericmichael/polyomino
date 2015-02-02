@@ -88,11 +88,20 @@ public class TileSystem {
     }
 
     public int getStrength(String label1, String label2) {
-        Pair key = new Pair<String, String>(label1, label2);
+        Pair key1 = new Pair<String, String>(label1, label2);
+        Pair key2 = new Pair<String, String>(label2, label1);
 
-        if (glueFunction.containsKey(key)) {
-            return glueFunction.get(key);
-        } else return 0;
+        try {
+            if (glueFunction.containsKey(key1)) {
+                return glueFunction.get(key1);
+            } else if (glueFunction.containsKey(key2)) {
+                return glueFunction.get(key2);
+            } else {
+                return 0;
+            }
+        }catch(NullPointerException npe){
+            return 0;
+        }
     }
 
     // add polytile to tiletypes

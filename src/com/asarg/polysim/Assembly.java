@@ -77,7 +77,9 @@ public class Assembly extends Observable {
         while(reader.hasNextLine()){
             String line = reader.nextLine();
             if(line.startsWith("LABEL ")){
-                t.setLabel(line.split(" ")[1]);
+                String tokens[] = line.split(" ");
+                if(tokens.length>1) t.setLabel(tokens[1]);
+                else t.setLabel("");
             }else if(line.startsWith("TILENAME ")){
                 name = line.split(" ")[1];
             }else if(line.contains("NORTHLABEL ")){
