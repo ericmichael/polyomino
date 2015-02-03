@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>groupId</groupId>
+    <artifactId>polyomino</artifactId>
+    <version>0.2.2-SNAPSHOT</version>
+
+    <scm>
+        <connection>scm:git:https://github.com/ericmichael/polyomino.git</connection>
+        <developerConnection>scm:git:git@github.com:ericmichael/polyomino.git</developerConnection>
+        <url>https://github.com/ericmichael/polyomino</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.1</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
