@@ -40,6 +40,13 @@
             <resource>
                 <filtering>true</filtering>
                 <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>fonts/*</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources/fonts</directory>
+                <filtering>false</filtering>
             </resource>
         </resources>
         <plugins>

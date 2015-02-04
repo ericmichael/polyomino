@@ -15,11 +15,14 @@ import java.io.InputStream;
  */
 
 public class SimulationApplication extends Application {
-    protected Assembly assembly;
-    static {
-        InputStream is = Main.class.getResourceAsStream("/fontawesome.ttf");
-        Font.loadFont(is,10);
+    static{
+        try {
+            Font.loadFont(Main.class.getResource("/fontawesome.ttf").toExternalForm(), 10);
+        }catch(Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
+    protected Assembly assembly;
     Stage primaryStage;
 
     @Override

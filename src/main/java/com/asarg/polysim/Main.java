@@ -6,9 +6,8 @@ import javafx.application.Application;
 
 public class Main {
 
-
     public static void main(String args[]) {
-        AutoUpdate.checkForUpdates();
+        //AutoUpdate.checkForUpdates();
         Application.launch(SimulationApplication.class, (java.lang.String[]) null);
     }
 
