@@ -65,7 +65,7 @@
                         <configuration>
                             <releaseName>VersaTile Assembly Simulator v${project.version}</releaseName>
                             <tag>v${project.version}</tag>
-                            <artifact>${project.build.directory}/${project.groupId}.${project.artifactId}-${project.version}.jar</artifact>
+                            <artifact>${project.build.directory}/${project.groupId}.${project.artifactId}-${project.version}-jar-with-dependencies.jar</artifact>
                         </configuration>
                     </execution>
                 </executions>
