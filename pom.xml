@@ -63,7 +63,7 @@
                         </goals>
                         <inherited>false</inherited>
                         <configuration>
-                            <releaseName>v${project.version}</releaseName>
+                            <releaseName>VersaTile Assembly Simulator v${project.version}</releaseName>
                             <tag>v${project.version}</tag>
                             <artifact>${project.build.directory}/${project.groupId}.${project.artifactId}-${project.version}.jar</artifact>
                         </configuration>
