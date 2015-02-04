@@ -8,6 +8,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by ericmartinez on 12/11/14.
@@ -16,7 +17,8 @@ import java.io.IOException;
 public class SimulationApplication extends Application {
     protected Assembly assembly;
     static {
-        Font.loadFont(Main.class.getResource("resources/fontawesome.ttf").toExternalForm(), 10);
+        InputStream is = Main.class.getResourceAsStream("/fontawesome.ttf");
+        Font.loadFont(is,10);
     }
     Stage primaryStage;
 
@@ -26,7 +28,7 @@ public class SimulationApplication extends Application {
         this.primaryStage = primaryStage;
         try {
             FXMLLoader loader = new FXMLLoader(
-                    Main.class.getResource("mainwindow.fxml")
+                    Main.class.getResource("/mainwindow.fxml")
             );
 
             BorderPane page = (BorderPane) loader.load();
@@ -42,6 +44,8 @@ public class SimulationApplication extends Application {
             }
 
         } catch (IOException ie) {
+            System.out.println(ie.getMessage());
+            ie.printStackTrace();
         }
     }
 }

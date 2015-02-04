@@ -406,7 +406,7 @@ public class SimulationController implements Initializable {
     }
 
     private void launchTileEditor(int i) {
-        FXMLLoader loader = new FXMLLoader(Main.class.getResource("tileeditorwindow.fxml"));
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/tileeditorwindow.fxml"));
 
         try {
             Parent root1 = (Parent) loader.load();
