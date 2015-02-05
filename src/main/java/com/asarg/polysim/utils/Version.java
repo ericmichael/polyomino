@@ -1,11 +1,16 @@
 package com.asarg.polysim.utils;
 
 import com.asarg.polysim.Main;
+import javafx.application.Platform;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Properties;
 
 /**
@@ -97,6 +102,31 @@ public class Version implements Comparable<Version> {
         return latest;
     }
 
+    public static File getLatestInstalled() {
+        File versionsDir = getAppVersionsDir("VersaTile", true);
+        String[] directories = versionsDir.list(new FilenameFilter() {
+            @Override
+            public boolean accept(File current, String name) {
+                return new File(current, name).isDirectory();
+            }
+        });
+        Version latest = null;
+        for (String folder : directories) {
+            try {
+                Version v = new Version(folder);
+                if (v.compareTo(latest) > 0) {
+                    latest = v;
+                }
+            } catch (IllegalArgumentException iae) {
+
+            }
+        }
+        if (latest != null) {
+            File jar = new File(versionsDir + "/" + latest.toString() + "/versatile.jar");
+            return jar;
+        } else return null;
+    }
+
     private static File getAppDataDir(String aName, boolean doCreate)
     {
         // Get user home + AppDataDir (platform specific) + name (if provided)
@@ -118,6 +148,32 @@ public class Version implements Comparable<Version> {
         File dfile = new File(dir);
         if(doCreate && aName!=null) dfile.mkdirs();
         return dfile;
+    }
+
+    public static void startLatest(String[] args) throws Exception{
+        //Create URLClassLoader for main jar file, get App class and invoke main
+        File jar = getLatestInstalled();
+        if(jar!=null) {
+            final URLClassLoader child = new URLClassLoader(new URL[]{jar.toURI().toURL()});
+            final Class classToLoad = Class.forName ("com.asarg.polysim.SimulationApplication", true, child);
+            final Method method = classToLoad.getMethod("start", Stage.class);
+            final Object instance = classToLoad.newInstance ();
+
+
+            if (classToLoad == Object.class) child.close(); // Getting rid of warning message for ucl
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.currentThread().setContextClassLoader(child);
+                        method.invoke(instance, new Stage());
+                    } catch (Throwable th) {
+                        System.out.println(th.getMessage());
+                        th.printStackTrace();
+                    }
+                }
+            });
+        }
     }
 
     // Whether Windows/Mac
