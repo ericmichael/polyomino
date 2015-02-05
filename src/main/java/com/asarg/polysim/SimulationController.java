@@ -1,6 +1,7 @@
 package com.asarg.polysim;
 
 import com.asarg.polysim.adapters.graphics.raster.SimulationCanvas;
+import com.asarg.polysim.utils.Version;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -31,6 +32,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -85,9 +88,25 @@ public class SimulationController implements Initializable {
     ListView<PolyTile> listview_polytiles;
     private boolean inspecting = false;
     private SimpleBooleanProperty showHelp = new SimpleBooleanProperty(true);
+    private SimpleBooleanProperty updateAvailable = new SimpleBooleanProperty(false);
 
     @Override // This method is called by the FXMLLoader when initialization is complete
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+        int minsForUpdateCheck = 10;
+        new Timer().schedule(
+                new TimerTask() {
+
+                    @Override
+                    public void run() {
+                        Version current = Version.getCurrentVersion();
+                        Version latestInstalled = Version.getLatestInstalledVersion();
+                        if(current.compareTo(latestInstalled)==-1){
+                            updateAvailable.set(true);
+                        }else{
+                        }
+                    }
+                }, 0, minsForUpdateCheck*60*1000);
+
         btn_fb.setText(String.valueOf('\uf049'));
         btn_b.setText(String.valueOf('\uf048'));
         btn_play.setText(String.valueOf('\uf04b'));

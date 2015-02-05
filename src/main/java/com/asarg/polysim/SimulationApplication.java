@@ -8,7 +8,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Created by ericmartinez on 12/11/14.

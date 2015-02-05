@@ -1,5 +1,13 @@
 package com.asarg.polysim.utils;
 
+import com.asarg.polysim.Main;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.util.Properties;
+
 /**
  * Created by ericmartinez on 2/3/15.
  */
@@ -48,4 +56,71 @@ public class Version implements Comparable<Version> {
         return this.compareTo((Version) that) == 0;
     }
 
+    @Override
+    public String toString() {
+        return version;
+    }
+
+    public static Version getCurrentVersion() {
+        try {
+            FileReader reader = new FileReader(Main.class.getResource("/project.properties").getFile());
+            Properties properties = new Properties();
+            properties.load(reader);
+            String version = properties.getProperty("MAVEN_PROJECT_VERSION");
+            Version myVersion = new Version(version);
+            return myVersion;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Version getLatestInstalledVersion() {
+        File versionsDir= getAppVersionsDir("VersaTile", true);
+        String[] directories = versionsDir.list(new FilenameFilter() {
+            @Override
+            public boolean accept(File current, String name) {
+                return new File(current, name).isDirectory();
+            }
+        });
+        Version latest = null;
+        for(String folder : directories){
+            try {
+                Version v = new Version(folder);
+                if(v.compareTo(latest)>0){
+                    latest = v;
+                }
+            }catch(IllegalArgumentException iae){
+
+            }
+        }
+        return latest;
+    }
+
+    private static File getAppDataDir(String aName, boolean doCreate)
+    {
+        // Get user home + AppDataDir (platform specific) + name (if provided)
+        String dir = System.getProperty("user.home");
+        if(isWindows) dir += File.separator + "AppData" + File.separator + "Local";
+        else if(isMac) dir += File.separator + "Library" + File.separator + "Application Support";
+        if(aName!=null) dir += File.separator + aName;
+
+        // Create file, actual directory (if requested) and return
+        File dfile = new File(dir);
+        if(doCreate && aName!=null) dfile.mkdirs();
+        return dfile;
+    }
+
+    private static File getAppVersionsDir(String aName, boolean doCreate){
+        File dataDir = getAppDataDir(aName, doCreate);
+        String dir = dataDir.getAbsolutePath()+ "/versions";
+        // Create file, actual directory (if requested) and return
+        File dfile = new File(dir);
+        if(doCreate && aName!=null) dfile.mkdirs();
+        return dfile;
+    }
+
+    // Whether Windows/Mac
+    static boolean isWindows = (System.getProperty("os.name").indexOf("Windows") >= 0);
+    static boolean isMac = (System.getProperty("os.name").indexOf("Mac OS X") >= 0);
 }
