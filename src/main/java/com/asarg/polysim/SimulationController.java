@@ -311,6 +311,12 @@ public class SimulationController implements Initializable {
     }
 
     @FXML
+    public void clear_seed(){
+        SimulationNode current = currentSimulationNode();
+        if (current != null) current.clear_seed();
+    }
+
+    @FXML
     public void play() {
         final SimulationNode current = currentSimulationNode();
         if (current != null) {

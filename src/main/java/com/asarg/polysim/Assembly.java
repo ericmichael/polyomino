@@ -573,6 +573,13 @@ public class Assembly extends Observable {
         getOpenGlues();
     }
 
+    public void clearSeed(){
+        detachAll(false);
+        Grid.clear();
+        setChanged();
+        notifyObservers(new Pair<String, FrontierElement>("refresh", null));
+    }
+
     public Set<Point> pointsInGrid() {
         return Grid.keySet();
     }

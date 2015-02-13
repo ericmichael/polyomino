@@ -158,6 +158,19 @@
                                                         <Insets left="10.0" right="10.0" />
                                                     </padding>
                                                 </VBox>
+                                    <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                       <children>
+                                          <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clear_seed" text="Clear Seed and Growth" HBox.hgrow="ALWAYS">
+                                             <styleClass>
+                                                <String fx:value="btn-danger" />
+                                                <String fx:value="large-btn" />
+                                             </styleClass>
+                                             <padding>
+                                                <Insets bottom="20.0" top="20.0" />
+                                             </padding>
+                                          </Button>
+                                       </children>
+                                    </HBox>
                                             </children>
                                         </AnchorPane>
                                     </content>

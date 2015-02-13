@@ -391,6 +391,10 @@ public class SimulationNode extends SwingNode implements Observer {
         step(-2, true);
     }
 
+    public void clear_seed(){
+        assembly.clearSeed();
+    }
+
     public void play() {
         stopped = false;
         boolean anyAttached = false;

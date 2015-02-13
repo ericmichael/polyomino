@@ -8,7 +8,7 @@
 
     <groupId>com.asarg.polysim</groupId>
     <artifactId>polyomino</artifactId>
-    <version>0.2.2</version>
+    <version>0.2.3</version>
     <packaging>jar</packaging>
     <organization>
         <name>Algorithmic Self-Assembly Research Group at UTPA</name>
@@ -57,7 +57,6 @@
                     <releaseName>VersaTile ${project.version}</releaseName>
                     <artifact>${project.build.directory}/${project.artifactId}-${project.version}-jar-with-dependencies.${project.packaging}</artifact>
                 </configuration>
-
             </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
