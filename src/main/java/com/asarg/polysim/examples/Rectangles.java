@@ -1,6 +1,8 @@
 package com.asarg.polysim.examples;
 
 import com.asarg.polysim.*;
+import com.asarg.polysim.models.base.Assembly;
+import com.asarg.polysim.models.base.TileSystem;
 import com.asarg.polysim.models.atam.ATAMTile;
 import javafx.application.Application;
 

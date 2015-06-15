@@ -1,7 +1,7 @@
 package com.asarg.polysim.models.datam;
 
-import com.asarg.polysim.PolyTile;
-import com.asarg.polysim.Tile;
+import com.asarg.polysim.models.base.PolyTile;
+import com.asarg.polysim.models.base.Tile;
 
 import java.awt.*;
 import java.util.Iterator;

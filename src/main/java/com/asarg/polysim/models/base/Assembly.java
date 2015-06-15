@@ -1,10 +1,9 @@
 /*
 "execution" place. takes care of the tile system, its changes, the grid, the frontier, and the open glue list.
  */
-package com.asarg.polysim;
+package com.asarg.polysim.models.base;
 
 import com.asarg.polysim.xml.GridXmlAdapter;
-import javafx.scene.paint.*;
 import javafx.util.Pair;
 
 import javax.xml.bind.JAXBContext;

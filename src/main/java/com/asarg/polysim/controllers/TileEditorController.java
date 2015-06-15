@@ -1,6 +1,8 @@
-package com.asarg.polysim;
+package com.asarg.polysim.controllers;
 
+import com.asarg.polysim.*;
 import com.asarg.polysim.adapters.graphics.raster.EditorCanvas;
+import com.asarg.polysim.models.base.*;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -30,7 +32,6 @@ import javafx.util.Pair;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.soap.Text;
 import java.io.File;
 import java.net.URL;
 import java.util.Iterator;

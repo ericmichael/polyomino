@@ -1,7 +1,7 @@
 package test.com.asarg.polysim; 
 
-import com.asarg.polysim.FrontierElement;
-import com.asarg.polysim.PolyTile;
+import com.asarg.polysim.models.base.FrontierElement;
+import com.asarg.polysim.models.base.PolyTile;
 import org.junit.Test;
 import org.junit.Before; 
 import org.junit.After;

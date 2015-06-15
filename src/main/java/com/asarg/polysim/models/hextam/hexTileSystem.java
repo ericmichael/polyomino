@@ -1,6 +1,6 @@
 package com.asarg.polysim.models.hextam;
 
-import com.asarg.polysim.TileSystem;
+import com.asarg.polysim.models.base.TileSystem;
 
 /**
  * Created by ericmartinez on 8/20/14.

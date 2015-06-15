@@ -1,9 +1,9 @@
 package com.asarg.polysim.examples;
 
-import com.asarg.polysim.Assembly;
-import com.asarg.polysim.PolyTile;
+import com.asarg.polysim.models.base.Assembly;
+import com.asarg.polysim.models.base.PolyTile;
 import com.asarg.polysim.SimulationApplication;
-import com.asarg.polysim.TileSystem;
+import com.asarg.polysim.models.base.TileSystem;
 import javafx.application.Application;
 
 import javax.xml.bind.JAXBContext;

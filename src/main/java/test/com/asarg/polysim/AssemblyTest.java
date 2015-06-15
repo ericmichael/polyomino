@@ -1,9 +1,11 @@
 package test.com.asarg.polysim;
 
-import org.junit.Test; 
+import com.asarg.polysim.models.base.Assembly;
+import com.asarg.polysim.models.base.PolyTile;
+import com.asarg.polysim.models.base.TileSystem;
+import org.junit.Test;
 import org.junit.Before; 
 import org.junit.After;
-import com.asarg.polysim.*;
 
 /** 
 * Assembly Tester. 

@@ -1,10 +1,12 @@
-package com.asarg.polysim.adapters.graphics.raster;
+package com.asarg.polysim.adapters.graphics.vector;
 
 import com.asarg.polysim.models.base.PolyTile;
 import com.asarg.polysim.models.base.Tile;
 import javafx.util.Pair;
+import org.jfree.fx.*;
 
 import java.awt.*;
+import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.util.List;
 import java.util.Map;
@@ -15,12 +17,11 @@ public class Drawer {
 
 
     //clears given graphics object, clip must have been set
-    public static void clearGraphics(Graphics2D g) {
+    public static void clearGraphics(FXGraphics2D g) {
         Rectangle bounds = g.getClipBounds();
         g.setComposite(AlphaComposite.Clear);
-        g.fillRect(0, 0, bounds.width, bounds.height);
+        g.clearRect(0, 0, bounds.width, bounds.height);
         g.setComposite(AlphaComposite.Src);
-
     }
 
     public static Point calculateGridDimension(List<Point> gridPoints) {
@@ -77,7 +78,7 @@ public class Drawer {
 
         }
 
-        public static void drawTile(Graphics2D g, Tile tile, int x, int y, int diameter) {
+        public static void drawTile(FXGraphics2D g, Tile tile, int x, int y, int diameter) {
             g.setFont(g.getFont().deriveFont((float) (diameter / 6)));
             Rectangle clip = g.getClipBounds();
 
@@ -152,7 +153,7 @@ public class Drawer {
             g.setStroke(new BasicStroke(diameter / 25));
         }
 
-        public static void drawHexTile(Graphics2D g, Tile tile, int x, int y, int diameter) {
+        public static void drawHexTile(FXGraphics2D g, Tile tile, int x, int y, int diameter) {
             Polygon sprite = new Polygon();
             for (int i = 0; i < 6; i++) {
                 sprite.addPoint(x + (diameter + 10) / 2 + (int) ((diameter + 10) * Math.cos(i * 2 * Math.PI / 6)), y + (int) ((diameter + 10) * Math.sin(i * 2 * Math.PI / 6)));
@@ -161,7 +162,7 @@ public class Drawer {
             g.drawPolygon(sprite);
         }
 
-        public static void drawTiles(Graphics2D g, Set<Map.Entry<Point, Tile>> tiles, int diameter, Point offset) {
+        public static void drawTiles(FXGraphics2D g, Set<Map.Entry<Point, Tile>> tiles, int diameter, Point offset) {
 
             for (Map.Entry<Point, Tile> mep : tiles) {
                 Point pt = mep.getKey();
@@ -174,7 +175,7 @@ public class Drawer {
 
         }
 
-        public static void drawTileSelection(Graphics2D g, Point location, int diameter, Point offset, Color color) {
+        public static void drawTileSelection(FXGraphics2D g, Point location, int diameter, Point offset, Color color) {
             clearGraphics(g);
 
             g.setColor(color);
@@ -184,7 +185,7 @@ public class Drawer {
 
         }
 
-        public static void drawPolyTile(Graphics2D g, PolyTile pt, int diameter, Point offset) {
+        public static void drawPolyTile(FXGraphics2D g, PolyTile pt, int diameter, Point offset) {
             Drawer.clearGraphics(g);
             java.util.List<Tile> lt = pt.tiles;
             for (Tile t : lt) {
@@ -196,14 +197,14 @@ public class Drawer {
 
         // used in when needed to paint a single polytile at some grid location
         // location = from the tile grid (0,0) etc; offset = from the canvas (400, 300) or whatever.
-        public static void drawNewPolyTile(Graphics2D g, List<Tile> tiles, int diameter, Point location, Point offset) {
+        public static void drawNewPolyTile(FXGraphics2D g, List<Tile> tiles, int diameter, Point location, Point offset) {
             for (Tile t : tiles) {
 //                System.out.println(t.getLocation());
                 drawTile(g, t, (location.x + t.getLocation().x) * diameter + offset.x - diameter / 2, -(location.y + t.getLocation().y) * diameter + offset.y - diameter / 2, diameter);
             }
         }
 
-        public static Pair<Point, Integer> drawCenteredPolyTile(Graphics2D g, PolyTile pt) {
+        public static Pair<Point, Integer> drawCenteredPolyTile(FXGraphics2D g, PolyTile pt) {
             Point polyDim = calculatePolyTileGridDimension(pt);
             Rectangle graphicsDim = g.getClipBounds();
 
@@ -230,7 +231,7 @@ public class Drawer {
             return new Pair<Point, Integer>(offset, diameter);
         }
 
-        public static Pair<Point, Integer> drawCenteredPolyTile(Graphics2D g, PolyTile pt, Point offset/* provide an offset x and y*/) {
+        public static Pair<Point, Integer> drawCenteredPolyTile(FXGraphics2D g, PolyTile pt, Point offset/* provide an offset x and y*/) {
             Point polyDim = calculatePolyTileGridDimension(pt);
             Rectangle graphicsDim = g.getClipBounds();
 
@@ -256,7 +257,7 @@ public class Drawer {
             return new Pair<Point, Integer>(offset, diameter);
         }
 
-        public static Pair<Point, Integer> drawCenteredPolyTile(Graphics2D g, PolyTile pt, int diameter) {
+        public static Pair<Point, Integer> drawCenteredPolyTile(FXGraphics2D g, PolyTile pt, int diameter) {
             Point polyDim = calculatePolyTileGridDimension(pt);
             Rectangle graphicsDim = g.getClipBounds();
 

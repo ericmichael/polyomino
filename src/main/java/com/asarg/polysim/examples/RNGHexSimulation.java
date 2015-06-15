@@ -1,6 +1,6 @@
 package com.asarg.polysim.examples;
 
-import com.asarg.polysim.Assembly;
+import com.asarg.polysim.models.base.Assembly;
 import com.asarg.polysim.SimulationApplication;
 import com.asarg.polysim.models.hextam.hexTAMTile;
 import com.asarg.polysim.models.hextam.hexTileSystem;

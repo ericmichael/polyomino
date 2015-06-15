@@ -1,4 +1,4 @@
-package com.asarg.polysim;/*Tile class
+package com.asarg.polysim.models.base;/*Tile class
 information for single tiles (not to be confused with polytiles).
 Should store a location and an id.
 */

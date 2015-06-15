@@ -1,7 +1,7 @@
 package com.asarg.polysim.adapters.graphics.raster;
 
-import com.asarg.polysim.PolyTile;
-import com.asarg.polysim.Tile;
+import com.asarg.polysim.models.base.PolyTile;
+import com.asarg.polysim.models.base.Tile;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.util.Pair;
 

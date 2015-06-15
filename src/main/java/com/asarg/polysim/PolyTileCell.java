@@ -1,6 +1,7 @@
 package com.asarg.polysim;
 
 import com.asarg.polysim.adapters.graphics.raster.Drawer;
+import com.asarg.polysim.models.base.PolyTile;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Pos;
 import javafx.scene.control.ListCell;

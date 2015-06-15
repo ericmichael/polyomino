@@ -1,4 +1,4 @@
-package com.asarg.polysim;
+package com.asarg.polysim.models.base;
 
 import com.asarg.polysim.xml.GlueXmlAdapter;
 import javafx.collections.FXCollections;

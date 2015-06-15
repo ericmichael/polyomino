@@ -1,5 +1,7 @@
 package com.asarg.polysim;
 
+import com.asarg.polysim.controllers.SimulationController;
+import com.asarg.polysim.models.base.Assembly;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

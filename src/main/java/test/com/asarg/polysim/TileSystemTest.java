@@ -1,14 +1,13 @@
 package test.com.asarg.polysim; 
 
-import com.asarg.polysim.PolyTile;
+import com.asarg.polysim.models.base.PolyTile;
 import javafx.collections.ObservableList;
 import org.junit.Test;
 import org.junit.Before; 
 import org.junit.After;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
-import com.asarg.polysim.TileSystem;
-import java.util.Set;
+import com.asarg.polysim.models.base.TileSystem;
 
 public class TileSystemTest {
     private TileSystem ts;

@@ -1,4 +1,4 @@
-package com.asarg.polysim;
+package com.asarg.polysim.models.base;
 
 /* Frontier Element
     Will be used for the frontier list of polytiles.

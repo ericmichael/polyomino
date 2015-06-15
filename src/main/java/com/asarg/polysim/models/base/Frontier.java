@@ -1,4 +1,4 @@
-package com.asarg.polysim;
+package com.asarg.polysim.models.base;
 
 import java.util.ArrayList;
 import java.util.Random;

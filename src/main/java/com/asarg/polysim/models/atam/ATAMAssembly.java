@@ -1,7 +1,7 @@
 package com.asarg.polysim.models.atam;
 
-import com.asarg.polysim.Assembly;
-import com.asarg.polysim.TileSystem;
+import com.asarg.polysim.models.base.Assembly;
+import com.asarg.polysim.models.base.TileSystem;
 
 /**
  * Created by ericmartinez on 8/19/14.

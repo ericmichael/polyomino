@@ -1,4 +1,4 @@
-package com.asarg.polysim;
+package com.asarg.polysim.models.base;
 /* polytile class
     polytile with shape, glues, concentration, & label are defined.
     TODO: Check connected tiles in the polytile and change their strength to infinite

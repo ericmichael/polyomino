@@ -1,7 +1,7 @@
 package com.asarg.polysim.xml;
 
-import com.asarg.polysim.PolyTile;
-import com.asarg.polysim.Tile;
+import com.asarg.polysim.models.base.PolyTile;
+import com.asarg.polysim.models.base.Tile;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;

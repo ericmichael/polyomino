@@ -1,7 +1,8 @@
-package com.asarg.polysim;
+package com.asarg.polysim.controllers;
 
+import com.asarg.polysim.*;
 import com.asarg.polysim.adapters.graphics.raster.SimulationCanvas;
-import com.asarg.polysim.utils.Version;
+import com.asarg.polysim.models.base.*;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -32,8 +33,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

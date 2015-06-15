@@ -1,7 +1,8 @@
-package com.asarg.polysim;
+package com.asarg.polysim.models.base;
 
 import com.asarg.polysim.adapters.graphics.raster.Drawer;
 import com.asarg.polysim.adapters.graphics.raster.SimulationCanvas;
+import com.asarg.polysim.controllers.SimulationController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
@@ -30,12 +31,12 @@ public class SimulationNode extends SwingNode implements Observer {
     public StringProperty right_status = new SimpleStringProperty("");
     public StringProperty right_previous_status = new SimpleStringProperty("");
     public boolean stopped = true;
-    Frontier frontier;
+    public Frontier frontier;
     PolyTile frontierTile;
     boolean frontierClick = false;
     ArrayList<FrontierElement> frontierAttachments;
     int frontierIndex = 0;
-    FrontierElement currentFrontierAttachment = null;
+    public FrontierElement currentFrontierAttachment = null;
     Point frontierClickPoint = null;
     Point lastMouseXY = new Point(800, 600);
     int dragCount = 0;

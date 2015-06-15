@@ -1,9 +1,9 @@
 package com.asarg.polysim.examples;
 
-import com.asarg.polysim.Assembly;
+import com.asarg.polysim.models.base.Assembly;
 import com.asarg.polysim.SimulationApplication;
-import com.asarg.polysim.TileConfiguration;
-import com.asarg.polysim.TileSystem;
+import com.asarg.polysim.models.base.TileConfiguration;
+import com.asarg.polysim.models.base.TileSystem;
 import com.asarg.polysim.models.atam.ATAMTile;
 import javafx.application.Application;
 

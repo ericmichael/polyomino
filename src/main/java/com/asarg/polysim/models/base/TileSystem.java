@@ -1,4 +1,4 @@
-package com.asarg.polysim;/*
+package com.asarg.polysim.models.base;/*
 Tile system is meant to be the container where all different types of polytiles are.
  should be able to create polytiles and keep a list of all polytiles in the system.
  Glue function is also called from here.

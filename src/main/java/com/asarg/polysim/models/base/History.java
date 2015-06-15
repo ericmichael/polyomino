@@ -1,5 +1,7 @@
-package com.asarg.polysim;
+package com.asarg.polysim.models.base;
 
+
+import com.asarg.polysim.models.base.FrontierElement;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
