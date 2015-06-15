@@ -287,8 +287,35 @@ public class PolyTile {
         }
     }
 
+    public void normalize(){
+        Tile min = null;
+        for(Tile t : tiles){
+            if(min==null) min = t;
+            else{
+                if(t.getLocation().getX() <= min.getLocation().getX() && t.getLocation().getY() <= min.getLocation().getY()){
+                    min = t;
+                }
+            }
+        }
 
-    public boolean equals(PolyTile toCompare) {
+        int x_translate = - (int) min.getLocation().getX();
+        int y_translate = - (int) min.getLocation().getY();
+
+        for(Tile t : tiles){
+            t.getLocation().translate(x_translate, y_translate);
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+
+        PolyTile toCompare = (PolyTile) obj;
         // check if the simple polytile data is the same
         if (polyName != null && toCompare.getPolyName() != null) {
             if (concentration != toCompare.getConcentration()) return false;
@@ -296,18 +323,24 @@ public class PolyTile {
             if (count != toCompare.getCount()) return false;
         }
 
+
+        normalize();
+        toCompare.normalize();
+
         // check if all tiles in the polytile are equal, by looking through their coordinates
         for (Tile t : tiles) {
             Point tLoc = t.getLocation();
             Tile t2 = toCompare.getTile((int) tLoc.getX(), (int) tLoc.getY());
-            if (!t.equals(t2)) return false;
+            if(t2==null) return false;
+            else if (!t.equals(t2)) return false;
         }
 
         // the coordinates of both polytiles need to be checked: do the same for the points in the other polytile
         for (Tile t : toCompare.tiles) {
             Point tLoc = t.getLocation();
             Tile t2 = this.getTile((int) tLoc.getX(), (int) tLoc.getY());
-            if (!t.equals(t2)) return false;
+            if(t2==null) return false;
+            else if (!t.equals(t2)) return false;
         }
         return true;
     }

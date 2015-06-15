@@ -645,6 +645,18 @@ public class Assembly extends Observable {
         return matrixString.toString();
     }
 
+    public PolyTile toPolyTile(){
+        PolyTile assemblyPT = new PolyTile();
+        assemblyPT.getTiles().clear();
+        for (Map.Entry<Point, Tile> t : Grid.entrySet()) {
+            Point location = t.getKey();
+            Tile tile = t.getValue();
+            Tile tile_copy = new Tile((int) location.getX(), (int) location.getY(), tile.getGlueLabels(), assemblyPT);
+            assemblyPT.addTile(tile_copy);
+        }
+        return assemblyPT;
+    }
+
     public void printDebugInformation() {
         System.out.println("--- Debug Information ----");
         System.out.println("Grid Size: " + Grid.size());

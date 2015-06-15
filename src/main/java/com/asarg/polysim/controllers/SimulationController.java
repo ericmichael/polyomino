@@ -2,6 +2,8 @@ package com.asarg.polysim.controllers;
 
 import com.asarg.polysim.*;
 import com.asarg.polysim.adapters.graphics.raster.SimulationCanvas;
+import com.asarg.polysim.models.TwoHAM.TwoHAMAssembly;
+import com.asarg.polysim.models.TwoHAM.TwoHAMSimulationNode;
 import com.asarg.polysim.models.base.*;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -108,26 +110,26 @@ public class SimulationController implements Initializable {
         listview_polytiles.setCellFactory(new Callback<ListView<PolyTile>, ListCell<PolyTile>>() {
                                               @Override
                                               public ListCell<PolyTile> call(ListView<PolyTile> list) {
-                                                  final ListCell<PolyTile> ptCell = new PolyTileCell();
-                                                  ptCell.setOnDragDetected(new EventHandler<MouseEvent>() {
-                                                      public void handle(MouseEvent event) {
-                            /* drag was detected, start a drag-and-drop gesture*/
-                            /* allow any transfer mode */
-                                                          Dragboard db = ptCell.startDragAndDrop(TransferMode.ANY);
+              final ListCell<PolyTile> ptCell = new PolyTileCell();
+              ptCell.setOnDragDetected(new EventHandler<MouseEvent>() {
+                  public void handle(MouseEvent event) {
+                      /* drag was detected, start a drag-and-drop gesture*/
+                      /* allow any transfer mode */
+                      Dragboard db = ptCell.startDragAndDrop(TransferMode.ANY);
 
-                            /* Put a string on a dragboard */
-                                                          ClipboardContent content = new ClipboardContent();
-                                                          //content.putString(ptCell.getGraphic());
-                                                          ImageView temp = (ImageView) ptCell.getGraphic();
-                                                          content.put(polyTileFormat, ptCell.getIndex());
-                                                          db.setContent(content);
-                                                          db.setDragView(temp.getImage());
-                                                          event.consume();
-                                                      }
-                                                  });
-                                                  return ptCell;
-                                              }
-                                          }
+                      /* Put a string on a dragboard */
+                      ClipboardContent content = new ClipboardContent();
+                      //content.putString(ptCell.getGraphic());
+                      ImageView temp = (ImageView) ptCell.getGraphic();
+                      content.put(polyTileFormat, ptCell.getIndex());
+                      db.setContent(content);
+                      db.setDragView(temp.getImage());
+                      event.consume();
+                  }
+              });
+              return ptCell;
+          }
+      }
         );
 
         field_temperature.focusedProperty().addListener(new ChangeListener<Boolean>() {
@@ -364,6 +366,23 @@ public class SimulationController implements Initializable {
     }
 
     @FXML
+    public void new2HAMMenuItem() {
+        Assembly asm = new Assembly();
+        loadTwoHAMAssembly(asm);
+        currentSimulationNode().removeFrontierFromGrid();
+        currentSimulationNode().frontier.clear();
+
+        listview_polytiles.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<PolyTile>() {
+            @Override
+            public void changed(ObservableValue<? extends PolyTile> observable, PolyTile oldValue, PolyTile newValue) {
+                if (newValue != null) {
+                    currentSimulationNode().clearAssemblyReseed(newValue);
+                }
+            }
+        });
+    }
+
+    @FXML
     public void saveAsMenuItem() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save As...");
@@ -446,6 +465,21 @@ public class SimulationController implements Initializable {
         else tab.setText("Untitled");
         final SimulationCanvas blankCanvas = new SimulationCanvas((int) tabPane.getWidth(), (int) tabPane.getHeight());
         final SimulationNode simulationNode = new SimulationNode(assembly, blankCanvas, f);
+        simulationNode.drawGrid();
+        tab.setContent(simulationNode);
+        tabPane.getTabs().add(tab);
+    }
+
+    public void loadTwoHAMAssembly(Assembly assembly) {
+        loadTwoHAMAssembly(assembly, null);
+    }
+
+    public void loadTwoHAMAssembly(Assembly assembly, File f) {
+        Tab tab = new Tab();
+        if (f != null) tab.setText(f.getName());
+        else tab.setText("Untitled");
+        final SimulationCanvas blankCanvas = new SimulationCanvas((int) tabPane.getWidth(), (int) tabPane.getHeight());
+        final TwoHAMSimulationNode simulationNode = new TwoHAMSimulationNode(assembly, blankCanvas, f);
         simulationNode.drawGrid();
         tab.setContent(simulationNode);
         tabPane.getTabs().add(tab);

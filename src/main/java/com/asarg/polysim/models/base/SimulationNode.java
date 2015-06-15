@@ -483,6 +483,20 @@ public class SimulationNode extends SwingNode implements Observer {
         }
     }
 
+
+    public void clearAssemblyReseed(PolyTile pt){
+        frontier.clear();
+        assembly.getFrontier().clear();
+        assembly.Grid.clear();
+        assembly.placeSeed(pt);
+        assembly.getOpenGlues();
+
+        frontier = assembly.calculateFrontier();
+        getCanvas().reset();
+        placeFrontierOnGrid();
+        drawGrid();
+    }
+
     public void placeFrontierOnGrid() {
         if (assembly.Grid.isEmpty()) {
             for (PolyTile pt : assembly.getTileSystem().getTileTypes()) {
