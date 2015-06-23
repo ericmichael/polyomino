@@ -6,7 +6,7 @@ import java.util.Random;
 public class Frontier extends ArrayList<FrontierElement> {
     private TileSystem tileSystem;
 
-    Frontier(TileSystem parent) {
+    public Frontier(TileSystem parent) {
         super();
         tileSystem = parent;
     }

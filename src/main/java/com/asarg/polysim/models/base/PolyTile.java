@@ -306,6 +306,13 @@ public class PolyTile {
         }
     }
 
+    @Override public int hashCode(){
+        int hash = 1;
+        hash = hash * 13 + (polyName == null ? 0 : polyName.hashCode());
+        hash = hash * 17 + tiles.size();
+        return hash;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)

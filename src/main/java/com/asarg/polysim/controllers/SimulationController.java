@@ -474,6 +474,7 @@ public class SimulationController implements Initializable {
         loadTwoHAMAssembly(assembly, null);
     }
 
+    @FXML
     public void loadTwoHAMAssembly(Assembly assembly, File f) {
         Tab tab = new Tab();
         if (f != null) tab.setText(f.getName());
@@ -500,6 +501,23 @@ public class SimulationController implements Initializable {
                 javax.swing.JOptionPane.showMessageDialog(null, "Failed to load assembly");
             }
         }
+    }
+
+    @FXML
+    public void loadTwoHamMenuItem() {
+//        FileChooser fileChooser = new FileChooser();
+//        fileChooser.setTitle("Open 2HAM Assembly...");
+//        File selectedFile = fileChooser.showOpenDialog(stage);
+//        if (selectedFile != null) {
+//            try {
+//                Assembly assembly = Assembly.LoadAssembly(selectedFile);
+//                loadAssembly(assembly, selectedFile);
+//            } catch (javax.xml.bind.JAXBException jaxbe) {
+//                javax.swing.JOptionPane.showMessageDialog(null, "Failed to load assembly");
+//            } catch (FileNotFoundException fnfe){
+//                javax.swing.JOptionPane.showMessageDialog(null, "Failed to load assembly");
+//            }
+//        }
     }
 
     private void deleteSelectedPolyTile() {

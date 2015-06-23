@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Assembly>
+    <AssemblyGrid>
+        <GridTile>
+            <GridLocation x="2" y="0"/>
+            <Tile>
+                <Location x="2" y="0"/>
+                <Color>00FFFF</Color>
+                <NorthGlue></NorthGlue>
+                <EastGlue>a</EastGlue>
+                <SouthGlue></SouthGlue>
+                <WestGlue>b</WestGlue>
+                <label>New</label>
+            </Tile>
+            <ParentPolyTile Label="New" Color="00FFFF">
+                <Tile>
+                    <Location x="3" y="0"/>
+                    <Color>00FFFF</Color>
+                    <NorthGlue></NorthGlue>
+                    <EastGlue>c</EastGlue>
+                    <SouthGlue></SouthGlue>
+                    <WestGlue>a</WestGlue>
+                    <label>New</label>
+                </Tile>
+                <Tile>
+                    <Location x="2" y="0"/>
+                    <Color>00FFFF</Color>
+                    <NorthGlue></NorthGlue>
+                    <EastGlue>a</EastGlue>
+                    <SouthGlue></SouthGlue>
+                    <WestGlue>b</WestGlue>
+                    <label>New</label>
+                </Tile>
+                <Tile>
+                    <Location x="0" y="0"/>
+                    <Color>00FFFF</Color>
+                    <NorthGlue></NorthGlue>
+                    <EastGlue>c</EastGlue>
+                    <SouthGlue></SouthGlue>
+                    <WestGlue>a</WestGlue>
+                    <label>New</label>
+                </Tile>
+                <Tile>
+                    <Location x="1" y="0"/>
+                    <Color>00FFFF</Color>
+                    <NorthGlue></NorthGlue>
+                    <EastGlue>b</EastGlue>
+                    <SouthGlue></SouthGlue>
+                    <WestGlue>c</WestGlue>
+                    <label>New</label>
+                </Tile>
+                <concentration>-1.0</concentration>
+                <count>-1</count>
+            </ParentPolyTile>
+        </GridTile>
+        <GridTile>
+            <GridLocation x="0" y="0"/>
+            <Tile>
+                <Location x="0" y="0"/>
+                <Color>00FFFF</Color>
+                <NorthGlue></NorthGlue>
+                <EastGlue>c</EastGlue>
+                <SouthGlue></SouthGlue>
+                <WestGlue>a</WestGlue>
+                <label>New</label>
+            </Tile>
+            <ParentPolyTile Label="New" Color="00FFFF">
+                <Tile>
+                    <Location x="3" y="0"/>
+                    <Color>00FFFF</Color>
+                    <NorthGlue></NorthGlue>
+                    <EastGlue>c</EastGlue>
+                    <SouthGlue></SouthGlue>
+                    <WestGlue>a</WestGlue>
+                    <label>New</label>
+                </Tile>
+                <Tile>
+                    <Location x="2" y="0"/>
+                    <Color>00FFFF</Color>
+                    <NorthGlue></NorthGlue>
+                    <EastGlue>a</EastGlue>
+                    <SouthGlue></SouthGlue>
+                    <WestGlue>b</WestGlue>
+                    <label>New</label>
+                </Tile>
+                <Tile>
+                    <Location x="0" y="0"/>
+                    <Color>00FFFF</Color>
+                    <NorthGlue></NorthGlue>
+                    <EastGlue>c</EastGlue>
+                    <SouthGlue></SouthGlue>
+                    <WestGlue>a</WestGlue>
+                    <label>New</label>
+                </Tile>
+                <Tile>
+                    <Location x="1" y="0"/>
+                    <Color>00FFFF</Color>
+                    <NorthGlue></NorthGlue>
+                    <EastGlue>b</EastGlue>
+                    <SouthGlue></SouthGlue>
+                    <WestGlue>c</WestGlue>
+                    <label>New</label>
+                </Tile>
+                <concentration>-1.0</concentration>
+                <count>-1</count>
+            </ParentPolyTile>
+        </GridTile>
+        <GridTile>
+            <GridLocation x="1" y="0"/>
+            <Tile>
+                <Location x="1" y="0"/>
+                <Color>00FFFF</Color>
+                <NorthGlue></NorthGlue>
+                <EastGlue>b</EastGlue>
+                <SouthGlue></SouthGlue>
+                <WestGlue>c</WestGlue>
+                <label>New</label>
+            </Tile>
+            <ParentPolyTile Label="New" Color="00FFFF">
+                <Tile>
+                    <Location x="3" y="0"/>
+                    <Color>00FFFF</Color>
+                    <NorthGlue></NorthGlue>
+                    <EastGlue>c</EastGlue>
+                    <SouthGlue></SouthGlue>
+                    <WestGlue>a</WestGlue>
+                    <label>New</label>
+                </Tile>
+                <Tile>
+                    <Location x="2" y="0"/>
+                    <Color>00FFFF</Color>
+                    <NorthGlue></NorthGlue>
+                    <EastGlue>a</EastGlue>
+                    <SouthGlue></SouthGlue>
+                    <WestGlue>b</WestGlue>
+                    <label>New</label>
+                </Tile>
+                <Tile>
+                    <Location x="0" y="0"/>
+                    <Color>00FFFF</Color>
+                    <NorthGlue></NorthGlue>
+                    <EastGlue>c</EastGlue>
+                    <SouthGlue></SouthGlue>
+                    <WestGlue>a</WestGlue>
+                    <label>New</label>
+                </Tile>
+                <Tile>
+                    <Location x="1" y="0"/>
+                    <Color>00FFFF</Color>
+                    <NorthGlue></NorthGlue>
+                    <EastGlue>b</EastGlue>
+                    <SouthGlue></SouthGlue>
+                    <WestGlue>c</WestGlue>
+                    <label>New</label>
+                </Tile>
+                <concentration>-1.0</concentration>
+                <count>-1</count>
+            </ParentPolyTile>
+        </GridTile>
+        <GridTile>
+            <GridLocation x="3" y="0"/>
+            <Tile>
+                <Location x="3" y="0"/>
+                <Color>00FFFF</Color>
+                <NorthGlue></NorthGlue>
+                <EastGlue>c</EastGlue>
+                <SouthGlue></SouthGlue>
+                <WestGlue>a</WestGlue>
+                <label>New</label>
+            </Tile>
+            <ParentPolyTile Label="New" Color="00FFFF">
+                <Tile>
+                    <Location x="3" y="0"/>
+                    <Color>00FFFF</Color>
+                    <NorthGlue></NorthGlue>
+                    <EastGlue>c</EastGlue>
+                    <SouthGlue></SouthGlue>
+                    <WestGlue>a</WestGlue>
+                    <label>New</label>
+                </Tile>
+                <Tile>
+                    <Location x="2" y="0"/>
+                    <Color>00FFFF</Color>
+                    <NorthGlue></NorthGlue>
+                    <EastGlue>a</EastGlue>
+                    <SouthGlue></SouthGlue>
+                    <WestGlue>b</WestGlue>
+                    <label>New</label>
+                </Tile>
+                <Tile>
+                    <Location x="0" y="0"/>
+                    <Color>00FFFF</Color>
+                    <NorthGlue></NorthGlue>
+                    <EastGlue>c</EastGlue>
+                    <SouthGlue></SouthGlue>
+                    <WestGlue>a</WestGlue>
+                    <label>New</label>
+                </Tile>
+                <Tile>
+                    <Location x="1" y="0"/>
+                    <Color>00FFFF</Color>
+                    <NorthGlue></NorthGlue>
+                    <EastGlue>b</EastGlue>
+                    <SouthGlue></SouthGlue>
+                    <WestGlue>c</WestGlue>
+                    <label>New</label>
+                </Tile>
+                <concentration>-1.0</concentration>
+                <count>-1</count>
+            </ParentPolyTile>
+        </GridTile>
+    </AssemblyGrid>
+    <TileSystem Temperature="1" WeightingOption="0">
+        <GlueFunction>
+            <Function>
+                <Labels L1="c" L2="c"/>
+                <Strength>1</Strength>
+            </Function>
+            <Function>
+                <Labels L1="b" L2="b"/>
+                <Strength>1</Strength>
+            </Function>
+            <Function>
+                <Labels L1="a" L2="a"/>
+                <Strength>1</Strength>
+            </Function>
+        </GlueFunction>
+        <TileType Label="New" Color="00FFFF">
+            <Tile>
+                <Location x="1" y="0"/>
+                <Color>00FFFF</Color>
+                <NorthGlue></NorthGlue>
+                <EastGlue>c</EastGlue>
+                <SouthGlue></SouthGlue>
+                <WestGlue>a</WestGlue>
+                <label>New</label>
+            </Tile>
+            <Tile>
+                <Location x="0" y="0"/>
+                <Color>00FFFF</Color>
+                <NorthGlue></NorthGlue>
+                <EastGlue>a</EastGlue>
+                <SouthGlue></SouthGlue>
+                <WestGlue>b</WestGlue>
+                <label>New</label>
+            </Tile>
+            <concentration>-1.0</concentration>
+            <count>-1</count>
+        </TileType>
+        <TileType Label="New" Color="00FFFF">
+            <Tile>
+                <Location x="0" y="0"/>
+                <Color>00FFFF</Color>
+                <NorthGlue></NorthGlue>
+                <EastGlue>c</EastGlue>
+                <SouthGlue></SouthGlue>
+                <WestGlue>a</WestGlue>
+                <label>New</label>
+            </Tile>
+            <Tile>
+                <Location x="1" y="0"/>
+                <Color>00FFFF</Color>
+                <NorthGlue></NorthGlue>
+                <EastGlue>b</EastGlue>
+                <SouthGlue></SouthGlue>
+                <WestGlue>c</WestGlue>
+                <label>New</label>
+            </Tile>
+            <concentration>-1.0</concentration>
+            <count>-1</count>
+        </TileType>
+        <TileType Label="New" Color="00FFFF">
+            <Tile>
+                <Location x="3" y="0"/>
+                <Color>00FFFF</Color>
+                <NorthGlue></NorthGlue>
+                <EastGlue>c</EastGlue>
+                <SouthGlue></SouthGlue>
+                <WestGlue>a</WestGlue>
+                <label>New</label>
+            </Tile>
+            <Tile>
+                <Location x="2" y="0"/>
+                <Color>00FFFF</Color>
+                <NorthGlue></NorthGlue>
+                <EastGlue>a</EastGlue>
+                <SouthGlue></SouthGlue>
+                <WestGlue>b</WestGlue>
+                <label>New</label>
+            </Tile>
+            <Tile>
+                <Location x="0" y="0"/>
+                <Color>00FFFF</Color>
+                <NorthGlue></NorthGlue>
+                <EastGlue>c</EastGlue>
+                <SouthGlue></SouthGlue>
+                <WestGlue>a</WestGlue>
+                <label>New</label>
+            </Tile>
+            <Tile>
+                <Location x="1" y="0"/>
+                <Color>00FFFF</Color>
+                <NorthGlue></NorthGlue>
+                <EastGlue>b</EastGlue>
+                <SouthGlue></SouthGlue>
+                <WestGlue>c</WestGlue>
+                <label>New</label>
+            </Tile>
+            <concentration>-1.0</concentration>
+            <count>-1</count>
+        </TileType>
+        <totalConcentration>0.0</totalConcentration>
+    </TileSystem>
+    <History/>
+</Assembly>

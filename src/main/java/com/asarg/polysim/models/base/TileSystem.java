@@ -74,7 +74,7 @@ public class TileSystem {
     }
 
     public HashMap<Pair<String, String>, Integer> getGlueFunction() {
-        return (HashMap<Pair<String, String>, Integer>) glueFunction.clone();
+        return glueFunction;
     }
 
     // needs some work, it's not maintaining the new glue values further down the process.

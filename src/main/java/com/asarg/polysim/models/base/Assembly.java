@@ -15,6 +15,7 @@ import java.awt.*;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InvalidObjectException;
 import java.util.*;
 import java.util.List;
 
@@ -50,13 +51,20 @@ public class Assembly extends Observable {
     private History attached = new History();
 
     public Assembly() {
-        System.out.print("in assembly,");
         tileSystem = new TileSystem(2, 0);
         frontier = new Frontier(tileSystem);
     }
 
     public Assembly(TileSystem ts) {
-        tileSystem = ts;
+        tileSystem = new TileSystem(ts.getTemperature());
+        try {
+            tileSystem.setWeightOption(ts.getWeightOption());
+        }catch(InvalidObjectException ioe){
+            System.out.println("invalid option");
+        }
+
+        tileSystem.getGlueFunction().putAll(ts.getGlueFunction());
+        tileSystem.getTileTypes().addAll(ts.getTileTypes());
         frontier = new Frontier(tileSystem);
     }
 
@@ -379,6 +387,9 @@ public class Assembly extends Observable {
             for (Point aPoint : glues.keySet()) {
                 glue1 = ptGlues.get(ptPoint);
                 glue2 = glues.get(aPoint);
+                if(glue1==glue2){
+                    System.out.println("smae");
+                }
                 if (tileSystem.getStrength(glue1, glue2) > 0) {
                     Pair<Point, Point> locAndOffset = getOffset(aPoint, ptPoint, offsetX, offsetY);
                     FrontierElement fe = new FrontierElement(locAndOffset.getKey(), locAndOffset.getValue(), pt, direction);
