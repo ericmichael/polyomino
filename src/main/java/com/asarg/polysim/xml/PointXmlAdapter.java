@@ -1,24 +1,24 @@
 package com.asarg.polysim.xml;
 
+import com.asarg.polysim.models.base.Coordinate;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.awt.*;
 
-public final class PointXmlAdapter extends XmlAdapter<PointXmlAdapter.PointXml, Point> {
+public final class PointXmlAdapter extends XmlAdapter<PointXmlAdapter.PointXml, Coordinate> {
 
     @Override
-    public PointXml marshal(Point p) throws Exception {
+    public PointXml marshal(Coordinate p) throws Exception {
         PointXml pointXml = new PointXml();
-        pointXml.x = p.x;
-        pointXml.y = p.y;
+        pointXml.x = p.getX();
+        pointXml.y = p.getY();
         return pointXml;
     }
 
     @Override
-    public Point unmarshal(PointXml p) throws Exception {
-        Point point = new Point();
-        point.x = p.x;
-        point.y = p.y;
+    public Coordinate unmarshal(PointXml p) throws Exception {
+        Coordinate point = new Coordinate(p.x, p.y);
         return point;
     }
 

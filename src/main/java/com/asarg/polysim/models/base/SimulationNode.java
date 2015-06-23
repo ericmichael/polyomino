@@ -37,8 +37,8 @@ public class SimulationNode extends SwingNode implements Observer {
     ArrayList<FrontierElement> frontierAttachments;
     int frontierIndex = 0;
     public FrontierElement currentFrontierAttachment = null;
-    Point frontierClickPoint = null;
-    Point lastMouseXY = new Point(800, 600);
+    Coordinate frontierClickPoint = null;
+    Coordinate lastMouseXY = new Coordinate(800, 600);
     int dragCount = 0;
     private File file;
 
@@ -56,8 +56,8 @@ public class SimulationNode extends SwingNode implements Observer {
         setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                Point point = new Point((int) e.getX(), (int) e.getY());
-                Point clicked = Drawer.TileDrawer.getGridPoint(point, getCanvas().getOffset(), getCanvas().getTileDiameter());
+                Coordinate point = new Coordinate((int) e.getX(), (int) e.getY());
+                Coordinate clicked = Drawer.TileDrawer.getGridPoint(point, getCanvas().getOffset(), getCanvas().getTileDiameter());
                 Tile clicked_tile = assembly.Grid.get(clicked);
                 if (clicked_tile != null) {
                     processFrontierClick(clicked, clicked_tile);
@@ -67,7 +67,7 @@ public class SimulationNode extends SwingNode implements Observer {
         setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                Point point = new Point((int) e.getX(), (int) e.getY());
+                Coordinate point = new Coordinate((int) e.getX(), (int) e.getY());
                 lastMouseXY = point;
             }
         });
@@ -127,14 +127,14 @@ public class SimulationNode extends SwingNode implements Observer {
         setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                Point point = new Point((int) e.getX(), (int) e.getY());
+                Coordinate point = new Coordinate((int) e.getX(), (int) e.getY());
                 int x = (int) e.getX();
                 int y = (int) e.getY();
                 if (!stopped) {
                     stopped = true;
                     return;
                 }
-                getCanvas().translateOffset(x - lastMouseXY.x, y - lastMouseXY.y);
+                getCanvas().translateOffset(x - lastMouseXY.getX(), y - lastMouseXY.getY());
                 lastMouseXY = point;
                 getCanvas().reset();
                 drawGrid();
@@ -148,7 +148,7 @@ public class SimulationNode extends SwingNode implements Observer {
 
             /* mouse moved away, remove the graphical cues */
                 if (currentFrontierAttachment != null) {
-                    Point loc = currentFrontierAttachment.getOffset();
+                    Coordinate loc = currentFrontierAttachment.getOffset();
                     assembly.removePolytile(currentFrontierAttachment.getPolyTile(), (int) loc.getX(), (int) loc.getY());
                     currentFrontierAttachment = null;
                 }
@@ -192,7 +192,7 @@ public class SimulationNode extends SwingNode implements Observer {
                     removeFrontierFromGrid();
 
                     if (currentFrontierAttachment != null) {
-                        Point loc = currentFrontierAttachment.getOffset();
+                        Coordinate loc = currentFrontierAttachment.getOffset();
                         assembly.removePolytile(currentFrontierAttachment.getPolyTile(), (int) loc.getX(), (int) loc.getY());
                         currentFrontierAttachment = null;
                     }
@@ -201,8 +201,8 @@ public class SimulationNode extends SwingNode implements Observer {
 
                     Integer index = (Integer) event.getDragboard().getContent(SimulationController.polyTileFormat);
                     PolyTile dropped = getTileSet().get(index.intValue());
-                    Point point = new Point((int) event.getX(), (int) event.getY());
-                    Point spot = Drawer.TileDrawer.getGridPoint(point, getCanvas().getOffset(), getCanvas().getTileDiameter());
+                    Coordinate point = new Coordinate((int) event.getX(), (int) event.getY());
+                    Coordinate spot = Drawer.TileDrawer.getGridPoint(point, getCanvas().getOffset(), getCanvas().getTileDiameter());
                     FrontierElement fe = new FrontierElement(spot, spot, dropped, 0);
 
                     //translate to spot
@@ -290,7 +290,7 @@ public class SimulationNode extends SwingNode implements Observer {
 
     public void exitFrontierMode() {
         if (currentFrontierAttachment != null) {
-            assembly.removePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().x, currentFrontierAttachment.getOffset().y);
+            assembly.removePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().getX(), currentFrontierAttachment.getOffset().getY());
         }
         frontierClick = false;
         frontierClickPoint = null;
@@ -311,7 +311,7 @@ public class SimulationNode extends SwingNode implements Observer {
         }
     }
 
-    private void processFrontierClick(Point clicked, Tile clicked_tile) {
+    private void processFrontierClick(Coordinate clicked, Tile clicked_tile) {
         PolyTile clicked_pt = clicked_tile.getParent();
         if (!frontierClick) {
             left_previous_status.setValue(left_status.getValue());
@@ -341,7 +341,7 @@ public class SimulationNode extends SwingNode implements Observer {
 
     private void removeCurrentFrontierAttachment() {
         if (currentFrontierAttachment != null) {
-            assembly.removePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().x, currentFrontierAttachment.getOffset().y);
+            assembly.removePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().getX(), currentFrontierAttachment.getOffset().getY());
             //left_status.setValue(left_previous_status.getValue());
             right_status.setValue(right_previous_status.getValue());
             //mainMenu.statusLabel.setText(mainMenu.statusLabelPreviousText);
@@ -358,7 +358,7 @@ public class SimulationNode extends SwingNode implements Observer {
             String status_str = String.format("Probability of Attachment: %.4f", probability);
             //mainMenu.statusLabel.setText(status_str);
             right_status.setValue(status_str);
-            assembly.placePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().x, currentFrontierAttachment.getOffset().y);
+            assembly.placePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().getX(), currentFrontierAttachment.getOffset().getY());
         }
     }
 
@@ -500,7 +500,7 @@ public class SimulationNode extends SwingNode implements Observer {
     public void placeFrontierOnGrid() {
         if (assembly.Grid.isEmpty()) {
             for (PolyTile pt : assembly.getTileSystem().getTileTypes()) {
-                frontier.add(new FrontierElement(new Point(0, 0), new Point(0, 0), pt, 4));
+                frontier.add(new FrontierElement(new Coordinate(0, 0), new Coordinate(0, 0), pt, 4));
             }
         }
         for (FrontierElement fe : frontier) {

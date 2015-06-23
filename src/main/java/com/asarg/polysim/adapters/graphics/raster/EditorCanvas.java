@@ -1,5 +1,6 @@
 package com.asarg.polysim.adapters.graphics.raster;
 
+import com.asarg.polysim.models.base.Coordinate;
 import com.asarg.polysim.models.base.PolyTile;
 import com.asarg.polysim.models.base.Tile;
 import javafx.beans.property.SimpleObjectProperty;
@@ -17,7 +18,7 @@ import java.awt.image.BufferedImage;
  */
 public class EditorCanvas extends JPanel {
     //the current canvas display info
-    Point canvasCenteredOffset = new Point(0, 0);
+    Coordinate canvasCenteredOffset = new Coordinate(0, 0);
     int tileDiameter = 1;
 
     SimpleObjectProperty<Tile> selectedTile = new SimpleObjectProperty<Tile>(null);
@@ -32,7 +33,7 @@ public class EditorCanvas extends JPanel {
     double height, width;
 
     //Canvas panning
-    Point lastXY = null;
+    Coordinate lastXY = null;
 
     public EditorCanvas(double width, double height) {
         super();
@@ -44,7 +45,7 @@ public class EditorCanvas extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                lastXY = e.getPoint();
+                lastXY = new Coordinate((int) e.getPoint().getX(), (int) e.getPoint().getY());
             }
 
             @Override
@@ -73,8 +74,8 @@ public class EditorCanvas extends JPanel {
 
             @Override
             public void mouseDragged(MouseEvent e) {
-                canvasCenteredOffset.translate(e.getX() - lastXY.x, e.getY() - lastXY.y);
-                lastXY.setLocation(e.getPoint());
+                canvasCenteredOffset = canvasCenteredOffset.translate(e.getX() - lastXY.getX(), e.getY() - lastXY.getY());
+                lastXY = new Coordinate((int) e.getPoint().getX(), (int) e.getPoint().getY());
                 Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX, pt, tileDiameter, canvasCenteredOffset);
                 Drawer.clearGraphics(overLayerGFX);
                 if (selectedTile.get() != null)
@@ -86,13 +87,13 @@ public class EditorCanvas extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 if (pt != null) {
-                    Point gridPoint = Drawer.TileDrawer.getGridPoint(e.getPoint(), canvasCenteredOffset, tileDiameter);
-                    Tile tile = pt.getTile(gridPoint.x, gridPoint.y);
+                    Coordinate gridPoint = Drawer.TileDrawer.getGridPoint(new Coordinate((int) e.getPoint().getX(), (int) e.getPoint().getY()), canvasCenteredOffset, tileDiameter);
+                    Tile tile = pt.getTile((int) gridPoint.getX(), (int) gridPoint.getY());
                     if (tile != null) {
                         selectTile(tile);
                     } else if (pt.adjacentExits(gridPoint)) {
                         Tile newTile = new Tile();
-                        newTile.setTileLocation(gridPoint.x, gridPoint.y);
+                        newTile.setTileLocation((int) gridPoint.getX(), (int) gridPoint.getY());
 
                         pt.addTile(newTile);
                         selectedTile.set(newTile);
@@ -100,7 +101,7 @@ public class EditorCanvas extends JPanel {
                         Drawer.clearGraphics(overLayerGFX);
                         //  canvasCenteredOffset = newOffDia.getKey();
                         // tileDiameter = newOffDia.getValue();
-                        Drawer.TileDrawer.drawTileSelection(overLayerGFX, Drawer.TileDrawer.getGridPoint(e.getPoint(), canvasCenteredOffset, tileDiameter), tileDiameter, canvasCenteredOffset, Color.CYAN);
+                        Drawer.TileDrawer.drawTileSelection(overLayerGFX, Drawer.TileDrawer.getGridPoint(new Coordinate((int) e.getPoint().getX(), (int) e.getPoint().getY()), canvasCenteredOffset, tileDiameter), tileDiameter, canvasCenteredOffset, Color.CYAN);
                         repaint();
 
                     }
@@ -143,7 +144,7 @@ public class EditorCanvas extends JPanel {
     public void drawPolyTile() {
 
         Drawer.clearGraphics(overLayerGFX);
-        Pair<Point, Integer> ppi = Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX, pt);
+        Pair<Coordinate, Integer> ppi = Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX, pt);
         canvasCenteredOffset = ppi.getKey();
         tileDiameter = ppi.getValue();
         Drawer.clearGraphics(overLayerGFX);

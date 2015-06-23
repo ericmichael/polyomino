@@ -659,7 +659,7 @@ public class TileEditorController implements Initializable {
                 Tile selectedTile = canvas.getSelectedTileProperty().get();
                 PolyTile pt = canvas.getPolyTile();
                 if(pt.tiles.size()>1) {
-                    pt.removeTile(selectedTile.getLocation().x, selectedTile.getLocation().y);
+                    pt.removeTile(selectedTile.getLocation().getX(), selectedTile.getLocation().getY());
                     redrawPolyTile(null);
                 }
                 else{

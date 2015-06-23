@@ -38,11 +38,11 @@ public class TwoHAMAssembly {
     private ArrayList<PolyTile> getNextAssembliesAsPolyTiles(Assembly asm){
         ArrayList<PolyTile> nextAssemblies = new ArrayList<PolyTile>();
         for (FrontierElement fe : asm.getFrontier()) {
-            asm.placePolytile(fe.getPolyTile(), fe.getOffset().x, fe.getOffset().y);
+            asm.placePolytile(fe.getPolyTile(), fe.getOffset().getX(), fe.getOffset().getY());
             PolyTile asmPt = asm.toPolyTile();
             if(!nextAssemblies.contains(asmPt))
                 nextAssemblies.add(asmPt);
-            asm.removePolytile(fe.getPolyTile(), fe.getOffset().x, fe.getOffset().y);
+            asm.removePolytile(fe.getPolyTile(), fe.getOffset().getX(), fe.getOffset().getY());
         }
         return nextAssemblies;
     }

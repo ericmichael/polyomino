@@ -1,6 +1,7 @@
 package com.asarg.polysim.adapters.graphics.raster;
 
 
+import com.asarg.polysim.models.base.Coordinate;
 import com.asarg.polysim.models.base.FrontierElement;
 import com.asarg.polysim.models.base.Tile;
 
@@ -16,12 +17,12 @@ public class SimulationCanvas extends JPanel {
     Graphics2D cg2d;
     Dimension res = new Dimension();
     private int tileDiameter = 50;
-    private Point center;
+    private Coordinate center;
     private int w;
     private int h;
 
     public SimulationCanvas(int w, int h) {
-        center = new Point(w / 2, h / 2);
+        center = new Coordinate(w / 2, h / 2);
         canvasBFI = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         cg2d = canvasBFI.createGraphics();
         cg2d.setComposite(AlphaComposite.Src);
@@ -47,7 +48,7 @@ public class SimulationCanvas extends JPanel {
     @Override
     public void resize(int w, int h) {
         super.resize(w, h);
-        center = new Point(w / 2, h / 2);
+        center = new Coordinate(w / 2, h / 2);
         canvasBFI = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         cg2d = canvasBFI.createGraphics();
         cg2d.setComposite(AlphaComposite.Src);
@@ -60,7 +61,7 @@ public class SimulationCanvas extends JPanel {
     @Override
     public void setSize(int width, int height) {
         super.setSize(width, height);
-        center = new Point(width / 2, height / 2);
+        center = new Coordinate(width / 2, height / 2);
     }
 
     public void reset() {
@@ -77,7 +78,7 @@ public class SimulationCanvas extends JPanel {
     }
 
 
-    public void drawGrid(HashMap<Point, Tile> hmpt) {
+    public void drawGrid(HashMap<Coordinate, Tile> hmpt) {
 
         Drawer.TileDrawer.drawTiles(cg2d, hmpt.entrySet(), tileDiameter, center);
 
@@ -108,10 +109,10 @@ public class SimulationCanvas extends JPanel {
     }
 
     public void translateOffset(int x, int y) {
-        center.translate(x, y);
+        center = center.translate(x, y);
     }
 
-    public final Point getOffset() {
+    public final Coordinate getOffset() {
         return center;
     }
 

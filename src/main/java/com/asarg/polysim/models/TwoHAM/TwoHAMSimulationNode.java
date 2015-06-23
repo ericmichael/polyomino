@@ -34,9 +34,9 @@ public class TwoHAMSimulationNode extends SimulationNode {
             System.out.println("Frontier Size: " + frontier.size());
 
             for(FrontierElement fe : frontier){
-                subassembly.placePolytile(fe.getPolyTile(), fe.getOffset().x, fe.getOffset().y);
+                subassembly.placePolytile(fe.getPolyTile(), fe.getOffset().getX(), fe.getOffset().getY());
                 subassemblies.add(subassembly.toPolyTile());
-                subassembly.removePolytile(fe.getPolyTile(), fe.getOffset().x, fe.getOffset().y);
+                subassembly.removePolytile(fe.getPolyTile(), fe.getOffset().getX(), fe.getOffset().getY());
             }
         }
 

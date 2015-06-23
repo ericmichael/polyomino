@@ -18,12 +18,12 @@ import java.util.Arrays;
 @XmlType(propOrder = {"location", "color", "glueN", "glueE", "glueS", "glueW", "label"})
 public class Tile {
 
-    public static Point NORTH = new Point(0, 1);
-    public static Point EAST = new Point(1, 0);
-    public static Point SOUTH = new Point(0, -1);
-    public static Point WEST = new Point(-1, 0);
+    public static Coordinate NORTH = new Coordinate(0, 1);
+    public static Coordinate EAST = new Coordinate(1, 0);
+    public static Coordinate SOUTH = new Coordinate(0, -1);
+    public static Coordinate WEST = new Coordinate(-1, 0);
     // each point in coordinates has 4 edges with a label and a direction
-    private Point tileLocation;
+    private Coordinate tileLocation;
     // glue labels are 4 field array of strings: 0=N, 1=E, 2=S, 3=W
 
     private String glueN;
@@ -45,13 +45,13 @@ public class Tile {
         glueE = null;
         glueS = null;
         glueW = null;
-        tileLocation = new Point(x, y);
+        tileLocation = new Coordinate(x, y);
         polyTile = parent;
 
     }
 
     public Tile(int x, int y, String[] gl, PolyTile parent) {
-        tileLocation = new Point(x, y);
+        tileLocation = new Coordinate(x, y);
         changeTileGlue(gl);
         polyTile = parent;
     }
@@ -91,21 +91,19 @@ public class Tile {
     }
 
     public void setTileLocation(int x, int y) {
-        if (tileLocation != null)
-            tileLocation.setLocation(x, y);
-        else tileLocation = new Point(x, y);
+        tileLocation = new Coordinate(x, y);
     }
 
     @XmlElement(name = "Location")
     @XmlJavaTypeAdapter(PointXmlAdapter.class)
-    public Point getLocation() {
+    public Coordinate getLocation() {
         return tileLocation;
     }
 
-    public void setLocation(Point p) {
+    public void setLocation(Coordinate p) {
         if (tileLocation != null)
             tileLocation = p;
-        else tileLocation = new Point(p.x, p.y);
+        else tileLocation = new Coordinate(p.getX(), p.getY());
     }
 
     public String[] getGlueLabels() {

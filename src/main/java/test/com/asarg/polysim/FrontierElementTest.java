@@ -1,5 +1,6 @@
 package test.com.asarg.polysim; 
 
+import com.asarg.polysim.models.base.Coordinate;
 import com.asarg.polysim.models.base.FrontierElement;
 import com.asarg.polysim.models.base.PolyTile;
 import org.junit.Test;
@@ -23,32 +24,32 @@ public class FrontierElementTest {
 public void before() throws Exception {
     p1 = new PolyTile();
     p1.addTile(0,0, new String[]{null, null, "a",null});
-    fe1 = new FrontierElement(new Point(0,1), new Point(1,1),p1,0);
+    fe1 = new FrontierElement(new Coordinate(0,1), new Coordinate(1,1),p1,0);
 
     // same polytile as the first
     p2 = new PolyTile();
     p2.addTile(0,0, new String[]{null, null, "a",null});
-    fe2 = new FrontierElement(new Point(0,1), new Point(1,1),p2,0);
+    fe2 = new FrontierElement(new Coordinate(0,1), new Coordinate(1,1),p2,0);
 
     // same polytile at different glue
     p3 = new PolyTile();
     p3.addTile(0,0, new String[]{null, null, "a",null});
-    fe3 = new FrontierElement(new Point(8,1), new Point(1,1),p3,2);
+    fe3 = new FrontierElement(new Coordinate(8,1), new Coordinate(1,1),p3,2);
 
     // same polytile at different point and same glue direction
     p4 = new PolyTile();
     p4.addTile(0,0, new String[]{null, null, "a",null});
-    fe4 = new FrontierElement(new Point(20,1), new Point(1,1),p4,0);
+    fe4 = new FrontierElement(new Coordinate(20,1), new Coordinate(1,1),p4,0);
 
     // frontier element with different offset
     p5 = new PolyTile();
     p5.addTile(0,0, new String[]{null, null, "a",null});
-    fe5 = new FrontierElement(new Point(0,1), new Point(1,20),p5,0);
+    fe5 = new FrontierElement(new Coordinate(0,1), new Coordinate(1,20),p5,0);
 
     // different polytile.
     p6 = new PolyTile();
     p6.addTile(0,0, new String[]{null, "b", "a",null});
-    fe6 = new FrontierElement(new Point(0,1), new Point(1,1),p6,0);
+    fe6 = new FrontierElement(new Coordinate(0,1), new Coordinate(1,1),p6,0);
 } 
 
 @After

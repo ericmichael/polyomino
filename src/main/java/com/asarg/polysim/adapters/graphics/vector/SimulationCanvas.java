@@ -1,6 +1,7 @@
 package com.asarg.polysim.adapters.graphics.vector;
 
 
+import com.asarg.polysim.models.base.Coordinate;
 import com.asarg.polysim.models.base.FrontierElement;
 import com.asarg.polysim.models.base.Tile;
 import org.jfree.fx.FXGraphics2D;
@@ -15,11 +16,11 @@ public class SimulationCanvas extends Canvas {
     FXGraphics2D cg2d;
     Dimension res = new Dimension();
     private int tileDiameter = 50;
-    private Point center;
+    private Coordinate center;
 
     public SimulationCanvas(int w, int h) {
         super(w,h);
-        center = new Point(w / 2, h / 2);
+        center = new Coordinate(w / 2, h / 2);
         cg2d = new FXGraphics2D(getGraphicsContext2D());
 //        cg2d.setComposite(AlphaComposite.Src);
 //        cg2d.setColor(Color.white);
@@ -35,7 +36,7 @@ public class SimulationCanvas extends Canvas {
     public void resize(int w, int h) {
         setWidth(w);
         setHeight(h);
-        center = new Point(w / 2, h / 2);
+        center = new Coordinate(w / 2, h / 2);
         cg2d = new FXGraphics2D(getGraphicsContext2D());
 //        cg2d.setComposite(AlphaComposite.Src);
 //        cg2d.setColor(Color.white);
@@ -57,7 +58,7 @@ public class SimulationCanvas extends Canvas {
 //    }
 //
 
-    public void drawGrid(HashMap<Point, Tile> hmpt) {
+    public void drawGrid(HashMap<Coordinate, Tile> hmpt) {
 
         Drawer.TileDrawer.drawTiles(cg2d, hmpt.entrySet(), tileDiameter, center);
 
@@ -83,10 +84,10 @@ public class SimulationCanvas extends Canvas {
     }
 
     public void translateOffset(int x, int y) {
-        center.translate(x, y);
+        center = center.translate(x, y);
     }
 
-    public final Point getOffset() {
+    public final Coordinate getOffset() {
         return center;
     }
 

@@ -19,11 +19,11 @@ import java.awt.*;
 public class FrontierElement {
     @XmlElement(name = "Location")
     @XmlJavaTypeAdapter(PointXmlAdapter.class)
-    private Point tileWithGlue;
+    private Coordinate tileWithGlue;
 
     @XmlElement(name = "Offset")
     @XmlJavaTypeAdapter(PointXmlAdapter.class)
-    private Point polytileOffset;
+    private Coordinate polytileOffset;
 
     @XmlElement(name = "PolyTile")
     private PolyTile polyTile;
@@ -40,7 +40,7 @@ public class FrontierElement {
     public FrontierElement() {
     }
 
-    public FrontierElement(Point tg, Point poff, PolyTile p, int d) {
+    public FrontierElement(Coordinate tg, Coordinate poff, PolyTile p, int d) {
         tileWithGlue = tg;
         polytileOffset = poff;
         polyTile = p;
@@ -48,7 +48,7 @@ public class FrontierElement {
         attachment = true;
     }
 
-    public FrontierElement(Point tg, Point poff, PolyTile p, int d, boolean a) {
+    public FrontierElement(Coordinate tg, Coordinate poff, PolyTile p, int d, boolean a) {
         tileWithGlue = tg;
         polytileOffset = poff;
         polyTile = p;
@@ -56,11 +56,11 @@ public class FrontierElement {
         attachment = a;
     }
 
-    public Point getLocation() {
+    public Coordinate getLocation() {
         return tileWithGlue;
     }
 
-    public Point getOffset() {
+    public Coordinate getOffset() {
         return polytileOffset;
     }
 

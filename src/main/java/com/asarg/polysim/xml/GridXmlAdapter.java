@@ -1,5 +1,6 @@
 package com.asarg.polysim.xml;
 
+import com.asarg.polysim.models.base.Coordinate;
 import com.asarg.polysim.models.base.PolyTile;
 import com.asarg.polysim.models.base.Tile;
 
@@ -13,11 +14,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GridXmlAdapter extends XmlAdapter<GridXmlAdapter.HashMapXml, HashMap<Point, Tile>> {
+public class GridXmlAdapter extends XmlAdapter<GridXmlAdapter.HashMapXml, HashMap<Coordinate, Tile>> {
 
     @Override
-    public HashMap<Point, Tile> unmarshal(HashMapXml v) throws Exception {
-        HashMap<Point, Tile> hashMap = new HashMap<Point, Tile>();
+    public HashMap<Coordinate, Tile> unmarshal(HashMapXml v) throws Exception {
+        HashMap<Coordinate, Tile> hashMap = new HashMap<Coordinate, Tile>();
         for (EntryXml entry : v.GridTile) {
             entry.tile.setParent(entry.parent);
             hashMap.put(entry.point, entry.tile);
@@ -26,9 +27,9 @@ public class GridXmlAdapter extends XmlAdapter<GridXmlAdapter.HashMapXml, HashMa
     }
 
     @Override
-    public HashMapXml marshal(HashMap<Point, Tile> v) throws Exception {
+    public HashMapXml marshal(HashMap<Coordinate, Tile> v) throws Exception {
         HashMapXml hashMapXml = new HashMapXml();
-        for (Map.Entry<Point, Tile> entry : v.entrySet()) {
+        for (Map.Entry<Coordinate, Tile> entry : v.entrySet()) {
             EntryXml entryXml = new EntryXml();
             entryXml.point = entry.getKey();
             entryXml.tile = entry.getValue();
@@ -47,7 +48,7 @@ public class GridXmlAdapter extends XmlAdapter<GridXmlAdapter.HashMapXml, HashMa
     public static class EntryXml {
         @XmlElement(name = "GridLocation")
         @XmlJavaTypeAdapter(PointXmlAdapter.class)
-        public Point point;
+        public Coordinate point;
         @XmlElement(name = "Tile")
         public Tile tile;
         @XmlElement(name = "ParentPolyTile")
