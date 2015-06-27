@@ -40,7 +40,7 @@ public class Assembly extends Observable {
     @XmlTransient
     HashMap<Coordinate, String> openWestGlues = new HashMap<Coordinate, String>();
     @XmlTransient
-    ArrayList<FrontierElement> possibleAttach = new ArrayList<FrontierElement>();
+    public ArrayList<FrontierElement> possibleAttach = new ArrayList<FrontierElement>();
     // tile system, it can be changed so it needs its own class
     @XmlElement(name = "TileSystem")
     private TileSystem tileSystem;
@@ -288,16 +288,18 @@ public class Assembly extends Observable {
         for (Map.Entry<Coordinate, Tile> t : Grid.entrySet()) {
             String[] glueLabels = t.getValue().getGlueLabels();
             //Check if glues are open by checking if their corresponding adjacent point is open
-            if (glueLabels[0] != null && Grid.get(new Coordinate(t.getKey().getX(), t.getKey().getY() + 1)) == null) {
+            Coordinate spot = t.getKey();
+
+            if (glueLabels[0] != null && Grid.get(spot.translate(0,1)) == null) {
                 openNorthGlues.put(t.getKey(), glueLabels[0]);
             }
-            if (glueLabels[1] != null && Grid.get(new Coordinate(t.getKey().getX() + 1, t.getKey().getY())) == null) {
+            if (glueLabels[1] != null && Grid.get(spot.translate(1,0)) == null) {
                 openEastGlues.put(t.getKey(), glueLabels[1]);
             }
-            if (glueLabels[2] != null && Grid.get(new Coordinate(t.getKey().getX(), t.getKey().getY() - 1)) == null) {
+            if (glueLabels[2] != null && Grid.get(spot.translate(0,-1)) == null) {
                 openSouthGlues.put(t.getKey(), glueLabels[2]);
             }
-            if (glueLabels[3] != null && Grid.get(new Coordinate(t.getKey().getX() - 1, t.getKey().getY())) == null) {
+            if (glueLabels[3] != null && Grid.get(spot.translate(-1,0)) == null) {
                 openWestGlues.put(t.getKey(), glueLabels[3]);
             }
         }
@@ -339,11 +341,10 @@ public class Assembly extends Observable {
     }
 
     private Pair<Coordinate, Coordinate> getOffset(Coordinate aPoint, Coordinate ptPoint, int offsetX, int offsetY) {
-        Coordinate tmp = new Coordinate(aPoint);
-        tmp = tmp.translate(offsetX, offsetY);
-        Coordinate placement = new Coordinate(tmp);
-        int xOffset = (int) (tmp.getX() - ptPoint.getX());
-        int yOffset = (int) (tmp.getY() - ptPoint.getY());
+        Coordinate placement = new Coordinate(offsetX, offsetY);
+        placement = placement.translate(aPoint.getX(), aPoint.getY());
+        int xOffset = (int) - (ptPoint.getX() - placement.getX());
+        int yOffset = (int) - (ptPoint.getY() - placement.getY());
         Coordinate tmp2 = new Coordinate(xOffset, yOffset);
         return new Pair<Coordinate, Coordinate>(placement, tmp2);
     }
@@ -387,9 +388,6 @@ public class Assembly extends Observable {
             for (Coordinate aPoint : glues.keySet()) {
                 glue1 = ptGlues.get(ptPoint);
                 glue2 = glues.get(aPoint);
-                if(glue1==glue2){
-                    System.out.println("smae");
-                }
                 if (tileSystem.getStrength(glue1, glue2) > 0) {
                     Pair<Coordinate, Coordinate> locAndOffset = getOffset(aPoint, ptPoint, offsetX, offsetY);
                     FrontierElement fe = new FrontierElement(locAndOffset.getKey(), locAndOffset.getValue(), pt, direction);
@@ -400,7 +398,7 @@ public class Assembly extends Observable {
     }
 
     //Adds coordinate of placement of certain polytile to a grid location iff the polytile has a matching glue with assembly
-    private void checkMatchingGlues(PolyTile t) {
+    public void checkMatchingGlues(PolyTile t) {
         fillPossibleList(t, NORTH);
         fillPossibleList(t, EAST);
         fillPossibleList(t, SOUTH);
@@ -414,24 +412,24 @@ public class Assembly extends Observable {
     public Frontier getFrontier() {
         return frontier;
     }
-    // calculate frontier
 
     public Frontier calculateFrontier() {
-        ArrayList toRemove = new ArrayList();
+        ArrayList<FrontierElement> toRemove = new ArrayList<FrontierElement>();
         for (PolyTile t : tileSystem.getTileTypes()) {
             checkMatchingGlues(t);
         }
         for (FrontierElement fe : possibleAttach) {
-            if (checkStability(fe.getPolyTile(), fe.getOffset().getX(), fe.getOffset().getY()) &&
-                    geometryCheckSuccess(fe.getPolyTile(), fe.getOffset().getX(), fe.getOffset().getY())) {
+            boolean isStable = checkStability(fe.getPolyTile(), fe.getOffset().getX(), fe.getOffset().getY());
+            boolean fitsGeometrically = geometryCheckSuccess(fe.getPolyTile(), fe.getOffset().getX(), fe.getOffset().getY());
 
+            if (isStable && fitsGeometrically) {
                 if (!frontier.contains(fe)) {
                     frontier.add(fe);
                 }
                 toRemove.add(fe);
             }
         }
-        for (Object e : toRemove) {
+        for (FrontierElement e : toRemove) {
             possibleAttach.remove(e);
         }
         return frontier;
@@ -444,8 +442,7 @@ public class Assembly extends Observable {
         for (Tile t : p.tiles) {
             String nPolytileGlue = t.getGlueN();
             if (nPolytileGlue != null) {
-                Coordinate pt = new Coordinate(t.getLocation());
-                pt = pt.translate(x, y + 1);
+                Coordinate pt = new Coordinate(t.getLocation().getX()+x, t.getLocation().getY()+y+1);
                 Tile nAssemblyTile = Grid.get(pt);
                 if (nAssemblyTile != null)
                     totalStrength += tileSystem.getStrength(nPolytileGlue, nAssemblyTile.getGlueS());
@@ -454,8 +451,7 @@ public class Assembly extends Observable {
 
             String ePolytileGlue = t.getGlueE();
             if (ePolytileGlue != null) {
-                Coordinate pt = new Coordinate(t.getLocation());
-                pt = pt.translate(x + 1, y);
+                Coordinate pt = new Coordinate(t.getLocation().getX()+x+1, t.getLocation().getY()+y);
                 Tile eAssemblyTile = Grid.get(pt);
                 if (eAssemblyTile != null)
                     totalStrength += tileSystem.getStrength(ePolytileGlue, eAssemblyTile.getGlueW());
@@ -464,8 +460,7 @@ public class Assembly extends Observable {
 
             String sPolytileGlue = t.getGlueS();
             if (sPolytileGlue != null) {
-                Coordinate pt = new Coordinate(t.getLocation());
-                pt = pt.translate(x, y - 1);
+                Coordinate pt = new Coordinate(t.getLocation().getX()+x, t.getLocation().getY()+y-1);
                 Tile sAssemblyTile = Grid.get(pt);
                 if (sAssemblyTile != null)
                     totalStrength += tileSystem.getStrength(sPolytileGlue, sAssemblyTile.getGlueN());
@@ -474,8 +469,7 @@ public class Assembly extends Observable {
 
             String wPolytileGlue = t.getGlueW();
             if (wPolytileGlue != null) {
-                Coordinate pt = new Coordinate(t.getLocation());
-                pt = pt.translate(x - 1, y);
+                Coordinate pt = new Coordinate(t.getLocation().getX()+x-1, t.getLocation().getY()+y);
                 Tile wAssemblyTile = Grid.get(pt);
                 if (wAssemblyTile != null)
                     totalStrength += tileSystem.getStrength(wPolytileGlue, wAssemblyTile.getGlueE());

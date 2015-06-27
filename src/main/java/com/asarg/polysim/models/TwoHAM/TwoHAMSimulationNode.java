@@ -24,6 +24,7 @@ public class TwoHAMSimulationNode extends SimulationNode {
         return clonedAssembly;
     }
 
+    @Override
     public void forward() {
         //removeFrontierFromGrid();
         ArrayList<PolyTile> subassemblies = new ArrayList<PolyTile>();
@@ -53,7 +54,8 @@ public class TwoHAMSimulationNode extends SimulationNode {
 
         for(PolyTile pt: subassemblies_no_dups){
             pt.normalize();
-            assembly.getTileSystem().getTileTypes().add(pt);
+            if(!assembly.getTileSystem().getTileTypes().contains(pt))
+                assembly.getTileSystem().getTileTypes().add(pt);
         }
 //        step(1, true);
 //        java.util.List<FrontierElement> attached = assembly.getAttached();

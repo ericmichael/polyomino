@@ -80,6 +80,18 @@ public class PolyTile {
         System.out.println("polytile " + polyName + " created with count " + c + " and concentration " + con);
     }
 
+    public PolyTile(PolyTile other){
+        polyName = other.polyName;
+        count = other.count;
+        concentration = other.concentration;
+        color = other.color;
+        frontier = other.frontier;
+        for(Tile t : other.getTiles()){
+            tiles.add(new Tile(t));
+        }
+        setGlues();
+    }
+
     public void setFrontier() {
         frontier = true;
         setColor("EEEEEE");
@@ -209,7 +221,7 @@ public class PolyTile {
     // deletes tile at the specified location
     public void removeTile(int x, int y) {
         for (Tile tile : tiles) {
-            if (tile.getLocation().equals(new Point(x, y))) {
+            if (tile.getLocation().equals(new Coordinate(x, y))) {
                 System.out.println("Tile found in polyTile! Removing...");
                 tiles.remove(tile);
                 return;
@@ -270,26 +282,29 @@ public class PolyTile {
         eastGlues.clear();
         southGlues.clear();
         westGlues.clear();
+
         for (Tile t : tiles) {
             String[] glueLabels = t.getGlueLabels();
-            if (glueLabels[0] != null && !glueLabels[0].equals("")) {
+            if (glueLabels[0] != null) {
                 northGlues.put(t.getLocation(), glueLabels[0]);
             }
-            if (glueLabels[1] != null && !glueLabels[1].equals("")) {
+            if (glueLabels[1] != null) {
                 eastGlues.put(t.getLocation(), glueLabels[1]);
             }
-            if (glueLabels[2] != null && !glueLabels[2].equals("")) {
+            if (glueLabels[2] != null) {
                 southGlues.put(t.getLocation(), glueLabels[2]);
             }
-            if (glueLabels[3] != null && !glueLabels[3].equals("")) {
+            if (glueLabels[3] != null) {
                 westGlues.put(t.getLocation(), glueLabels[3]);
             }
         }
     }
 
-    public void normalize(){
+    public PolyTile normalize(){
+        PolyTile copy = new PolyTile(this);
+
         Tile min = null;
-        for(Tile t : tiles){
+        for(Tile t : copy.tiles){
             if(min==null) min = t;
             else{
                 if(t.getLocation().getX() <= min.getLocation().getX() && t.getLocation().getY() <= min.getLocation().getY()){
@@ -301,9 +316,10 @@ public class PolyTile {
         int x_translate = - (int) min.getLocation().getX();
         int y_translate = - (int) min.getLocation().getY();
 
-        for(Tile t : tiles){
+        for(Tile t : copy.tiles){
             t.setLocation(t.getLocation().translate(x_translate, y_translate));
         }
+        return copy;
     }
 
     @Override public int hashCode(){
@@ -331,21 +347,21 @@ public class PolyTile {
         }
 
 
-        normalize();
-        toCompare.normalize();
+        PolyTile first = normalize();
+        PolyTile second = toCompare.normalize();
 
         // check if all tiles in the polytile are equal, by looking through their coordinates
-        for (Tile t : tiles) {
+        for (Tile t : first.getTiles()) {
             Coordinate tLoc = t.getLocation();
-            Tile t2 = toCompare.getTile((int) tLoc.getX(), (int) tLoc.getY());
+            Tile t2 = second.getTile((int) tLoc.getX(), (int) tLoc.getY());
             if(t2==null) return false;
             else if (!t.equals(t2)) return false;
         }
 
         // the coordinates of both polytiles need to be checked: do the same for the points in the other polytile
-        for (Tile t : toCompare.tiles) {
+        for (Tile t : second.getTiles()) {
             Coordinate tLoc = t.getLocation();
-            Tile t2 = this.getTile((int) tLoc.getX(), (int) tLoc.getY());
+            Tile t2 = first.getTile((int) tLoc.getX(), (int) tLoc.getY());
             if(t2==null) return false;
             else if (!t.equals(t2)) return false;
         }

@@ -99,12 +99,17 @@ public class TwoHAMAssembly {
     boolean addPerimeters(){
         ArrayList<PolyTile> toAdd = new ArrayList<PolyTile>();
         for(PolyTile pt: tileSystem.getTileTypes()) {
-            Assembly subassembly = polyTileToAssembly(pt);
+            if(!expanded.contains(pt)) {
+                Assembly subassembly = polyTileToAssembly(pt);
 
-            for(PolyTile subasm : getNextAssembliesAsPolyTiles(subassembly)){
-                if(!tileSystem.getTileTypes().contains(subasm)) toAdd.add(subasm);
+                for (PolyTile subasm : getNextAssembliesAsPolyTiles(subassembly)) {
+                    if (!tileSystem.getTileTypes().contains(subasm)) {
+                        if (!toAdd.contains(subasm))
+                            toAdd.add(subasm);
+                    }
+                }
+                expanded.add(pt);
             }
-            expanded.add(pt);
         }
 
         tileSystem.getTileTypes().addAll(toAdd);

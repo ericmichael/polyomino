@@ -1,6 +1,7 @@
 package com.asarg.polysim.examples;
 
-import com.asarg.polysim.models.TwoHAM.TwoHAMAssembly;
+import com.asarg.polysim.models.StagedTwoHAM.Bin;
+import com.asarg.polysim.models.StagedTwoHAM.Stage;
 import com.asarg.polysim.models.atam.ATAMTile;
 import com.asarg.polysim.models.base.*;
 import javafx.util.Pair;
@@ -9,135 +10,13 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by ericmartinez on 6/16/15.
  */
-class Bin extends TwoHAMAssembly{
-    public Stage stage;
-    ArrayList<Bin> edges = new ArrayList<Bin>();
-    public int i;
 
-    public Bin(int i){
-        super();
-        this.i = i;
-    }
-
-    public Bin(int i, int temperature){
-        super(new TileSystem(temperature));
-        this.i=i;
-    }
-
-    void setStage(Stage stage){
-        this.stage = stage;
-    }
-
-    void addEdge(Bin b){ edges.add(b); }
-
-    void addTile(PolyTile pt){ tileSystem.getTileTypes().add(pt); }
-
-    void addTiles(ArrayList<PolyTile> polyTileArrayList){ tileSystem.getTileTypes().addAll(polyTileArrayList); }
-
-    void addGlueFunction(HashMap<Pair<String, String>, Integer> glueFunction){
-        for(Map.Entry<Pair<String, String>, Integer> entry : glueFunction.entrySet()){
-            Pair<String, String> glues = entry.getKey();
-            Integer strength = entry.getValue();
-            tileSystem.addGlueFunction(glues.getKey(), glues.getValue(), strength);
-        }
-    }
-
-    void start(){
-        System.out.println("Starting with " + this.tileSystem.getTileTypes().size() + " tile types");
-        //pass info to connected bins
-        for(Bin bin : edges){
-            int max = 0;
-            for(PolyTile pt : getTerminalSet()) if(pt.getTiles().size() > max) max=pt.getTiles().size();
-
-            int min = getTerminalSet().get(0).getTiles().size();
-            for(PolyTile pt : getTerminalSet()) if(pt.getTiles().size() < min) min=pt.getTiles().size();
-
-            System.out.println("Passing from Stage " + stage.num + " Bin " + i + " to Stage " + bin.stage.num + " Bin " + bin.i);
-            System.out.println("Passing " + getTerminalSet().size() + " tiles");
-            System.out.println("Passing down tiles of max size: " + max);
-            System.out.println("Passing down tiles of min size: " + min);
-
-            if(getTerminalSet().size()==2){
-                int i = 0;
-                for(PolyTile pt : getTerminalSet()){
-                    Assembly ptAsm = polyTileToAssembly(pt);
-                    if(isTerminalAssembly(ptAsm)){
-                        PolyTile problem = new PolyTile();
-                        problem.getTile(0,0).setGlueW("a");
-                        problem.getTile(0,0).setGlueE("c");
-                        String glues[] = {"", "b", "", "c"};
-                        problem.addTile(1,0, glues);
-                        problem.setConcentration(-1);
-                        problem.setCount(-1);
-                        problem.getTile(1,0).setLabel("New");
-
-                        try {
-                            JAXBContext jaxbContext = JAXBContext.newInstance(Assembly.class);
-                            Marshaller marshaller = jaxbContext.createMarshaller();
-                            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                            marshaller.marshal(ptAsm, new File("/Users/ericmartinez/error_asm_" + i + ".xml"));
-                        } catch (JAXBException jaxbe) {
-
-                        }
-
-                        if(pt.equals(problem)) {
-                            System.out.println("equal");
-                        }else{
-                            System.out.println("not equal");
-                        }
-                    }
-                    i++;
-                }
-
-
-                System.out.println("crashing and burning");
-                GeometricAlgorithms.writeTileConfig(this,"/Users/ericmartinez/error_stage_"+this.stage.num+"_bin_" + this.i + ".xml");
-                System.exit(0);
-            }
-
-            for(PolyTile pt : getTerminalSet()){
-                for(int i = 0; i < 4; i ++){
-                    String glue = pt.getTiles().get(0).getGlueLabels()[i];
-                    if(glue!=null || !glue.trim().isEmpty())
-                        System.out.println("" + i + ": " + glue);
-                }
-            }
-            bin.addTiles(getTerminalSet());
-            bin.addGlueFunction(tileSystem.getGlueFunction());
-
-
-        }
-    }
-}
-
-class Stage{
-    public int num;
-    public Stage(int i){
-        num = i;
-    }
-    ArrayList<Bin> bins = new ArrayList<Bin>();
-
-    void addBin(Bin bin){bins.add(bin); bin.stage=this;}
-
-    Bin getBin(int i){return bins.get(i);}
-
-    int size(){return bins.size();}
-
-    void start(){
-        int i = 0;
-        for(Bin bin : bins){
-            bin.start();
-        }
-    }
-}
 
 
 public class GeometricAlgorithms{
@@ -238,16 +117,36 @@ public class GeometricAlgorithms{
 
                 Bin bin = stage.getBin(k);
 
-                writeTileConfig(bin, "/Users/ericmartinez/stage_"+stagenum+"_bin_" + binnum + ".xml");
+                writeTerminalTileSet(bin, "/Users/ericmartinez/stage_"+stagenum+"_bin_" + binnum + ".xml");
             }
         }
     }
+
     public static void writeTileConfig(Bin bin, String filename){
 
         try {
             TileConfiguration tc = new TileConfiguration();
 
             for (PolyTile pt : bin.tileSystem.getTileTypes())
+                tc.addTileType(pt);
+
+            tc.getGlueFunction().putAll(bin.tileSystem.getGlueFunction());
+            File f = new File(filename);
+            JAXBContext jaxbContext = JAXBContext.newInstance(TileConfiguration.class);
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            marshaller.marshal(tc, f);
+        } catch (JAXBException jxb) {
+            jxb.printStackTrace();
+        }
+    }
+
+    public static void writeTerminalTileSet(Bin bin, String filename){
+
+        try {
+            TileConfiguration tc = new TileConfiguration();
+
+            for (PolyTile pt : bin.getTerminalSet())
                 tc.addTileType(pt);
 
             tc.getGlueFunction().putAll(bin.tileSystem.getGlueFunction());

@@ -56,6 +56,16 @@ public class Tile {
         polyTile = parent;
     }
 
+    public Tile(Tile t){
+        tileLocation = new Coordinate(t.getLocation());
+        glueN = t.getGlueN();
+        glueE = t.getGlueE();
+        glueS = t.getGlueS();
+        glueW = t.getGlueW();
+        polyTile = t.getParent();
+        t.label = t.getLabel();
+    }
+
     public String getLabel() {
         if (label.isEmpty() && polyTile!=null) return polyTile.getPolyName();
         else return label;
@@ -101,9 +111,7 @@ public class Tile {
     }
 
     public void setLocation(Coordinate p) {
-        if (tileLocation != null)
-            tileLocation = p;
-        else tileLocation = new Coordinate(p.getX(), p.getY());
+        tileLocation = new Coordinate(p.getX(), p.getY());
     }
 
     public String[] getGlueLabels() {
@@ -151,7 +159,15 @@ public class Tile {
         glueW = g;
     }
 
-    public boolean equals(Tile toCompare) {
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (!(other instanceof Tile)) {
+            return false;
+        }
+        Tile toCompare = (Tile) other;
         // check if coordinates are the same.
         if (!tileLocation.equals(toCompare.getLocation()))
             return false;
