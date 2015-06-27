@@ -181,6 +181,25 @@ public class SimulationController implements Initializable {
                                 field_temperature.setText("" + currentSimulationNode().getTemperature());
                                 choice_weight.getSelectionModel().select(current.getWeightOption());
                                 listview_polytiles.setItems(current.getTileSet());
+                                listview_polytiles.getSelectionModel().selectedItemProperty().removeListener(new ChangeListener<PolyTile>() {
+                                    @Override
+                                    public void changed(ObservableValue<? extends PolyTile> observable, PolyTile oldValue, PolyTile newValue) {
+                                        if (newValue != null) {
+                                            currentSimulationNode().clearAssemblyReseed(newValue);
+                                        }
+                                    }
+                                });
+
+                                if(current.getClass() == TwoHAMSimulationNode.class){
+                                    listview_polytiles.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<PolyTile>() {
+                                        @Override
+                                        public void changed(ObservableValue<? extends PolyTile> observable, PolyTile oldValue, PolyTile newValue) {
+                                            if (newValue != null) {
+                                                currentSimulationNode().clearAssemblyReseed(newValue);
+                                            }
+                                        }
+                                    });
+                                }
 
                                 if (current.getFile() == null) {
                                     menu_save.setDisable(true);
@@ -371,15 +390,6 @@ public class SimulationController implements Initializable {
         loadTwoHAMAssembly(asm);
         currentSimulationNode().removeFrontierFromGrid();
         currentSimulationNode().frontier.clear();
-
-        listview_polytiles.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<PolyTile>() {
-            @Override
-            public void changed(ObservableValue<? extends PolyTile> observable, PolyTile oldValue, PolyTile newValue) {
-                if (newValue != null) {
-                    currentSimulationNode().clearAssemblyReseed(newValue);
-                }
-            }
-        });
     }
 
     @FXML
