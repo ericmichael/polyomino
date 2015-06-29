@@ -2,7 +2,11 @@ package com.asarg.polysim.models.TwoHAM;
 
 import com.asarg.polysim.adapters.graphics.raster.SimulationCanvas;
 import com.asarg.polysim.models.base.*;
+import javafx.collections.ObservableList;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,9 +16,12 @@ import java.util.Iterator;
  * Created by ericmartinez on 6/15/15.
  */
 public class TwoHAMSimulationNode extends SimulationNode {
+    TwoHAMAssembly twoHAMAssembly;
 
-    public TwoHAMSimulationNode(Assembly asm, SimulationCanvas tc, File file) {
-        super(asm, tc, file);
+    public TwoHAMSimulationNode(TwoHAMAssembly asm, SimulationCanvas tc, File file) {
+        super(new Assembly(), tc, file);
+        twoHAMAssembly = new TwoHAMAssembly();
+        assembly.changeTileSystem(twoHAMAssembly.getTileSystem());
         System.out.println("TWOHAM MODE");
     }
 
@@ -24,39 +31,32 @@ public class TwoHAMSimulationNode extends SimulationNode {
         return clonedAssembly;
     }
 
+    public boolean exportTerminalTileSet(File file){
+        try {
+            TileConfiguration tc = new TileConfiguration();
+
+            for (PolyTile pt : twoHAMAssembly.getTerminalSet())
+                tc.addTileType(pt);
+
+            tc.getGlueFunction().putAll(twoHAMAssembly.getTileSystem().getGlueFunction());
+            JAXBContext jaxbContext = JAXBContext.newInstance(TileConfiguration.class);
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            marshaller.marshal(tc, file);
+            return true;
+        } catch (JAXBException jxb) {
+            jxb.printStackTrace();
+        }
+        return false;
+    }
+
+    public TileSystem getTileSystem(){
+        return twoHAMAssembly.getTileSystem();
+    }
+
     @Override
     public void forward() {
-        //removeFrontierFromGrid();
-        ArrayList<PolyTile> subassemblies = new ArrayList<PolyTile>();
-        for(PolyTile pt: assembly.getTileSystem().getTileTypes()){
-            Assembly subassembly = polyTileToAssembly(pt);
-            subassembly.getOpenGlues();
-            Frontier frontier = subassembly.calculateFrontier();
-            System.out.println("Frontier Size: " + frontier.size());
-
-            for(FrontierElement fe : frontier){
-                subassembly.placePolytile(fe.getPolyTile(), fe.getOffset().getX(), fe.getOffset().getY());
-                subassemblies.add(subassembly.toPolyTile());
-                subassembly.removePolytile(fe.getPolyTile(), fe.getOffset().getX(), fe.getOffset().getY());
-            }
-        }
-
-        ArrayList<PolyTile> subassemblies_no_dups = new ArrayList<PolyTile>();
-        Iterator iterator = subassemblies.iterator();
-
-        while (iterator.hasNext())
-        {
-            PolyTile o = (PolyTile) iterator.next();
-            if(!subassemblies_no_dups.contains(o)) {
-                subassemblies_no_dups.add(o);
-            }
-        }
-
-        for(PolyTile pt: subassemblies_no_dups){
-            pt.normalize();
-            if(!assembly.getTileSystem().getTileTypes().contains(pt))
-                assembly.getTileSystem().getTileTypes().add(pt);
-        }
+        twoHAMAssembly.forward();
 //        step(1, true);
 //        java.util.List<FrontierElement> attached = assembly.getAttached();
 //        if (!attached.isEmpty()) {
@@ -72,10 +72,15 @@ public class TwoHAMSimulationNode extends SimulationNode {
 //        }
 //    }
 //
-//    public void backward() {
-//        step(-1, true);
-//    }
+    public void backward() {
+        twoHAMAssembly.backward();
+    }
 //
+    @Override
+    public ObservableList<PolyTile> getTileSet() {
+    return twoHAMAssembly.getTileSystem().getTileTypes();
+}
+
 //    public void fast_backward() {
 //        step(-2, true);
 //    }

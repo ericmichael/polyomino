@@ -483,6 +483,13 @@ public class SimulationNode extends SwingNode implements Observer {
         }
     }
 
+    public void changeTileSystem(TileSystem ts){
+        assembly.changeTileSystem(ts);
+    }
+
+    public TileSystem getTileSystem(){
+        return assembly.getTileSystem();
+    }
 
     public void clearAssemblyReseed(PolyTile pt){
         frontier.clear();

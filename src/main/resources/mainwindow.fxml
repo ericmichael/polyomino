@@ -36,6 +36,8 @@
                         <Menu mnemonicParsing="false" text="Tools">
                             <items>
                                 <MenuItem fx:id="menu_import_tile_config" disable="true" mnemonicParsing="false" onAction="#importTileConfigMenuItem" text="Import Tile Set" />
+                        <MenuItem fx:id="menu_export_tile_config" disable="true" mnemonicParsing="false" onAction="#exportTileConfigMenuItem" text="Export Tile Set" />
+                        <MenuItem fx:id="menu_export_2ham_terminal_tileset" disable="true" mnemonicParsing="false" onAction="#export2HAMTerminalTileSetMenuItem" text="Export Terminal Assemblies (2HAM)" />
                                 <MenuItem fx:id="menu_tile_editor" disable="true" mnemonicParsing="false" onAction="#tileEditorMenuItem" text="Tile Set Editor" />
                             </items>
                         </Menu>

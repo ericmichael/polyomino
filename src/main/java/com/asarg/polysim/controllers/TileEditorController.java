@@ -794,12 +794,12 @@ public class TileEditorController implements Initializable {
         btn_update_assembly.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                TileSystem ts = current.assembly.getTileSystem();
+                TileSystem ts = current.getTileSystem();
                 ts.getTileTypes().clear();
                 ts.getGlueFunction().clear();
                 ts.loadTileConfiguration(tc);
                 current.removeFrontierFromGrid();
-                current.assembly.changeTileSystem(ts);
+                current.changeTileSystem(ts);
                 updateable.set(false);
             }
         });

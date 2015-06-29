@@ -127,10 +127,10 @@ public class GeometricAlgorithms{
         try {
             TileConfiguration tc = new TileConfiguration();
 
-            for (PolyTile pt : bin.tileSystem.getTileTypes())
+            for (PolyTile pt : bin.getTileSystem().getTileTypes())
                 tc.addTileType(pt);
 
-            tc.getGlueFunction().putAll(bin.tileSystem.getGlueFunction());
+            tc.getGlueFunction().putAll(bin.getTileSystem().getGlueFunction());
             File f = new File(filename);
             JAXBContext jaxbContext = JAXBContext.newInstance(TileConfiguration.class);
             Marshaller marshaller = jaxbContext.createMarshaller();
@@ -149,7 +149,7 @@ public class GeometricAlgorithms{
             for (PolyTile pt : bin.getTerminalSet())
                 tc.addTileType(pt);
 
-            tc.getGlueFunction().putAll(bin.tileSystem.getGlueFunction());
+            tc.getGlueFunction().putAll(bin.getTileSystem().getGlueFunction());
             File f = new File(filename);
             JAXBContext jaxbContext = JAXBContext.newInstance(TileConfiguration.class);
             Marshaller marshaller = jaxbContext.createMarshaller();

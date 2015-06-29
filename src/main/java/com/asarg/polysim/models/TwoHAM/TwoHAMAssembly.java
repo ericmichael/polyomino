@@ -1,6 +1,7 @@
 package com.asarg.polysim.models.TwoHAM;
 
 import com.asarg.polysim.models.base.*;
+import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
 import javax.xml.bind.JAXBContext;
@@ -15,10 +16,11 @@ import java.util.Iterator;
  * Created by ericmartinez on 6/15/15.
  */
 public class TwoHAMAssembly {
-    public TileSystem tileSystem;
+    private TileSystem tileSystem;
     ArrayList<PolyTile> terminalSet = new ArrayList<PolyTile>();
     ArrayList<PolyTile> expanded = new ArrayList<PolyTile>();
     ArrayList<Pair<PolyTile, PolyTile>> processed = new ArrayList<Pair<PolyTile, PolyTile>>();
+    ArrayList<ArrayList<PolyTile>> attached = new ArrayList<ArrayList<PolyTile>>();
 
     public TwoHAMAssembly() {
         System.out.print("in assembly,");
@@ -54,6 +56,10 @@ public class TwoHAMAssembly {
             nextAssemblies.add(polyTileToAssembly(pt));
         }
         return nextAssemblies;
+    }
+
+    public TileSystem getTileSystem(){
+        return tileSystem;
     }
 
     protected Assembly polyTileToAssembly(PolyTile pt){
@@ -113,6 +119,7 @@ public class TwoHAMAssembly {
         }
 
         tileSystem.getTileTypes().addAll(toAdd);
+        attached.add(toAdd);
 
         return toAdd.size()!=0;
     }
@@ -135,6 +142,18 @@ public class TwoHAMAssembly {
                     }
                 }
             }
+        }
+    }
+
+    void backward(){
+        if(!attached.isEmpty()) {
+            ArrayList<PolyTile> lastRound = attached.get(attached.size()-1);
+            for(PolyTile pt : lastRound){
+                tileSystem.getTileTypes().remove(pt);
+                expanded.remove(pt);
+                terminalSet.remove(pt);
+            }
+            attached.remove(attached.size()-1);
         }
     }
 }

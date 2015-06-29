@@ -33,20 +33,20 @@ public class Bin extends TwoHAMAssembly {
 
     public void addEdge(Bin b){ edges.add(b); }
 
-    public void addTile(PolyTile pt){ tileSystem.getTileTypes().add(pt); }
+    public void addTile(PolyTile pt){ getTileSystem().getTileTypes().add(pt); }
 
-    public void addTiles(ArrayList<PolyTile> polyTileArrayList){ tileSystem.getTileTypes().addAll(polyTileArrayList); }
+    public void addTiles(ArrayList<PolyTile> polyTileArrayList){ getTileSystem().getTileTypes().addAll(polyTileArrayList); }
 
     public void addGlueFunction(HashMap<Pair<String, String>, Integer> glueFunction){
         for(Map.Entry<Pair<String, String>, Integer> entry : glueFunction.entrySet()){
             Pair<String, String> glues = entry.getKey();
             Integer strength = entry.getValue();
-            tileSystem.addGlueFunction(glues.getKey(), glues.getValue(), strength);
+            getTileSystem().addGlueFunction(glues.getKey(), glues.getValue(), strength);
         }
     }
 
     public void start(){
-        System.out.println("Starting with " + this.tileSystem.getTileTypes().size() + " tile types");
+        System.out.println("Starting with " + this.getTileSystem().getTileTypes().size() + " tile types");
         //pass info to connected bins
         for(Bin bin : edges){
             try {
@@ -70,7 +70,7 @@ public class Bin extends TwoHAMAssembly {
                 }
             }
             bin.addTiles(getTerminalSet());
-            bin.addGlueFunction(tileSystem.getGlueFunction());
+            bin.addGlueFunction(getTileSystem().getGlueFunction());
         }
     }
 }

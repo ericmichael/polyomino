@@ -82,6 +82,8 @@ public class SimulationController implements Initializable {
     @FXML
     MenuItem menu_tile_editor;
     @FXML
+    MenuItem menu_export_2ham_terminal_tileset;
+    @FXML
     Label lbl_left_status;
     @FXML
     Label lbl_right_status;
@@ -191,6 +193,8 @@ public class SimulationController implements Initializable {
                                 });
 
                                 if(current.getClass() == TwoHAMSimulationNode.class){
+                                    menu_export_2ham_terminal_tileset.setDisable(false);
+
                                     listview_polytiles.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<PolyTile>() {
                                         @Override
                                         public void changed(ObservableValue<? extends PolyTile> observable, PolyTile oldValue, PolyTile newValue) {
@@ -215,6 +219,8 @@ public class SimulationController implements Initializable {
                             menu_save.setDisable(true);
                             menu_save_as.setDisable(true);
                             menu_tile_editor.setDisable(true);
+                            menu_export_2ham_terminal_tileset.setDisable(true);
+
                         }
                     }
                 }
@@ -386,7 +392,7 @@ public class SimulationController implements Initializable {
 
     @FXML
     public void new2HAMMenuItem() {
-        Assembly asm = new Assembly();
+        TwoHAMAssembly asm = new TwoHAMAssembly();
         loadTwoHAMAssembly(asm);
         currentSimulationNode().removeFrontierFromGrid();
         currentSimulationNode().frontier.clear();
@@ -405,6 +411,26 @@ public class SimulationController implements Initializable {
                 menu_save.setDisable(false);
             }
         }
+    }
+
+    //TODO: Add functionality here
+    @FXML void exportTileConfigMenuItem(){
+
+    }
+
+    @FXML void export2HAMTerminalTileSetMenuItem(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save As...");
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("XML", "*.xml"));
+
+        File selectedFile = fileChooser.showSaveDialog(stage);
+        if (selectedFile != null) {
+            if (((TwoHAMSimulationNode) currentSimulationNode()).exportTerminalTileSet(selectedFile)) {
+                tabPane.getSelectionModel().getSelectedItem().setText(selectedFile.getName());
+                menu_save.setDisable(false);
+            }
+        }
+
     }
 
     @FXML
@@ -480,12 +506,12 @@ public class SimulationController implements Initializable {
         tabPane.getTabs().add(tab);
     }
 
-    public void loadTwoHAMAssembly(Assembly assembly) {
+    public void loadTwoHAMAssembly(TwoHAMAssembly assembly) {
         loadTwoHAMAssembly(assembly, null);
     }
 
     @FXML
-    public void loadTwoHAMAssembly(Assembly assembly, File f) {
+    public void loadTwoHAMAssembly(TwoHAMAssembly assembly, File f) {
         Tab tab = new Tab();
         if (f != null) tab.setText(f.getName());
         else tab.setText("Untitled");
