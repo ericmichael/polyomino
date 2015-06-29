@@ -7,7 +7,6 @@ import javafx.util.Pair;
 import org.jfree.fx.*;
 
 import java.awt.*;
-import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.util.List;
 import java.util.Map;

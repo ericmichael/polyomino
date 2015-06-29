@@ -43,9 +43,9 @@ import java.util.ResourceBundle;
  */
 public class TileEditorController implements Initializable {
 
-    TileConfiguration tc;
-    EditorCanvas canvas;
-    SimulationNode current;
+    private TileConfiguration tc;
+    private EditorCanvas canvas;
+    private SimulationNode current;
 
     @FXML
     AnchorPane ptAnchorPane;
@@ -109,9 +109,9 @@ public class TileEditorController implements Initializable {
     MenuItem menu_close;
 
     ObservableList<Glue> glueData;
-    SimpleBooleanProperty updateable = new SimpleBooleanProperty(false);
+    final SimpleBooleanProperty updateable = new SimpleBooleanProperty(false);
 
-    ChangeListener<Boolean> listener_pt_field_focus = new ChangeListener<Boolean>() {
+    final ChangeListener<Boolean> listener_pt_field_focus = new ChangeListener<Boolean>() {
         @Override
         public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
             if(!newValue) {
@@ -126,7 +126,7 @@ public class TileEditorController implements Initializable {
     };
 
     //Listeners
-    ChangeListener<String> listener_concentration = new ChangeListener<String>() {
+    final ChangeListener<String> listener_concentration = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, final String newValue) {
             if (newValue != null) {
@@ -157,7 +157,7 @@ public class TileEditorController implements Initializable {
         }
     };
 
-    ChangeListener<String> listener_count = new ChangeListener<String>() {
+    final ChangeListener<String> listener_count = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, final String newValue) {
             if (newValue != null) {
@@ -188,7 +188,7 @@ public class TileEditorController implements Initializable {
         }
     };
 
-    ChangeListener<String> listener_label = new ChangeListener<String>() {
+    final ChangeListener<String> listener_label = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, final String newValue) {
             if (newValue != null) {
@@ -210,7 +210,7 @@ public class TileEditorController implements Initializable {
         }
     };
 
-    ChangeListener<String> listener_north_glue = new ChangeListener<String>() {
+    final ChangeListener<String> listener_north_glue = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
             if (newValue != null) {
@@ -232,7 +232,7 @@ public class TileEditorController implements Initializable {
         }
     };
 
-    ChangeListener<String> listener_south_glue = new ChangeListener<String>() {
+    final ChangeListener<String> listener_south_glue = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
             if (newValue != null) {
@@ -254,7 +254,7 @@ public class TileEditorController implements Initializable {
         }
     };
 
-    ChangeListener<String> listener_east_glue = new ChangeListener<String>() {
+    final ChangeListener<String> listener_east_glue = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
             if (newValue != null) {
@@ -276,7 +276,7 @@ public class TileEditorController implements Initializable {
         }
     };
 
-    ChangeListener<String> listener_west_glue = new ChangeListener<String>() {
+    final ChangeListener<String> listener_west_glue = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
             if (newValue != null) {
@@ -350,7 +350,7 @@ public class TileEditorController implements Initializable {
         addListeners();
         accordion.setExpandedPane(tileEditorPane);
 
-        glueData = FXCollections.<Glue>observableArrayList();
+        glueData = FXCollections.observableArrayList();
 
         TableColumn col1 = table_gluetable.getColumns().get(0);
         TableColumn col2 = table_gluetable.getColumns().get(1);
@@ -367,9 +367,8 @@ public class TileEditorController implements Initializable {
                 new EventHandler<TableColumn.CellEditEvent<Glue, String>>() {
                     @Override
                     public void handle(TableColumn.CellEditEvent<Glue, String> t) {
-                        Glue g = ((Glue) t.getTableView().getItems().get(
-                                t.getTablePosition().getRow())
-                        );
+                        Glue g = t.getTableView().getItems().get(
+                                t.getTablePosition().getRow());
                         tc.getGlueFunction().remove(new Pair<String, String>(g.getGlueA(), g.getGlueB()));
                         g.setGlueA(t.getNewValue());
                         Pair<String, String> p = new Pair<String, String>(g.getGlueA(), g.getGlueB());
@@ -383,9 +382,8 @@ public class TileEditorController implements Initializable {
                 new EventHandler<TableColumn.CellEditEvent<Glue, String>>() {
                     @Override
                     public void handle(TableColumn.CellEditEvent<Glue, String> t) {
-                        Glue g = ((Glue) t.getTableView().getItems().get(
-                                t.getTablePosition().getRow())
-                        );
+                        Glue g = t.getTableView().getItems().get(
+                                t.getTablePosition().getRow());
                         tc.getGlueFunction().remove(new Pair<String, String>(g.getGlueA(), g.getGlueB()));
                         g.setGlueB(t.getNewValue());
                         Pair<String, String> p = new Pair<String, String>(g.getGlueA(), g.getGlueB());
@@ -399,9 +397,8 @@ public class TileEditorController implements Initializable {
                 new EventHandler<TableColumn.CellEditEvent<Glue, String>>() {
                     @Override
                     public void handle(TableColumn.CellEditEvent<Glue, String> t) {
-                        Glue g = ((Glue) t.getTableView().getItems().get(
-                                t.getTablePosition().getRow())
-                        );
+                        Glue g = t.getTableView().getItems().get(
+                                t.getTablePosition().getRow());
                         tc.getGlueFunction().remove(new Pair<String, String>(g.getGlueA(), g.getGlueB()));
                         g.setStrength(t.getNewValue());
                         Pair<String, String> p = new Pair<String, String>(g.getGlueA(), g.getGlueB());
@@ -530,8 +527,6 @@ public class TileEditorController implements Initializable {
         field_west_glue.textProperty().addListener(listener_west_glue);
     }
 
-    ;
-
     private void removeTileListeners() {
         field_tile_label.textProperty().removeListener(listener_label);
         field_north_glue.textProperty().removeListener(listener_north_glue);
@@ -562,7 +557,6 @@ public class TileEditorController implements Initializable {
             listview_polytiles.getItems().remove(index);
             updateable.set(true);
         }
-        ;
     }
 
     private void addListeners() {
@@ -774,7 +768,7 @@ public class TileEditorController implements Initializable {
                         Marshaller marshaller = jaxbContext.createMarshaller();
                         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
                         marshaller.marshal(tc, selectedFile);
-                    } catch (JAXBException jxb) {
+                    } catch (JAXBException ignored) {
 
                     }
                 }
@@ -807,9 +801,9 @@ public class TileEditorController implements Initializable {
     }
 
     public static class Glue {
-        private SimpleStringProperty glueA;
-        private SimpleStringProperty glueB;
-        private SimpleStringProperty strength;
+        private final SimpleStringProperty glueA;
+        private final SimpleStringProperty glueB;
+        private final SimpleStringProperty strength;
 
         private Glue(String g1, String g2, String str) {
             glueA = new SimpleStringProperty(g1);
@@ -841,7 +835,7 @@ public class TileEditorController implements Initializable {
             try {
                 int i = Integer.parseInt(str);
                 if (i >= 0) strength.set(str);
-            } catch (NumberFormatException npe) {
+            } catch (NumberFormatException ignored) {
 
             }
 

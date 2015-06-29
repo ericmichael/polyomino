@@ -14,8 +14,8 @@ import java.util.Map;
  */
 public class Bin extends TwoHAMAssembly {
     public Stage stage;
-    ArrayList<Bin> edges = new ArrayList<Bin>();
-    public int i;
+    private final ArrayList<Bin> edges = new ArrayList<Bin>();
+    private final int i;
 
     public Bin(int i){
         super();
@@ -60,7 +60,7 @@ public class Bin extends TwoHAMAssembly {
                 System.out.println("Passing " + getTerminalSet().size() + " tiles");
                 System.out.println("Passing down tiles of max size: " + max);
                 System.out.println("Passing down tiles of min size: " + min);
-            }catch(Exception e){}
+            }catch(Exception ignored){}
 
             for(PolyTile pt : getTerminalSet()){
                 for(int i = 0; i < 4; i ++){

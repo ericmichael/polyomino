@@ -6,11 +6,11 @@ import java.util.ArrayList;
  * Created by ericmartinez on 6/27/15.
  */
 public class Stage{
-    public int num;
+    public final int num;
     public Stage(int i){
         num = i;
     }
-    ArrayList<Bin> bins = new ArrayList<Bin>();
+    final ArrayList<Bin> bins = new ArrayList<Bin>();
 
     public void addBin(Bin bin){bins.add(bin); bin.stage=this;}
 

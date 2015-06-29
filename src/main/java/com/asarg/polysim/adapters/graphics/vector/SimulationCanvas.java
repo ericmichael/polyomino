@@ -13,8 +13,8 @@ import javafx.scene.canvas.Canvas;
 import java.util.HashMap;
 
 public class SimulationCanvas extends Canvas {
-    FXGraphics2D cg2d;
-    Dimension res = new Dimension();
+    private FXGraphics2D cg2d;
+    private final Dimension res = new Dimension();
     private int tileDiameter = 50;
     private Coordinate center;
 

@@ -12,7 +12,6 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.awt.*;
-import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InvalidObjectException;
@@ -22,33 +21,37 @@ import java.util.List;
 @XmlRootElement(name = "Assembly")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Assembly extends Observable {
-    static final int NORTH = 0;
-    static final int EAST = 1;
-    static final int SOUTH = 2;
-    static final int WEST = 3;
+    private static final int NORTH = 0;
+    private static final int EAST = 1;
+    private static final int SOUTH = 2;
+    private static final int WEST = 3;
     // placeholder for the grid
     @XmlElement(name = "AssemblyGrid")
     @XmlJavaTypeAdapter(GridXmlAdapter.class)
-    public HashMap<Coordinate, Tile> Grid = new HashMap<Coordinate, Tile>();
+    public final HashMap<Coordinate, Tile> Grid = new HashMap<Coordinate, Tile>();
     //Open glue ends stored by their coordinate
     @XmlTransient
+    private final
     HashMap<Coordinate, String> openNorthGlues = new HashMap<Coordinate, String>();
     @XmlTransient
+    private final
     HashMap<Coordinate, String> openEastGlues = new HashMap<Coordinate, String>();
     @XmlTransient
+    private final
     HashMap<Coordinate, String> openSouthGlues = new HashMap<Coordinate, String>();
     @XmlTransient
+    private final
     HashMap<Coordinate, String> openWestGlues = new HashMap<Coordinate, String>();
     @XmlTransient
-    public ArrayList<FrontierElement> possibleAttach = new ArrayList<FrontierElement>();
+    private final ArrayList<FrontierElement> possibleAttach = new ArrayList<FrontierElement>();
     // tile system, it can be changed so it needs its own class
     @XmlElement(name = "TileSystem")
     private TileSystem tileSystem;
     // frontier list: calculated, increased, decreased, and changed here.
     @XmlTransient
-    private Frontier frontier;
+    private final Frontier frontier;
     @XmlElement(name = "History")
-    private History attached = new History();
+    private final History attached = new History();
 
     public Assembly() {
         tileSystem = new TileSystem(2, 0);
@@ -145,7 +148,7 @@ public class Assembly extends Observable {
                         String rgb = Integer.toHexString(c.getRGB());
                         rgb = rgb.substring(2, rgb.length());
                         pt.setColor(rgb);
-                    } catch (NullPointerException npe) {
+                    } catch (NullPointerException ignored) {
                     }
                 }
                 for(Map.Entry<Point, String> entry : seeds.entrySet()){
@@ -343,8 +346,8 @@ public class Assembly extends Observable {
     private Pair<Coordinate, Coordinate> getOffset(Coordinate aPoint, Coordinate ptPoint, int offsetX, int offsetY) {
         Coordinate placement = new Coordinate(offsetX, offsetY);
         placement = placement.translate(aPoint.getX(), aPoint.getY());
-        int xOffset = (int) - (ptPoint.getX() - placement.getX());
-        int yOffset = (int) - (ptPoint.getY() - placement.getY());
+        int xOffset = - (ptPoint.getX() - placement.getX());
+        int yOffset = - (ptPoint.getY() - placement.getY());
         Coordinate tmp2 = new Coordinate(xOffset, yOffset);
         return new Pair<Coordinate, Coordinate>(placement, tmp2);
     }
@@ -476,10 +479,7 @@ public class Assembly extends Observable {
 
             }
         }
-        if (totalStrength >= tileSystem.getTemperature())
-            return true;
-        else
-            return false;
+        return totalStrength >= tileSystem.getTemperature();
     }
 
     // delete from frontier
@@ -626,9 +626,9 @@ public class Assembly extends Observable {
         }
 
         //Shift everything to 0,0 as bottom left
-        for (int i = 0; i < tiles2.length; i++) {
-            tiles2[i].x += (-1) * minimumX;
-            tiles2[i].y += (-1) * minimumY;
+        for (Point aTiles2 : tiles2) {
+            aTiles2.x += (-1) * minimumX;
+            aTiles2.y += (-1) * minimumY;
         }
         maximumX += (-1) * minimumX;
         maximumY += (-1) * minimumY;
@@ -640,9 +640,9 @@ public class Assembly extends Observable {
 
         StringBuilder matrixString = new StringBuilder();
 
-        for (int i = 0; i < assemblyMatrix.length; i++) {
-            for (int j = 0; j < assemblyMatrix[i].length; j++) {
-                matrixString.append(assemblyMatrix[i][j] + " ");
+        for (int[] anAssemblyMatrix : assemblyMatrix) {
+            for (int j = 0; j < anAssemblyMatrix.length; j++) {
+                matrixString.append(anAssemblyMatrix[j] + " ");
             }
             matrixString.append("\n");
         }
@@ -656,7 +656,7 @@ public class Assembly extends Observable {
         for (Map.Entry<Coordinate, Tile> t : Grid.entrySet()) {
             Coordinate location = t.getKey();
             Tile tile = t.getValue();
-            Tile tile_copy = new Tile((int) location.getX(), (int) location.getY(), tile.getGlueLabels(), assemblyPT);
+            Tile tile_copy = new Tile(location.getX(), location.getY(), tile.getGlueLabels(), assemblyPT);
             assemblyPT.addTile(tile_copy);
         }
         return assemblyPT;

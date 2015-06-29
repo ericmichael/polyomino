@@ -37,16 +37,6 @@ public class Frontier extends ArrayList<FrontierElement> {
         return super.add(frontierElement);
     }
 
-    @Override
-    public boolean remove(Object o) {
-        return super.remove(o);
-    }
-
-    @Override
-    public void clear() {
-        super.clear();
-    }
-
     public int randomSelect() {
         if (tileSystem.getWeightOption() == TileSystem.CONCENTRATION)
             return concentrationSelectHelper();

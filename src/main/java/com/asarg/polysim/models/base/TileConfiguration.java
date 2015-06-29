@@ -21,12 +21,12 @@ public class TileConfiguration {
     //Glue Function stores the strength of attachment between two labels
     @XmlElement(name = "GlueFunction")
     @XmlJavaTypeAdapter(GlueXmlAdapter.class)
-    private HashMap<Pair<String, String>, Integer> glueFunction = new HashMap<Pair<String, String>, Integer>();
+    private final HashMap<Pair<String, String>, Integer> glueFunction = new HashMap<Pair<String, String>, Integer>();
 
     //Tile Types is the list of PolyTiles
-    private List<PolyTile> tileTypes = new ArrayList<PolyTile>();
+    private final List<PolyTile> tileTypes = new ArrayList<PolyTile>();
     @XmlElement(name = "TileType")
-    private ObservableList<PolyTile> observableTileTypes = FXCollections.observableArrayList(tileTypes);
+    private final ObservableList<PolyTile> observableTileTypes = FXCollections.observableArrayList(tileTypes);
 
     public TileConfiguration() {
     }

@@ -95,7 +95,7 @@ public class Version implements Comparable<Version> {
                 if(v.compareTo(latest)>0){
                     latest = v;
                 }
-            }catch(IllegalArgumentException iae){
+            }catch(IllegalArgumentException ignored){
 
             }
         }
@@ -117,7 +117,7 @@ public class Version implements Comparable<Version> {
                 if (v.compareTo(latest) > 0) {
                     latest = v;
                 }
-            } catch (IllegalArgumentException iae) {
+            } catch (IllegalArgumentException ignored) {
 
             }
         }
@@ -177,6 +177,6 @@ public class Version implements Comparable<Version> {
     }
 
     // Whether Windows/Mac
-    static boolean isWindows = (System.getProperty("os.name").indexOf("Windows") >= 0);
-    static boolean isMac = (System.getProperty("os.name").indexOf("Mac OS X") >= 0);
+    static final boolean isWindows = (System.getProperty("os.name").contains("Windows"));
+    static final boolean isMac = (System.getProperty("os.name").contains("Mac OS X"));
 }

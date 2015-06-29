@@ -6,7 +6,6 @@ package com.asarg.polysim.models.base;
 
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,15 +16,15 @@ import java.util.List;
 public class PolyTile {
     // tiles that make up the shape of the polytile.
     @XmlElement(name = "Tile")
-    public List<Tile> tiles = new ArrayList<Tile>();
+    public final List<Tile> tiles = new ArrayList<Tile>();
     @XmlTransient
-    public HashMap<Coordinate, String> northGlues = new HashMap<Coordinate, String>();
+    public final HashMap<Coordinate, String> northGlues = new HashMap<Coordinate, String>();
     @XmlTransient
-    public HashMap<Coordinate, String> eastGlues = new HashMap<Coordinate, String>();
+    public final HashMap<Coordinate, String> eastGlues = new HashMap<Coordinate, String>();
     @XmlTransient
-    public HashMap<Coordinate, String> southGlues = new HashMap<Coordinate, String>();
+    public final HashMap<Coordinate, String> southGlues = new HashMap<Coordinate, String>();
     @XmlTransient
-    public HashMap<Coordinate, String> westGlues = new HashMap<Coordinate, String>();
+    public final HashMap<Coordinate, String> westGlues = new HashMap<Coordinate, String>();
     // tileID increases every time a new tile is created, changes are not accounted for.
     //          (delete one, that number is lost forever)
     // polytiles have a concentration or a count. Initialized to -1 to use as "not set" exception.
@@ -107,18 +106,14 @@ public class PolyTile {
 
 
     public boolean adjacentExists(int x, int y) {
-        if (getTile(x + 1, y) != null || getTile(x - 1, y) != null || getTile(x, y + 1) != null || getTile(x, y - 1) != null)
-            return true;
+        return getTile(x + 1, y) != null || getTile(x - 1, y) != null || getTile(x, y + 1) != null || getTile(x, y - 1) != null;
 
-        return false;
     }
 
     public boolean adjacentExits(Coordinate gridPoint) {
         int x = gridPoint.getX();
         int y = gridPoint.getY();
-        if (getTile(x + 1, y) != null || getTile(x - 1, y) != null || getTile(x, y + 1) != null || getTile(x, y - 1) != null)
-            return true;
-        return false;
+        return getTile(x + 1, y) != null || getTile(x - 1, y) != null || getTile(x, y + 1) != null || getTile(x, y - 1) != null;
     }
 
     public boolean adjacentExistsExc(Coordinate gridPoint, Coordinate exclusionPoint) {
@@ -136,12 +131,8 @@ public class PolyTile {
         if (!exclusionPoint.equals(southNeighbor) && getTile(southNeighbor) != null) {
             return true;
         }
-        if (!exclusionPoint.equals(westNeighbor) && getTile(westNeighbor) != null) {
-            return true;
-        }
+        return !exclusionPoint.equals(westNeighbor) && getTile(westNeighbor) != null;
 
-
-        return false;
 
     }
 
@@ -313,8 +304,8 @@ public class PolyTile {
             }
         }
 
-        int x_translate = - (int) min.getLocation().getX();
-        int y_translate = - (int) min.getLocation().getY();
+        int x_translate = -min.getLocation().getX();
+        int y_translate = -min.getLocation().getY();
 
         for(Tile t : copy.tiles){
             t.setLocation(t.getLocation().translate(x_translate, y_translate));
@@ -353,7 +344,7 @@ public class PolyTile {
         // check if all tiles in the polytile are equal, by looking through their coordinates
         for (Tile t : first.getTiles()) {
             Coordinate tLoc = t.getLocation();
-            Tile t2 = second.getTile((int) tLoc.getX(), (int) tLoc.getY());
+            Tile t2 = second.getTile(tLoc.getX(), tLoc.getY());
             if(t2==null) return false;
             else if (!t.equals(t2)) return false;
         }
@@ -361,7 +352,7 @@ public class PolyTile {
         // the coordinates of both polytiles need to be checked: do the same for the points in the other polytile
         for (Tile t : second.getTiles()) {
             Coordinate tLoc = t.getLocation();
-            Tile t2 = first.getTile((int) tLoc.getX(), (int) tLoc.getY());
+            Tile t2 = first.getTile(tLoc.getX(), tLoc.getY());
             if(t2==null) return false;
             else if (!t.equals(t2)) return false;
         }

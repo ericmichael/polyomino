@@ -10,11 +10,10 @@ import javafx.application.Application;
  * Created by ericmartinez on 8/20/14.
  */
 public class RNGDominoSimulation extends SimulationApplication {
-    private TileSystem ts;
 
     public RNGDominoSimulation() {
         super();
-        ts = new TileSystem(2);
+        TileSystem ts = new TileSystem(2);
         ts.addPolyTile(dR());
         ts.addPolyTile(dCoin());
 

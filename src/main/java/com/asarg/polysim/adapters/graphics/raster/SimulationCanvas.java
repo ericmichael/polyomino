@@ -13,13 +13,11 @@ import java.util.HashMap;
 public class SimulationCanvas extends JPanel {
 
 
-    BufferedImage canvasBFI;
-    Graphics2D cg2d;
-    Dimension res = new Dimension();
+    private BufferedImage canvasBFI;
+    private Graphics2D cg2d;
+    private final Dimension res = new Dimension();
     private int tileDiameter = 50;
     private Coordinate center;
-    private int w;
-    private int h;
 
     public SimulationCanvas(int w, int h) {
         center = new Coordinate(w / 2, h / 2);
@@ -29,8 +27,8 @@ public class SimulationCanvas extends JPanel {
         cg2d.setColor(Color.black);
         res.setSize(w, h);
         cg2d.setClip(0, 0, w, h);
-        this.w = w;
-        this.h = h;
+        int w1 = w;
+        int h1 = h;
     }
 
     public SimulationCanvas() {

@@ -43,7 +43,7 @@ import java.util.logging.Logger;
  */
 public class SimulationController implements Initializable {
     public static final DataFormat polyTileFormat = new DataFormat("PolyTile");
-    Stage stage;
+    private Stage stage;
     //FXML Components
     @FXML
     TabPane tabPane;
@@ -90,7 +90,7 @@ public class SimulationController implements Initializable {
     @FXML
     ListView<PolyTile> listview_polytiles;
     private boolean inspecting = false;
-    private SimpleBooleanProperty showHelp = new SimpleBooleanProperty(true);
+    private final SimpleBooleanProperty showHelp = new SimpleBooleanProperty(true);
 
     @Override // This method is called by the FXMLLoader when initialization is complete
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
@@ -144,7 +144,7 @@ public class SimulationController implements Initializable {
                             currentSimulationNode().setTemperature(temperature);
                         }
                         return;
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
 
                     }
                     field_temperature.setText("" + currentSimulationNode().getTemperature());
@@ -308,7 +308,7 @@ public class SimulationController implements Initializable {
         try {
             return (SimulationNode) tabPane.getSelectionModel().getSelectedItem().getContent();
         } catch (NullPointerException npe) {
-            return (SimulationNode) null;
+            return null;
         }
     }
 
@@ -472,8 +472,8 @@ public class SimulationController implements Initializable {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/tileeditorwindow.fxml"));
 
         try {
-            Parent root1 = (Parent) loader.load();
-            TileEditorController editorController = loader.<TileEditorController>getController();
+            Parent root1 = loader.load();
+            TileEditorController editorController = loader.getController();
             editorController.setTileConfiguration(currentSimulationNode().assembly.getTileSystem().getTileConfiguration());
             if (i != -1) editorController.selectPolyTileIndex(i);
             editorController.setSimulationNode(currentSimulationNode());

@@ -8,8 +8,6 @@ import org.junit.Before;
 import org.junit.After;
 import static org.junit.Assert.*;
 
-import java.awt.*;
-
 /** 
 * FrontierElement Tester. 
 * 
@@ -18,38 +16,42 @@ import java.awt.*;
 * @version 1.0 
 */ 
 public class FrontierElementTest {
-    FrontierElement fe1,fe2,fe3,fe4,fe5,fe6;
-    PolyTile p1,p2,p3,p4,p5,p6;
-@Before
+    private FrontierElement fe1;
+    private FrontierElement fe2;
+    private FrontierElement fe3;
+    private FrontierElement fe5;
+    private FrontierElement fe6;
+
+    @Before
 public void before() throws Exception {
-    p1 = new PolyTile();
-    p1.addTile(0,0, new String[]{null, null, "a",null});
-    fe1 = new FrontierElement(new Coordinate(0,1), new Coordinate(1,1),p1,0);
+    PolyTile p1 = new PolyTile();
+    p1.addTile(0, 0, new String[]{null, null, "a", null});
+    fe1 = new FrontierElement(new Coordinate(0,1), new Coordinate(1,1), p1,0);
 
     // same polytile as the first
-    p2 = new PolyTile();
-    p2.addTile(0,0, new String[]{null, null, "a",null});
-    fe2 = new FrontierElement(new Coordinate(0,1), new Coordinate(1,1),p2,0);
+    PolyTile p2 = new PolyTile();
+    p2.addTile(0, 0, new String[]{null, null, "a", null});
+    fe2 = new FrontierElement(new Coordinate(0,1), new Coordinate(1,1), p2,0);
 
     // same polytile at different glue
-    p3 = new PolyTile();
-    p3.addTile(0,0, new String[]{null, null, "a",null});
-    fe3 = new FrontierElement(new Coordinate(8,1), new Coordinate(1,1),p3,2);
+    PolyTile p3 = new PolyTile();
+    p3.addTile(0, 0, new String[]{null, null, "a", null});
+    fe3 = new FrontierElement(new Coordinate(8,1), new Coordinate(1,1), p3,2);
 
     // same polytile at different point and same glue direction
-    p4 = new PolyTile();
-    p4.addTile(0,0, new String[]{null, null, "a",null});
-    fe4 = new FrontierElement(new Coordinate(20,1), new Coordinate(1,1),p4,0);
+    PolyTile p4 = new PolyTile();
+    p4.addTile(0, 0, new String[]{null, null, "a", null});
+    FrontierElement fe4 = new FrontierElement(new Coordinate(20, 1), new Coordinate(1, 1), p4, 0);
 
     // frontier element with different offset
-    p5 = new PolyTile();
-    p5.addTile(0,0, new String[]{null, null, "a",null});
-    fe5 = new FrontierElement(new Coordinate(0,1), new Coordinate(1,20),p5,0);
+    PolyTile p5 = new PolyTile();
+    p5.addTile(0, 0, new String[]{null, null, "a", null});
+    fe5 = new FrontierElement(new Coordinate(0,1), new Coordinate(1,20), p5,0);
 
     // different polytile.
-    p6 = new PolyTile();
-    p6.addTile(0,0, new String[]{null, "b", "a",null});
-    fe6 = new FrontierElement(new Coordinate(0,1), new Coordinate(1,1),p6,0);
+        PolyTile p6 = new PolyTile();
+    p6.addTile(0, 0, new String[]{null, "b", "a", null});
+    fe6 = new FrontierElement(new Coordinate(0,1), new Coordinate(1,1), p6,0);
 } 
 
 @After

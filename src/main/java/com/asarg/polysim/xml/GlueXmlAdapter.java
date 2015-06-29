@@ -34,7 +34,7 @@ public class GlueXmlAdapter extends XmlAdapter<GlueXmlAdapter.HashMapXml, HashMa
     }
 
     public static class HashMapXml {
-        public List<EntryXml> Function = new ArrayList<EntryXml>();
+        public final List<EntryXml> Function = new ArrayList<EntryXml>();
     }
 
     public static class EntryXml {

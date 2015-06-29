@@ -16,11 +16,11 @@ import java.util.Iterator;
  * Created by ericmartinez on 6/15/15.
  */
 public class TwoHAMAssembly {
-    private TileSystem tileSystem;
-    ArrayList<PolyTile> terminalSet = new ArrayList<PolyTile>();
-    ArrayList<PolyTile> expanded = new ArrayList<PolyTile>();
+    private final TileSystem tileSystem;
+    private final ArrayList<PolyTile> terminalSet = new ArrayList<PolyTile>();
+    private final ArrayList<PolyTile> expanded = new ArrayList<PolyTile>();
     ArrayList<Pair<PolyTile, PolyTile>> processed = new ArrayList<Pair<PolyTile, PolyTile>>();
-    ArrayList<ArrayList<PolyTile>> attached = new ArrayList<ArrayList<PolyTile>>();
+    private final ArrayList<ArrayList<PolyTile>> attached = new ArrayList<ArrayList<PolyTile>>();
 
     public TwoHAMAssembly() {
         System.out.print("in assembly,");
@@ -31,7 +31,7 @@ public class TwoHAMAssembly {
         tileSystem = new TileSystem(ts.getTemperature());
         try {
             tileSystem.setWeightOption(ts.getWeightOption());
-        }catch(InvalidObjectException ioe){}
+        }catch(InvalidObjectException ignored){}
 
         tileSystem.setGlueFunction(ts.getGlueFunction());
         tileSystem.getTileTypes().addAll(ts.getTileTypes());

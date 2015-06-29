@@ -10,7 +10,6 @@ import javafx.application.Application;
  * Created by ericmartinez on 3/16/15.
  */
 public class Rectangles extends SimulationApplication {
-    private TileSystem ts;
 
     public static ATAMTile normal(int i) {
         ATAMTile poly = new ATAMTile(""+i);
@@ -98,7 +97,7 @@ public class Rectangles extends SimulationApplication {
 
     public Rectangles() {
         super();
-        ts = new TileSystem(2);
+        TileSystem ts = new TileSystem(2);
         int k = 5;
         int n = 5;
         int m = (int) Math.ceil(Math.pow(n, 1.0/k));
@@ -107,7 +106,7 @@ public class Rectangles extends SimulationApplication {
 
         for(int i = 0; i < m; i++){
             ts.addPolyTile(reflectY(normal(i)));
-            ts.addGlueFunction("u_"+i,"u_"+i,1);
+            ts.addGlueFunction("u_" + i, "u_" + i, 1);
         }
         ts.addGlueFunction("g", "g", 1);
         ts.addGlueFunction("r", "r", 1);
@@ -118,7 +117,7 @@ public class Rectangles extends SimulationApplication {
         for(int i = 1; i < m; i++){
             ts.addPolyTile(reflectY(hairpin_1(i)));
             ts.addPolyTile(reflectY(hairpin_2(i)));
-            ts.addGlueFunction("h_"+i,"h_"+i,2);
+            ts.addGlueFunction("h_" + i, "h_" + i, 2);
         }
 
         ts.addPolyTile(reflectY(return_probe()));
@@ -126,13 +125,13 @@ public class Rectangles extends SimulationApplication {
 
         for(int i = 0; i < k; i++){
             ts.addPolyTile(reflectY(seed(i, k)));
-            ts.addGlueFunction("s_"+i, "s_"+i, 2);
+            ts.addGlueFunction("s_" + i, "s_" + i, 2);
         }
 
         for(int i = 0; i < m; i++){
             ts.addPolyTile(reflectY(chain(i, m)));
             if(i!=0)
-            ts.addGlueFunction("c_"+i, "c_"+i, 2);
+            ts.addGlueFunction("c_" + i, "c_" + i, 2);
 
         }
 

@@ -11,7 +11,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.awt.*;
 import java.util.Arrays;
 
 @XmlRootElement
@@ -31,7 +30,7 @@ public class Tile {
     private String glueS;
     private String glueW;
 
-    private String label = new String();
+    private String label = "";
     // tiles have an id that references the polyTile they belong to.
     private PolyTile polyTile;
 
@@ -172,17 +171,15 @@ public class Tile {
         if (!tileLocation.equals(toCompare.getLocation()))
             return false;
         //if (!glueLabels.equals(toCompare.getGlueLabels()))
-        if (!Arrays.deepEquals(toCompare.getGlueLabels(), getGlueLabels()))
-            return false;
+        return Arrays.deepEquals(toCompare.getGlueLabels(), getGlueLabels());
 
-        return true;
     }
 
     public void afterUnmarshal(Unmarshaller u, Object parent) {
 
         try {
             this.polyTile = (PolyTile) parent;
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 }

@@ -1,7 +1,5 @@
 package com.asarg.polysim.models.base;
 
-import java.awt.*;
-
 /**
  * Created by ericmartinez on 6/23/15.
  */
@@ -35,13 +33,13 @@ public final class Coordinate {
 
     @Override
     public int hashCode() {
-        return (int) this.x + 31 * (int) this.y;
+        return this.x + 31 * this.y;
     }
 
 
 //    returns new coordinate
     @Deprecated
     public Coordinate translate(int dx, int dy){
-        return new Coordinate((int) x+dx, (int) y+dy);
+        return new Coordinate(x + dx, y + dy);
     }
 }

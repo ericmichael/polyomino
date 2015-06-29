@@ -18,27 +18,25 @@ import java.awt.image.BufferedImage;
  */
 public class EditorCanvas extends JPanel {
     //the current canvas display info
-    Coordinate canvasCenteredOffset = new Coordinate(0, 0);
-    int tileDiameter = 1;
+    private Coordinate canvasCenteredOffset = new Coordinate(0, 0);
+    private int tileDiameter = 1;
 
-    SimpleObjectProperty<Tile> selectedTile = new SimpleObjectProperty<Tile>(null);
+    private final SimpleObjectProperty<Tile> selectedTile = new SimpleObjectProperty<Tile>(null);
 
-    PolyTile pt;
+    private PolyTile pt;
     //canvas stuff
-    BufferedImage polyTileCanvas;
-    Graphics2D polyTileCanvasGFX;
-    BufferedImage overLayer;
-    Graphics2D overLayerGFX;
-
-    double height, width;
+    private BufferedImage polyTileCanvas;
+    private Graphics2D polyTileCanvasGFX;
+    private BufferedImage overLayer;
+    private Graphics2D overLayerGFX;
 
     //Canvas panning
-    Coordinate lastXY = null;
+    private Coordinate lastXY = null;
 
     public EditorCanvas(double width, double height) {
         super();
-        this.height = height;
-        this.width = width;
+        double height1 = height;
+        double width1 = width;
 
         resize((int) width, (int) height);
         MouseAdapter gridListener = new MouseAdapter() {
@@ -88,12 +86,12 @@ public class EditorCanvas extends JPanel {
                 super.mouseClicked(e);
                 if (pt != null) {
                     Coordinate gridPoint = Drawer.TileDrawer.getGridPoint(new Coordinate((int) e.getPoint().getX(), (int) e.getPoint().getY()), canvasCenteredOffset, tileDiameter);
-                    Tile tile = pt.getTile((int) gridPoint.getX(), (int) gridPoint.getY());
+                    Tile tile = pt.getTile(gridPoint.getX(), gridPoint.getY());
                     if (tile != null) {
                         selectTile(tile);
                     } else if (pt.adjacentExits(gridPoint)) {
                         Tile newTile = new Tile();
-                        newTile.setTileLocation((int) gridPoint.getX(), (int) gridPoint.getY());
+                        newTile.setTileLocation(gridPoint.getX(), gridPoint.getY());
 
                         pt.addTile(newTile);
                         selectedTile.set(newTile);

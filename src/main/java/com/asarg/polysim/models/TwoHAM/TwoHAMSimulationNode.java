@@ -16,7 +16,7 @@ import java.util.Iterator;
  * Created by ericmartinez on 6/15/15.
  */
 public class TwoHAMSimulationNode extends SimulationNode {
-    TwoHAMAssembly twoHAMAssembly;
+    private final TwoHAMAssembly twoHAMAssembly;
 
     public TwoHAMSimulationNode(TwoHAMAssembly asm, SimulationCanvas tc, File file) {
         super(new Assembly(), tc, file);

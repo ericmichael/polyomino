@@ -12,11 +12,10 @@ import com.asarg.polysim.models.atam.ATAMTile;
 import javafx.application.Application;
 
 public class InfiniteLine extends SimulationApplication {
-    private TileSystem ts;
 
     public InfiniteLine() {
         super();
-        ts = new TileSystem(2);
+        TileSystem ts = new TileSystem(2);
 
         ts.addGlueFunction("a", "a", 2);
         assembly = new Assembly(ts);

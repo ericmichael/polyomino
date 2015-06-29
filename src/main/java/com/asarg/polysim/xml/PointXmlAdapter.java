@@ -4,7 +4,6 @@ import com.asarg.polysim.models.base.Coordinate;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
-import java.awt.*;
 
 public final class PointXmlAdapter extends XmlAdapter<PointXmlAdapter.PointXml, Coordinate> {
 

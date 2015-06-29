@@ -10,10 +10,9 @@ import javafx.application.Application;
  * Created by ericmartinez on 8/20/14.
  */
 public class RNGHexSimulation extends SimulationApplication {
-    private hexTileSystem ts;
 
     public RNGHexSimulation() {
-        ts = new hexTileSystem(2);
+        hexTileSystem ts = new hexTileSystem(2);
         ts.addPolyTile(choiceTile());
         ts.addPolyTile(seedTile());
 

@@ -33,9 +33,9 @@ public class TileSystem {
     @XmlJavaTypeAdapter(GlueXmlAdapter.class)
     private HashMap<Pair<String, String>, Integer> glueFunction = new HashMap<Pair<String, String>, Integer>();
     // list of polytiles: data structure should be changed to something that would be of better performance
-    private List<PolyTile> tileTypes = new ArrayList<PolyTile>();
+    private final List<PolyTile> tileTypes = new ArrayList<PolyTile>();
     @XmlElement(name = "TileType")
-    private ObservableList<PolyTile> observableTileTypes = FXCollections.observableArrayList(tileTypes);
+    private final ObservableList<PolyTile> observableTileTypes = FXCollections.observableArrayList(tileTypes);
 
 
     // used to set weight option: 0 = none (assumed equal concentrations), 1 = concentration, 2 = tile count
@@ -44,7 +44,6 @@ public class TileSystem {
     // total count of all tiles in tile system; used for count-based attachment
     @XmlTransient
     private int totalCount = 0;
-    private double totalConcentration = 0;
 
     public TileSystem() {
     }
@@ -185,7 +184,7 @@ public class TileSystem {
         for (PolyTile p : observableTileTypes) {
             tConc += p.getConcentration();
         }
-        totalConcentration = tConc;
+        double totalConcentration = tConc;
         return totalConcentration;
     }
 

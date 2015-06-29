@@ -35,8 +35,8 @@ public class SimulationApplication extends Application {
                     Main.class.getResource("/mainwindow.fxml")
             );
 
-            BorderPane page = (BorderPane) loader.load();
-            SimulationController controller = (SimulationController) loader.getController();
+            BorderPane page = loader.load();
+            SimulationController controller = loader.getController();
             controller.setStage(primaryStage);
             Scene scene = new Scene(page);
             primaryStage.setScene(scene);

@@ -6,7 +6,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +36,7 @@ public class OpenGlueXmlAdapter extends XmlAdapter<OpenGlueXmlAdapter.HashMapXml
 
     @XmlType(name = "OpenGlueHashMapXml")
     public static class HashMapXml {
-        public List<EntryXml> Glue = new ArrayList<EntryXml>();
+        public final List<EntryXml> Glue = new ArrayList<EntryXml>();
     }
 
     @XmlType(name = "OpenGlueEntryXml")
