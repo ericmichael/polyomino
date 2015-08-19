@@ -22,9 +22,9 @@
                         <Menu mnemonicParsing="false" text="File">
                             <items>
                                 <MenuItem mnemonicParsing="false" onAction="#newMenuItem" text="New Assembly" />
-                        <MenuItem mnemonicParsing="false" onAction="#new2HAMMenuItem" text="New 2HAM Assembly" />
+                        <MenuItem mnemonicParsing="false" onAction="#new2HAMMenuItem" text="New 2HAM Assembly" visible="false" />
                                 <MenuItem mnemonicParsing="false" onAction="#loadMenuItem" text="Load" />
-                        <MenuItem mnemonicParsing="false" onAction="#loadTwoHamMenuItem" text="Load 2HAM Assembly" />
+                        <MenuItem mnemonicParsing="false" onAction="#loadTwoHamMenuItem" text="Load 2HAM Assembly" visible="false" />
                                 <MenuItem fx:id="menu_save" disable="true" mnemonicParsing="false" onAction="#saveMenuItem" text="Save" />
                                 <MenuItem fx:id="menu_save_as" disable="true" mnemonicParsing="false" onAction="#saveAsMenuItem" text="Save As..." />
                                 <SeparatorMenuItem mnemonicParsing="false" />
