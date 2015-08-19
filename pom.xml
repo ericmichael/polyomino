@@ -8,7 +8,7 @@
 
     <groupId>com.asarg.polysim</groupId>
     <artifactId>polyomino</artifactId>
-    <version>0.2.4</version>
+    <version>0.2.5</version>
     <packaging>jar</packaging>
     <organization>
         <name>Algorithmic Self-Assembly Research Group at UTPA</name>
