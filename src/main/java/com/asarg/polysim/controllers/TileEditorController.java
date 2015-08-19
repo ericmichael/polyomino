@@ -278,6 +278,8 @@ public class TileEditorController implements Initializable {
     @FXML
     MenuItem context_menu_new;
     @FXML
+    MenuItem menu_new;
+    @FXML
     MenuItem menu_clear;
     @FXML
     MenuItem menu_clear_glues;
@@ -332,7 +334,6 @@ public class TileEditorController implements Initializable {
 
         swingNodeCanvas.setContent(canvas);
         menu_delete.setDisable(true);
-        context_menu_delete.setDisable(true);
         btn_update_assembly.managedProperty().bind(btn_update_assembly.visibleProperty());
         btn_update_assembly.visibleProperty().bind(updateable);
         disableTileData();
@@ -567,7 +568,6 @@ public class TileEditorController implements Initializable {
                 } else {
                     canvas.setPolyTile(null);
                     menu_delete.setDisable(true);
-                    context_menu_delete.setDisable(true);
                     removePolyTileListeners();
                     removeTileListeners();
                     disableTileData();
@@ -705,6 +705,15 @@ public class TileEditorController implements Initializable {
         });
 
         context_menu_new.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                PolyTile toAdd = new PolyTile();
+                listview_polytiles.getItems().add(0, toAdd);
+                listview_polytiles.getSelectionModel().select(0);
+            }
+        });
+
+        menu_new.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 PolyTile toAdd = new PolyTile();

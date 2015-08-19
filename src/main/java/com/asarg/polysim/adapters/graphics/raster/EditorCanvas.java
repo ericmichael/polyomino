@@ -72,8 +72,8 @@ public class EditorCanvas extends JPanel {
             public void mouseDragged(MouseEvent e) {
                 canvasCenteredOffset = canvasCenteredOffset.translate(e.getX() - lastXY.getX(), e.getY() - lastXY.getY());
                 lastXY = new Coordinate((int) e.getPoint().getX(), (int) e.getPoint().getY());
+                clearPolyTile();
                 Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX, pt, tileDiameter, canvasCenteredOffset);
-                Drawer.clearGraphics(overLayerGFX);
                 if (selectedTile.get() != null)
                     Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.get().getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
                 repaint();
@@ -164,6 +164,13 @@ public class EditorCanvas extends JPanel {
         if (pt != null) drawPolyTile();
     }
 
+    public void reset() {
+        Drawer.clearGraphics(overLayerGFX);
+        Drawer.clearGraphics(polyTileCanvasGFX);
+        repaint();
+    }
+
+
     public void resetBlank(int width, int height) {
         polyTileCanvas = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         polyTileCanvasGFX = polyTileCanvas.createGraphics();
@@ -177,6 +184,7 @@ public class EditorCanvas extends JPanel {
 
     @Override
     public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.drawImage(polyTileCanvas, 0, 0, null);
         g2.drawImage(overLayer, 0, 0, null);
