@@ -24,18 +24,18 @@ import java.util.Observer;
  * Created by ericmartinez on 1/5/15.
  */
 public class SimulationNode extends SwingNode implements Observer {
-    public Assembly assembly;
     public final StringProperty left_status = new SimpleStringProperty("");
-    private final StringProperty left_previous_status = new SimpleStringProperty("");
     public final StringProperty right_status = new SimpleStringProperty("");
+    private final StringProperty left_previous_status = new SimpleStringProperty("");
     private final StringProperty right_previous_status = new SimpleStringProperty("");
+    public Assembly assembly;
     public boolean stopped = true;
     public Frontier frontier;
+    public FrontierElement currentFrontierAttachment = null;
     private PolyTile frontierTile;
     private boolean frontierClick = false;
     private ArrayList<FrontierElement> frontierAttachments;
     private int frontierIndex = 0;
-    public FrontierElement currentFrontierAttachment = null;
     private Coordinate frontierClickPoint = null;
     private Coordinate lastMouseXY = new Coordinate(800, 600);
     private int dragCount = 0;
@@ -363,7 +363,7 @@ public class SimulationNode extends SwingNode implements Observer {
 
     private void updateAttachTime(double time) {
         String time_str = String.format("%.4f", time);
-        right_status.setValue("Last Attachment took " + time_str + "ms");
+        right_status.setValue("Last Attachment took " + time_str + " time units");
         //mainMenu.statusLabel.setText("Last Attachment took " + time_str + "ms");
     }
 
@@ -391,7 +391,7 @@ public class SimulationNode extends SwingNode implements Observer {
         step(-2, true);
     }
 
-    public void clear_seed(){
+    public void clear_seed() {
         assembly.clearSeed();
     }
 
@@ -482,15 +482,15 @@ public class SimulationNode extends SwingNode implements Observer {
         }
     }
 
-    public void changeTileSystem(TileSystem ts){
+    public void changeTileSystem(TileSystem ts) {
         assembly.changeTileSystem(ts);
     }
 
-    public TileSystem getTileSystem(){
+    public TileSystem getTileSystem() {
         return assembly.getTileSystem();
     }
 
-    public void clearAssemblyReseed(PolyTile pt){
+    public void clearAssemblyReseed(PolyTile pt) {
         frontier.clear();
         assembly.getFrontier().clear();
         assembly.Grid.clear();

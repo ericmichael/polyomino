@@ -1,6 +1,7 @@
 package com.asarg.polysim.controllers;
 
-import com.asarg.polysim.*;
+import com.asarg.polysim.Main;
+import com.asarg.polysim.PolyTileCell;
 import com.asarg.polysim.adapters.graphics.raster.SimulationCanvas;
 import com.asarg.polysim.models.TwoHAM.TwoHAMAssembly;
 import com.asarg.polysim.models.TwoHAM.TwoHAMSimulationNode;
@@ -43,7 +44,7 @@ import java.util.logging.Logger;
  */
 public class SimulationController implements Initializable {
     public static final DataFormat polyTileFormat = new DataFormat("PolyTile");
-    private Stage stage;
+    private final SimpleBooleanProperty showHelp = new SimpleBooleanProperty(true);
     //FXML Components
     @FXML
     TabPane tabPane;
@@ -89,8 +90,8 @@ public class SimulationController implements Initializable {
     Label lbl_right_status;
     @FXML
     ListView<PolyTile> listview_polytiles;
+    private Stage stage;
     private boolean inspecting = false;
-    private final SimpleBooleanProperty showHelp = new SimpleBooleanProperty(true);
 
     @Override // This method is called by the FXMLLoader when initialization is complete
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
@@ -112,26 +113,26 @@ public class SimulationController implements Initializable {
         listview_polytiles.setCellFactory(new Callback<ListView<PolyTile>, ListCell<PolyTile>>() {
                                               @Override
                                               public ListCell<PolyTile> call(ListView<PolyTile> list) {
-              final ListCell<PolyTile> ptCell = new PolyTileCell();
-              ptCell.setOnDragDetected(new EventHandler<MouseEvent>() {
-                  public void handle(MouseEvent event) {
+                                                  final ListCell<PolyTile> ptCell = new PolyTileCell();
+                                                  ptCell.setOnDragDetected(new EventHandler<MouseEvent>() {
+                                                      public void handle(MouseEvent event) {
                       /* drag was detected, start a drag-and-drop gesture*/
                       /* allow any transfer mode */
-                      Dragboard db = ptCell.startDragAndDrop(TransferMode.ANY);
+                                                          Dragboard db = ptCell.startDragAndDrop(TransferMode.ANY);
 
                       /* Put a string on a dragboard */
-                      ClipboardContent content = new ClipboardContent();
-                      //content.putString(ptCell.getGraphic());
-                      ImageView temp = (ImageView) ptCell.getGraphic();
-                      content.put(polyTileFormat, ptCell.getIndex());
-                      db.setContent(content);
-                      db.setDragView(temp.getImage());
-                      event.consume();
-                  }
-              });
-              return ptCell;
-          }
-      }
+                                                          ClipboardContent content = new ClipboardContent();
+                                                          //content.putString(ptCell.getGraphic());
+                                                          ImageView temp = (ImageView) ptCell.getGraphic();
+                                                          content.put(polyTileFormat, ptCell.getIndex());
+                                                          db.setContent(content);
+                                                          db.setDragView(temp.getImage());
+                                                          event.consume();
+                                                      }
+                                                  });
+                                                  return ptCell;
+                                              }
+                                          }
         );
 
         field_temperature.focusedProperty().addListener(new ChangeListener<Boolean>() {
@@ -192,7 +193,7 @@ public class SimulationController implements Initializable {
                                     }
                                 });
 
-                                if(current.getClass() == TwoHAMSimulationNode.class){
+                                if (current.getClass() == TwoHAMSimulationNode.class) {
                                     menu_export_2ham_terminal_tileset.setDisable(false);
 
                                     listview_polytiles.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<PolyTile>() {
@@ -337,7 +338,7 @@ public class SimulationController implements Initializable {
     }
 
     @FXML
-    public void clear_seed(){
+    public void clear_seed() {
         SimulationNode current = currentSimulationNode();
         if (current != null) current.clear_seed();
     }
@@ -414,11 +415,13 @@ public class SimulationController implements Initializable {
     }
 
     //TODO: Add functionality here
-    @FXML void exportTileConfigMenuItem(){
+    @FXML
+    void exportTileConfigMenuItem() {
 
     }
 
-    @FXML void export2HAMTerminalTileSetMenuItem(){
+    @FXML
+    void export2HAMTerminalTileSetMenuItem() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save As...");
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("XML", "*.xml"));
@@ -533,7 +536,7 @@ public class SimulationController implements Initializable {
                 loadAssembly(assembly, selectedFile);
             } catch (javax.xml.bind.JAXBException jaxbe) {
                 javax.swing.JOptionPane.showMessageDialog(null, "Failed to load assembly");
-            } catch (FileNotFoundException fnfe){
+            } catch (FileNotFoundException fnfe) {
                 javax.swing.JOptionPane.showMessageDialog(null, "Failed to load assembly");
             }
         }

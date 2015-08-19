@@ -8,9 +8,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 
 /**
  * Created by ericmartinez on 6/15/15.
@@ -25,13 +22,13 @@ public class TwoHAMSimulationNode extends SimulationNode {
         System.out.println("TWOHAM MODE");
     }
 
-    private Assembly polyTileToAssembly(PolyTile pt){
+    private Assembly polyTileToAssembly(PolyTile pt) {
         Assembly clonedAssembly = new Assembly(assembly.getTileSystem());
         clonedAssembly.placeSeed(pt);
         return clonedAssembly;
     }
 
-    public boolean exportTerminalTileSet(File file){
+    public boolean exportTerminalTileSet(File file) {
         try {
             TileConfiguration tc = new TileConfiguration();
 
@@ -50,7 +47,7 @@ public class TwoHAMSimulationNode extends SimulationNode {
         return false;
     }
 
-    public TileSystem getTileSystem(){
+    public TileSystem getTileSystem() {
         return twoHAMAssembly.getTileSystem();
     }
 
@@ -63,7 +60,8 @@ public class TwoHAMSimulationNode extends SimulationNode {
 //            updateAttachTime(attached.get(attached.size() - 1).getAttachTime());
 //        }
     }
-//
+
+    //
 //    public void fast_forward() {
 //        step(2, true);
 //        java.util.List<FrontierElement> attached = assembly.getAttached();
@@ -75,11 +73,12 @@ public class TwoHAMSimulationNode extends SimulationNode {
     public void backward() {
         twoHAMAssembly.backward();
     }
-//
+
+    //
     @Override
     public ObservableList<PolyTile> getTileSet() {
-    return twoHAMAssembly.getTileSystem().getTileTypes();
-}
+        return twoHAMAssembly.getTileSystem().getTileTypes();
+    }
 
 //    public void fast_backward() {
 //        step(-2, true);

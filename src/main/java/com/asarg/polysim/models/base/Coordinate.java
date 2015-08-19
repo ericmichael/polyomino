@@ -8,16 +8,23 @@ public final class Coordinate {
     private final int x;
     private final int y;
 
-    public Coordinate(Coordinate c){
+    public Coordinate(Coordinate c) {
         this.x = c.getX();
         this.y = c.getY();
     }
 
-    public Coordinate(int x, int y) { this.x = x; this.y = y; }
+    public Coordinate(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 
-    public int getX() { return this.x; }
+    public int getX() {
+        return this.x;
+    }
 
-    public int getY() { return this.y; }
+    public int getY() {
+        return this.y;
+    }
 
     @Override
     public boolean equals(Object other) {
@@ -37,9 +44,9 @@ public final class Coordinate {
     }
 
 
-//    returns new coordinate
+    //    returns new coordinate
     @Deprecated
-    public Coordinate translate(int dx, int dy){
+    public Coordinate translate(int dx, int dy) {
         return new Coordinate(x + dx, y + dy);
     }
 }

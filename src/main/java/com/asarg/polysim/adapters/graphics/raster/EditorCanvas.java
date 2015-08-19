@@ -17,12 +17,10 @@ import java.awt.image.BufferedImage;
  * Created by ericmartinez on 1/12/15.
  */
 public class EditorCanvas extends JPanel {
+    private final SimpleObjectProperty<Tile> selectedTile = new SimpleObjectProperty<Tile>(null);
     //the current canvas display info
     private Coordinate canvasCenteredOffset = new Coordinate(0, 0);
     private int tileDiameter = 1;
-
-    private final SimpleObjectProperty<Tile> selectedTile = new SimpleObjectProperty<Tile>(null);
-
     private PolyTile pt;
     //canvas stuff
     private BufferedImage polyTileCanvas;
@@ -119,7 +117,7 @@ public class EditorCanvas extends JPanel {
         if (this.pt != pt) {
             this.pt = pt;
             selectedTile.set(null);
-            if(pt!=null) drawPolyTile();
+            if (pt != null) drawPolyTile();
             else clearPolyTile();
         }
     }
@@ -154,7 +152,7 @@ public class EditorCanvas extends JPanel {
         repaint();
     }
 
-    public void clearPolyTile(){
+    public void clearPolyTile() {
         Drawer.clearGraphics(overLayerGFX);
         Drawer.clearGraphics(polyTileCanvasGFX);
         repaint();

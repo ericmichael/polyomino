@@ -4,7 +4,7 @@ import com.asarg.polysim.models.base.Coordinate;
 import com.asarg.polysim.models.base.PolyTile;
 import com.asarg.polysim.models.base.Tile;
 import javafx.util.Pair;
-import org.jfree.fx.*;
+import org.jfree.fx.FXGraphics2D;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;

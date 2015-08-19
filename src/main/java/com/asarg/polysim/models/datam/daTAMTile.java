@@ -10,11 +10,11 @@ import java.util.Iterator;
  * Created by ericmartinez on 8/19/14.
  */
 public class daTAMTile extends PolyTile {
-    private boolean horizontal;
     private final Point left = new Point(0, 0);
     Point top = left;
     Point right = new Point(1, 0);
     Point bottom = new Point(0, -1);
+    private boolean horizontal;
 
     public daTAMTile() {
         System.out.println("datam tile with no name and infinite counts");

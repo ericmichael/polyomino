@@ -1,6 +1,6 @@
 package com.asarg.polysim.controllers;
 
-import com.asarg.polysim.*;
+import com.asarg.polysim.PolyTileCell;
 import com.asarg.polysim.adapters.graphics.raster.EditorCanvas;
 import com.asarg.polysim.models.base.*;
 import javafx.application.Platform;
@@ -43,10 +43,186 @@ import java.util.ResourceBundle;
  */
 public class TileEditorController implements Initializable {
 
-    private TileConfiguration tc;
-    private EditorCanvas canvas;
-    private SimulationNode current;
+    final SimpleBooleanProperty updateable = new SimpleBooleanProperty(false);
+    final ChangeListener<Boolean> listener_pt_field_focus = new ChangeListener<Boolean>() {
+        @Override
+        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+            if (!newValue) {
+                final PolyTile selected = listview_polytiles.getSelectionModel().getSelectedItem();
+                double concentration = selected.getConcentration();
+                int count = selected.getCount();
+                if (concentration < 0) field_concentration.setText("");
 
+                if (count < 0) field_count.setText("");
+            }
+        }
+    };
+    //Listeners
+    final ChangeListener<String> listener_concentration = new ChangeListener<String>() {
+        @Override
+        public void changed(ObservableValue<? extends String> observable, String oldValue, final String newValue) {
+            if (newValue != null) {
+                final PolyTile selected = listview_polytiles.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    if (newValue.trim().equals("")) {
+                        selected.setConcentration(-1.0);
+                    } else {
+                        try {
+                            double d = Double.parseDouble(newValue);
+                            if (d < 0) selected.setConcentration(-1.0);
+                            else selected.setConcentration(d);
+                        } catch (NumberFormatException npe) {
+                            selected.setConcentration(-1.0);
+                        }
+                    }
+                    updateable.set(true);
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            field_concentration.requestFocus();
+                            field_concentration.positionCaret(newValue.length());
+                        }
+                    });
+                }
+            }
+        }
+    };
+    final ChangeListener<String> listener_count = new ChangeListener<String>() {
+        @Override
+        public void changed(ObservableValue<? extends String> observable, String oldValue, final String newValue) {
+            if (newValue != null) {
+                final PolyTile selected = listview_polytiles.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    if (newValue.trim().equals("")) {
+                        selected.setCount(-1);
+                    } else {
+                        try {
+                            int i = Integer.parseInt(newValue);
+                            if (i < 0) selected.setCount(-1);
+                            else selected.setCount(i);
+                        } catch (NumberFormatException npe) {
+                            selected.setCount(-1);
+                        }
+                    }
+                    updateable.set(true);
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            field_count.requestFocus();
+                            field_count.positionCaret(newValue.length());
+                        }
+                    });
+                }
+            }
+        }
+    };
+    final ChangeListener<String> listener_label = new ChangeListener<String>() {
+        @Override
+        public void changed(ObservableValue<? extends String> observable, String oldValue, final String newValue) {
+            if (newValue != null) {
+                Tile selected = canvas.getSelectedTileProperty().get();
+                if (selected != null) {
+                    canvas.getSelectedTileProperty().get().setLabel(newValue);
+                    redrawPolyTile(selected);
+                    updateable.set(true);
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            field_tile_label.requestFocus();
+                            field_tile_label.positionCaret(newValue.length());
+                        }
+                    });
+                }
+            }
+        }
+    };
+    final ChangeListener<String> listener_north_glue = new ChangeListener<String>() {
+        @Override
+        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+            if (newValue != null) {
+                Tile selected = canvas.getSelectedTileProperty().get();
+                if (selected != null) {
+                    canvas.getSelectedTileProperty().get().setGlueN(newValue);
+                    redrawPolyTile(selected);
+                    updateable.set(true);
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            field_north_glue.requestFocus();
+                            field_north_glue.positionCaret(field_north_glue.getText().length());
+                        }
+                    });
+                }
+            }
+        }
+    };
+    final ChangeListener<String> listener_south_glue = new ChangeListener<String>() {
+        @Override
+        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+            if (newValue != null) {
+                Tile selected = canvas.getSelectedTileProperty().get();
+                if (selected != null) {
+                    canvas.getSelectedTileProperty().get().setGlueS(newValue);
+                    redrawPolyTile(selected);
+                    updateable.set(true);
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            field_south_glue.requestFocus();
+                            field_south_glue.positionCaret(field_south_glue.getText().length());
+                        }
+                    });
+                }
+            }
+        }
+    };
+    final ChangeListener<String> listener_east_glue = new ChangeListener<String>() {
+        @Override
+        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+            if (newValue != null) {
+                Tile selected = canvas.getSelectedTileProperty().get();
+                if (selected != null) {
+                    canvas.getSelectedTileProperty().get().setGlueE(newValue);
+                    redrawPolyTile(selected);
+                    updateable.set(true);
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            field_east_glue.requestFocus();
+                            field_east_glue.positionCaret(field_east_glue.getText().length());
+                        }
+                    });
+                }
+            }
+        }
+    };
+    final ChangeListener<String> listener_west_glue = new ChangeListener<String>() {
+        @Override
+        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+            if (newValue != null) {
+                Tile selected = canvas.getSelectedTileProperty().get();
+                if (selected != null) {
+                    canvas.getSelectedTileProperty().get().setGlueW(newValue);
+                    redrawPolyTile(selected);
+                    updateable.set(true);
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            field_west_glue.requestFocus();
+                            field_west_glue.positionCaret(field_west_glue.getText().length());
+                        }
+                    });
+                }
+            }
+        }
+    };
     @FXML
     AnchorPane ptAnchorPane;
     @FXML
@@ -107,196 +283,10 @@ public class TileEditorController implements Initializable {
     MenuItem menu_clear_glues;
     @FXML
     MenuItem menu_close;
-
     ObservableList<Glue> glueData;
-    final SimpleBooleanProperty updateable = new SimpleBooleanProperty(false);
-
-    final ChangeListener<Boolean> listener_pt_field_focus = new ChangeListener<Boolean>() {
-        @Override
-        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-            if(!newValue) {
-                final PolyTile selected = listview_polytiles.getSelectionModel().getSelectedItem();
-                double concentration = selected.getConcentration();
-                int count = selected.getCount();
-                if (concentration < 0) field_concentration.setText("");
-
-                if (count < 0) field_count.setText("");
-            }
-        }
-    };
-
-    //Listeners
-    final ChangeListener<String> listener_concentration = new ChangeListener<String>() {
-        @Override
-        public void changed(ObservableValue<? extends String> observable, String oldValue, final String newValue) {
-            if (newValue != null) {
-                final PolyTile selected = listview_polytiles.getSelectionModel().getSelectedItem();
-                if (selected != null) {
-                    if(newValue.trim().equals("")){
-                        selected.setConcentration(-1.0);
-                    }else{
-                        try {
-                            double d = Double.parseDouble(newValue);
-                            if(d<0) selected.setConcentration(-1.0);
-                            else selected.setConcentration(d);
-                        }catch(NumberFormatException npe){
-                            selected.setConcentration(-1.0);
-                        }
-                    }
-                    updateable.set(true);
-
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            field_concentration.requestFocus();
-                            field_concentration.positionCaret(newValue.length());
-                        }
-                    });
-                }
-            }
-        }
-    };
-
-    final ChangeListener<String> listener_count = new ChangeListener<String>() {
-        @Override
-        public void changed(ObservableValue<? extends String> observable, String oldValue, final String newValue) {
-            if (newValue != null) {
-                final PolyTile selected = listview_polytiles.getSelectionModel().getSelectedItem();
-                if (selected != null) {
-                    if(newValue.trim().equals("")){
-                        selected.setCount(-1);
-                    }else{
-                        try {
-                            int i = Integer.parseInt(newValue);
-                            if(i<0) selected.setCount(-1);
-                            else selected.setCount(i);
-                        }catch(NumberFormatException npe){
-                            selected.setCount(-1);
-                        }
-                    }
-                    updateable.set(true);
-
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            field_count.requestFocus();
-                            field_count.positionCaret(newValue.length());
-                        }
-                    });
-                }
-            }
-        }
-    };
-
-    final ChangeListener<String> listener_label = new ChangeListener<String>() {
-        @Override
-        public void changed(ObservableValue<? extends String> observable, String oldValue, final String newValue) {
-            if (newValue != null) {
-                Tile selected = canvas.getSelectedTileProperty().get();
-                if (selected != null) {
-                    canvas.getSelectedTileProperty().get().setLabel(newValue);
-                    redrawPolyTile(selected);
-                    updateable.set(true);
-
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            field_tile_label.requestFocus();
-                            field_tile_label.positionCaret(newValue.length());
-                        }
-                    });
-                }
-            }
-        }
-    };
-
-    final ChangeListener<String> listener_north_glue = new ChangeListener<String>() {
-        @Override
-        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-            if (newValue != null) {
-                Tile selected = canvas.getSelectedTileProperty().get();
-                if (selected != null) {
-                    canvas.getSelectedTileProperty().get().setGlueN(newValue);
-                    redrawPolyTile(selected);
-                    updateable.set(true);
-
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            field_north_glue.requestFocus();
-                            field_north_glue.positionCaret(field_north_glue.getText().length());
-                        }
-                    });
-                }
-            }
-        }
-    };
-
-    final ChangeListener<String> listener_south_glue = new ChangeListener<String>() {
-        @Override
-        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-            if (newValue != null) {
-                Tile selected = canvas.getSelectedTileProperty().get();
-                if (selected != null) {
-                    canvas.getSelectedTileProperty().get().setGlueS(newValue);
-                    redrawPolyTile(selected);
-                    updateable.set(true);
-
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            field_south_glue.requestFocus();
-                            field_south_glue.positionCaret(field_south_glue.getText().length());
-                        }
-                    });
-                }
-            }
-        }
-    };
-
-    final ChangeListener<String> listener_east_glue = new ChangeListener<String>() {
-        @Override
-        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-            if (newValue != null) {
-                Tile selected = canvas.getSelectedTileProperty().get();
-                if (selected != null) {
-                    canvas.getSelectedTileProperty().get().setGlueE(newValue);
-                    redrawPolyTile(selected);
-                    updateable.set(true);
-
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            field_east_glue.requestFocus();
-                            field_east_glue.positionCaret(field_east_glue.getText().length());
-                        }
-                    });
-                }
-            }
-        }
-    };
-
-    final ChangeListener<String> listener_west_glue = new ChangeListener<String>() {
-        @Override
-        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-            if (newValue != null) {
-                Tile selected = canvas.getSelectedTileProperty().get();
-                if (selected != null) {
-                    canvas.getSelectedTileProperty().get().setGlueW(newValue);
-                    redrawPolyTile(selected);
-                    updateable.set(true);
-
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            field_west_glue.requestFocus();
-                            field_west_glue.positionCaret(field_west_glue.getText().length());
-                        }
-                    });
-                }
-            }
-        }
-    };
+    private TileConfiguration tc;
+    private EditorCanvas canvas;
+    private SimulationNode current;
 
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
@@ -478,26 +468,26 @@ public class TileEditorController implements Initializable {
         btn_delete_tile.setDisable(false);
     }
 
-    private void enablePolyTileData(){
+    private void enablePolyTileData() {
         field_concentration.setDisable(false);
         field_count.setDisable(false);
         colorpicker_color.setDisable(false);
         btn_delete_polytile.setDisable(false);
     }
 
-    private void setPolyTileData(PolyTile pt){
-        if(pt.getConcentration()<0)
+    private void setPolyTileData(PolyTile pt) {
+        if (pt.getConcentration() < 0)
             field_concentration.setText("");
-        else field_concentration.setText(""+pt.getConcentration());
+        else field_concentration.setText("" + pt.getConcentration());
 
-        if(pt.getCount()<0)
+        if (pt.getCount() < 0)
             field_count.setText("");
-        else field_count.setText(""+pt.getCount());
+        else field_count.setText("" + pt.getCount());
 
         colorpicker_color.setValue(Color.valueOf("0x" + pt.getColor()));
     }
 
-    private void disablePolyTileData(){
+    private void disablePolyTileData() {
         field_concentration.setDisable(true);
         field_count.setDisable(true);
         colorpicker_color.setDisable(true);
@@ -505,14 +495,14 @@ public class TileEditorController implements Initializable {
         btn_delete_polytile.setDisable(true);
     }
 
-    private void addPolyTileListeners(){
+    private void addPolyTileListeners() {
         field_concentration.textProperty().addListener(listener_concentration);
         field_count.textProperty().addListener(listener_count);
         field_concentration.focusedProperty().addListener(listener_pt_field_focus);
         field_count.focusedProperty().addListener(listener_pt_field_focus);
     }
 
-    private void removePolyTileListeners(){
+    private void removePolyTileListeners() {
         field_concentration.textProperty().removeListener(listener_concentration);
         field_count.textProperty().removeListener(listener_count);
         field_concentration.focusedProperty().removeListener(listener_pt_field_focus);
@@ -652,11 +642,10 @@ public class TileEditorController implements Initializable {
             public void handle(ActionEvent event) {
                 Tile selectedTile = canvas.getSelectedTileProperty().get();
                 PolyTile pt = canvas.getPolyTile();
-                if(pt.tiles.size()>1) {
+                if (pt.tiles.size() > 1) {
                     pt.removeTile(selectedTile.getLocation().getX(), selectedTile.getLocation().getY());
                     redrawPolyTile(null);
-                }
-                else{
+                } else {
                     listview_polytiles.getItems().remove(pt);
                 }
                 updateable.set(true);
@@ -667,7 +656,7 @@ public class TileEditorController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 PolyTile selected = listview_polytiles.getSelectionModel().getSelectedItem();
-                if(selected!=null) listview_polytiles.getItems().remove(selected);
+                if (selected != null) listview_polytiles.getItems().remove(selected);
                 updateable.set(true);
             }
         });
@@ -681,7 +670,7 @@ public class TileEditorController implements Initializable {
                     Glue g = new Glue(glue1, glue2, field_strength.getText().trim());
                     Pair<String, String> p = new Pair<String, String>(g.getGlueA(), g.getGlueB());
                     Pair<String, String> p2 = new Pair<String, String>(g.getGlueB(), g.getGlueA());
-                    if(!tc.getGlueFunction().containsKey(p) && !tc.getGlueFunction().containsKey(p2)) {
+                    if (!tc.getGlueFunction().containsKey(p) && !tc.getGlueFunction().containsKey(p2)) {
                         table_gluetable.getItems().add(g);
                         tc.getGlueFunction().put(p, Integer.parseInt(g.getStrength()));
                         updateable.set(true);

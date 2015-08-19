@@ -16,13 +16,14 @@ import java.io.IOException;
  */
 
 public class SimulationApplication extends Application {
-    static{
+    static {
         try {
             Font.loadFont(Main.class.getResource("/fontawesome.ttf").toExternalForm(), 10);
-        }catch(Exception ex) {
+        } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
     }
+
     protected Assembly assembly;
     Stage primaryStage;
 

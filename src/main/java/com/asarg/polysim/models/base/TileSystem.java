@@ -23,21 +23,17 @@ public class TileSystem {
     public static final int UNIFORMDISTRIBUTION = 0;
     public static final int CONCENTRATION = 1;
     public static final int COUNT = 2;
-
-    // temperature of the system, bonds must be of at least this value or they break.
-    @XmlAttribute(name = "Temperature")
-    private int temperature;
-
-    // glue function to determine strength between two labels
-    @XmlElement(name = "GlueFunction")
-    @XmlJavaTypeAdapter(GlueXmlAdapter.class)
-    private HashMap<Pair<String, String>, Integer> glueFunction = new HashMap<Pair<String, String>, Integer>();
     // list of polytiles: data structure should be changed to something that would be of better performance
     private final List<PolyTile> tileTypes = new ArrayList<PolyTile>();
     @XmlElement(name = "TileType")
     private final ObservableList<PolyTile> observableTileTypes = FXCollections.observableArrayList(tileTypes);
-
-
+    // temperature of the system, bonds must be of at least this value or they break.
+    @XmlAttribute(name = "Temperature")
+    private int temperature;
+    // glue function to determine strength between two labels
+    @XmlElement(name = "GlueFunction")
+    @XmlJavaTypeAdapter(GlueXmlAdapter.class)
+    private HashMap<Pair<String, String>, Integer> glueFunction = new HashMap<Pair<String, String>, Integer>();
     // used to set weight option: 0 = none (assumed equal concentrations), 1 = concentration, 2 = tile count
     @XmlAttribute(name = "WeightingOption")
     private int weightOption;
@@ -98,7 +94,7 @@ public class TileSystem {
             } else {
                 return 0;
             }
-        }catch(NullPointerException npe){
+        } catch (NullPointerException npe) {
             return 0;
         }
     }

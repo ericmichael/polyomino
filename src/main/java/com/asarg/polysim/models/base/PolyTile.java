@@ -79,13 +79,13 @@ public class PolyTile {
         System.out.println("polytile " + polyName + " created with count " + c + " and concentration " + con);
     }
 
-    public PolyTile(PolyTile other){
+    public PolyTile(PolyTile other) {
         polyName = other.polyName;
         count = other.count;
         concentration = other.concentration;
         color = other.color;
         frontier = other.frontier;
-        for(Tile t : other.getTiles()){
+        for (Tile t : other.getTiles()) {
             tiles.add(new Tile(t));
         }
         setGlues();
@@ -291,14 +291,14 @@ public class PolyTile {
         }
     }
 
-    public PolyTile normalize(){
+    public PolyTile normalize() {
         PolyTile copy = new PolyTile(this);
 
         Tile min = null;
-        for(Tile t : copy.tiles){
-            if(min==null) min = t;
-            else{
-                if(t.getLocation().getX() <= min.getLocation().getX() && t.getLocation().getY() <= min.getLocation().getY()){
+        for (Tile t : copy.tiles) {
+            if (min == null) min = t;
+            else {
+                if (t.getLocation().getX() <= min.getLocation().getX() && t.getLocation().getY() <= min.getLocation().getY()) {
                     min = t;
                 }
             }
@@ -307,13 +307,14 @@ public class PolyTile {
         int x_translate = -min.getLocation().getX();
         int y_translate = -min.getLocation().getY();
 
-        for(Tile t : copy.tiles){
+        for (Tile t : copy.tiles) {
             t.setLocation(t.getLocation().translate(x_translate, y_translate));
         }
         return copy;
     }
 
-    @Override public int hashCode(){
+    @Override
+    public int hashCode() {
         int hash = 1;
         hash = hash * 13 + (polyName == null ? 0 : polyName.hashCode());
         hash = hash * 17 + tiles.size();
@@ -345,7 +346,7 @@ public class PolyTile {
         for (Tile t : first.getTiles()) {
             Coordinate tLoc = t.getLocation();
             Tile t2 = second.getTile(tLoc.getX(), tLoc.getY());
-            if(t2==null) return false;
+            if (t2 == null) return false;
             else if (!t.equals(t2)) return false;
         }
 
@@ -353,7 +354,7 @@ public class PolyTile {
         for (Tile t : second.getTiles()) {
             Coordinate tLoc = t.getLocation();
             Tile t2 = first.getTile(tLoc.getX(), tLoc.getY());
-            if(t2==null) return false;
+            if (t2 == null) return false;
             else if (!t.equals(t2)) return false;
         }
         return true;

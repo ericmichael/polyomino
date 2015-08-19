@@ -1,16 +1,13 @@
 package com.asarg.polysim.models.TwoHAM;
 
-import com.asarg.polysim.models.base.*;
-import javafx.collections.ObservableList;
+import com.asarg.polysim.models.base.Assembly;
+import com.asarg.polysim.models.base.FrontierElement;
+import com.asarg.polysim.models.base.PolyTile;
+import com.asarg.polysim.models.base.TileSystem;
 import javafx.util.Pair;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import java.io.File;
 import java.io.InvalidObjectException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * Created by ericmartinez on 6/15/15.
@@ -19,8 +16,8 @@ public class TwoHAMAssembly {
     private final TileSystem tileSystem;
     private final ArrayList<PolyTile> terminalSet = new ArrayList<PolyTile>();
     private final ArrayList<PolyTile> expanded = new ArrayList<PolyTile>();
-    ArrayList<Pair<PolyTile, PolyTile>> processed = new ArrayList<Pair<PolyTile, PolyTile>>();
     private final ArrayList<ArrayList<PolyTile>> attached = new ArrayList<ArrayList<PolyTile>>();
+    ArrayList<Pair<PolyTile, PolyTile>> processed = new ArrayList<Pair<PolyTile, PolyTile>>();
 
     public TwoHAMAssembly() {
         System.out.print("in assembly,");
@@ -31,38 +28,39 @@ public class TwoHAMAssembly {
         tileSystem = new TileSystem(ts.getTemperature());
         try {
             tileSystem.setWeightOption(ts.getWeightOption());
-        }catch(InvalidObjectException ignored){}
+        } catch (InvalidObjectException ignored) {
+        }
 
         tileSystem.setGlueFunction(ts.getGlueFunction());
         tileSystem.getTileTypes().addAll(ts.getTileTypes());
     }
 
-    private ArrayList<PolyTile> getNextAssembliesAsPolyTiles(Assembly asm){
+    private ArrayList<PolyTile> getNextAssembliesAsPolyTiles(Assembly asm) {
         ArrayList<PolyTile> nextAssemblies = new ArrayList<PolyTile>();
         for (FrontierElement fe : asm.getFrontier()) {
             asm.placePolytile(fe.getPolyTile(), fe.getOffset().getX(), fe.getOffset().getY());
             PolyTile asmPt = asm.toPolyTile();
-            if(!nextAssemblies.contains(asmPt))
+            if (!nextAssemblies.contains(asmPt))
                 nextAssemblies.add(asmPt);
             asm.removePolytile(fe.getPolyTile(), fe.getOffset().getX(), fe.getOffset().getY());
         }
         return nextAssemblies;
     }
 
-    private ArrayList<Assembly> getNextAssemblies(Assembly asm){
+    private ArrayList<Assembly> getNextAssemblies(Assembly asm) {
         ArrayList<Assembly> nextAssemblies = new ArrayList<Assembly>();
 
-        for(PolyTile pt : getNextAssembliesAsPolyTiles(asm)){
+        for (PolyTile pt : getNextAssembliesAsPolyTiles(asm)) {
             nextAssemblies.add(polyTileToAssembly(pt));
         }
         return nextAssemblies;
     }
 
-    public TileSystem getTileSystem(){
+    public TileSystem getTileSystem() {
         return tileSystem;
     }
 
-    protected Assembly polyTileToAssembly(PolyTile pt){
+    protected Assembly polyTileToAssembly(PolyTile pt) {
         Assembly clonedAssembly = new Assembly(tileSystem);
         clonedAssembly.placeSeed(pt);
         clonedAssembly.cleanUp();
@@ -72,40 +70,40 @@ public class TwoHAMAssembly {
         return clonedAssembly;
     }
 
-    protected boolean isTerminalAssembly(Assembly asm){
+    protected boolean isTerminalAssembly(Assembly asm) {
         //asm.changeTileSystem(tileSystem);
         return asm.calculateFrontier().isEmpty();
     }
 
-    boolean isDone(){
+    boolean isDone() {
         //everyone who is not expanded is terminal
-        for(PolyTile pt : tileSystem.getTileTypes()){
-            if(!expanded.contains(pt) && !terminalSet.contains(pt)) {
+        for (PolyTile pt : tileSystem.getTileTypes()) {
+            if (!expanded.contains(pt) && !terminalSet.contains(pt)) {
                 System.out.println("Not done");
                 return false;
             }
         }
 
-        System.out.println("Tile types size: "+ tileSystem.getTileTypes().size());
-        System.out.println("Terminal types size: "+ terminalSet.size());
+        System.out.println("Tile types size: " + tileSystem.getTileTypes().size());
+        System.out.println("Terminal types size: " + terminalSet.size());
 
         System.out.println("Done");
         System.out.println("");
         return true;
     }
 
-    public ArrayList<PolyTile> getTerminalSet(){
+    public ArrayList<PolyTile> getTerminalSet() {
         System.out.println("terminal set requested");
-        while(!isDone()){
+        while (!isDone()) {
             forward();
         }
         return terminalSet;
     }
 
-    boolean addPerimeters(){
+    boolean addPerimeters() {
         ArrayList<PolyTile> toAdd = new ArrayList<PolyTile>();
-        for(PolyTile pt: tileSystem.getTileTypes()) {
-            if(!expanded.contains(pt)) {
+        for (PolyTile pt : tileSystem.getTileTypes()) {
+            if (!expanded.contains(pt)) {
                 Assembly subassembly = polyTileToAssembly(pt);
 
                 for (PolyTile subasm : getNextAssembliesAsPolyTiles(subassembly)) {
@@ -121,10 +119,10 @@ public class TwoHAMAssembly {
         tileSystem.getTileTypes().addAll(toAdd);
         attached.add(toAdd);
 
-        return toAdd.size()!=0;
+        return toAdd.size() != 0;
     }
 
-    void forward(){
+    void forward() {
         System.out.println("in forward pass");
         System.out.println("Expanded: " + expanded.size());
         System.out.println("Terminal: " + terminalSet.size());
@@ -134,10 +132,10 @@ public class TwoHAMAssembly {
         //attempt to expand any that i didn't have before, flag
         boolean anyExpanded = addPerimeters();
 
-        if(!anyExpanded){
-            for(PolyTile pt: tileSystem.getTileTypes()){
-                if(!terminalSet.contains(pt)){
-                    if(isTerminalAssembly(polyTileToAssembly(pt))){
+        if (!anyExpanded) {
+            for (PolyTile pt : tileSystem.getTileTypes()) {
+                if (!terminalSet.contains(pt)) {
+                    if (isTerminalAssembly(polyTileToAssembly(pt))) {
                         terminalSet.add(pt);
                     }
                 }
@@ -145,15 +143,15 @@ public class TwoHAMAssembly {
         }
     }
 
-    void backward(){
-        if(!attached.isEmpty()) {
-            ArrayList<PolyTile> lastRound = attached.get(attached.size()-1);
-            for(PolyTile pt : lastRound){
+    void backward() {
+        if (!attached.isEmpty()) {
+            ArrayList<PolyTile> lastRound = attached.get(attached.size() - 1);
+            for (PolyTile pt : lastRound) {
                 tileSystem.getTileTypes().remove(pt);
                 expanded.remove(pt);
                 terminalSet.remove(pt);
             }
-            attached.remove(attached.size()-1);
+            attached.remove(attached.size() - 1);
         }
     }
 }

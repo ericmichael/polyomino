@@ -5,22 +5,30 @@ import java.util.ArrayList;
 /**
  * Created by ericmartinez on 6/27/15.
  */
-public class Stage{
+public class Stage {
     public final int num;
-    public Stage(int i){
-        num = i;
-    }
     final ArrayList<Bin> bins = new ArrayList<Bin>();
 
-    public void addBin(Bin bin){bins.add(bin); bin.stage=this;}
+    public Stage(int i) {
+        num = i;
+    }
 
-    public Bin getBin(int i){return bins.get(i);}
+    public void addBin(Bin bin) {
+        bins.add(bin);
+        bin.stage = this;
+    }
 
-    public int size(){return bins.size();}
+    public Bin getBin(int i) {
+        return bins.get(i);
+    }
 
-    public void start(){
+    public int size() {
+        return bins.size();
+    }
+
+    public void start() {
         int i = 0;
-        for(Bin bin : bins){
+        for (Bin bin : bins) {
             bin.start();
         }
     }

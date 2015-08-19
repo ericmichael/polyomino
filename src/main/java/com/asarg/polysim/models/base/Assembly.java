@@ -44,14 +44,14 @@ public class Assembly extends Observable {
     HashMap<Coordinate, String> openWestGlues = new HashMap<Coordinate, String>();
     @XmlTransient
     private final ArrayList<FrontierElement> possibleAttach = new ArrayList<FrontierElement>();
-    // tile system, it can be changed so it needs its own class
-    @XmlElement(name = "TileSystem")
-    private TileSystem tileSystem;
     // frontier list: calculated, increased, decreased, and changed here.
     @XmlTransient
     private final Frontier frontier;
     @XmlElement(name = "History")
     private final History attached = new History();
+    // tile system, it can be changed so it needs its own class
+    @XmlElement(name = "TileSystem")
+    private TileSystem tileSystem;
 
     public Assembly() {
         tileSystem = new TileSystem(2, 0);
@@ -62,7 +62,7 @@ public class Assembly extends Observable {
         tileSystem = new TileSystem(ts.getTemperature());
         try {
             tileSystem.setWeightOption(ts.getWeightOption());
-        }catch(InvalidObjectException ioe){
+        } catch (InvalidObjectException ioe) {
             System.out.println("invalid option");
         }
 
@@ -71,10 +71,10 @@ public class Assembly extends Observable {
         frontier = new Frontier(tileSystem);
     }
 
-    private static Pair<TileConfiguration,  HashMap<Point, PolyTile>> LoadISUTASTileConfiguration(File f, HashMap<Point, String> seeds) throws FileNotFoundException{
+    private static Pair<TileConfiguration, HashMap<Point, PolyTile>> LoadISUTASTileConfiguration(File f, HashMap<Point, String> seeds) throws FileNotFoundException {
         TileConfiguration tc = new TileConfiguration();
         Scanner reader = new Scanner(f);
-        HashMap<Point, PolyTile> seedPolyTiles = new  HashMap<Point, PolyTile>();
+        HashMap<Point, PolyTile> seedPolyTiles = new HashMap<Point, PolyTile>();
 
         Tile t = new Tile();
         int northStrength = 0;
@@ -84,66 +84,65 @@ public class Assembly extends Observable {
         Color c = null;
         String name = null;
 
-        while(reader.hasNextLine()){
+        while (reader.hasNextLine()) {
             String line = reader.nextLine();
-            if(line.startsWith("LABEL ")){
+            if (line.startsWith("LABEL ")) {
                 String tokens[] = line.split(" ");
-                if(tokens.length>1) t.setLabel(tokens[1]);
+                if (tokens.length > 1) t.setLabel(tokens[1]);
                 else t.setLabel("");
-            }else if(line.startsWith("TILENAME ")){
+            } else if (line.startsWith("TILENAME ")) {
                 name = line.split(" ")[1];
-            }else if(line.contains("NORTHLABEL ")){
+            } else if (line.contains("NORTHLABEL ")) {
                 t.setGlueN(line.split(" ")[1]);
-            }else if(line.contains("EASTLABEL ")){
+            } else if (line.contains("EASTLABEL ")) {
                 t.setGlueE(line.split(" ")[1]);
-            }else if(line.contains("SOUTHLABEL ")){
+            } else if (line.contains("SOUTHLABEL ")) {
                 t.setGlueS(line.split(" ")[1]);
-            }else if(line.contains("WESTLABEL ")){
+            } else if (line.contains("WESTLABEL ")) {
                 t.setGlueW(line.split(" ")[1]);
-            }else if(line.contains("NORTHBIND ")){
+            } else if (line.contains("NORTHBIND ")) {
                 northStrength = Integer.parseInt(line.split(" ")[1]);
-            }else if(line.contains("EASTBIND ")){
+            } else if (line.contains("EASTBIND ")) {
                 eastStrength = Integer.parseInt(line.split(" ")[1]);
-            }else if(line.contains("SOUTHBIND ")){
+            } else if (line.contains("SOUTHBIND ")) {
                 southStrength = Integer.parseInt(line.split(" ")[1]);
-            }else if(line.contains("WESTBIND ")){
+            } else if (line.contains("WESTBIND ")) {
                 westStrength = Integer.parseInt(line.split(" ")[1]);
-            }else if(line.contains("TILECOLOR ")){
+            } else if (line.contains("TILECOLOR ")) {
                 String colorStr = line.split(" ")[1];
-                if(colorStr.toLowerCase().contains("rgb(")) {
+                if (colorStr.toLowerCase().contains("rgb(")) {
                     colorStr = colorStr.substring(4, colorStr.length() - 1);
                     String rgbs[] = colorStr.split(",");
                     int red = Integer.parseInt(rgbs[0]);
                     int green = Integer.parseInt(rgbs[1]);
                     int blue = Integer.parseInt(rgbs[2]);
                     c = new Color(red, green, blue);
-                }else{
+                } else {
                     javafx.scene.paint.Color c2 = javafx.scene.paint.Color.web(colorStr);
-                    c = new Color((int) (c2.getRed()*255), (int) (c2.getGreen()*255), (int) (c2.getBlue()*255));
+                    c = new Color((int) (c2.getRed() * 255), (int) (c2.getGreen() * 255), (int) (c2.getBlue() * 255));
                 }
-            }
-            else if(line.contains("CREATE")){
-                if(t.getGlueN()!=null) {
-                    t.setGlueN(t.getGlueN()+northStrength);
+            } else if (line.contains("CREATE")) {
+                if (t.getGlueN() != null) {
+                    t.setGlueN(t.getGlueN() + northStrength);
                     tc.addGlueFunction(t.getGlueN(), t.getGlueN(), northStrength);
                 }
-                if(t.getGlueE()!=null) {
-                    t.setGlueE(t.getGlueE()+eastStrength);
+                if (t.getGlueE() != null) {
+                    t.setGlueE(t.getGlueE() + eastStrength);
                     tc.addGlueFunction(t.getGlueE(), t.getGlueE(), eastStrength);
                 }
-                if(t.getGlueS()!=null) {
-                    t.setGlueS(t.getGlueS()+southStrength);
+                if (t.getGlueS() != null) {
+                    t.setGlueS(t.getGlueS() + southStrength);
                     tc.addGlueFunction(t.getGlueS(), t.getGlueS(), southStrength);
                 }
-                if(t.getGlueW()!=null) {
-                    t.setGlueW(t.getGlueW()+westStrength);
+                if (t.getGlueW() != null) {
+                    t.setGlueW(t.getGlueW() + westStrength);
                     tc.addGlueFunction(t.getGlueW(), t.getGlueW(), westStrength);
                 }
                 PolyTile pt;
                 pt = new PolyTile(t.getLabel());
 
-                pt.addTile(0,0, t.getGlueLabels());
-                if(c!=null) {
+                pt.addTile(0, 0, t.getGlueLabels());
+                if (c != null) {
                     try {
                         String rgb = Integer.toHexString(c.getRGB());
                         rgb = rgb.substring(2, rgb.length());
@@ -151,31 +150,31 @@ public class Assembly extends Observable {
                     } catch (NullPointerException ignored) {
                     }
                 }
-                for(Map.Entry<Point, String> entry : seeds.entrySet()){
-                    if(entry.getValue().equals(name)){
+                for (Map.Entry<Point, String> entry : seeds.entrySet()) {
+                    if (entry.getValue().equals(name)) {
                         seedPolyTiles.put(entry.getKey(), pt);
                     }
                 }
                 tc.addTileType(pt);
                 t = new Tile();
-                northStrength=0;
-                eastStrength=0;
-                southStrength=0;
-                westStrength=0;
-                c=null;
+                northStrength = 0;
+                eastStrength = 0;
+                southStrength = 0;
+                westStrength = 0;
+                c = null;
             }
         }
-        return new Pair<TileConfiguration,  HashMap<Point, PolyTile>>(tc, seedPolyTiles);
+        return new Pair<TileConfiguration, HashMap<Point, PolyTile>>(tc, seedPolyTiles);
     }
 
-    private static Assembly LoadISUTASAssembly(File f) throws FileNotFoundException{
+    private static Assembly LoadISUTASAssembly(File f) throws FileNotFoundException {
         /*
             Load ISU TAS
             Reverse Engineered from File Format
             Code was never looked at such as to not inherit GPL
             */
 
-        String tileSetFile=null;
+        String tileSetFile = null;
         String mode = "atam";
         int temperature = 2;
         HashMap<Point, String> seeds = new HashMap<Point, String>();
@@ -186,39 +185,39 @@ public class Assembly extends Observable {
 
         Scanner reader = new Scanner(f);
 
-        while(reader.hasNextLine()){
+        while (reader.hasNextLine()) {
             String line = reader.nextLine();
             String lowerline = line.toLowerCase();
 
-            if(line.contains(".")) tileSetFile=line;
-            else if(lowerline.contains("mode="))
+            if (line.contains(".")) tileSetFile = line;
+            else if (lowerline.contains("mode="))
                 mode = lowerline.split("mode=")[1];
-            else if(lowerline.contains("temperature="))
+            else if (lowerline.contains("temperature="))
                 temperature = Integer.parseInt(lowerline.split("temperature=")[1]);
-            else if(line.split(" ").length>=3){
+            else if (line.split(" ").length >= 3) {
                 String tokens[] = line.split(" ");
                 String tileLabel = tokens[0];
                 int x = Integer.parseInt(tokens[1]);
                 int y = Integer.parseInt(tokens[2]);
-                int z = tokens.length>3 ? Integer.parseInt(tokens[3]) : 0;
-                if(z!=0) three_dimensional = true;
+                int z = tokens.length > 3 ? Integer.parseInt(tokens[3]) : 0;
+                if (z != 0) three_dimensional = true;
                 seeds.put(new Point(x, y), tileLabel);
             }
         }
 
         TileConfiguration tc = null;
-        if(tileSetFile!=null) {
+        if (tileSetFile != null) {
             File tileConfig = new File(f.getParent() + "/" + tileSetFile);
             Pair<TileConfiguration, HashMap<Point, PolyTile>> p = LoadISUTASTileConfiguration(tileConfig, seeds);
             tc = p.getKey();
             seedsPt = p.getValue();
         }
 
-        if(mode.equals("atam") && !three_dimensional){
+        if (mode.equals("atam") && !three_dimensional) {
             TileSystem ts = new TileSystem(temperature);
-            if(tc!=null) ts.loadTileConfiguration(tc);
+            if (tc != null) ts.loadTileConfiguration(tc);
             Assembly assembly = new Assembly(ts);
-            for(Map.Entry<Point, PolyTile> entry : seedsPt.entrySet()){
+            for (Map.Entry<Point, PolyTile> entry : seedsPt.entrySet()) {
                 Point location = entry.getKey();
                 PolyTile pt = entry.getValue();
 
@@ -229,20 +228,20 @@ public class Assembly extends Observable {
 
             }
             return assembly;
-        }else{
+        } else {
             //cannot use ktam, 2ham, or 3d
             return null;
         }
     }
 
-    public static Assembly LoadAssembly(File f) throws JAXBException, FileNotFoundException{
+    public static Assembly LoadAssembly(File f) throws JAXBException, FileNotFoundException {
         String extension = Assembly.getFileExtension(f);
-        if(extension.equals("tdp")){
+        if (extension.equals("tdp")) {
             Assembly assembly = LoadISUTASAssembly(f);
             assembly.getOpenGlues();
             assembly.calculateFrontier();
             return assembly;
-        }else { //load VersaTILE
+        } else { //load VersaTILE
             JAXBContext jaxbContext = JAXBContext.newInstance(Assembly.class);
             Unmarshaller unmarshaller;
             unmarshaller = jaxbContext.createUnmarshaller();
@@ -251,6 +250,13 @@ public class Assembly extends Observable {
             assembly.calculateFrontier();
             return assembly;
         }
+    }
+
+    private static String getFileExtension(File file) {
+        String fileName = file.getName();
+        if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
+            return fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+        else return "";
     }
 
     //change tile system stub
@@ -262,7 +268,6 @@ public class Assembly extends Observable {
         frontier.changeTileSystem(newTS);
         frontier.clear();
         calculateFrontier();
-        printDebugInformation();
         setChanged();
         notifyObservers(new Pair<String, FrontierElement>("Tile System", null));
         System.out.println("Frontier: " + frontier.size());
@@ -293,16 +298,16 @@ public class Assembly extends Observable {
             //Check if glues are open by checking if their corresponding adjacent point is open
             Coordinate spot = t.getKey();
 
-            if (glueLabels[0] != null && Grid.get(spot.translate(0,1)) == null) {
+            if (glueLabels[0] != null && Grid.get(spot.translate(0, 1)) == null) {
                 openNorthGlues.put(t.getKey(), glueLabels[0]);
             }
-            if (glueLabels[1] != null && Grid.get(spot.translate(1,0)) == null) {
+            if (glueLabels[1] != null && Grid.get(spot.translate(1, 0)) == null) {
                 openEastGlues.put(t.getKey(), glueLabels[1]);
             }
-            if (glueLabels[2] != null && Grid.get(spot.translate(0,-1)) == null) {
+            if (glueLabels[2] != null && Grid.get(spot.translate(0, -1)) == null) {
                 openSouthGlues.put(t.getKey(), glueLabels[2]);
             }
-            if (glueLabels[3] != null && Grid.get(spot.translate(-1,0)) == null) {
+            if (glueLabels[3] != null && Grid.get(spot.translate(-1, 0)) == null) {
                 openWestGlues.put(t.getKey(), glueLabels[3]);
             }
         }
@@ -346,8 +351,8 @@ public class Assembly extends Observable {
     private Pair<Coordinate, Coordinate> getOffset(Coordinate aPoint, Coordinate ptPoint, int offsetX, int offsetY) {
         Coordinate placement = new Coordinate(offsetX, offsetY);
         placement = placement.translate(aPoint.getX(), aPoint.getY());
-        int xOffset = - (ptPoint.getX() - placement.getX());
-        int yOffset = - (ptPoint.getY() - placement.getY());
+        int xOffset = -(ptPoint.getX() - placement.getX());
+        int yOffset = -(ptPoint.getY() - placement.getY());
         Coordinate tmp2 = new Coordinate(xOffset, yOffset);
         return new Pair<Coordinate, Coordinate>(placement, tmp2);
     }
@@ -438,6 +443,8 @@ public class Assembly extends Observable {
         return frontier;
     }
 
+    // delete from frontier
+
     private boolean checkStability(PolyTile p, int x, int y) {
         int totalStrength = 0;
         //For all tiles and their edges, check the tile they would possibly bond with for the strength
@@ -445,7 +452,7 @@ public class Assembly extends Observable {
         for (Tile t : p.tiles) {
             String nPolytileGlue = t.getGlueN();
             if (nPolytileGlue != null) {
-                Coordinate pt = new Coordinate(t.getLocation().getX()+x, t.getLocation().getY()+y+1);
+                Coordinate pt = new Coordinate(t.getLocation().getX() + x, t.getLocation().getY() + y + 1);
                 Tile nAssemblyTile = Grid.get(pt);
                 if (nAssemblyTile != null)
                     totalStrength += tileSystem.getStrength(nPolytileGlue, nAssemblyTile.getGlueS());
@@ -454,7 +461,7 @@ public class Assembly extends Observable {
 
             String ePolytileGlue = t.getGlueE();
             if (ePolytileGlue != null) {
-                Coordinate pt = new Coordinate(t.getLocation().getX()+x+1, t.getLocation().getY()+y);
+                Coordinate pt = new Coordinate(t.getLocation().getX() + x + 1, t.getLocation().getY() + y);
                 Tile eAssemblyTile = Grid.get(pt);
                 if (eAssemblyTile != null)
                     totalStrength += tileSystem.getStrength(ePolytileGlue, eAssemblyTile.getGlueW());
@@ -463,7 +470,7 @@ public class Assembly extends Observable {
 
             String sPolytileGlue = t.getGlueS();
             if (sPolytileGlue != null) {
-                Coordinate pt = new Coordinate(t.getLocation().getX()+x, t.getLocation().getY()+y-1);
+                Coordinate pt = new Coordinate(t.getLocation().getX() + x, t.getLocation().getY() + y - 1);
                 Tile sAssemblyTile = Grid.get(pt);
                 if (sAssemblyTile != null)
                     totalStrength += tileSystem.getStrength(sPolytileGlue, sAssemblyTile.getGlueN());
@@ -472,7 +479,7 @@ public class Assembly extends Observable {
 
             String wPolytileGlue = t.getGlueW();
             if (wPolytileGlue != null) {
-                Coordinate pt = new Coordinate(t.getLocation().getX()+x-1, t.getLocation().getY()+y);
+                Coordinate pt = new Coordinate(t.getLocation().getX() + x - 1, t.getLocation().getY() + y);
                 Tile wAssemblyTile = Grid.get(pt);
                 if (wAssemblyTile != null)
                     totalStrength += tileSystem.getStrength(wPolytileGlue, wAssemblyTile.getGlueE());
@@ -481,8 +488,6 @@ public class Assembly extends Observable {
         }
         return totalStrength >= tileSystem.getTemperature();
     }
-
-    // delete from frontier
 
     public void cleanUp() {
         frontier.clear();
@@ -537,7 +542,6 @@ public class Assembly extends Observable {
         return last;
     }
 
-
     public void detach(boolean notify) {
         if (!attached.getHistory().isEmpty()) {
             FrontierElement last = attached.getHistory().remove(attached.getHistory().size() - 1);
@@ -577,7 +581,7 @@ public class Assembly extends Observable {
         getOpenGlues();
     }
 
-    public void clearSeed(){
+    public void clearSeed() {
         detachAll(false);
         Grid.clear();
         setChanged();
@@ -587,7 +591,6 @@ public class Assembly extends Observable {
     public Set<Coordinate> pointsInGrid() {
         return Grid.keySet();
     }
-
 
     public double getDistribution(double rate) {
         Random rand = new Random();
@@ -650,7 +653,7 @@ public class Assembly extends Observable {
         return matrixString.toString();
     }
 
-    public PolyTile toPolyTile(){
+    public PolyTile toPolyTile() {
         PolyTile assemblyPT = new PolyTile();
         assemblyPT.getTiles().clear();
         for (Map.Entry<Coordinate, Tile> t : Grid.entrySet()) {
@@ -683,12 +686,5 @@ public class Assembly extends Observable {
     public void afterUnmarshal(Unmarshaller u, Object parent) {
         changeTileSystem(getTileSystem());
         getOpenGlues();
-    }
-
-    private static String getFileExtension(File file) {
-        String fileName = file.getName();
-        if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
-            return fileName.substring(fileName.lastIndexOf(".")+1).toLowerCase();
-        else return "";
     }
 }

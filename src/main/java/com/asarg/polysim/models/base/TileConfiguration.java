@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @XmlRootElement(name = "TileConfiguration")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -46,5 +47,20 @@ public class TileConfiguration {
 
     public ObservableList<PolyTile> getTiletypes() {
         return observableTileTypes;
+    }
+
+    public void mergeTileConfiguration(TileConfiguration tc){
+        for(PolyTile pt : tc.getTiletypes()){
+            if(!getTiletypes().contains(pt))
+                addTileType(pt);
+        }
+
+        for(Map.Entry<Pair<String, String>, Integer> entry : tc.getGlueFunction().entrySet()){
+            String glue1 = entry.getKey().getKey();
+            String glue2 = entry.getKey().getValue();
+            Integer strength = entry.getValue();
+
+            addGlueFunction(glue1, glue2, strength);
+        }
     }
 }

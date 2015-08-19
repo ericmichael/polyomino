@@ -3,7 +3,8 @@ package com.asarg.polysim.examples;
 import com.asarg.polysim.models.StagedTwoHAM.Bin;
 import com.asarg.polysim.models.StagedTwoHAM.Stage;
 import com.asarg.polysim.models.atam.ATAMTile;
-import com.asarg.polysim.models.base.*;
+import com.asarg.polysim.models.base.PolyTile;
+import com.asarg.polysim.models.base.TileConfiguration;
 import javafx.util.Pair;
 
 import javax.xml.bind.JAXBContext;
@@ -18,29 +19,28 @@ import java.util.HashMap;
  */
 
 
+public class GeometricAlgorithms {
 
-public class GeometricAlgorithms{
-
-    public static void main(String args[]){
+    public static void main(String args[]) {
         int number = 16;
         int logn = 5;
         ArrayList<Stage> stages = new ArrayList<Stage>(5);
-        for(int i = 0; i < logn; i++){
+        for (int i = 0; i < logn; i++) {
             System.out.println("Creating Stage: " + i);
-            Stage stage = new Stage(i+1);
+            Stage stage = new Stage(i + 1);
             stages.add(stage);
 
-            HashMap<Pair<String,String>, Integer> glueFunction = new HashMap<Pair<String, String>, Integer>();
+            HashMap<Pair<String, String>, Integer> glueFunction = new HashMap<Pair<String, String>, Integer>();
             glueFunction.put(new Pair<String, String>("a", "a"), 1);
             glueFunction.put(new Pair<String, String>("b", "b"), 1);
             glueFunction.put(new Pair<String, String>("c", "c"), 1);
 
-            Bin b1 = new Bin(1,1);
-            Bin b2 = new Bin(2,1);
-            Bin b3 = new Bin(3,1);
-            Bin b4 = new Bin(4,1);
-            Bin b5 = new Bin(5,1);
-            Bin b6 = new Bin(6,1);
+            Bin b1 = new Bin(1, 1);
+            Bin b2 = new Bin(2, 1);
+            Bin b3 = new Bin(3, 1);
+            Bin b4 = new Bin(4, 1);
+            Bin b5 = new Bin(5, 1);
+            Bin b6 = new Bin(6, 1);
 
             stage.addBin(b1);
             stage.addBin(b2);
@@ -49,19 +49,19 @@ public class GeometricAlgorithms{
             stage.addBin(b5);
             stage.addBin(b6);
 
-            if(i==0){
+            if (i == 0) {
                 ATAMTile pt1 = new ATAMTile("");
                 ATAMTile pt2 = new ATAMTile("");
                 ATAMTile pt3 = new ATAMTile("");
                 ATAMTile pt4 = new ATAMTile("");
                 ATAMTile pt5 = new ATAMTile("");
                 ATAMTile pt6 = new ATAMTile("");
-                pt1.setGlues("","c","","a");
-                pt2.setGlues("","b","","c");
-                pt3.setGlues("","a","","b");
-                pt4.setGlues("","a","","c");
-                pt5.setGlues("","c","","b");
-                pt6.setGlues("","b","","a");
+                pt1.setGlues("", "c", "", "a");
+                pt2.setGlues("", "b", "", "c");
+                pt3.setGlues("", "a", "", "b");
+                pt4.setGlues("", "a", "", "c");
+                pt5.setGlues("", "c", "", "b");
+                pt6.setGlues("", "b", "", "a");
 
                 b1.addTile(pt1);
                 b2.addTile(pt2);
@@ -76,8 +76,8 @@ public class GeometricAlgorithms{
                 b4.addGlueFunction(glueFunction);
                 b5.addGlueFunction(glueFunction);
                 b6.addGlueFunction(glueFunction);
-            }else{
-                Stage previousStage = stages.get(i-1);
+            } else {
+                Stage previousStage = stages.get(i - 1);
                 Bin bb1 = previousStage.getBin(0);
                 Bin bb2 = previousStage.getBin(1);
                 Bin bb3 = previousStage.getBin(2);
@@ -104,25 +104,25 @@ public class GeometricAlgorithms{
                 bb2.addEdge(b6);
             }
         }
-        for(int i = 0; i < stages.size(); i ++) {
+        for (int i = 0; i < stages.size(); i++) {
             Stage stage = stages.get(i);
             stage.start();
 
 
             for (int k = 0; k < stage.size(); k++) {
 
-                int stagenum=i+1;
-                int binnum = k+1;
+                int stagenum = i + 1;
+                int binnum = k + 1;
                 System.out.println("Writing Terminal Tiles for Stage: " + stagenum + " Bin: " + binnum);
 
                 Bin bin = stage.getBin(k);
 
-                writeTerminalTileSet(bin, "/Users/ericmartinez/stage_"+stagenum+"_bin_" + binnum + ".xml");
+                writeTerminalTileSet(bin, "/Users/ericmartinez/stage_" + stagenum + "_bin_" + binnum + ".xml");
             }
         }
     }
 
-    public static void writeTileConfig(Bin bin, String filename){
+    public static void writeTileConfig(Bin bin, String filename) {
 
         try {
             TileConfiguration tc = new TileConfiguration();
@@ -141,7 +141,7 @@ public class GeometricAlgorithms{
         }
     }
 
-    public static void writeTerminalTileSet(Bin bin, String filename){
+    public static void writeTerminalTileSet(Bin bin, String filename) {
 
         try {
             TileConfiguration tc = new TileConfiguration();

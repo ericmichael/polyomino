@@ -55,7 +55,7 @@ public class Tile {
         polyTile = parent;
     }
 
-    public Tile(Tile t){
+    public Tile(Tile t) {
         tileLocation = new Coordinate(t.getLocation());
         glueN = t.getGlueN();
         glueE = t.getGlueE();
@@ -66,7 +66,7 @@ public class Tile {
     }
 
     public String getLabel() {
-        if (label.isEmpty() && polyTile!=null) return polyTile.getPolyName();
+        if (label.isEmpty() && polyTile != null) return polyTile.getPolyName();
         else return label;
     }
 

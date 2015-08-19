@@ -13,9 +13,9 @@ import java.util.HashMap;
 public class SimulationCanvas extends JPanel {
 
 
+    private final Dimension res = new Dimension();
     private BufferedImage canvasBFI;
     private Graphics2D cg2d;
-    private final Dimension res = new Dimension();
     private int tileDiameter = 50;
     private Coordinate center;
 

@@ -18,52 +18,17 @@ import java.util.Properties;
  */
 public class Version implements Comparable<Version> {
 
+    // Whether Windows/Mac
+    static final boolean isWindows = (System.getProperty("os.name").contains("Windows"));
+    static final boolean isMac = (System.getProperty("os.name").contains("Mac OS X"));
     private String version;
 
-    public final String get() {
-        return this.version;
-    }
-
     public Version(String version) {
-        if(version == null)
+        if (version == null)
             throw new IllegalArgumentException("Version can not be null");
-        if(!version.matches("[0-9]+(\\.[0-9]+)*"))
+        if (!version.matches("[0-9]+(\\.[0-9]+)*"))
             throw new IllegalArgumentException("Invalid version format");
         this.version = version;
-    }
-
-    @Override public int compareTo(Version that) {
-        if(that == null)
-            return 1;
-        String[] thisParts = this.get().split("\\.");
-        String[] thatParts = that.get().split("\\.");
-        int length = Math.max(thisParts.length, thatParts.length);
-        for(int i = 0; i < length; i++) {
-            int thisPart = i < thisParts.length ?
-                    Integer.parseInt(thisParts[i]) : 0;
-            int thatPart = i < thatParts.length ?
-                    Integer.parseInt(thatParts[i]) : 0;
-            if(thisPart < thatPart)
-                return -1;
-            if(thisPart > thatPart)
-                return 1;
-        }
-        return 0;
-    }
-
-    @Override public boolean equals(Object that) {
-        if(this == that)
-            return true;
-        if(that == null)
-            return false;
-        if(this.getClass() != that.getClass())
-            return false;
-        return this.compareTo((Version) that) == 0;
-    }
-
-    @Override
-    public String toString() {
-        return version;
     }
 
     public static Version getCurrentVersion() {
@@ -81,7 +46,7 @@ public class Version implements Comparable<Version> {
     }
 
     public static Version getLatestInstalledVersion() {
-        File versionsDir= getAppVersionsDir("VersaTile", true);
+        File versionsDir = getAppVersionsDir("VersaTile", true);
         String[] directories = versionsDir.list(new FilenameFilter() {
             @Override
             public boolean accept(File current, String name) {
@@ -89,13 +54,13 @@ public class Version implements Comparable<Version> {
             }
         });
         Version latest = null;
-        for(String folder : directories){
+        for (String folder : directories) {
             try {
                 Version v = new Version(folder);
-                if(v.compareTo(latest)>0){
+                if (v.compareTo(latest) > 0) {
                     latest = v;
                 }
-            }catch(IllegalArgumentException ignored){
+            } catch (IllegalArgumentException ignored) {
 
             }
         }
@@ -127,37 +92,36 @@ public class Version implements Comparable<Version> {
         } else return null;
     }
 
-    private static File getAppDataDir(String aName, boolean doCreate)
-    {
+    private static File getAppDataDir(String aName, boolean doCreate) {
         // Get user home + AppDataDir (platform specific) + name (if provided)
         String dir = System.getProperty("user.home");
-        if(isWindows) dir += File.separator + "AppData" + File.separator + "Local";
-        else if(isMac) dir += File.separator + "Library" + File.separator + "Application Support";
-        if(aName!=null) dir += File.separator + aName;
+        if (isWindows) dir += File.separator + "AppData" + File.separator + "Local";
+        else if (isMac) dir += File.separator + "Library" + File.separator + "Application Support";
+        if (aName != null) dir += File.separator + aName;
 
         // Create file, actual directory (if requested) and return
         File dfile = new File(dir);
-        if(doCreate && aName!=null) dfile.mkdirs();
+        if (doCreate && aName != null) dfile.mkdirs();
         return dfile;
     }
 
-    private static File getAppVersionsDir(String aName, boolean doCreate){
+    private static File getAppVersionsDir(String aName, boolean doCreate) {
         File dataDir = getAppDataDir(aName, doCreate);
-        String dir = dataDir.getAbsolutePath()+ "/versions";
+        String dir = dataDir.getAbsolutePath() + "/versions";
         // Create file, actual directory (if requested) and return
         File dfile = new File(dir);
-        if(doCreate && aName!=null) dfile.mkdirs();
+        if (doCreate && aName != null) dfile.mkdirs();
         return dfile;
     }
 
-    public static void startLatest(String[] args) throws Exception{
+    public static void startLatest(String[] args) throws Exception {
         //Create URLClassLoader for main jar file, get App class and invoke main
         File jar = getLatestInstalled();
-        if(jar!=null) {
+        if (jar != null) {
             final URLClassLoader child = new URLClassLoader(new URL[]{jar.toURI().toURL()});
-            final Class classToLoad = Class.forName ("com.asarg.polysim.SimulationApplication", true, child);
+            final Class classToLoad = Class.forName("com.asarg.polysim.SimulationApplication", true, child);
             final Method method = classToLoad.getMethod("start", Stage.class);
-            final Object instance = classToLoad.newInstance ();
+            final Object instance = classToLoad.newInstance();
 
 
             if (classToLoad == Object.class) child.close(); // Getting rid of warning message for ucl
@@ -176,7 +140,43 @@ public class Version implements Comparable<Version> {
         }
     }
 
-    // Whether Windows/Mac
-    static final boolean isWindows = (System.getProperty("os.name").contains("Windows"));
-    static final boolean isMac = (System.getProperty("os.name").contains("Mac OS X"));
+    public final String get() {
+        return this.version;
+    }
+
+    @Override
+    public int compareTo(Version that) {
+        if (that == null)
+            return 1;
+        String[] thisParts = this.get().split("\\.");
+        String[] thatParts = that.get().split("\\.");
+        int length = Math.max(thisParts.length, thatParts.length);
+        for (int i = 0; i < length; i++) {
+            int thisPart = i < thisParts.length ?
+                    Integer.parseInt(thisParts[i]) : 0;
+            int thatPart = i < thatParts.length ?
+                    Integer.parseInt(thatParts[i]) : 0;
+            if (thisPart < thatPart)
+                return -1;
+            if (thisPart > thatPart)
+                return 1;
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean equals(Object that) {
+        if (this == that)
+            return true;
+        if (that == null)
+            return false;
+        if (this.getClass() != that.getClass())
+            return false;
+        return this.compareTo((Version) that) == 0;
+    }
+
+    @Override
+    public String toString() {
+        return version;
+    }
 }

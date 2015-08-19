@@ -4,22 +4,20 @@ package com.asarg.polysim.adapters.graphics.vector;
 import com.asarg.polysim.models.base.Coordinate;
 import com.asarg.polysim.models.base.FrontierElement;
 import com.asarg.polysim.models.base.Tile;
+import javafx.scene.canvas.Canvas;
 import org.jfree.fx.FXGraphics2D;
 
-
 import java.awt.*;
-import javafx.scene.canvas.Canvas;
-
 import java.util.HashMap;
 
 public class SimulationCanvas extends Canvas {
-    private FXGraphics2D cg2d;
     private final Dimension res = new Dimension();
+    private FXGraphics2D cg2d;
     private int tileDiameter = 50;
     private Coordinate center;
 
     public SimulationCanvas(int w, int h) {
-        super(w,h);
+        super(w, h);
         center = new Coordinate(w / 2, h / 2);
         cg2d = new FXGraphics2D(getGraphicsContext2D());
 //        cg2d.setComposite(AlphaComposite.Src);
@@ -29,7 +27,7 @@ public class SimulationCanvas extends Canvas {
     }
 
     public SimulationCanvas() {
-        super(Toolkit.getDefaultToolkit().getScreenSize().width,Toolkit.getDefaultToolkit().getScreenSize().height);
+        super(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
     }
 
     //@Override
