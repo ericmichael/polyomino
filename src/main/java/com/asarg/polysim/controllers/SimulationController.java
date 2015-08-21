@@ -20,6 +20,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
@@ -31,9 +35,12 @@ import javafx.util.Callback;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -574,5 +581,14 @@ public class SimulationController implements Initializable {
     @FXML
     public void deletePolyTileMenuItem() {
         deleteSelectedPolyTile();
+    }
+
+    @FXML
+    public void openWebsite(){
+        try {
+            Desktop.getDesktop().browse(new URI("http://faculty.utpa.edu/orgs/asarg/"));
+        }catch(Exception e){
+
+        }
     }
 }
