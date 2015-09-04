@@ -6,6 +6,7 @@ import com.asarg.polysim.adapters.graphics.raster.SimulationCanvas;
 import com.asarg.polysim.models.TwoHAM.TwoHAMAssembly;
 import com.asarg.polysim.models.TwoHAM.TwoHAMSimulationNode;
 import com.asarg.polysim.models.base.*;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -13,6 +14,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -97,6 +99,8 @@ public class SimulationController implements Initializable {
     Label lbl_right_status;
     @FXML
     ListView<PolyTile> listview_polytiles;
+    @FXML
+    Hyperlink hyperlink_website;
     private Stage stage;
     private boolean inspecting = false;
 
@@ -302,6 +306,18 @@ public class SimulationController implements Initializable {
                         cn.drawGrid();
                         t.consume();
                     }
+                }
+            }
+        });
+
+        hyperlink_website.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent t) {
+                try {
+                    Desktop.getDesktop().browse(new URI(hyperlink_website.getText()));
+                }catch(Exception e){
+                    e.printStackTrace();
                 }
             }
         });
@@ -581,14 +597,5 @@ public class SimulationController implements Initializable {
     @FXML
     public void deletePolyTileMenuItem() {
         deleteSelectedPolyTile();
-    }
-
-    @FXML
-    public void openWebsite(){
-        try {
-            Desktop.getDesktop().browse(new URI("http://faculty.utpa.edu/orgs/asarg/"));
-        }catch(Exception e){
-
-        }
     }
 }

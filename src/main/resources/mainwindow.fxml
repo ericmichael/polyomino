@@ -102,7 +102,7 @@
                                     <Font name="Helvetica Neue Thin" size="12.0" />
                                  </font>
                               </Label>
-                              <Hyperlink layoutX="422.0" layoutY="79.0" onMouseClicked="#openWebsite" text="Visit Our Website" textAlignment="RIGHT" />
+                              <Hyperlink fx:id="hyperlink_website" disable="true" layoutX="422.0" layoutY="79.0" text="Visit Our Website" textAlignment="RIGHT" visible="false" />
                                         <Hyperlink text="Getting Started" textAlignment="RIGHT" visible="false" />
                                         <Hyperlink text="Video Tutorials" textAlignment="RIGHT" visible="false" />
                                         <Label text="Examples" textAlignment="RIGHT" visible="false" />
