@@ -78,14 +78,14 @@
         </VBox>
     </top>
     <center>
-        <StackPane prefHeight="304.0" prefWidth="371.0">
+        <StackPane prefHeight="501.0" prefWidth="673.0">
             <children>
                 <AnchorPane fx:id="helpPane" prefHeight="200.0" prefWidth="200.0">
                     <children>
-                        <HBox AnchorPane.rightAnchor="39.0" AnchorPane.topAnchor="0.0">
+                        <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <children>
                                 <Region prefHeight="304.0" prefWidth="124.0" HBox.hgrow="ALWAYS" />
-                                <VBox alignment="TOP_RIGHT" HBox.hgrow="NEVER">
+                                <VBox alignment="TOP_RIGHT" prefHeight="501.0" prefWidth="675.0" HBox.hgrow="NEVER">
                                     <children>
                                         <Label text="Welcome to VersaTile">
                                             <font>

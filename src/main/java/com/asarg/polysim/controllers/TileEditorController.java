@@ -285,7 +285,7 @@ public class TileEditorController implements Initializable {
     MenuItem menu_clear_glues;
     @FXML
     MenuItem menu_close;
-    ObservableList<Glue> glueData;
+    ObservableList<Glue> glueData = FXCollections.observableArrayList();
     private TileConfiguration tc;
     private EditorCanvas canvas;
     private SimulationNode current;
@@ -299,9 +299,6 @@ public class TileEditorController implements Initializable {
                 return ptCell;
             }
         });
-        if (this.tc != null) {
-            listview_polytiles.setItems(tc.getTiletypes());
-        }
 
         canvas = new EditorCanvas(800, 600);
 
@@ -340,8 +337,6 @@ public class TileEditorController implements Initializable {
         disablePolyTileData();
         addListeners();
         accordion.setExpandedPane(tileEditorPane);
-
-        glueData = FXCollections.observableArrayList();
 
         TableColumn col1 = table_gluetable.getColumns().get(0);
         TableColumn col2 = table_gluetable.getColumns().get(1);
@@ -398,7 +393,6 @@ public class TileEditorController implements Initializable {
                     }
                 }
         );
-
         table_gluetable.setItems(glueData);
         table_gluetable.setEditable(true);
 

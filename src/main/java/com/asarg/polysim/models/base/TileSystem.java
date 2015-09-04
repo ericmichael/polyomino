@@ -195,7 +195,7 @@ public class TileSystem {
         else if (t.getGlueFunction() == null || t.getTiletypes() == null)
             return false;
 
-        glueFunction = t.getGlueFunction();
+        glueFunction.putAll(t.getGlueFunction());
 
         observableTileTypes.addAll(t.getTiletypes());
 
