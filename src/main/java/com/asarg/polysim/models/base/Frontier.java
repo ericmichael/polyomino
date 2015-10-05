@@ -16,13 +16,11 @@ public class Frontier extends ArrayList<FrontierElement> {
         int hi = cdList.size() - 1;
         while (lo <= hi) {
             int mid = lo + (hi - lo) / 2;
-            if (mid == 0)
+            if (x <= cdList.get(mid) && (mid == 0 || x >= cdList.get(mid - 1)))
                 return mid;
-            if (x < cdList.get(mid) && x >= cdList.get(mid - 1))
-                return mid;
-            else if (x < cdList.get(mid))
+            else if (x <= cdList.get(mid))
                 hi = mid - 1;
-            else if (x > cdList.get(mid))
+            else
                 lo = mid + 1;
         }
         return -1;
