@@ -1,3 +1,6 @@
+@font-face {
+    src: url('fontawesome.ttf');
+}
 
 .inspector-primary-label .text{
     -fx-fill: #424242;
@@ -37,6 +40,8 @@
 .toolbar-ctrl-btn{
     -fx-background-color: none;
     -fx-font-family: FontAwesome;
+
+
 }
 
 .toolbar-ctrl-btn .text{

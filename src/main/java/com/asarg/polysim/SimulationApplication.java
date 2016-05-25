@@ -16,13 +16,6 @@ import java.io.IOException;
  */
 
 public class SimulationApplication extends Application {
-    static {
-        try {
-            Font.loadFont(Main.class.getResource("/fontawesome.ttf").toExternalForm(), 10);
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        }
-    }
 
     protected Assembly assembly;
     Stage primaryStage;
@@ -31,6 +24,13 @@ public class SimulationApplication extends Application {
     public void start(Stage primaryStage) {
         //Workspace w = new Workspace();
         this.primaryStage = primaryStage;
+
+        try {
+            Font.loadFont(Main.class.getResource("/fontawesome.ttf").toExternalForm(), 10);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+
         try {
             FXMLLoader loader = new FXMLLoader(
                     Main.class.getResource("/mainwindow.fxml")
