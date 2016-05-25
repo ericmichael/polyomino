@@ -118,111 +118,68 @@ public class TileEditorController implements Initializable {
             }
         }
     };
+
+    private void fieldHelper(final String oldValue, final String newValue, final TextField field, String target ){
+        final int caret = field.getCaretPosition();
+        final int caret_new;
+        if(newValue!=null && oldValue!=null)
+            caret_new = caret + (newValue.length() - oldValue.length());
+        else
+            caret_new = caret;
+
+        if (newValue != null) {
+            Tile selected = canvas.getSelectedTileProperty().get();
+            if (selected != null) {
+                if(target=="label") canvas.getSelectedTileProperty().get().setLabel(newValue);
+                else if(target=="north") canvas.getSelectedTileProperty().get().setGlueN(newValue);
+                else if(target=="south") canvas.getSelectedTileProperty().get().setGlueS(newValue);
+                else if(target=="east") canvas.getSelectedTileProperty().get().setGlueE(newValue);
+                else if(target=="west") canvas.getSelectedTileProperty().get().setGlueW(newValue);
+
+                redrawPolyTile(selected);
+                updateable.set(true);
+
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        field.requestFocus();
+                        field.positionCaret(caret_new);
+                    }
+                });
+            }
+        }
+    }
     final ChangeListener<String> listener_label = new ChangeListener<String>() {
         @Override
-        public void changed(ObservableValue<? extends String> observable, String oldValue, final String newValue) {
-            if (newValue != null) {
-                Tile selected = canvas.getSelectedTileProperty().get();
-                if (selected != null) {
-                    canvas.getSelectedTileProperty().get().setLabel(newValue);
-                    redrawPolyTile(selected);
-                    updateable.set(true);
-
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            field_tile_label.requestFocus();
-                            field_tile_label.positionCaret(newValue.length());
-                        }
-                    });
-                }
-            }
+        public void changed(ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+            fieldHelper(oldValue, newValue, field_tile_label,  "label");
         }
     };
     final ChangeListener<String> listener_north_glue = new ChangeListener<String>() {
         @Override
-        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-            if (newValue != null) {
-                Tile selected = canvas.getSelectedTileProperty().get();
-                if (selected != null) {
-                    canvas.getSelectedTileProperty().get().setGlueN(newValue);
-                    redrawPolyTile(selected);
-                    updateable.set(true);
-
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            field_north_glue.requestFocus();
-                            field_north_glue.positionCaret(field_north_glue.getText().length());
-                        }
-                    });
-                }
-            }
+        public void changed(ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+           fieldHelper(oldValue, newValue, field_north_glue, "north");
         }
     };
     final ChangeListener<String> listener_south_glue = new ChangeListener<String>() {
         @Override
-        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-            if (newValue != null) {
-                Tile selected = canvas.getSelectedTileProperty().get();
-                if (selected != null) {
-                    canvas.getSelectedTileProperty().get().setGlueS(newValue);
-                    redrawPolyTile(selected);
-                    updateable.set(true);
-
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            field_south_glue.requestFocus();
-                            field_south_glue.positionCaret(field_south_glue.getText().length());
-                        }
-                    });
-                }
-            }
+        public void changed(ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+            fieldHelper(oldValue, newValue, field_south_glue, "south");
         }
     };
     final ChangeListener<String> listener_east_glue = new ChangeListener<String>() {
         @Override
-        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-            if (newValue != null) {
-                Tile selected = canvas.getSelectedTileProperty().get();
-                if (selected != null) {
-                    canvas.getSelectedTileProperty().get().setGlueE(newValue);
-                    redrawPolyTile(selected);
-                    updateable.set(true);
-
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            field_east_glue.requestFocus();
-                            field_east_glue.positionCaret(field_east_glue.getText().length());
-                        }
-                    });
-                }
-            }
+        public void changed(ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+            fieldHelper(oldValue, newValue, field_east_glue, "east");
         }
     };
     final ChangeListener<String> listener_west_glue = new ChangeListener<String>() {
         @Override
-        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-            if (newValue != null) {
-                Tile selected = canvas.getSelectedTileProperty().get();
-                if (selected != null) {
-                    canvas.getSelectedTileProperty().get().setGlueW(newValue);
-                    redrawPolyTile(selected);
-                    updateable.set(true);
-
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            field_west_glue.requestFocus();
-                            field_west_glue.positionCaret(field_west_glue.getText().length());
-                        }
-                    });
-                }
-            }
+        public void changed(ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+            fieldHelper(oldValue, newValue, field_west_glue, "west");
         }
     };
+
     @FXML
     AnchorPane ptAnchorPane;
     @FXML
