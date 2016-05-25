@@ -66,8 +66,7 @@ public class Tile {
     }
 
     public String getLabel() {
-        if (label.isEmpty() && polyTile != null) return polyTile.getPolyName();
-        else return label;
+        return label;
     }
 
     public void setLabel(String Label) {
