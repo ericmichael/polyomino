@@ -481,7 +481,7 @@ public class TileEditorController implements Initializable {
         canvas.drawPolyTile();
         int index = listview_polytiles.getSelectionModel().getSelectedIndex();
         PolyTile pt = canvas.getPolyTile();
-        listview_polytiles.getItems().remove(index);
+         listview_polytiles.getItems().remove(index);
         listview_polytiles.getItems().add(index, pt);
         listview_polytiles.getSelectionModel().select(index);
         if (selected != null) {
@@ -660,7 +660,14 @@ public class TileEditorController implements Initializable {
             public void handle(ActionEvent event) {
                 PolyTile toAdd = new PolyTile();
                 listview_polytiles.getItems().add(0, toAdd);
-                listview_polytiles.getSelectionModel().select(0);
+                canvas.setPolyTile(toAdd);
+                menu_delete.setDisable(false);
+                context_menu_delete.setDisable(false);
+                removePolyTileListeners();
+                disableTileData();
+                setPolyTileData(toAdd);
+                enablePolyTileData();
+                addPolyTileListeners();
             }
         });
 
@@ -669,7 +676,14 @@ public class TileEditorController implements Initializable {
             public void handle(ActionEvent event) {
                 PolyTile toAdd = new PolyTile();
                 listview_polytiles.getItems().add(0, toAdd);
-                listview_polytiles.getSelectionModel().select(0);
+                canvas.setPolyTile(toAdd);
+                menu_delete.setDisable(false);
+                context_menu_delete.setDisable(false);
+                removePolyTileListeners();
+                disableTileData();
+                setPolyTileData(toAdd);
+                enablePolyTileData();
+                addPolyTileListeners();
             }
         });
 

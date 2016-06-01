@@ -77,9 +77,18 @@ public class SimulationCanvas extends JPanel {
 
 
     public void drawGrid(HashMap<Coordinate, Tile> hmpt) {
+        Drawer.TileDrawer.drawTiles(cg2d, hmpt, tileDiameter, center );
+    }
 
-        Drawer.TileDrawer.drawTiles(cg2d, hmpt.entrySet(), tileDiameter, center);
-
+    public void drawGrid(HashMap<Coordinate, Tile> hmpt, Coordinate selected) {
+        Drawer.TileDrawer.drawTiles(cg2d, hmpt, tileDiameter, center);
+        if(selected!=null) {
+            Tile selectedTile = hmpt.get(selected);
+            if(selectedTile!=null) {
+                Coordinate offset = new Coordinate(selected.getX() - selectedTile.getLocation().getX(), selected.getY() - selectedTile.getLocation().getY());
+                Drawer.TileDrawer.drawPolyTileSelection(cg2d, selectedTile.getParent(), tileDiameter, offset, center);
+            }
+        }
     }
 
     // draws the given polytile onto the loaded graphics object (alternative to drawGrid which draws the

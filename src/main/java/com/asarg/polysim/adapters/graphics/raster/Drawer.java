@@ -7,9 +7,9 @@ import javafx.util.Pair;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.lang.reflect.Array;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 
 public class Drawer {
@@ -153,6 +153,99 @@ public class Drawer {
             g.setStroke(new BasicStroke(diameter / 25));
         }
 
+        public static void drawTileOutline(Graphics2D g, Tile tile, int x, int y, int diameter, boolean hasNorth, boolean hasEast, boolean hasSouth, boolean hasWest, boolean selection){
+            Stroke dashed = new BasicStroke(diameter / 25, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{4}, 0);
+            Stroke simple = new BasicStroke(diameter / 25);
+
+            if(!tile.getParent().isFrontier()){
+                //draw wimpy borders
+                g.setStroke(dashed);
+                g.setColor(Color.gray);
+                if(hasNorth) g.drawLine(x, y, x+diameter, y);
+                if(hasEast) g.drawLine(x+diameter, y, x+diameter, y+diameter);
+                if(hasSouth) g.drawLine(x, y+diameter, x+diameter, y+diameter);
+                if(hasWest) g.drawLine(x, y, x, y + diameter);
+
+                g.setStroke(simple);
+
+                if(!selection)
+                    g.setColor(Color.black);
+                else {
+                    dashed = new BasicStroke(diameter / 10, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{4}, 0);
+                    g.setStroke(dashed);
+                    g.setColor(Color.decode("#007AFF"));
+                }
+
+                if(!hasNorth) g.drawLine(x, y, x+diameter, y);
+                if(!hasEast) g.drawLine(x+diameter, y, x+diameter, y+diameter);
+                if(!hasSouth) g.drawLine(x, y+diameter, x+diameter, y+diameter);
+                if(!hasWest) g.drawLine(x, y, x, y+diameter);
+
+            }else{
+                g.setColor(Color.black);
+
+                g.setStroke(dashed);
+                g.drawLine(x, y, x + diameter, y);
+                g.drawLine(x + diameter, y, x + diameter, y + diameter);
+                g.drawLine(x, y + diameter, x + diameter, y + diameter);
+                g.drawLine(x, y, x, y + diameter);
+            }
+        }
+
+        public static void drawTile(Graphics2D g, Tile tile, int x, int y, int diameter, boolean hasNorth, boolean hasEast, boolean hasSouth, boolean hasWest) {
+            g.setFont(g.getFont().deriveFont((float) (diameter / 6)));
+            Rectangle clip = g.getClipBounds();
+
+            if (x > clip.width + diameter || x < 0 - diameter || y > clip.height + diameter || y < 0 - diameter)
+                return;
+            AffineTransform gOriginalATransform = g.getTransform();
+
+            String tileLabel = tile.getLabel();
+            String northGlue = tile.getGlueN();
+            String eastGlue = tile.getGlueE();
+            String southGlue = tile.getGlueS();
+            String westGlue = tile.getGlueW();
+
+            //get hex color string to int, then create new color out of the rgb
+            //int colorInt = Integer.parseInt(tile.getColor(), 16);
+            //Color tileColor =new Color(colorInt >> 16, (colorInt & 0x00FF00) >> 8, colorInt & 0x0000FF, 100);
+            Color tileColor = Color.decode("#" + tile.getColor());
+            g.setColor(tileColor);
+
+            // the tiles fill color
+            g.fillRect(x, y, diameter, diameter);
+
+            drawTileOutline(g, tile, x, y, diameter, hasNorth, hasEast, hasSouth, hasWest, false);
+
+            //Drawing the glues-------------------------------------
+            // font metrics is used to calculate horizontal and vertical size of the string.
+            // horizontal: stringWidth(string);  vertical: getAscent()?
+            FontMetrics font = g.getFontMetrics();
+
+            if (westGlue != null && !westGlue.isEmpty()) {
+
+                g.rotate(Math.PI / 2);
+                g.drawString(westGlue, y + (diameter / 2 - font.stringWidth(westGlue) / 2), -x - diameter / 20);
+                g.setTransform(gOriginalATransform);
+            }
+            if (eastGlue != null && !eastGlue.isEmpty()) {
+                g.rotate(Math.PI / 2);
+                g.drawString(eastGlue, y + (diameter / 2 - font.stringWidth(eastGlue) / 2), -x - diameter + diameter / 6);
+                g.setTransform(gOriginalATransform);
+
+            }
+
+            if (southGlue != null && !southGlue.isEmpty()) {
+                g.drawString(southGlue, x + diameter / 2 - font.stringWidth(southGlue) / 2, y + diameter - diameter / 20);
+            }
+            if (northGlue != null && !northGlue.isEmpty()) {
+                g.drawString(northGlue, x + diameter / 2 - font.stringWidth(northGlue) / 2, y + diameter / 8);
+            }
+
+            g.drawString(tileLabel, x + (diameter / 2) - (font.stringWidth(tileLabel) / 2), y + (diameter / 2));
+        }
+
+
         public static void drawHexTile(Graphics2D g, Tile tile, int x, int y, int diameter) {
             Polygon sprite = new Polygon();
             for (int i = 0; i < 6; i++) {
@@ -162,14 +255,29 @@ public class Drawer {
             g.drawPolygon(sprite);
         }
 
-        public static void drawTiles(Graphics2D g, Set<Map.Entry<Coordinate, Tile>> tiles, int diameter, Coordinate offset) {
+        public static void drawTiles(Graphics2D g, HashMap<Coordinate, Tile> hmpt, int diameter, Coordinate offset) {
+
+            Set<Map.Entry<Coordinate, Tile>> tiles = hmpt.entrySet();
+
 
             for (Map.Entry<Coordinate, Tile> mep : tiles) {
                 Coordinate pt = mep.getKey();
                 Tile tile = mep.getValue();
 
-//                System.out.println(pt.toString()+" "+offset.x+" "+offset.y);
-                drawTile(g, tile, pt.getX() * diameter + offset.getX() - diameter / 2, -pt.getY() * diameter + offset.getY() - diameter / 2, diameter);
+//                Tile north = hmpt.get(pt.getNorth());
+//                Tile east = hmpt.get(pt.getEast());
+//                Tile west = hmpt.get(pt.getWest());
+//                Tile south = hmpt.get(pt.getSouth());
+
+                PolyTile parent = tile.getParent();
+                Coordinate unitLocation = tile.getLocation();
+                boolean hasNorth = parent.getTile(unitLocation.getNorth()) != null;
+                boolean hasEast = parent.getTile(unitLocation.getEast()) != null;
+                boolean hasSouth = parent.getTile(unitLocation.getSouth()) != null;
+                boolean hasWest = parent.getTile(unitLocation.getWest()) != null;
+
+
+                drawTile(g, tile, pt.getX() * diameter + offset.getX() - diameter / 2, -pt.getY() * diameter + offset.getY() - diameter / 2, diameter, hasNorth, hasEast, hasSouth, hasWest);
 //                drawHexTile(g, tile, pt.x * diameter + offset.x - diameter / 2, -pt.y * diameter + offset.y - diameter / 2, diameter);
             }
 
@@ -185,12 +293,33 @@ public class Drawer {
 
         }
 
+        public static void drawPolyTileSelection(Graphics2D g, PolyTile pt, int diameter, Coordinate location, Coordinate offset){
+            java.util.List<Tile> lt = pt.tiles;
+            for (Tile t : lt) {
+                Coordinate unitLocation = t.getLocation();
+                boolean hasNorth = pt.getTile(unitLocation.getNorth()) != null;
+                boolean hasEast = pt.getTile(unitLocation.getEast()) != null;
+                boolean hasSouth = pt.getTile(unitLocation.getSouth()) != null;
+                boolean hasWest = pt.getTile(unitLocation.getWest()) != null;
+                System.out.println("Location: " + location);
+                System.out.println("Unit location: " + unitLocation);
+                int x =  (location.getX() + unitLocation.getX()) * diameter + offset.getX() - diameter / 2;
+                int y =  -(location.getY() + unitLocation.getY()) * diameter + offset.getY() - diameter / 2;
+                System.out.println("("+x+","+y+")");
+                drawTileOutline(g, t, x, y, diameter, hasNorth, hasEast, hasSouth, hasWest, true);
+            }
+        }
+
         public static void drawPolyTile(Graphics2D g, PolyTile pt, int diameter, Coordinate offset) {
             Drawer.clearGraphics(g);
             java.util.List<Tile> lt = pt.tiles;
             for (Tile t : lt) {
-
-                drawTile(g, t, t.getLocation().getX() * diameter + offset.getX() - diameter / 2, -t.getLocation().getY() * diameter + offset.getY() - diameter / 2, diameter);
+                Coordinate unitLocation = t.getLocation();
+                boolean hasNorth = pt.getTile(unitLocation.getNorth()) != null;
+                boolean hasEast = pt.getTile(unitLocation.getEast()) != null;
+                boolean hasSouth = pt.getTile(unitLocation.getSouth()) != null;
+                boolean hasWest = pt.getTile(unitLocation.getWest()) != null;
+                drawTile(g, t, t.getLocation().getX() * diameter + offset.getX() - diameter / 2, -t.getLocation().getY() * diameter + offset.getY() - diameter / 2, diameter, hasNorth, hasEast, hasSouth, hasWest);
             }
 
         }

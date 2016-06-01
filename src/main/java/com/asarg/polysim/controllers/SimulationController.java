@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -269,6 +270,8 @@ public class SimulationController implements Initializable {
             final KeyCombination left = new KeyCodeCombination(KeyCode.LEFT);
             final KeyCombination right = new KeyCodeCombination(KeyCode.RIGHT);
             final KeyCombination escape = new KeyCodeCombination(KeyCode.ESCAPE);
+            final KeyCombination delete = new KeyCodeCombination(KeyCode.DELETE);
+            final KeyCombination backspace = new KeyCodeCombination(KeyCode.BACK_SPACE);
 
             @Override
             public void handle(KeyEvent t) {
@@ -304,6 +307,10 @@ public class SimulationController implements Initializable {
                         cn.frontier = cn.assembly.calculateFrontier();
                         cn.placeFrontierOnGrid();
                         cn.drawGrid();
+                        t.consume();
+                    } else if (backspace.match(t) || delete.match(t)){
+                        System.out.println("Deleting polytile");
+                        cn.deleteSelection();
                         t.consume();
                     }
                 }

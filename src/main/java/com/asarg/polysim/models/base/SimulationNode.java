@@ -16,6 +16,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.File;
 import java.io.InvalidObjectException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -40,6 +41,7 @@ public class SimulationNode extends SwingNode implements Observer {
     private Coordinate lastMouseXY = new Coordinate(800, 600);
     private int dragCount = 0;
     private File file;
+    private Coordinate selected;
 
     public SimulationNode() {
         super();
@@ -53,13 +55,28 @@ public class SimulationNode extends SwingNode implements Observer {
         setCanvas(tc);
 
         setOnMouseClicked(new EventHandler<MouseEvent>() {
+            /*
+            TODO: Unify selected tile and selected frontier tile
+             */
             @Override
             public void handle(MouseEvent e) {
                 Coordinate point = new Coordinate((int) e.getX(), (int) e.getY());
                 Coordinate clicked = Drawer.TileDrawer.getGridPoint(point, getCanvas().getOffset(), getCanvas().getTileDiameter());
                 Tile clicked_tile = assembly.Grid.get(clicked);
                 if (clicked_tile != null) {
-                    processFrontierClick(clicked, clicked_tile);
+                    if(clicked_tile.getParent().isFrontier()){
+                        selected = null;
+                        processFrontierClick(clicked, clicked_tile);
+                    }else{
+                        System.out.println("clicked: " + clicked);
+                        System.out.println("clicked unit: " + clicked_tile.getLocation());
+                        selected = clicked;
+                        drawGrid();
+                    }
+                }else{
+                    selected = null;
+                    getCanvas().reset();
+                    drawGrid();
                 }
             }
         });
@@ -278,7 +295,7 @@ public class SimulationNode extends SwingNode implements Observer {
     }
 
     public void drawGrid() {
-        getCanvas().drawGrid(assembly.Grid);
+        getCanvas().drawGrid(assembly.Grid, selected);
         getCanvas().repaint();
     }
 
@@ -609,6 +626,47 @@ public class SimulationNode extends SwingNode implements Observer {
             drawGrid();
         }
 
+    }
+
+    public ArrayList<Coordinate> getSelectedCoordinates(){
+        ArrayList<Coordinate> selectedCoordinates = new ArrayList<Coordinate>();
+        if(selected!=null) {
+            Tile selectedTile = assembly.Grid.get(selected);
+            Coordinate location = selectedTile.getLocation();
+            Coordinate offset = new Coordinate(selected.getX() - location.getX(), selected.getY() - location.getY());
+            PolyTile pt = selectedTile.getParent();
+            for (Tile t : pt.getTiles()) {
+                Coordinate unitLocation = t.getLocation();
+                int x = unitLocation.getX() + offset.getX();
+                int y = unitLocation.getY() + offset.getY();
+                Coordinate gridlocation = new Coordinate(x, y);
+                selectedCoordinates.add(gridlocation);
+            }
+        }
+        return selectedCoordinates;
+    }
+
+    public void removeSelection(){
+        selected = null;
+    }
+
+    public void deleteSelection(){
+        exitFrontierMode();
+        removeFrontierFromGrid();
+        resetFrontier();
+        getCanvas().reset();
+
+        ArrayList<Coordinate> selectedCoordinates = getSelectedCoordinates();
+
+        for(Coordinate c : selectedCoordinates){ assembly.Grid.remove(c); }
+
+        assembly.cleanUp();
+        assembly.getOpenGlues();
+        frontier = assembly.calculateFrontier();
+        System.out.println("Frontier size: " + frontier.size());
+        removeSelection();
+        placeFrontierOnGrid();
+        drawGrid();
     }
 
 }
