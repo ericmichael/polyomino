@@ -54,7 +54,7 @@ public class EditorCanvas extends JPanel {
                     Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX, pt, tileDiameter, canvasCenteredOffset);
                     //   canvasCenteredOffset = ofnt.getKey();
                     if (selectedTile.get() != null)
-                        Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.get().getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
+                        Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.get().getLocation(), tileDiameter, canvasCenteredOffset, Color.decode("#007AFF"));
                     repaint();
 
                 } else if (e.getWheelRotation() == -1 && tileDiameter * 3 < getWidth() && tileDiameter * 3 < getHeight()) {
@@ -62,7 +62,7 @@ public class EditorCanvas extends JPanel {
                     Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX, pt, tileDiameter, canvasCenteredOffset);
                     //  canvasCenteredOffset = ofnt.getKey();
                     if (selectedTile.get() != null)
-                        Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.get().getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
+                        Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.get().getLocation(), tileDiameter, canvasCenteredOffset, Color.decode("#007AFF"));
                     repaint();
 
                 }
@@ -75,7 +75,7 @@ public class EditorCanvas extends JPanel {
                 clearPolyTile();
                 Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX, pt, tileDiameter, canvasCenteredOffset);
                 if (selectedTile.get() != null)
-                    Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.get().getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
+                    Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.get().getLocation(), tileDiameter, canvasCenteredOffset, Color.decode("#007AFF"));
                 repaint();
             }
 
@@ -97,7 +97,7 @@ public class EditorCanvas extends JPanel {
                         Drawer.clearGraphics(overLayerGFX);
                         //  canvasCenteredOffset = newOffDia.getKey();
                         // tileDiameter = newOffDia.getValue();
-                        Drawer.TileDrawer.drawTileSelection(overLayerGFX, Drawer.TileDrawer.getGridPoint(new Coordinate((int) e.getPoint().getX(), (int) e.getPoint().getY()), canvasCenteredOffset, tileDiameter), tileDiameter, canvasCenteredOffset, Color.CYAN);
+                        Drawer.TileDrawer.drawTileSelection(overLayerGFX, Drawer.TileDrawer.getGridPoint(new Coordinate((int) e.getPoint().getX(), (int) e.getPoint().getY()), canvasCenteredOffset, tileDiameter), tileDiameter, canvasCenteredOffset, Color.decode("#007AFF"));
                         repaint();
 
                     }
@@ -133,7 +133,7 @@ public class EditorCanvas extends JPanel {
 
     private void selectTileHelper(Tile tile) {
         Drawer.clearGraphics(overLayerGFX);
-        Drawer.TileDrawer.drawTileSelection(overLayerGFX, tile.getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
+        Drawer.TileDrawer.drawTileSelection(overLayerGFX, tile.getLocation(), tileDiameter, canvasCenteredOffset, Color.decode("#007AFF"));
         repaint();
     }
 
@@ -146,7 +146,7 @@ public class EditorCanvas extends JPanel {
         Drawer.clearGraphics(overLayerGFX);
 
         if (selectedTile.get() != null) {
-            Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.get().getLocation(), tileDiameter, canvasCenteredOffset, Color.CYAN);
+            Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.get().getLocation(), tileDiameter, canvasCenteredOffset, Color.decode("#007AFF"));
         }
 
         repaint();
@@ -186,6 +186,7 @@ public class EditorCanvas extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+        this.setBackground(Color.WHITE);
         g2.drawImage(polyTileCanvas, 0, 0, null);
         g2.drawImage(overLayer, 0, 0, null);
     }
