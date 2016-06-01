@@ -26,6 +26,14 @@ public final class Coordinate {
         return this.y;
     }
 
+    public Coordinate getNorth(){ return new Coordinate(this.x, this.y+1);}
+
+    public Coordinate getEast(){ return new Coordinate(this.x+1, this.y);}
+
+    public Coordinate getSouth(){ return new Coordinate(this.x, this.y-1);}
+
+    public Coordinate getWest(){ return new Coordinate(this.x-1, this.y);}
+
     @Override
     public boolean equals(Object other) {
         if (this == other) {
@@ -48,5 +56,9 @@ public final class Coordinate {
     @Deprecated
     public Coordinate translate(int dx, int dy) {
         return new Coordinate(x + dx, y + dy);
+    }
+
+    public String toString(){
+        return "(" + this.x + ","+this.y+")";
     }
 }
