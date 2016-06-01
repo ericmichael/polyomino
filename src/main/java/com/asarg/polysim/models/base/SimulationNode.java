@@ -68,8 +68,6 @@ public class SimulationNode extends SwingNode implements Observer {
                         selected = null;
                         processFrontierClick(clicked, clicked_tile);
                     }else{
-                        System.out.println("clicked: " + clicked);
-                        System.out.println("clicked unit: " + clicked_tile.getLocation());
                         selected = clicked;
                         drawGrid();
                     }
