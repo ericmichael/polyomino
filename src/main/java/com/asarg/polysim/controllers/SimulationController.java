@@ -6,6 +6,7 @@ import com.asarg.polysim.adapters.graphics.raster.SimulationCanvas;
 import com.asarg.polysim.models.TwoHAM.TwoHAMAssembly;
 import com.asarg.polysim.models.TwoHAM.TwoHAMSimulationNode;
 import com.asarg.polysim.models.base.*;
+import com.asarg.polysim.utils.Utilities;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -562,7 +563,7 @@ public class SimulationController implements Initializable {
         File selectedFile = fileChooser.showOpenDialog(stage);
         if (selectedFile != null) {
             try {
-                Assembly assembly = Assembly.LoadAssembly(selectedFile);
+                Assembly assembly = Utilities.LoadAssembly(selectedFile);
                 loadAssembly(assembly, selectedFile);
             } catch (javax.xml.bind.JAXBException jaxbe) {
                 javax.swing.JOptionPane.showMessageDialog(null, "Failed to load assembly");
