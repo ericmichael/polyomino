@@ -1,6 +1,7 @@
 package com.asarg.polysim.adapters.graphics.raster;
 
 
+import com.asarg.polysim.models.base.ActiveGrid;
 import com.asarg.polysim.models.base.Coordinate;
 import com.asarg.polysim.models.base.FrontierElement;
 import com.asarg.polysim.models.base.Tile;
@@ -18,8 +19,9 @@ public class SimulationCanvas extends JPanel {
     private Graphics2D cg2d;
     private int tileDiameter = 50;
     private Coordinate center;
+    ActiveGrid parent;
 
-    public SimulationCanvas(int w, int h) {
+    public SimulationCanvas(ActiveGrid parent, int w, int h) {
         center = new Coordinate(w / 2, h / 2);
         canvasBFI = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         cg2d = canvasBFI.createGraphics();
@@ -27,20 +29,21 @@ public class SimulationCanvas extends JPanel {
         cg2d.setColor(Color.black);
         res.setSize(w, h);
         cg2d.setClip(0, 0, w, h);
-        int w1 = w;
-        int h1 = h;
+        this.parent = parent;
     }
 
-    public SimulationCanvas() {
+    public SimulationCanvas(ActiveGrid parent) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        canvasBFI = new BufferedImage(screenSize.width, screenSize.height, BufferedImage.TYPE_INT_ARGB);
+        int w = (int) screenSize.getWidth();
+        int h = (int) screenSize.getHeight();
+        center = new Coordinate(w / 2, h / 2);
+        canvasBFI = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         cg2d = canvasBFI.createGraphics();
         cg2d.setComposite(AlphaComposite.Src);
         cg2d.setColor(Color.black);
-        res.setSize(screenSize.width, screenSize.height);
-        cg2d.setClip(0, 0, screenSize.width, screenSize.height);
-
-
+        res.setSize(w, h);
+        cg2d.setClip(0, 0, w, h);
+        this.parent = parent;
     }
 
     @Override
@@ -73,11 +76,6 @@ public class SimulationCanvas extends JPanel {
         this.setBackground(Color.WHITE);
         canvasBFI.setAccelerationPriority(1);
         g.drawImage(canvasBFI, 0, 0, null);
-    }
-
-
-    public void drawGrid(HashMap<Coordinate, Tile> hmpt) {
-        Drawer.TileDrawer.drawTiles(cg2d, hmpt, tileDiameter, center );
     }
 
     public void drawGrid(HashMap<Coordinate, Tile> hmpt, Coordinate selected) {
@@ -113,15 +111,16 @@ public class SimulationCanvas extends JPanel {
 
     public void setTileDiameter(int td) {
         tileDiameter = td;
+        reset();
     }
 
     public void translateOffset(int x, int y) {
+
         center = center.translate(x, y);
+        reset();
     }
 
     public final Coordinate getOffset() {
         return center;
     }
-
-
 }

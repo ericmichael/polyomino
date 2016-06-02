@@ -103,6 +103,8 @@ public class SimulationController implements Initializable {
     ListView<PolyTile> listview_polytiles;
     @FXML
     Hyperlink hyperlink_website;
+
+
     private Stage stage;
     private boolean inspecting = false;
 
@@ -246,7 +248,6 @@ public class SimulationController implements Initializable {
                 if (newValue != null) {
                     if (currentSimulationNode() != null) {
                         currentSimulationNode().getCanvas().resize((int) tabPane.getWidth(), (int) tabPane.getHeight());
-                        currentSimulationNode().drawGrid();
                     }
                 }
             }
@@ -258,7 +259,6 @@ public class SimulationController implements Initializable {
                 if (newValue != null) {
                     if (currentSimulationNode() != null) {
                         currentSimulationNode().getCanvas().resize((int) tabPane.getWidth(), (int) tabPane.getHeight());
-                        currentSimulationNode().drawGrid();
                     }
                 }
             }
@@ -287,7 +287,6 @@ public class SimulationController implements Initializable {
                             cn.frontier = cn.assembly.calculateFrontier();
                             cn.placeFrontierOnGrid();
                             cn.exitFrontierMode();
-                            cn.drawGrid();
                             t.consume();
                         }
                     } else if (pgup.match(t)) {
@@ -307,7 +306,6 @@ public class SimulationController implements Initializable {
                         cn.getCanvas().reset();
                         cn.frontier = cn.assembly.calculateFrontier();
                         cn.placeFrontierOnGrid();
-                        cn.drawGrid();
                         t.consume();
                     } else if (backspace.match(t) || delete.match(t)){
                         System.out.println("Deleting polytile");
@@ -533,9 +531,8 @@ public class SimulationController implements Initializable {
         Tab tab = new Tab();
         if (f != null) tab.setText(f.getName());
         else tab.setText("Untitled");
-        final SimulationCanvas blankCanvas = new SimulationCanvas((int) tabPane.getWidth(), (int) tabPane.getHeight());
-        final SimulationNode simulationNode = new SimulationNode(assembly, blankCanvas, f);
-        simulationNode.drawGrid();
+        final SimulationNode simulationNode = new SimulationNode(assembly, f);
+        simulationNode.resize((int) tabPane.getWidth(), (int) tabPane.getHeight());
         tab.setContent(simulationNode);
         tabPane.getTabs().add(tab);
     }
@@ -549,9 +546,8 @@ public class SimulationController implements Initializable {
         Tab tab = new Tab();
         if (f != null) tab.setText(f.getName());
         else tab.setText("Untitled");
-        final SimulationCanvas blankCanvas = new SimulationCanvas((int) tabPane.getWidth(), (int) tabPane.getHeight());
-        final TwoHAMSimulationNode simulationNode = new TwoHAMSimulationNode(assembly, blankCanvas, f);
-        simulationNode.drawGrid();
+        final TwoHAMSimulationNode simulationNode = new TwoHAMSimulationNode(assembly, f);
+        simulationNode.resize((int) tabPane.getWidth(), (int) tabPane.getHeight());
         tab.setContent(simulationNode);
         tabPane.getTabs().add(tab);
     }

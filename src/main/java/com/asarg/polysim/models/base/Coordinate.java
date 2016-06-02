@@ -1,5 +1,7 @@
 package com.asarg.polysim.models.base;
 
+import javafx.util.Pair;
+
 /**
  * Created by ericmartinez on 6/23/15.
  */
@@ -33,6 +35,18 @@ public final class Coordinate {
     public Coordinate getSouth(){ return new Coordinate(this.x, this.y-1);}
 
     public Coordinate getWest(){ return new Coordinate(this.x-1, this.y);}
+
+    /*
+    TODO: Don't remember what this does
+     */
+    public static Pair<Coordinate, Coordinate> getOffset(Coordinate aPoint, Coordinate ptPoint, int offsetX, int offsetY) {
+        Coordinate placement = new Coordinate(offsetX, offsetY);
+        placement = placement.translate(aPoint.getX(), aPoint.getY());
+        int xOffset = -(ptPoint.getX() - placement.getX());
+        int yOffset = -(ptPoint.getY() - placement.getY());
+        Coordinate tmp2 = new Coordinate(xOffset, yOffset);
+        return new Pair<Coordinate, Coordinate>(placement, tmp2);
+    }
 
     @Override
     public boolean equals(Object other) {

@@ -47,12 +47,12 @@ public class SimulationNode extends SwingNode implements Observer {
         super();
     }
 
-    public SimulationNode(Assembly asm, SimulationCanvas tc) {
+    public SimulationNode(Assembly asm) {
         this.assembly = asm;
         assembly.addObserver(this);
         frontier = assembly.getFrontier();
         placeFrontierOnGrid();
-        setCanvas(tc);
+        setCanvas(assembly.Grid.getCanvas());
 
         setOnMouseClicked(new EventHandler<MouseEvent>() {
             /*
@@ -68,13 +68,10 @@ public class SimulationNode extends SwingNode implements Observer {
                         selected = null;
                         processFrontierClick(clicked, clicked_tile);
                     }else{
-                        selected = clicked;
-                        drawGrid();
+                        getGrid().select(clicked);
                     }
                 }else{
-                    selected = null;
-                    getCanvas().reset();
-                    drawGrid();
+                    getGrid().deselect();
                 }
             }
         });
@@ -112,7 +109,6 @@ public class SimulationNode extends SwingNode implements Observer {
                                 addFrontierAttachment(frontierIndex);
                             }
 
-                            drawGrid();
                             return;
                         }
                         zoomInDraw();
@@ -129,7 +125,6 @@ public class SimulationNode extends SwingNode implements Observer {
                                 frontierIndex = 0;
                                 addFrontierAttachment(0);
                             }
-                            drawGrid();
                             return;
                         }
                         zoomOutDraw();
@@ -150,8 +145,6 @@ public class SimulationNode extends SwingNode implements Observer {
                 }
                 getCanvas().translateOffset(x - lastMouseXY.getX(), y - lastMouseXY.getY());
                 lastMouseXY = point;
-                getCanvas().reset();
-                drawGrid();
                 placeFrontierOnGrid();
             }
         });
@@ -163,12 +156,10 @@ public class SimulationNode extends SwingNode implements Observer {
             /* mouse moved away, remove the graphical cues */
                 if (currentFrontierAttachment != null) {
                     Coordinate loc = currentFrontierAttachment.getOffset();
-                    assembly.removePolytile(currentFrontierAttachment.getPolyTile(), loc.getX(), loc.getY());
+                    assembly.Grid.removePolytile(currentFrontierAttachment.getPolyTile(), loc.getX(), loc.getY());
                     currentFrontierAttachment = null;
                 }
-                getCanvas().reset();
                 placeFrontierOnGrid();
-                drawGrid();
 
                 event.consume();
             }
@@ -207,11 +198,9 @@ public class SimulationNode extends SwingNode implements Observer {
 
                     if (currentFrontierAttachment != null) {
                         Coordinate loc = currentFrontierAttachment.getOffset();
-                        assembly.removePolytile(currentFrontierAttachment.getPolyTile(), loc.getX(), loc.getY());
+                        assembly.Grid.removePolytile(currentFrontierAttachment.getPolyTile(), loc.getX(), loc.getY());
                         currentFrontierAttachment = null;
                     }
-                    getCanvas().reset();
-
 
                     Integer index = (Integer) event.getDragboard().getContent(SimulationController.polyTileFormat);
                     PolyTile dropped = getTileSet().get(index);
@@ -222,13 +211,11 @@ public class SimulationNode extends SwingNode implements Observer {
                     //translate to spot
 
                     //check if passes geometry check
-                    if (assembly.geometryCheckSuccess(dropped, spot.getX(), spot.getY())) {
+                    if (assembly.Grid.geometryCheckSuccess(dropped, spot.getX(), spot.getY())) {
                         currentFrontierAttachment = fe;
-                        assembly.placePolytile(dropped, spot.getX(), spot.getY());
-                        drawGrid();
+                        assembly.Grid.placePolytile(dropped, spot.getX(), spot.getY());
                         event.acceptTransferModes(TransferMode.COPY);
                     } else {
-                        drawGrid();
                     }
                 }
 
@@ -237,9 +224,13 @@ public class SimulationNode extends SwingNode implements Observer {
         });
     }
 
-    public SimulationNode(Assembly asm, SimulationCanvas tc, File file) {
-        this(asm, tc);
+    public SimulationNode(Assembly asm, File file) {
+        this(asm);
         this.file = file;
+    }
+
+    public void resize(int w, int h){
+        assembly.Grid.getCanvas().resize(w, h);
     }
 
     public File getFile() {
@@ -289,12 +280,8 @@ public class SimulationNode extends SwingNode implements Observer {
     }
 
     public void setCanvas(SimulationCanvas tc) {
-        setContent(tc);
-    }
-
-    public void drawGrid() {
-        getCanvas().drawGrid(assembly.Grid, selected);
-        getCanvas().repaint();
+        assembly.Grid.setCanvas(tc);
+        setContent(assembly.Grid.getCanvas());
     }
 
     public void resetFrontier() {
@@ -304,7 +291,7 @@ public class SimulationNode extends SwingNode implements Observer {
 
     public void exitFrontierMode() {
         if (currentFrontierAttachment != null) {
-            assembly.removePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().getX(), currentFrontierAttachment.getOffset().getY());
+            assembly.Grid.removePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().getX(), currentFrontierAttachment.getOffset().getY());
         }
         frontierClick = false;
         frontierClickPoint = null;
@@ -314,7 +301,6 @@ public class SimulationNode extends SwingNode implements Observer {
         left_status.setValue(left_previous_status.getValue());
         right_status.setValue(right_previous_status.getValue());
         //mainMenu.statusLabel.setText(mainMenu.statusLabelPreviousText);
-//        canvas.reset();
     }
 
     public void removeFrontierFromGrid() {
@@ -348,21 +334,19 @@ public class SimulationNode extends SwingNode implements Observer {
                     frontierAttachments.add(fe);
                 }
             }
-//            drawGrid();
         }
 
     }
 
     private void removeCurrentFrontierAttachment() {
         if (currentFrontierAttachment != null) {
-            assembly.removePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().getX(), currentFrontierAttachment.getOffset().getY());
+            assembly.Grid.removePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().getX(), currentFrontierAttachment.getOffset().getY());
             //left_status.setValue(left_previous_status.getValue());
             right_status.setValue(right_previous_status.getValue());
             //mainMenu.statusLabel.setText(mainMenu.statusLabelPreviousText);
         } else {
             assembly.Grid.remove(frontierClickPoint);
         }
-        getCanvas().reset();
     }
 
     private void addFrontierAttachment(int index) {
@@ -372,7 +356,7 @@ public class SimulationNode extends SwingNode implements Observer {
             String status_str = String.format("Probability of Attachment: %.4f", probability);
             //mainMenu.statusLabel.setText(status_str);
             right_status.setValue(status_str);
-            assembly.placePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().getX(), currentFrontierAttachment.getOffset().getY());
+            assembly.Grid.placePolytile(currentFrontierAttachment.getPolyTile(), currentFrontierAttachment.getOffset().getX(), currentFrontierAttachment.getOffset().getY());
         }
     }
 
@@ -418,7 +402,6 @@ public class SimulationNode extends SwingNode implements Observer {
             if (stopped) {
                 // draw the entire grid when stopping, to see the frontier of the items.
                 placeFrontierOnGrid();
-                drawGrid();
                 break;
             } else {
                 anyAttached = true;
@@ -439,27 +422,6 @@ public class SimulationNode extends SwingNode implements Observer {
 
     public void paintPolytile(FrontierElement attachedFrontierElement) {
         getCanvas().drawTileOnGrid(attachedFrontierElement);
-        // commented code is to get the square of the new polytile painted(to avoid painting all)
-        // needs work and may not be needed at all.
-//        PolyTile attached = attachedFrontierElement.getPolyTile();
-//        // find the rectangle to repaint (highest x, highest y)*diameter centered on polytile location
-//        int highestX =0, highestY=0, lowX =0, lowY =0;
-//        for (Tile t : attached.getTiles()){
-//            if (t.getLocation().x > highestX)
-//                highestX = t.getLocation().x;
-//            if (t.getLocation().y > highestY)
-//                highestY = t.getLocation().y;
-//
-//            if (t.getLocation().x < lowX)
-//                lowX = t.getLocation().x;
-//            if (t.getLocation().y < lowY)
-//                lowY = t.getLocation().y;
-//        }
-//        int x = (attachedFrontierElement.getOffset().x+lowX)*canvas.getTileDiameter()+canvas.getOffset().x - canvas.getTileDiameter()/2;
-//        int y = (-attachedFrontierElement.getOffset().y+highestY)*canvas.getTileDiameter()+canvas.getOffset().y - canvas.getTileDiameter()/2;
-//        int w = canvas.getTileDiameter();
-//        int h = canvas.getTileDiameter();
-//        canvas.repaint(x,y,w,h);
         getCanvas().repaint();
     }
 
@@ -513,9 +475,7 @@ public class SimulationNode extends SwingNode implements Observer {
         assembly.getOpenGlues();
 
         frontier = assembly.calculateFrontier();
-        getCanvas().reset();
         placeFrontierOnGrid();
-        drawGrid();
     }
 
     public void placeFrontierOnGrid() {
@@ -536,9 +496,7 @@ public class SimulationNode extends SwingNode implements Observer {
             getCanvas().setTileDiameter((int) (tileDiameter * 1.5));
         } else return;
 
-        getCanvas().reset();
         placeFrontierOnGrid();
-        drawGrid();
     }
 
     public void zoomOutDraw() {
@@ -547,9 +505,7 @@ public class SimulationNode extends SwingNode implements Observer {
             getCanvas().setTileDiameter((int) (tileDiameter * .75));
         } else return;
 
-        getCanvas().reset();
         placeFrontierOnGrid();
-        drawGrid();
     }
 
 
@@ -592,36 +548,23 @@ public class SimulationNode extends SwingNode implements Observer {
         if (msg.equals("attach")) {
             frontier = assembly.getFrontier();
             placeFrontierOnGrid();
-            drawGrid();
-//            paintPolytile(fe);
-//            frontier = assembly.getFrontier();
-//            for(FrontierElement new_fe : frontier){
-//                paintPolytile(new_fe);
-//            }
-//            placeFrontierOnGrid();
         } else if (msg.equals("detach")) {
             resetFrontier();
             frontier = assembly.getFrontier();
             System.out.println("My Frontier size: " + frontier.size());
-            getCanvas().reset();
             placeFrontierOnGrid();
-            drawGrid();
         } else if (msg.equals("refresh")) {
             System.out.println("reset");
             resetFrontier();
             frontier = assembly.calculateFrontier();
             frontier.printDebugInformation();
-            getCanvas().reset();
             placeFrontierOnGrid();
-            drawGrid();
 
         } else if (msg.equals("Tile System")) {
             //resetFrontier();
 
             frontier = assembly.getFrontier();
-            getCanvas().reset();
             placeFrontierOnGrid();
-            drawGrid();
         }
 
     }
@@ -652,7 +595,6 @@ public class SimulationNode extends SwingNode implements Observer {
         exitFrontierMode();
         removeFrontierFromGrid();
         resetFrontier();
-        getCanvas().reset();
 
         ArrayList<Coordinate> selectedCoordinates = getSelectedCoordinates();
 
@@ -664,7 +606,9 @@ public class SimulationNode extends SwingNode implements Observer {
         System.out.println("Frontier size: " + frontier.size());
         removeSelection();
         placeFrontierOnGrid();
-        drawGrid();
     }
 
+    public ActiveGrid getGrid(){
+        return assembly.Grid;
+    }
 }

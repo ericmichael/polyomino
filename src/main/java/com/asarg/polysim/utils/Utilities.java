@@ -168,8 +168,8 @@ public class Utilities {
                 PolyTile pt = entry.getValue();
 
                 //check if passes geometry check
-                if (assembly.geometryCheckSuccess(pt, (int) location.getX(), (int) location.getY())) {
-                    assembly.placePolytile(pt, (int) location.getX(), (int) location.getY());
+                if (assembly.Grid.geometryCheckSuccess(pt, (int) location.getX(), (int) location.getY())) {
+                    assembly.Grid.placePolytile(pt, (int) location.getX(), (int) location.getY());
                 }
 
             }

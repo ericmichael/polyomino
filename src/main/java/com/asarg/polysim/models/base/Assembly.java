@@ -28,7 +28,7 @@ public class Assembly extends Observable {
     // placeholder for the grid
     @XmlElement(name = "AssemblyGrid")
     @XmlJavaTypeAdapter(GridXmlAdapter.class)
-    public final HashMap<Coordinate, Tile> Grid = new HashMap<Coordinate, Tile>();
+    public final ActiveGrid Grid = new ActiveGrid();
     //Open glue ends stored by their coordinate
     @XmlTransient
     private final
@@ -70,9 +70,6 @@ public class Assembly extends Observable {
         tileSystem.getTileTypes().addAll(ts.getTileTypes());
         frontier = new Frontier(tileSystem);
     }
-
-
-
 
     //change tile system stub
     public void changeTileSystem(TileSystem newTS) {
@@ -128,50 +125,6 @@ public class Assembly extends Observable {
         }
     }
 
-    public void placePolytile(PolyTile p, int x, int y) {
-        for (Tile t : p.tiles) {
-            Coordinate tmp = new Coordinate(t.getLocation());
-            tmp = tmp.translate(x, y);
-            Grid.put(tmp, t);
-        }
-    }
-
-    public void removePolytile(PolyTile p, int x, int y) {
-        boolean polytilePresent = true;
-        for (Tile t : p.tiles) {
-            Coordinate tmp = new Coordinate(t.getLocation());
-            tmp = tmp.translate(x, y);
-            Tile existing = Grid.get(tmp);
-
-            if (existing == null) polytilePresent = false;
-        }
-        if (polytilePresent) {
-            for (Tile t : p.tiles) {
-                Coordinate tmp = new Coordinate(t.getLocation());
-                tmp = tmp.translate(x, y);
-                Grid.remove(tmp);
-            }
-        }
-    }
-
-    public boolean geometryCheckSuccess(PolyTile p, int x, int y) {
-        for (Tile t : p.tiles) {
-            if (Grid.containsKey(new Coordinate(x + t.getLocation().getX(), y + t.getLocation().getY()))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private Pair<Coordinate, Coordinate> getOffset(Coordinate aPoint, Coordinate ptPoint, int offsetX, int offsetY) {
-        Coordinate placement = new Coordinate(offsetX, offsetY);
-        placement = placement.translate(aPoint.getX(), aPoint.getY());
-        int xOffset = -(ptPoint.getX() - placement.getX());
-        int yOffset = -(ptPoint.getY() - placement.getY());
-        Coordinate tmp2 = new Coordinate(xOffset, yOffset);
-        return new Pair<Coordinate, Coordinate>(placement, tmp2);
-    }
-
     private void fillPossibleList(PolyTile pt, int direction) {
         HashMap<Coordinate, String> ptGlues;
         HashMap<Coordinate, String> glues;
@@ -212,7 +165,7 @@ public class Assembly extends Observable {
                 glue1 = ptGlues.get(ptPoint);
                 glue2 = glues.get(aPoint);
                 if (tileSystem.getStrength(glue1, glue2) > 0) {
-                    Pair<Coordinate, Coordinate> locAndOffset = getOffset(aPoint, ptPoint, offsetX, offsetY);
+                    Pair<Coordinate, Coordinate> locAndOffset = Coordinate.getOffset(aPoint, ptPoint, offsetX, offsetY);
                     FrontierElement fe = new FrontierElement(locAndOffset.getKey(), locAndOffset.getValue(), pt, direction);
                     possibleAttach.add(fe);
                 }
@@ -243,7 +196,7 @@ public class Assembly extends Observable {
         }
         for (FrontierElement fe : possibleAttach) {
             boolean isStable = checkStability(fe.getPolyTile(), fe.getOffset().getX(), fe.getOffset().getY());
-            boolean fitsGeometrically = geometryCheckSuccess(fe.getPolyTile(), fe.getOffset().getX(), fe.getOffset().getY());
+            boolean fitsGeometrically = Grid.geometryCheckSuccess(fe.getPolyTile(), fe.getOffset().getX(), fe.getOffset().getY());
 
             if (isStable && fitsGeometrically) {
                 if (!frontier.contains(fe)) {
@@ -335,7 +288,7 @@ public class Assembly extends Observable {
 
     private double attachP(FrontierElement fe) {
         fe.setAttachTime(getDistribution(frontier.getTotalConcentration()));
-        placePolytile(fe.getPolyTile(), fe.getOffset().getX(), fe.getOffset().getY());
+        Grid.placePolytile(fe.getPolyTile(), fe.getOffset().getX(), fe.getOffset().getY());
         frontier.remove(fe);
         attached.getHistory().add(fe);
         cleanUp();
@@ -370,7 +323,7 @@ public class Assembly extends Observable {
     }
 
     private void detach(FrontierElement fe) {
-        removePolytile(fe.getPolyTile(), fe.getOffset().getX(), fe.getOffset().getY());
+        Grid.removePolytile(fe.getPolyTile(), fe.getOffset().getX(), fe.getOffset().getY());
         cleanUp();
         getOpenGlues();
     }
@@ -389,7 +342,7 @@ public class Assembly extends Observable {
 
     public void placeSeed(PolyTile t) {
         if (Grid.size() == 0)
-            placePolytile(t, 0, 0);
+            Grid.placePolytile(t, 0, 0);
         else
             System.out.println("Grid not empty");
 

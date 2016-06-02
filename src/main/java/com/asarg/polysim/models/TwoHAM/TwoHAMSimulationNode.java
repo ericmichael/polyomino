@@ -15,8 +15,9 @@ import java.io.File;
 public class TwoHAMSimulationNode extends SimulationNode {
     private final TwoHAMAssembly twoHAMAssembly;
 
-    public TwoHAMSimulationNode(TwoHAMAssembly asm, SimulationCanvas tc, File file) {
-        super(new Assembly(), tc, file);
+    public TwoHAMSimulationNode(TwoHAMAssembly asm, File file) {
+        super(new Assembly(), file);
+
         twoHAMAssembly = new TwoHAMAssembly();
         assembly.changeTileSystem(twoHAMAssembly.getTileSystem());
         System.out.println("TWOHAM MODE");
