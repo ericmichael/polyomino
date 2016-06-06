@@ -523,7 +523,8 @@ public class SimulationController implements Initializable {
         if (f != null) tab.setText(f.getName());
         else tab.setText("Untitled");
         final TwoHAMSimulationNode simulationNode = new TwoHAMSimulationNode(assembly, f);
-        simulationNode.resize((int) tabPane.getWidth(), (int) tabPane.getHeight());
+        simulationNode.widthProperty().bind(tabPane.widthProperty());
+        simulationNode.heightProperty().bind(tabPane.heightProperty());
         tab.setContent(simulationNode);
         tabPane.getTabs().add(tab);
     }
