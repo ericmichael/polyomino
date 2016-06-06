@@ -53,14 +53,14 @@ public class Bin extends TwoHAMAssembly {
         }
     }
 
-    public void addTileConfiguration(TileConfiguration tc){
+    public void addTileConfiguration(TileConfiguration tc) {
         addTiles(tc.getTiletypes());
         addGlueFunction(tc.getGlueFunction());
     }
 
-    public TileConfiguration getTerminalTileConfiguration(){
+    public TileConfiguration getTerminalTileConfiguration() {
         TileConfiguration tc = new TileConfiguration();
-        for(PolyTile pt : getTerminalSet()){
+        for (PolyTile pt : getTerminalSet()) {
             tc.addTileType(pt);
         }
 

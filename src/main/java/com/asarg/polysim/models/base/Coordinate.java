@@ -20,22 +20,6 @@ public final class Coordinate {
         this.y = y;
     }
 
-    public int getX() {
-        return this.x;
-    }
-
-    public int getY() {
-        return this.y;
-    }
-
-    public Coordinate getNorth(){ return new Coordinate(this.x, this.y+1);}
-
-    public Coordinate getEast(){ return new Coordinate(this.x+1, this.y);}
-
-    public Coordinate getSouth(){ return new Coordinate(this.x, this.y-1);}
-
-    public Coordinate getWest(){ return new Coordinate(this.x-1, this.y);}
-
     /*
     TODO: Don't remember what this does
      */
@@ -46,6 +30,30 @@ public final class Coordinate {
         int yOffset = -(ptPoint.getY() - placement.getY());
         Coordinate tmp2 = new Coordinate(xOffset, yOffset);
         return new Pair<Coordinate, Coordinate>(placement, tmp2);
+    }
+
+    public int getX() {
+        return this.x;
+    }
+
+    public int getY() {
+        return this.y;
+    }
+
+    public Coordinate getNorth() {
+        return new Coordinate(this.x, this.y + 1);
+    }
+
+    public Coordinate getEast() {
+        return new Coordinate(this.x + 1, this.y);
+    }
+
+    public Coordinate getSouth() {
+        return new Coordinate(this.x, this.y - 1);
+    }
+
+    public Coordinate getWest() {
+        return new Coordinate(this.x - 1, this.y);
     }
 
     @Override
@@ -72,7 +80,7 @@ public final class Coordinate {
         return new Coordinate(x + dx, y + dy);
     }
 
-    public String toString(){
-        return "(" + this.x + ","+this.y+")";
+    public String toString() {
+        return "(" + this.x + "," + this.y + ")";
     }
 }

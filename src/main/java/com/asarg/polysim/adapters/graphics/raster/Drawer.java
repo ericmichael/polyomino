@@ -21,9 +21,9 @@ public class Drawer {
     //clears given graphics object, clip must have been set
     public static void clearGraphics(Graphics2D g) {
         Rectangle bounds = g.getClipBounds();
-        if(g instanceof FXGraphics2D)
+        if (g instanceof FXGraphics2D)
             g.clearRect(0, 0, bounds.width, bounds.height);
-        else{
+        else {
             g.setComposite(AlphaComposite.Clear);
             g.fillRect(0, 0, bounds.width, bounds.height);
             g.setComposite(AlphaComposite.Src);
@@ -159,22 +159,22 @@ public class Drawer {
             g.setStroke(new BasicStroke(diameter / 25));
         }
 
-        public static void drawTileOutline(Graphics2D g, Tile tile, int x, int y, int diameter, boolean hasNorth, boolean hasEast, boolean hasSouth, boolean hasWest, boolean selection){
+        public static void drawTileOutline(Graphics2D g, Tile tile, int x, int y, int diameter, boolean hasNorth, boolean hasEast, boolean hasSouth, boolean hasWest, boolean selection) {
             Stroke dashed = new BasicStroke(diameter / 25, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{4}, 0);
             Stroke simple = new BasicStroke(diameter / 25);
 
-            if(!tile.getParent().isFrontier()){
+            if (!tile.getParent().isFrontier()) {
                 //draw wimpy borders
                 g.setStroke(dashed);
                 g.setColor(Color.gray);
-                if(hasNorth) g.drawLine(x, y, x+diameter, y);
-                if(hasEast) g.drawLine(x+diameter, y, x+diameter, y+diameter);
-                if(hasSouth) g.drawLine(x, y+diameter, x+diameter, y+diameter);
-                if(hasWest) g.drawLine(x, y, x, y + diameter);
+                if (hasNorth) g.drawLine(x, y, x + diameter, y);
+                if (hasEast) g.drawLine(x + diameter, y, x + diameter, y + diameter);
+                if (hasSouth) g.drawLine(x, y + diameter, x + diameter, y + diameter);
+                if (hasWest) g.drawLine(x, y, x, y + diameter);
 
                 g.setStroke(simple);
 
-                if(!selection)
+                if (!selection)
                     g.setColor(Color.black);
                 else {
                     dashed = new BasicStroke(diameter / 10, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{4}, 0);
@@ -182,12 +182,12 @@ public class Drawer {
                     g.setColor(Color.decode("#007AFF"));
                 }
 
-                if(!hasNorth) g.drawLine(x, y, x+diameter, y);
-                if(!hasEast) g.drawLine(x+diameter, y, x+diameter, y+diameter);
-                if(!hasSouth) g.drawLine(x, y+diameter, x+diameter, y+diameter);
-                if(!hasWest) g.drawLine(x, y, x, y+diameter);
+                if (!hasNorth) g.drawLine(x, y, x + diameter, y);
+                if (!hasEast) g.drawLine(x + diameter, y, x + diameter, y + diameter);
+                if (!hasSouth) g.drawLine(x, y + diameter, x + diameter, y + diameter);
+                if (!hasWest) g.drawLine(x, y, x, y + diameter);
 
-            }else{
+            } else {
                 g.setColor(Color.black);
 
                 g.setStroke(dashed);
@@ -218,7 +218,7 @@ public class Drawer {
 
         }
 
-        private static void drawStringsOnTiles(Graphics2D g, Tile tile, int x, int y, int diameter, boolean hasNorth, boolean hasEast, boolean hasSouth, boolean hasWest){
+        private static void drawStringsOnTiles(Graphics2D g, Tile tile, int x, int y, int diameter, boolean hasNorth, boolean hasEast, boolean hasSouth, boolean hasWest) {
             Rectangle clip = g.getClipBounds();
 
             if (x > clip.width + diameter || x < 0 - diameter || y > clip.height + diameter || y < 0 - diameter)
@@ -263,7 +263,7 @@ public class Drawer {
 
         //Wil be deprecated when updated FXGraphics2d hits on maven.
         //This hack works around a bug in FXGraphics2d. rotate does not work in current version
-        private static void drawStringsOnTiles(GraphicsContext gc, FXGraphics2D g, Tile tile, int x, int y, int diameter, boolean hasNorth, boolean hasEast, boolean hasSouth, boolean hasWest){
+        private static void drawStringsOnTiles(GraphicsContext gc, FXGraphics2D g, Tile tile, int x, int y, int diameter, boolean hasNorth, boolean hasEast, boolean hasSouth, boolean hasWest) {
             Rectangle clip = g.getClipBounds();
 
             if (x > clip.width + diameter || x < 0 - diameter || y > clip.height + diameter || y < 0 - diameter)
@@ -388,7 +388,7 @@ public class Drawer {
 
         }
 
-        public static void drawPolyTileSelection(Graphics2D g, PolyTile pt, int diameter, Coordinate location, Coordinate offset){
+        public static void drawPolyTileSelection(Graphics2D g, PolyTile pt, int diameter, Coordinate location, Coordinate offset) {
             java.util.List<Tile> lt = pt.tiles;
             for (Tile t : lt) {
                 Coordinate unitLocation = t.getLocation();
@@ -398,9 +398,9 @@ public class Drawer {
                 boolean hasWest = pt.getTile(unitLocation.getWest()) != null;
                 System.out.println("Location: " + location);
                 System.out.println("Unit location: " + unitLocation);
-                int x =  (location.getX() + unitLocation.getX()) * diameter + offset.getX() - diameter / 2;
-                int y =  -(location.getY() + unitLocation.getY()) * diameter + offset.getY() - diameter / 2;
-                System.out.println("("+x+","+y+")");
+                int x = (location.getX() + unitLocation.getX()) * diameter + offset.getX() - diameter / 2;
+                int y = -(location.getY() + unitLocation.getY()) * diameter + offset.getY() - diameter / 2;
+                System.out.println("(" + x + "," + y + ")");
                 drawTileOutline(g, t, x, y, diameter, hasNorth, hasEast, hasSouth, hasWest, true);
             }
         }

@@ -7,14 +7,16 @@ import java.util.HashMap;
 /**
  * Created by Eric Martinez on 6/2/2016.
  */
-public class ActiveGrid extends HashMap<Coordinate, Tile>{
+public class ActiveGrid extends HashMap<Coordinate, Tile> {
 
     SimulationCanvas canvas;
     private Coordinate selected;
 
-    public ActiveGrid(){ canvas=null; }
+    public ActiveGrid() {
+        canvas = null;
+    }
 
-    public ActiveGrid(SimulationCanvas canvas){
+    public ActiveGrid(SimulationCanvas canvas) {
         this.canvas = canvas;
     }
 
@@ -57,54 +59,55 @@ public class ActiveGrid extends HashMap<Coordinate, Tile>{
     }
 
     //Select a PolyTile at the Coordinate c
-    public void select(Coordinate c){
+    public void select(Coordinate c) {
         this.selected = c;
         draw();
     }
 
     //Deselect any selection
-    public void deselect(){
+    public void deselect() {
         this.selected = null;
         draw();
     }
 
-    public Coordinate getSelection(){ return selected; }
-
-    //Where should things be drawn
-    public void setCanvas(SimulationCanvas canvas){
-        this.canvas = canvas;
+    public Coordinate getSelection() {
+        return selected;
     }
 
-    public SimulationCanvas getCanvas(){
+    public SimulationCanvas getCanvas() {
         return this.canvas;
+    }
+
+    //Where should things be drawn
+    public void setCanvas(SimulationCanvas canvas) {
+        this.canvas = canvas;
     }
 
     /*
     Override HashMap stuff to allow update drawing
      */
-    public Tile put(Coordinate key, Tile value){
-        Tile return_value = super.put(key,value);
+    public Tile put(Coordinate key, Tile value) {
+        Tile return_value = super.put(key, value);
         draw();
         return return_value;
     }
 
-    public Tile remove(Object key){
+    public Tile remove(Object key) {
         Tile return_value = super.remove(key);
         draw();
         return return_value;
     }
 
-    public void clear(){
+    public void clear() {
         super.clear();
         draw();
     }
 
     public void draw() {
-        if (canvas!=null) {
+        if (canvas != null) {
             canvas.draw();
         }
     }
-
 
 
 }

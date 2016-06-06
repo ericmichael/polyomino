@@ -22,7 +22,7 @@ public abstract class SimulationCanvas extends Canvas {
 
         this.grid = grid;
         // Redraw canvas when size changes.
-        widthProperty().addListener(e ->recenterAndDraw());
+        widthProperty().addListener(e -> recenterAndDraw());
         heightProperty().addListener(e -> recenterAndDraw());
 
         int width = (int) getWidth();
@@ -31,15 +31,15 @@ public abstract class SimulationCanvas extends Canvas {
         cg2d.setClip(0, 0, width, height);
     }
 
-    public void draw(){
+    public void draw() {
         int width = (int) getWidth();
         int height = (int) getHeight();
-        getGraphicsContext2D().clearRect(0,0,width, height);
-        cg2d.setClip(0,0,width, height);
+        getGraphicsContext2D().clearRect(0, 0, width, height);
+        cg2d.setClip(0, 0, width, height);
         drawGrid();
     }
 
-    public void recenterAndDraw(){
+    public void recenterAndDraw() {
         int width = (int) getWidth();
         int height = (int) getHeight();
         center = new Coordinate(width / 2, height / 2);
@@ -52,23 +52,26 @@ public abstract class SimulationCanvas extends Canvas {
     }
 
     @Override
-    public double prefWidth(double height) { return getWidth(); }
+    public double prefWidth(double height) {
+        return getWidth();
+    }
 
     @Override
-    public double prefHeight(double width) { return getHeight();
+    public double prefHeight(double width) {
+        return getHeight();
     }
 
     public void reset() {
-        getGraphicsContext2D().clearRect(0,0,getWidth(), getHeight());
+        getGraphicsContext2D().clearRect(0, 0, getWidth(), getHeight());
         draw();
     }
 
 
     public void drawGrid() {
         Drawer.TileDrawer.drawTiles(this);
-        if(grid.getSelection()!=null) {
+        if (grid.getSelection() != null) {
             Tile selectedTile = grid.get(grid.getSelection());
-            if(selectedTile!=null) {
+            if (selectedTile != null) {
                 Coordinate offset = new Coordinate(grid.getSelection().getX() - selectedTile.getLocation().getX(), grid.getSelection().getY() - selectedTile.getLocation().getY());
                 Drawer.TileDrawer.drawPolyTileSelection(cg2d, selectedTile.getParent(), tileDiameter, offset, center);
             }
@@ -100,5 +103,7 @@ public abstract class SimulationCanvas extends Canvas {
         return center;
     }
 
-    public FXGraphics2D getGraphics(){ return cg2d; }
+    public FXGraphics2D getGraphics() {
+        return cg2d;
+    }
 }

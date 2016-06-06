@@ -239,7 +239,6 @@ public class SimulationController implements Initializable {
         );
 
 
-
         borderPane.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             final KeyCombination enter = new KeyCodeCombination(KeyCode.ENTER);
             final KeyCombination pgup = new KeyCodeCombination(KeyCode.PAGE_UP);
@@ -283,7 +282,7 @@ public class SimulationController implements Initializable {
                         cn.frontier = cn.assembly.calculateFrontier();
                         cn.placeFrontierOnGrid();
                         t.consume();
-                    } else if (backspace.match(t) || delete.match(t)){
+                    } else if (backspace.match(t) || delete.match(t)) {
                         System.out.println("Deleting polytile");
                         cn.deleteSelection();
                         t.consume();
@@ -298,7 +297,7 @@ public class SimulationController implements Initializable {
             public void handle(ActionEvent t) {
                 try {
                     Desktop.getDesktop().browse(new URI(hyperlink_website.getText()));
-                }catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

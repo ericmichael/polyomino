@@ -49,13 +49,13 @@ public class TileConfiguration {
         return observableTileTypes;
     }
 
-    public void mergeTileConfiguration(TileConfiguration tc){
-        for(PolyTile pt : tc.getTiletypes()){
-            if(!getTiletypes().contains(pt))
+    public void mergeTileConfiguration(TileConfiguration tc) {
+        for (PolyTile pt : tc.getTiletypes()) {
+            if (!getTiletypes().contains(pt))
                 addTileType(pt);
         }
 
-        for(Map.Entry<Pair<String, String>, Integer> entry : tc.getGlueFunction().entrySet()){
+        for (Map.Entry<Pair<String, String>, Integer> entry : tc.getGlueFunction().entrySet()) {
             String glue1 = entry.getKey().getKey();
             String glue2 = entry.getKey().getValue();
             Integer strength = entry.getValue();

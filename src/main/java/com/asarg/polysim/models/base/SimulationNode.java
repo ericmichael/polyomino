@@ -59,13 +59,13 @@ public class SimulationNode extends SimulationCanvas implements Observer {
                 Coordinate clicked = Drawer.TileDrawer.getGridPoint(point, getOffset(), getTileDiameter());
                 Tile clicked_tile = assembly.Grid.get(clicked);
                 if (clicked_tile != null) {
-                    if(clicked_tile.getParent().isFrontier()){
+                    if (clicked_tile.getParent().isFrontier()) {
                         selected = null;
                         processFrontierClick(clicked, clicked_tile);
-                    }else{
+                    } else {
                         getGrid().select(clicked);
                     }
-                }else{
+                } else {
                     getGrid().deselect();
                 }
             }
@@ -224,7 +224,7 @@ public class SimulationNode extends SimulationCanvas implements Observer {
         this.file = file;
     }
 
-    public void resize(int w, int h){
+    public void resize(int w, int h) {
         assembly.Grid.getCanvas().resize(w, h);
     }
 
@@ -554,9 +554,9 @@ public class SimulationNode extends SimulationCanvas implements Observer {
 
     }
 
-    public ArrayList<Coordinate> getSelectedCoordinates(){
+    public ArrayList<Coordinate> getSelectedCoordinates() {
         ArrayList<Coordinate> selectedCoordinates = new ArrayList<Coordinate>();
-        if(selected!=null) {
+        if (selected != null) {
             Tile selectedTile = assembly.Grid.get(selected);
             Coordinate location = selectedTile.getLocation();
             Coordinate offset = new Coordinate(selected.getX() - location.getX(), selected.getY() - location.getY());
@@ -572,18 +572,20 @@ public class SimulationNode extends SimulationCanvas implements Observer {
         return selectedCoordinates;
     }
 
-    public void removeSelection(){
+    public void removeSelection() {
         selected = null;
     }
 
-    public void deleteSelection(){
+    public void deleteSelection() {
         exitFrontierMode();
         removeFrontierFromGrid();
         resetFrontier();
 
         ArrayList<Coordinate> selectedCoordinates = getSelectedCoordinates();
 
-        for(Coordinate c : selectedCoordinates){ assembly.Grid.remove(c); }
+        for (Coordinate c : selectedCoordinates) {
+            assembly.Grid.remove(c);
+        }
 
         assembly.cleanUp();
         assembly.getOpenGlues();
@@ -593,7 +595,7 @@ public class SimulationNode extends SimulationCanvas implements Observer {
         placeFrontierOnGrid();
     }
 
-    public ActiveGrid getGrid(){
+    public ActiveGrid getGrid() {
         return assembly.Grid;
     }
 }

@@ -44,19 +44,30 @@ import java.util.ResourceBundle;
 public class TileEditorController implements Initializable {
 
     final SimpleBooleanProperty updateable = new SimpleBooleanProperty(false);
-    final ChangeListener<Boolean> listener_pt_field_focus = new ChangeListener<Boolean>() {
-        @Override
-        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-            if (!newValue) {
-                final PolyTile selected = listview_polytiles.getSelectionModel().getSelectedItem();
-                double concentration = selected.getConcentration();
-                int count = selected.getCount();
-                if (concentration < 0) field_concentration.setText("");
-
-                if (count < 0) field_count.setText("");
-            }
-        }
-    };
+    @FXML
+    AnchorPane ptAnchorPane;
+    @FXML
+    SwingNode swingNodeCanvas;
+    @FXML
+    AnchorPane inspectorPane;
+    @FXML
+    TitledPane tileEditorPane;
+    @FXML
+    ListView<PolyTile> listview_polytiles;
+    @FXML
+    Accordion accordion;
+    @FXML
+    TextField field_tile_label;
+    @FXML
+    TextField field_north_glue;
+    @FXML
+    TextField field_east_glue;
+    @FXML
+    TextField field_south_glue;
+    @FXML
+    TextField field_west_glue;
+    @FXML
+    TextField field_concentration;
     //Listeners
     final ChangeListener<String> listener_concentration = new ChangeListener<String>() {
         @Override
@@ -85,6 +96,21 @@ public class TileEditorController implements Initializable {
                         }
                     });
                 }
+            }
+        }
+    };
+    @FXML
+    TextField field_count;
+    final ChangeListener<Boolean> listener_pt_field_focus = new ChangeListener<Boolean>() {
+        @Override
+        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+            if (!newValue) {
+                final PolyTile selected = listview_polytiles.getSelectionModel().getSelectedItem();
+                double concentration = selected.getConcentration();
+                int count = selected.getCount();
+                if (concentration < 0) field_concentration.setText("");
+
+                if (count < 0) field_count.setText("");
             }
         }
     };
@@ -118,94 +144,6 @@ public class TileEditorController implements Initializable {
             }
         }
     };
-
-    private void fieldHelper(final String oldValue, final String newValue, final TextField field, String target ){
-        final int caret = field.getCaretPosition();
-        final int caret_new;
-        if(newValue!=null && oldValue!=null)
-            caret_new = caret + (newValue.length() - oldValue.length());
-        else
-            caret_new = caret;
-
-        if (newValue != null) {
-            Tile selected = canvas.getSelectedTileProperty().get();
-            if (selected != null) {
-                if(target=="label") canvas.getSelectedTileProperty().get().setLabel(newValue);
-                else if(target=="north") canvas.getSelectedTileProperty().get().setGlueN(newValue);
-                else if(target=="south") canvas.getSelectedTileProperty().get().setGlueS(newValue);
-                else if(target=="east") canvas.getSelectedTileProperty().get().setGlueE(newValue);
-                else if(target=="west") canvas.getSelectedTileProperty().get().setGlueW(newValue);
-
-                redrawPolyTile(selected);
-                updateable.set(true);
-
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        field.requestFocus();
-                        field.positionCaret(caret_new);
-                    }
-                });
-            }
-        }
-    }
-    final ChangeListener<String> listener_label = new ChangeListener<String>() {
-        @Override
-        public void changed(ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
-            fieldHelper(oldValue, newValue, field_tile_label,  "label");
-        }
-    };
-    final ChangeListener<String> listener_north_glue = new ChangeListener<String>() {
-        @Override
-        public void changed(ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
-           fieldHelper(oldValue, newValue, field_north_glue, "north");
-        }
-    };
-    final ChangeListener<String> listener_south_glue = new ChangeListener<String>() {
-        @Override
-        public void changed(ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
-            fieldHelper(oldValue, newValue, field_south_glue, "south");
-        }
-    };
-    final ChangeListener<String> listener_east_glue = new ChangeListener<String>() {
-        @Override
-        public void changed(ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
-            fieldHelper(oldValue, newValue, field_east_glue, "east");
-        }
-    };
-    final ChangeListener<String> listener_west_glue = new ChangeListener<String>() {
-        @Override
-        public void changed(ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
-            fieldHelper(oldValue, newValue, field_west_glue, "west");
-        }
-    };
-
-    @FXML
-    AnchorPane ptAnchorPane;
-    @FXML
-    SwingNode swingNodeCanvas;
-    @FXML
-    AnchorPane inspectorPane;
-    @FXML
-    TitledPane tileEditorPane;
-    @FXML
-    ListView<PolyTile> listview_polytiles;
-    @FXML
-    Accordion accordion;
-    @FXML
-    TextField field_tile_label;
-    @FXML
-    TextField field_north_glue;
-    @FXML
-    TextField field_east_glue;
-    @FXML
-    TextField field_south_glue;
-    @FXML
-    TextField field_west_glue;
-    @FXML
-    TextField field_concentration;
-    @FXML
-    TextField field_count;
     @FXML
     TextField field_glue_1;
     @FXML
@@ -245,7 +183,68 @@ public class TileEditorController implements Initializable {
     ObservableList<Glue> glueData = FXCollections.observableArrayList();
     private TileConfiguration tc;
     private EditorCanvas canvas;
+    final ChangeListener<String> listener_west_glue = new ChangeListener<String>() {
+        @Override
+        public void changed(ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+            fieldHelper(oldValue, newValue, field_west_glue, "west");
+        }
+    };
+    final ChangeListener<String> listener_east_glue = new ChangeListener<String>() {
+        @Override
+        public void changed(ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+            fieldHelper(oldValue, newValue, field_east_glue, "east");
+        }
+    };
+    final ChangeListener<String> listener_south_glue = new ChangeListener<String>() {
+        @Override
+        public void changed(ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+            fieldHelper(oldValue, newValue, field_south_glue, "south");
+        }
+    };
+    final ChangeListener<String> listener_north_glue = new ChangeListener<String>() {
+        @Override
+        public void changed(ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+            fieldHelper(oldValue, newValue, field_north_glue, "north");
+        }
+    };
+    final ChangeListener<String> listener_label = new ChangeListener<String>() {
+        @Override
+        public void changed(ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+            fieldHelper(oldValue, newValue, field_tile_label, "label");
+        }
+    };
     private SimulationNode current;
+
+    private void fieldHelper(final String oldValue, final String newValue, final TextField field, String target) {
+        final int caret = field.getCaretPosition();
+        final int caret_new;
+        if (newValue != null && oldValue != null)
+            caret_new = caret + (newValue.length() - oldValue.length());
+        else
+            caret_new = caret;
+
+        if (newValue != null) {
+            Tile selected = canvas.getSelectedTileProperty().get();
+            if (selected != null) {
+                if (target == "label") canvas.getSelectedTileProperty().get().setLabel(newValue);
+                else if (target == "north") canvas.getSelectedTileProperty().get().setGlueN(newValue);
+                else if (target == "south") canvas.getSelectedTileProperty().get().setGlueS(newValue);
+                else if (target == "east") canvas.getSelectedTileProperty().get().setGlueE(newValue);
+                else if (target == "west") canvas.getSelectedTileProperty().get().setGlueW(newValue);
+
+                redrawPolyTile(selected);
+                updateable.set(true);
+
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        field.requestFocus();
+                        field.positionCaret(caret_new);
+                    }
+                });
+            }
+        }
+    }
 
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
@@ -481,7 +480,7 @@ public class TileEditorController implements Initializable {
         canvas.drawPolyTile();
         int index = listview_polytiles.getSelectionModel().getSelectedIndex();
         PolyTile pt = canvas.getPolyTile();
-         listview_polytiles.getItems().remove(index);
+        listview_polytiles.getItems().remove(index);
         listview_polytiles.getItems().add(index, pt);
         listview_polytiles.getSelectionModel().select(index);
         if (selected != null) {
