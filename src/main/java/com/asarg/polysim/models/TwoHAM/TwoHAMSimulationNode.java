@@ -1,6 +1,5 @@
 package com.asarg.polysim.models.TwoHAM;
 
-import com.asarg.polysim.adapters.graphics.raster.SimulationCanvas;
 import com.asarg.polysim.models.base.*;
 import javafx.collections.ObservableList;
 

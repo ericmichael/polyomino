@@ -6,14 +6,10 @@ package com.asarg.polysim.models.base;
 import com.asarg.polysim.xml.GridXmlAdapter;
 import javafx.util.Pair;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.awt.*;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.InvalidObjectException;
 import java.util.*;
 import java.util.List;
