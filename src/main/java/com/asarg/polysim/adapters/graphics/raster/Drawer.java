@@ -30,31 +30,6 @@ public class Drawer {
         }
     }
 
-    public static Coordinate calculateGridDimension(List<Coordinate> gridPoints) {
-        int maxX = Integer.MIN_VALUE;
-        int maxY = Integer.MIN_VALUE;
-        int minX = Integer.MAX_VALUE;
-        int minY = Integer.MAX_VALUE;
-
-        for (Coordinate p : gridPoints) {
-            if (p.getX() > maxX) {
-                maxX = p.getX();
-            }
-            if (p.getX() < minX) {
-                minX = p.getX();
-            }
-            if (p.getY() > maxY) {
-                maxY = p.getY();
-            }
-            if (p.getY() < minY) {
-                minY = p.getY();
-            }
-        }
-
-        return new Coordinate(1 + maxX - minX, 1 + maxY - minY);
-
-    }
-
     public static class TileDrawer {
 
         public static Coordinate calculatePolyTileGridDimension(PolyTile polyt) {
@@ -320,16 +295,6 @@ public class Drawer {
             g.drawString(tileLabel, x + (diameter / 2) - (font.stringWidth(tileLabel) / 2), y + (diameter / 2));
         }
 
-
-        public static void drawHexTile(Graphics2D g, Tile tile, int x, int y, int diameter) {
-            Polygon sprite = new Polygon();
-            for (int i = 0; i < 6; i++) {
-                sprite.addPoint(x + (diameter + 10) / 2 + (int) ((diameter + 10) * Math.cos(i * 2 * Math.PI / 6)), y + (int) ((diameter + 10) * Math.sin(i * 2 * Math.PI / 6)));
-            }
-            g.drawRect(x, y, diameter, diameter);
-            g.drawPolygon(sprite);
-        }
-
         public static void drawTiles(SimulationCanvas sc) {
             Set<Map.Entry<Coordinate, Tile>> tiles = sc.grid.entrySet();
 
@@ -349,31 +314,6 @@ public class Drawer {
 
                 drawTile(sc.getGraphics(), tile, pt.getX() * diameter + offset.getX() - diameter / 2, -pt.getY() * diameter + offset.getY() - diameter / 2, diameter, hasNorth, hasEast, hasSouth, hasWest);
                 drawStringsOnTiles(sc.getGraphicsContext2D(), sc.getGraphics(), tile, pt.getX() * diameter + offset.getX() - diameter / 2, -pt.getY() * diameter + offset.getY() - diameter / 2, diameter, hasNorth, hasEast, hasSouth, hasWest);
-            }
-
-        }
-
-        public static void drawTiles(Graphics2D g, HashMap<Coordinate, Tile> hmpt, int diameter, Coordinate offset) {
-
-            Set<Map.Entry<Coordinate, Tile>> tiles = hmpt.entrySet();
-
-
-            for (Map.Entry<Coordinate, Tile> mep : tiles) {
-                Coordinate pt = mep.getKey();
-                Tile tile = mep.getValue();
-
-                PolyTile parent = tile.getParent();
-                Coordinate unitLocation = tile.getLocation();
-                boolean hasNorth = parent.getTile(unitLocation.getNorth()) != null;
-                boolean hasEast = parent.getTile(unitLocation.getEast()) != null;
-                boolean hasSouth = parent.getTile(unitLocation.getSouth()) != null;
-                boolean hasWest = parent.getTile(unitLocation.getWest()) != null;
-
-
-                drawTile(g, tile, pt.getX() * diameter + offset.getX() - diameter / 2, -pt.getY() * diameter + offset.getY() - diameter / 2, diameter, hasNorth, hasEast, hasSouth, hasWest);
-                drawStringsOnTiles(g, tile, pt.getX() * diameter + offset.getX() - diameter / 2, -pt.getY() * diameter + offset.getY() - diameter / 2, diameter, hasNorth, hasEast, hasSouth, hasWest);
-
-//                drawHexTile(g, tile, pt.x * diameter + offset.x - diameter / 2, -pt.y * diameter + offset.y - diameter / 2, diameter);
             }
 
         }
@@ -455,58 +395,6 @@ public class Drawer {
             drawPolyTile(g, pt, diameter, offset);
             return new Pair<Coordinate, Integer>(offset, diameter);
         }
-
-        public static Pair<Coordinate, Integer> drawCenteredPolyTile(Graphics2D g, PolyTile pt, Coordinate offset/* provide an offset x and y*/) {
-            Coordinate polyDim = calculatePolyTileGridDimension(pt);
-            Rectangle graphicsDim = g.getClipBounds();
-
-            int diameter = (int) (Math.ceil(Math.min(graphicsDim.getWidth(), graphicsDim.getHeight()) / Math.max(polyDim.getX(), polyDim.getY())) / 1.5);
-
-
-            int maxX = Integer.MIN_VALUE;
-            int maxY = Integer.MIN_VALUE;
-            int minX = Integer.MAX_VALUE;
-            int minY = Integer.MAX_VALUE;
-            for (Tile t : pt.getTiles()) {
-                Coordinate Tpt = t.getLocation();
-                maxX = Tpt.getX() > maxX ? Tpt.getX() : maxX;
-                maxY = Tpt.getY() > maxY ? Tpt.getY() : maxY;
-                minX = Tpt.getX() < minX ? Tpt.getX() : minX;
-                minY = Tpt.getY() < minY ? Tpt.getY() : minY;
-            }
-
-
-            offset = offset.translate(-minX * diameter + diameter / 2 + ((graphicsDim.width - (polyDim.getX() * diameter)) / 2), +maxY * diameter + diameter / 2 + ((graphicsDim.height - (polyDim.getY() * diameter)) / 2));
-
-            drawPolyTile(g, pt, diameter, offset);
-            return new Pair<Coordinate, Integer>(offset, diameter);
-        }
-
-        public static Pair<Coordinate, Integer> drawCenteredPolyTile(Graphics2D g, PolyTile pt, int diameter) {
-            Coordinate polyDim = calculatePolyTileGridDimension(pt);
-            Rectangle graphicsDim = g.getClipBounds();
-
-
-            Coordinate offset = new Coordinate(0, 0);
-
-            int maxX = Integer.MIN_VALUE;
-            int maxY = Integer.MIN_VALUE;
-            int minX = Integer.MAX_VALUE;
-            int minY = Integer.MAX_VALUE;
-            for (Tile t : pt.getTiles()) {
-                Coordinate Tpt = t.getLocation();
-                maxX = Tpt.getX() > maxX ? Tpt.getX() : maxX;
-                maxY = Tpt.getY() > maxY ? Tpt.getY() : maxY;
-                minX = Tpt.getX() < minX ? Tpt.getX() : minX;
-                minY = Tpt.getY() < minY ? Tpt.getY() : minY;
-            }
-
-            offset = offset.translate(-minX * diameter + diameter / 2 + ((graphicsDim.width - (polyDim.getX() * diameter)) / 2), +maxY * diameter + diameter / 2 + ((graphicsDim.height - (polyDim.getY() * diameter)) / 2));
-
-            drawPolyTile(g, pt, diameter, offset);
-            return new Pair<Coordinate, Integer>(offset, diameter);
-        }
-
 
         public static Coordinate getGridPoint(Coordinate canvasPoint, Coordinate offset, int diameter) {
             Coordinate p = new Coordinate((int) Math.round((canvasPoint.getX() - offset.getX()) / (double) diameter), (int) Math.round((-canvasPoint.getY() + offset.getY()) / (double) diameter));
