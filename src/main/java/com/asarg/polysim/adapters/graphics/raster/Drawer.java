@@ -3,7 +3,10 @@ package com.asarg.polysim.adapters.graphics.raster;
 import com.asarg.polysim.models.base.Coordinate;
 import com.asarg.polysim.models.base.PolyTile;
 import com.asarg.polysim.models.base.Tile;
+import com.sun.corba.se.impl.orbutil.graph.Graph;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.util.Pair;
+import org.jfree.fx.FXGraphics2D;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -18,10 +21,13 @@ public class Drawer {
     //clears given graphics object, clip must have been set
     public static void clearGraphics(Graphics2D g) {
         Rectangle bounds = g.getClipBounds();
-        g.setComposite(AlphaComposite.Clear);
-        g.fillRect(0, 0, bounds.width, bounds.height);
-        g.setComposite(AlphaComposite.Src);
-
+        if(g instanceof FXGraphics2D)
+            g.clearRect(0, 0, bounds.width, bounds.height);
+        else{
+            g.setComposite(AlphaComposite.Clear);
+            g.fillRect(0, 0, bounds.width, bounds.height);
+            g.setComposite(AlphaComposite.Src);
+        }
     }
 
     public static Coordinate calculateGridDimension(List<Coordinate> gridPoints) {
@@ -192,19 +198,12 @@ public class Drawer {
             }
         }
 
+
         public static void drawTile(Graphics2D g, Tile tile, int x, int y, int diameter, boolean hasNorth, boolean hasEast, boolean hasSouth, boolean hasWest) {
-            g.setFont(g.getFont().deriveFont((float) (diameter / 6)));
             Rectangle clip = g.getClipBounds();
 
             if (x > clip.width + diameter || x < 0 - diameter || y > clip.height + diameter || y < 0 - diameter)
                 return;
-            AffineTransform gOriginalATransform = g.getTransform();
-
-            String tileLabel = tile.getLabel();
-            String northGlue = tile.getGlueN();
-            String eastGlue = tile.getGlueE();
-            String southGlue = tile.getGlueS();
-            String westGlue = tile.getGlueW();
 
             //get hex color string to int, then create new color out of the rgb
             //int colorInt = Integer.parseInt(tile.getColor(), 16);
@@ -217,6 +216,22 @@ public class Drawer {
 
             drawTileOutline(g, tile, x, y, diameter, hasNorth, hasEast, hasSouth, hasWest, false);
 
+        }
+
+        private static void drawStringsOnTiles(Graphics2D g, Tile tile, int x, int y, int diameter, boolean hasNorth, boolean hasEast, boolean hasSouth, boolean hasWest){
+            Rectangle clip = g.getClipBounds();
+
+            if (x > clip.width + diameter || x < 0 - diameter || y > clip.height + diameter || y < 0 - diameter)
+                return;
+
+            g.setFont(g.getFont().deriveFont((float) (diameter / 6)));
+
+            String tileLabel = tile.getLabel();
+            String northGlue = tile.getGlueN();
+            String eastGlue = tile.getGlueE();
+            String southGlue = tile.getGlueS();
+            String westGlue = tile.getGlueW();
+
             //Drawing the glues-------------------------------------
             // font metrics is used to calculate horizontal and vertical size of the string.
             // horizontal: stringWidth(string);  vertical: getAscent()?
@@ -226,12 +241,72 @@ public class Drawer {
 
                 g.rotate(Math.PI / 2);
                 g.drawString(westGlue, y + (diameter / 2 - font.stringWidth(westGlue) / 2), -x - diameter / 20);
-                g.setTransform(gOriginalATransform);
+                g.rotate(-Math.PI / 2);
             }
             if (eastGlue != null && !eastGlue.isEmpty()) {
                 g.rotate(Math.PI / 2);
                 g.drawString(eastGlue, y + (diameter / 2 - font.stringWidth(eastGlue) / 2), -x - diameter + diameter / 6);
-                g.setTransform(gOriginalATransform);
+                g.rotate(-Math.PI / 2);
+
+            }
+
+            if (southGlue != null && !southGlue.isEmpty()) {
+                g.drawString(southGlue, x + diameter / 2 - font.stringWidth(southGlue) / 2, y + diameter - diameter / 20);
+            }
+            if (northGlue != null && !northGlue.isEmpty()) {
+                g.drawString(northGlue, x + diameter / 2 - font.stringWidth(northGlue) / 2, y + diameter / 8);
+            }
+
+            g.drawString(tileLabel, x + (diameter / 2) - (font.stringWidth(tileLabel) / 2), y + (diameter / 2));
+        }
+
+
+        //Wil be deprecated when updated FXGraphics2d hits on maven.
+        //This hack works around a bug in FXGraphics2d. rotate does not work in current version
+        private static void drawStringsOnTiles(GraphicsContext gc, FXGraphics2D g, Tile tile, int x, int y, int diameter, boolean hasNorth, boolean hasEast, boolean hasSouth, boolean hasWest){
+            Rectangle clip = g.getClipBounds();
+
+            if (x > clip.width + diameter || x < 0 - diameter || y > clip.height + diameter || y < 0 - diameter)
+                return;
+
+            g.setFont(g.getFont().deriveFont((float) (diameter / 6)));
+
+            String tileLabel = tile.getLabel();
+            String northGlue = tile.getGlueN();
+            String eastGlue = tile.getGlueE();
+            String southGlue = tile.getGlueS();
+            String westGlue = tile.getGlueW();
+
+            //Drawing the glues-------------------------------------
+            // font metrics is used to calculate horizontal and vertical size of the string.
+            // horizontal: stringWidth(string);  vertical: getAscent()?
+            FontMetrics font = g.getFontMetrics();
+
+            double theta = Math.PI / 2;
+            double bug = theta * Math.PI / 180;
+
+            if (westGlue != null && !westGlue.isEmpty()) {
+                g.rotate(theta);
+                //undo whatever bug they did
+                gc.rotate(-bug);
+
+                //apply correct rotation
+                gc.rotate(Math.toDegrees(theta));
+                g.drawString(westGlue, y + (diameter / 2 - font.stringWidth(westGlue) / 2), -x - diameter / 20);
+
+                g.rotate(-theta);
+                gc.rotate(bug);
+                gc.rotate(-Math.toDegrees(theta));
+            }
+            if (eastGlue != null && !eastGlue.isEmpty()) {
+                g.rotate(theta);
+                gc.rotate(-bug);
+                //apply correct rotation
+                gc.rotate(Math.toDegrees(theta));
+                g.drawString(eastGlue, y + (diameter / 2 - font.stringWidth(eastGlue) / 2), -x - diameter + diameter / 6);
+                g.rotate(-theta);
+                gc.rotate(bug);
+                gc.rotate(-Math.toDegrees(theta));
 
             }
 
@@ -255,6 +330,29 @@ public class Drawer {
             g.drawPolygon(sprite);
         }
 
+        public static void drawTiles(SimulationCanvas sc) {
+            Set<Map.Entry<Coordinate, Tile>> tiles = sc.grid.entrySet();
+
+            for (Map.Entry<Coordinate, Tile> mep : tiles) {
+                Coordinate pt = mep.getKey();
+                Tile tile = mep.getValue();
+
+                PolyTile parent = tile.getParent();
+                Coordinate unitLocation = tile.getLocation();
+                boolean hasNorth = parent.getTile(unitLocation.getNorth()) != null;
+                boolean hasEast = parent.getTile(unitLocation.getEast()) != null;
+                boolean hasSouth = parent.getTile(unitLocation.getSouth()) != null;
+                boolean hasWest = parent.getTile(unitLocation.getWest()) != null;
+
+                Coordinate offset = sc.center;
+                int diameter = sc.getTileDiameter();
+
+                drawTile(sc.getGraphics(), tile, pt.getX() * diameter + offset.getX() - diameter / 2, -pt.getY() * diameter + offset.getY() - diameter / 2, diameter, hasNorth, hasEast, hasSouth, hasWest);
+                drawStringsOnTiles(sc.getGraphicsContext2D(), sc.getGraphics(), tile, pt.getX() * diameter + offset.getX() - diameter / 2, -pt.getY() * diameter + offset.getY() - diameter / 2, diameter, hasNorth, hasEast, hasSouth, hasWest);
+            }
+
+        }
+
         public static void drawTiles(Graphics2D g, HashMap<Coordinate, Tile> hmpt, int diameter, Coordinate offset) {
 
             Set<Map.Entry<Coordinate, Tile>> tiles = hmpt.entrySet();
@@ -263,11 +361,6 @@ public class Drawer {
             for (Map.Entry<Coordinate, Tile> mep : tiles) {
                 Coordinate pt = mep.getKey();
                 Tile tile = mep.getValue();
-
-//                Tile north = hmpt.get(pt.getNorth());
-//                Tile east = hmpt.get(pt.getEast());
-//                Tile west = hmpt.get(pt.getWest());
-//                Tile south = hmpt.get(pt.getSouth());
 
                 PolyTile parent = tile.getParent();
                 Coordinate unitLocation = tile.getLocation();
@@ -278,6 +371,8 @@ public class Drawer {
 
 
                 drawTile(g, tile, pt.getX() * diameter + offset.getX() - diameter / 2, -pt.getY() * diameter + offset.getY() - diameter / 2, diameter, hasNorth, hasEast, hasSouth, hasWest);
+                drawStringsOnTiles(g, tile, pt.getX() * diameter + offset.getX() - diameter / 2, -pt.getY() * diameter + offset.getY() - diameter / 2, diameter, hasNorth, hasEast, hasSouth, hasWest);
+
 //                drawHexTile(g, tile, pt.x * diameter + offset.x - diameter / 2, -pt.y * diameter + offset.y - diameter / 2, diameter);
             }
 
@@ -320,6 +415,7 @@ public class Drawer {
                 boolean hasSouth = pt.getTile(unitLocation.getSouth()) != null;
                 boolean hasWest = pt.getTile(unitLocation.getWest()) != null;
                 drawTile(g, t, t.getLocation().getX() * diameter + offset.getX() - diameter / 2, -t.getLocation().getY() * diameter + offset.getY() - diameter / 2, diameter, hasNorth, hasEast, hasSouth, hasWest);
+                drawStringsOnTiles(g, t, t.getLocation().getX() * diameter + offset.getX() - diameter / 2, -t.getLocation().getY() * diameter + offset.getY() - diameter / 2, diameter, hasNorth, hasEast, hasSouth, hasWest);
             }
 
         }

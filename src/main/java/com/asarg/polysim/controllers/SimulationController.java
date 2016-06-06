@@ -242,27 +242,7 @@ public class SimulationController implements Initializable {
                 }
         );
 
-        tabPane.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if (newValue != null) {
-                    if (currentSimulationNode() != null) {
-                        currentSimulationNode().getCanvas().resize((int) tabPane.getWidth(), (int) tabPane.getHeight());
-                    }
-                }
-            }
-        });
 
-        tabPane.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if (newValue != null) {
-                    if (currentSimulationNode() != null) {
-                        currentSimulationNode().getCanvas().resize((int) tabPane.getWidth(), (int) tabPane.getHeight());
-                    }
-                }
-            }
-        });
 
         borderPane.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             final KeyCombination enter = new KeyCodeCombination(KeyCode.ENTER);
@@ -303,7 +283,7 @@ public class SimulationController implements Initializable {
                         t.consume();
                     } else if (escape.match(t)) {
                         cn.exitFrontierMode();
-                        cn.getCanvas().reset();
+                        cn.reset();
                         cn.frontier = cn.assembly.calculateFrontier();
                         cn.placeFrontierOnGrid();
                         t.consume();
@@ -532,7 +512,8 @@ public class SimulationController implements Initializable {
         if (f != null) tab.setText(f.getName());
         else tab.setText("Untitled");
         final SimulationNode simulationNode = new SimulationNode(assembly, f);
-        simulationNode.resize((int) tabPane.getWidth(), (int) tabPane.getHeight());
+        simulationNode.widthProperty().bind(tabPane.widthProperty());
+        simulationNode.heightProperty().bind(tabPane.heightProperty());
         tab.setContent(simulationNode);
         tabPane.getTabs().add(tab);
     }

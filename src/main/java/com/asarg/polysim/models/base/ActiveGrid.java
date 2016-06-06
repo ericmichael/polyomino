@@ -12,7 +12,11 @@ public class ActiveGrid extends HashMap<Coordinate, Tile>{
     SimulationCanvas canvas;
     private Coordinate selected;
 
-    public ActiveGrid(){ canvas = new SimulationCanvas(this); }
+    public ActiveGrid(){ canvas=null; }
+
+    public ActiveGrid(SimulationCanvas canvas){
+        this.canvas = canvas;
+    }
 
     //Check if a PolyTile could fit without overlaps when translated by x, y
     public boolean geometryCheckSuccess(PolyTile p, int x, int y) {
@@ -64,6 +68,7 @@ public class ActiveGrid extends HashMap<Coordinate, Tile>{
         draw();
     }
 
+    public Coordinate getSelection(){ return selected; }
 
     //Where should things be drawn
     public void setCanvas(SimulationCanvas canvas){
@@ -96,9 +101,7 @@ public class ActiveGrid extends HashMap<Coordinate, Tile>{
 
     public void draw() {
         if (canvas!=null) {
-            canvas.reset();
-            canvas.drawGrid(this, selected);
-            canvas.repaint();
+            canvas.draw();
         }
     }
 

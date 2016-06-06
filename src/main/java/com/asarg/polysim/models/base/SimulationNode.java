@@ -24,7 +24,7 @@ import java.util.Observer;
 /**
  * Created by ericmartinez on 1/5/15.
  */
-public class SimulationNode extends SwingNode implements Observer {
+public class SimulationNode extends SimulationCanvas implements Observer {
     public final StringProperty left_status = new SimpleStringProperty("");
     public final StringProperty right_status = new SimpleStringProperty("");
     private final StringProperty left_previous_status = new SimpleStringProperty("");
@@ -43,16 +43,13 @@ public class SimulationNode extends SwingNode implements Observer {
     private File file;
     private Coordinate selected;
 
-    public SimulationNode() {
-        super();
-    }
-
     public SimulationNode(Assembly asm) {
+        super(asm.Grid);
+        asm.Grid.setCanvas(this);
         this.assembly = asm;
         assembly.addObserver(this);
         frontier = assembly.getFrontier();
         placeFrontierOnGrid();
-        setCanvas(assembly.Grid.getCanvas());
 
         setOnMouseClicked(new EventHandler<MouseEvent>() {
             /*
@@ -61,7 +58,7 @@ public class SimulationNode extends SwingNode implements Observer {
             @Override
             public void handle(MouseEvent e) {
                 Coordinate point = new Coordinate((int) e.getX(), (int) e.getY());
-                Coordinate clicked = Drawer.TileDrawer.getGridPoint(point, getCanvas().getOffset(), getCanvas().getTileDiameter());
+                Coordinate clicked = Drawer.TileDrawer.getGridPoint(point, getOffset(), getTileDiameter());
                 Tile clicked_tile = assembly.Grid.get(clicked);
                 if (clicked_tile != null) {
                     if(clicked_tile.getParent().isFrontier()){
@@ -143,7 +140,7 @@ public class SimulationNode extends SwingNode implements Observer {
                     stopped = true;
                     return;
                 }
-                getCanvas().translateOffset(x - lastMouseXY.getX(), y - lastMouseXY.getY());
+                translateOffset(x - lastMouseXY.getX(), y - lastMouseXY.getY());
                 lastMouseXY = point;
                 placeFrontierOnGrid();
             }
@@ -205,7 +202,7 @@ public class SimulationNode extends SwingNode implements Observer {
                     Integer index = (Integer) event.getDragboard().getContent(SimulationController.polyTileFormat);
                     PolyTile dropped = getTileSet().get(index);
                     Coordinate point = new Coordinate((int) event.getX(), (int) event.getY());
-                    Coordinate spot = Drawer.TileDrawer.getGridPoint(point, getCanvas().getOffset(), getCanvas().getTileDiameter());
+                    Coordinate spot = Drawer.TileDrawer.getGridPoint(point, getOffset(), getTileDiameter());
                     FrontierElement fe = new FrontierElement(spot, spot, dropped, 0);
 
                     //translate to spot
@@ -273,15 +270,6 @@ public class SimulationNode extends SwingNode implements Observer {
             placeFrontierOnGrid();
             return false;
         }
-    }
-
-    public SimulationCanvas getCanvas() {
-        return (SimulationCanvas) getContent();
-    }
-
-    public void setCanvas(SimulationCanvas tc) {
-        assembly.Grid.setCanvas(tc);
-        setContent(assembly.Grid.getCanvas());
     }
 
     public void resetFrontier() {
@@ -421,8 +409,7 @@ public class SimulationNode extends SwingNode implements Observer {
     }
 
     public void paintPolytile(FrontierElement attachedFrontierElement) {
-        getCanvas().drawTileOnGrid(attachedFrontierElement);
-        getCanvas().repaint();
+        drawTileOnGrid(attachedFrontierElement);
     }
 
     public void updateTileConfiguration(TileConfiguration tc) {
@@ -490,19 +477,19 @@ public class SimulationNode extends SwingNode implements Observer {
     }
 
     public void zoomInDraw() {
-        int tileDiameter = getCanvas().getTileDiameter();
-        if (tileDiameter < getContent().getWidth()) {
-            System.out.println(getContent().getWidth() + " " + tileDiameter);
-            getCanvas().setTileDiameter((int) (tileDiameter * 1.5));
+        int tileDiameter = getTileDiameter();
+        if (tileDiameter < getWidth()) {
+            System.out.println(getWidth() + " " + tileDiameter);
+            setTileDiameter((int) (tileDiameter * 1.5));
         } else return;
 
         placeFrontierOnGrid();
     }
 
     public void zoomOutDraw() {
-        int tileDiameter = getCanvas().getTileDiameter();
+        int tileDiameter = getTileDiameter();
         if (tileDiameter > 2) {
-            getCanvas().setTileDiameter((int) (tileDiameter * .75));
+            setTileDiameter((int) (tileDiameter * .75));
         } else return;
 
         placeFrontierOnGrid();

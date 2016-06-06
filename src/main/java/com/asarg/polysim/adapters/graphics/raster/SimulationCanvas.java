@@ -1,89 +1,75 @@
 package com.asarg.polysim.adapters.graphics.raster;
 
-
 import com.asarg.polysim.models.base.ActiveGrid;
 import com.asarg.polysim.models.base.Coordinate;
 import com.asarg.polysim.models.base.FrontierElement;
 import com.asarg.polysim.models.base.Tile;
+import javafx.scene.canvas.Canvas;
+import org.jfree.fx.FXGraphics2D;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.HashMap;
-
-public class SimulationCanvas extends JPanel {
+public abstract class SimulationCanvas extends Canvas {
 
 
-    private final Dimension res = new Dimension();
-    private BufferedImage canvasBFI;
-    private Graphics2D cg2d;
-    private int tileDiameter = 50;
-    private Coordinate center;
-    ActiveGrid parent;
+    protected FXGraphics2D cg2d;
+    protected int tileDiameter = 50;
+    protected Coordinate center;
+    protected ActiveGrid grid;
 
-    public SimulationCanvas(ActiveGrid parent, int w, int h) {
-        center = new Coordinate(w / 2, h / 2);
-        canvasBFI = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-        cg2d = canvasBFI.createGraphics();
-        cg2d.setComposite(AlphaComposite.Src);
-        cg2d.setColor(Color.black);
-        res.setSize(w, h);
-        cg2d.setClip(0, 0, w, h);
-        this.parent = parent;
-    }
+    public SimulationCanvas(ActiveGrid grid) {
+        super();
+        this.cg2d = new FXGraphics2D(getGraphicsContext2D());
+        System.out.println("Should have createdgraphics object");
 
-    public SimulationCanvas(ActiveGrid parent) {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int w = (int) screenSize.getWidth();
-        int h = (int) screenSize.getHeight();
-        center = new Coordinate(w / 2, h / 2);
-        canvasBFI = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-        cg2d = canvasBFI.createGraphics();
-        cg2d.setComposite(AlphaComposite.Src);
-        cg2d.setColor(Color.black);
-        res.setSize(w, h);
-        cg2d.setClip(0, 0, w, h);
-        this.parent = parent;
-    }
+        this.grid = grid;
+        // Redraw canvas when size changes.
+        widthProperty().addListener(e ->recenterAndDraw());
+        heightProperty().addListener(e -> recenterAndDraw());
 
-    @Override
-    public void resize(int w, int h) {
-        super.resize(w, h);
-        center = new Coordinate(w / 2, h / 2);
-        canvasBFI = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-        cg2d = canvasBFI.createGraphics();
-        cg2d.setComposite(AlphaComposite.Src);
-        cg2d.setColor(Color.black);
-        res.setSize(w, h);
-        cg2d.setClip(0, 0, w, h);
-    }
-
-
-    @Override
-    public void setSize(int width, int height) {
-        super.setSize(width, height);
+        int width = (int) getWidth();
+        int height = (int) getHeight();
         center = new Coordinate(width / 2, height / 2);
+        cg2d.setClip(0, 0, width, height);
+    }
+
+    public void draw(){
+        int width = (int) getWidth();
+        int height = (int) getHeight();
+        getGraphicsContext2D().clearRect(0,0,width, height);
+        cg2d.setClip(0,0,width, height);
+        drawGrid();
+    }
+
+    public void recenterAndDraw(){
+        int width = (int) getWidth();
+        int height = (int) getHeight();
+        center = new Coordinate(width / 2, height / 2);
+        draw();
+    }
+
+    @Override
+    public boolean isResizable() {
+        return true;
+    }
+
+    @Override
+    public double prefWidth(double height) { return getWidth(); }
+
+    @Override
+    public double prefHeight(double width) { return getHeight();
     }
 
     public void reset() {
-        Drawer.clearGraphics(cg2d);
+        getGraphicsContext2D().clearRect(0,0,getWidth(), getHeight());
+        draw();
     }
 
 
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        this.setBackground(Color.WHITE);
-        canvasBFI.setAccelerationPriority(1);
-        g.drawImage(canvasBFI, 0, 0, null);
-    }
-
-    public void drawGrid(HashMap<Coordinate, Tile> hmpt, Coordinate selected) {
-        Drawer.TileDrawer.drawTiles(cg2d, hmpt, tileDiameter, center);
-        if(selected!=null) {
-            Tile selectedTile = hmpt.get(selected);
+    public void drawGrid() {
+        Drawer.TileDrawer.drawTiles(this);
+        if(grid.getSelection()!=null) {
+            Tile selectedTile = grid.get(grid.getSelection());
             if(selectedTile!=null) {
-                Coordinate offset = new Coordinate(selected.getX() - selectedTile.getLocation().getX(), selected.getY() - selectedTile.getLocation().getY());
+                Coordinate offset = new Coordinate(grid.getSelection().getX() - selectedTile.getLocation().getX(), grid.getSelection().getY() - selectedTile.getLocation().getY());
                 Drawer.TileDrawer.drawPolyTileSelection(cg2d, selectedTile.getParent(), tileDiameter, offset, center);
             }
         }
@@ -92,20 +78,10 @@ public class SimulationCanvas extends JPanel {
     // draws the given polytile onto the loaded graphics object (alternative to drawGrid which draws the
     //entire grid)
     public void drawTileOnGrid(FrontierElement attached) {
-//        System.out.println(attached.getLocation());
-//        System.out.println(attached.getOffset());
-//        System.out.println(center);
         Drawer.TileDrawer.drawNewPolyTile(cg2d, attached.getPolyTile().getTiles(), tileDiameter, attached.getOffset(), center);
     }
 
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(800, 600);
-    }
-
     public int getTileDiameter() {
-
-
         return tileDiameter;
     }
 
@@ -123,4 +99,6 @@ public class SimulationCanvas extends JPanel {
     public final Coordinate getOffset() {
         return center;
     }
+
+    public FXGraphics2D getGraphics(){ return cg2d; }
 }
