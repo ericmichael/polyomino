@@ -49,173 +49,147 @@ public class SimulationNode extends SimulationCanvas implements Observer {
         frontier = assembly.getFrontier();
         placeFrontierOnGrid();
 
-        setOnMouseClicked(new EventHandler<MouseEvent>() {
-            /*
-            TODO: Unify selected tile and selected frontier tile
-             */
-            @Override
-            public void handle(MouseEvent e) {
-                Coordinate point = new Coordinate((int) e.getX(), (int) e.getY());
-                Coordinate clicked = Drawer.TileDrawer.getGridPoint(point, getOffset(), getTileDiameter());
-                Tile clicked_tile = assembly.Grid.get(clicked);
-                if (clicked_tile != null) {
-                    if (clicked_tile.getParent().isFrontier()) {
-                        selected = null;
-                        processFrontierClick(clicked, clicked_tile);
-                    } else {
-                        getGrid().select(clicked);
-                    }
+        setOnMouseClicked(e -> {
+            Coordinate point = new Coordinate((int) e.getX(), (int) e.getY());
+            Coordinate clicked = Drawer.TileDrawer.getGridPoint(point, getOffset(), getTileDiameter());
+            Tile clicked_tile = assembly.Grid.get(clicked);
+            if (clicked_tile != null) {
+                if (clicked_tile.getParent().isFrontier()) {
+                    selected = null;
+                    processFrontierClick(clicked, clicked_tile);
                 } else {
-                    getGrid().deselect();
+                    getGrid().select(clicked);
                 }
+            } else {
+                getGrid().deselect();
             }
         });
-        setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                Coordinate point = new Coordinate((int) e.getX(), (int) e.getY());
-                lastMouseXY = point;
-            }
+        setOnMousePressed(e -> {
+            Coordinate point = new Coordinate((int) e.getX(), (int) e.getY());
+            lastMouseXY = point;
         });
-        setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                dragCount = 0;
-            }
-        });
-        setOnScroll(new EventHandler<ScrollEvent>() {
-            @Override
-            public void handle(ScrollEvent e) {
-                //Point point = new Point((int)e.getX(), (int)e.getY());
-                boolean rotation = e.getDeltaY() > 0.0;
-                if (stopped) {
-                    if (rotation) {
-                        if (frontierClick) {
-                            removeCurrentFrontierAttachment();
-                            if (currentFrontierAttachment == null) {
-                                frontierIndex = 0;
-                                addFrontierAttachment(frontierIndex);
+        setOnMouseReleased(e -> dragCount = 0);
+        setOnScroll(e -> {
+            //Point point = new Point((int)e.getX(), (int)e.getY());
+            boolean rotation = e.getDeltaY() > 0.0;
+            if (stopped) {
+                if (rotation) {
+                    if (frontierClick) {
+                        removeCurrentFrontierAttachment();
+                        if (currentFrontierAttachment == null) {
+                            frontierIndex = 0;
+                            addFrontierAttachment(frontierIndex);
 
-                            } else if (frontierIndex > 0) {
-                                frontierIndex -= 1;
-                                addFrontierAttachment(frontierIndex);
-                            } else {
-                                frontierIndex = frontierAttachments.size() - 1;
-                                addFrontierAttachment(frontierIndex);
-                            }
+                        } else if (frontierIndex > 0) {
+                            frontierIndex -= 1;
+                            addFrontierAttachment(frontierIndex);
+                        } else {
+                            frontierIndex = frontierAttachments.size() - 1;
+                            addFrontierAttachment(frontierIndex);
+                        }
 
-                            return;
-                        }
-                        zoomInDraw();
-                    } else {
-                        if (frontierClick) {
-                            removeCurrentFrontierAttachment();
-                            if (currentFrontierAttachment == null) {
-                                frontierIndex = 0;
-                                addFrontierAttachment(frontierIndex);
-                            } else if (frontierIndex + 1 < frontierAttachments.size()) {
-                                frontierIndex += 1;
-                                addFrontierAttachment(frontierIndex);
-                            } else {
-                                frontierIndex = 0;
-                                addFrontierAttachment(0);
-                            }
-                            return;
-                        }
-                        zoomOutDraw();
+                        return;
                     }
+                    zoomInDraw();
+                } else {
+                    if (frontierClick) {
+                        removeCurrentFrontierAttachment();
+                        if (currentFrontierAttachment == null) {
+                            frontierIndex = 0;
+                            addFrontierAttachment(frontierIndex);
+                        } else if (frontierIndex + 1 < frontierAttachments.size()) {
+                            frontierIndex += 1;
+                            addFrontierAttachment(frontierIndex);
+                        } else {
+                            frontierIndex = 0;
+                            addFrontierAttachment(0);
+                        }
+                        return;
+                    }
+                    zoomOutDraw();
                 }
             }
         });
 
-        setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                Coordinate point = new Coordinate((int) e.getX(), (int) e.getY());
-                int x = (int) e.getX();
-                int y = (int) e.getY();
-                if (!stopped) {
-                    stopped = true;
-                    return;
-                }
-                translateOffset(x - lastMouseXY.getX(), y - lastMouseXY.getY());
-                lastMouseXY = point;
-                placeFrontierOnGrid();
+        setOnMouseDragged(e -> {
+            Coordinate point = new Coordinate((int) e.getX(), (int) e.getY());
+            int x = (int) e.getX();
+            int y = (int) e.getY();
+            if (!stopped) {
+                stopped = true;
+                return;
             }
+            translateOffset(x - lastMouseXY.getX(), y - lastMouseXY.getY());
+            lastMouseXY = point;
+            placeFrontierOnGrid();
         });
 
-        setOnDragExited(new EventHandler<DragEvent>() {
-            public void handle(DragEvent event) {
-                System.out.println("exited");
+        setOnDragExited(event -> {
+            System.out.println("exited");
 
-            /* mouse moved away, remove the graphical cues */
+        /* mouse moved away, remove the graphical cues */
+            if (currentFrontierAttachment != null) {
+                Coordinate loc = currentFrontierAttachment.getOffset();
+                assembly.Grid.removePolytile(currentFrontierAttachment.getPolyTile(), loc.getX(), loc.getY());
+                currentFrontierAttachment = null;
+            }
+            placeFrontierOnGrid();
+
+            event.consume();
+        });
+
+        setOnDragDropped(event -> {
+            System.out.println("dropped");
+            /* data dropped */
+            /* if there is a string data on dragboard, read it and use it */
+            Dragboard db = event.getDragboard();
+            boolean success = false;
+            if (db.hasContent(SimulationController.polyTileFormat)) {
+                currentFrontierAttachment = null;
+                assembly.cleanUp();
+                assembly.getOpenGlues();
+                frontier = assembly.calculateFrontier();
+                success = true;
+            }
+    /* let the source know whether the string was successfully
+     * transferred and used */
+            event.setDropCompleted(success);
+
+            event.consume();
+        });
+
+        setOnDragOver(event ->  {
+            System.out.println("over");
+
+            /* the drag-and-drop gesture entered the target */
+            /* show to the user that it is an actual gesture target */
+            if (event.getGestureSource() != this && event.getDragboard().hasContent(SimulationController.polyTileFormat)) {
+                removeFrontierFromGrid();
+
                 if (currentFrontierAttachment != null) {
                     Coordinate loc = currentFrontierAttachment.getOffset();
                     assembly.Grid.removePolytile(currentFrontierAttachment.getPolyTile(), loc.getX(), loc.getY());
                     currentFrontierAttachment = null;
                 }
-                placeFrontierOnGrid();
 
-                event.consume();
-            }
-        });
+                Integer index = (Integer) event.getDragboard().getContent(SimulationController.polyTileFormat);
+                PolyTile dropped = getTileSet().get(index);
+                Coordinate point = new Coordinate((int) event.getX(), (int) event.getY());
+                Coordinate spot = Drawer.TileDrawer.getGridPoint(point, getOffset(), getTileDiameter());
+                FrontierElement fe = new FrontierElement(spot, spot, dropped, 0);
 
-        setOnDragDropped(new EventHandler<DragEvent>() {
-            public void handle(DragEvent event) {
-                System.out.println("dropped");
-                /* data dropped */
-                /* if there is a string data on dragboard, read it and use it */
-                Dragboard db = event.getDragboard();
-                boolean success = false;
-                if (db.hasContent(SimulationController.polyTileFormat)) {
-                    currentFrontierAttachment = null;
-                    assembly.cleanUp();
-                    assembly.getOpenGlues();
-                    frontier = assembly.calculateFrontier();
-                    success = true;
+                //translate to spot
+
+                //check if passes geometry check
+                if (assembly.Grid.geometryCheckSuccess(dropped, spot.getX(), spot.getY())) {
+                    currentFrontierAttachment = fe;
+                    assembly.Grid.placePolytile(dropped, spot.getX(), spot.getY());
+                    event.acceptTransferModes(TransferMode.COPY);
+                } else {
                 }
-        /* let the source know whether the string was successfully
-         * transferred and used */
-                event.setDropCompleted(success);
-
-                event.consume();
             }
-        });
 
-        setOnDragOver(new EventHandler<DragEvent>() {
-            public void handle(DragEvent event) {
-                System.out.println("over");
-
-                /* the drag-and-drop gesture entered the target */
-                /* show to the user that it is an actual gesture target */
-                if (event.getGestureSource() != this && event.getDragboard().hasContent(SimulationController.polyTileFormat)) {
-                    removeFrontierFromGrid();
-
-                    if (currentFrontierAttachment != null) {
-                        Coordinate loc = currentFrontierAttachment.getOffset();
-                        assembly.Grid.removePolytile(currentFrontierAttachment.getPolyTile(), loc.getX(), loc.getY());
-                        currentFrontierAttachment = null;
-                    }
-
-                    Integer index = (Integer) event.getDragboard().getContent(SimulationController.polyTileFormat);
-                    PolyTile dropped = getTileSet().get(index);
-                    Coordinate point = new Coordinate((int) event.getX(), (int) event.getY());
-                    Coordinate spot = Drawer.TileDrawer.getGridPoint(point, getOffset(), getTileDiameter());
-                    FrontierElement fe = new FrontierElement(spot, spot, dropped, 0);
-
-                    //translate to spot
-
-                    //check if passes geometry check
-                    if (assembly.Grid.geometryCheckSuccess(dropped, spot.getX(), spot.getY())) {
-                        currentFrontierAttachment = fe;
-                        assembly.Grid.placePolytile(dropped, spot.getX(), spot.getY());
-                        event.acceptTransferModes(TransferMode.COPY);
-                    } else {
-                    }
-                }
-
-                event.consume();
-            }
+            event.consume();
         });
     }
 
