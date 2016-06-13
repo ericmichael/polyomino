@@ -4,7 +4,9 @@ import com.asarg.polysim.models.base.ActiveGrid;
 import com.asarg.polysim.models.base.Coordinate;
 import com.asarg.polysim.models.base.FrontierElement;
 import com.asarg.polysim.models.base.Tile;
+import javafx.event.Event;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.input.ScrollEvent;
 import org.jfree.fx.FXGraphics2D;
 
 public abstract class SimulationCanvas extends Canvas {
@@ -14,11 +16,15 @@ public abstract class SimulationCanvas extends Canvas {
     protected int tileDiameter = 50;
     protected Coordinate center;
     protected ActiveGrid grid;
+    protected Coordinate lastMouseXY = new Coordinate(800, 600);
+    protected int dragCount = 0;
+    public Coordinate selected;
+
+
 
     public SimulationCanvas(ActiveGrid grid) {
         super();
         this.cg2d = new FXGraphics2D(getGraphicsContext2D());
-        System.out.println("Should have createdgraphics object");
 
         this.grid = grid;
         // Redraw canvas when size changes.
@@ -29,7 +35,26 @@ public abstract class SimulationCanvas extends Canvas {
         int height = (int) getHeight();
         center = new Coordinate(width / 2, height / 2);
         cg2d.setClip(0, 0, width, height);
+
+        setOnMousePressed(e -> {
+            Coordinate point = new Coordinate((int) e.getX(), (int) e.getY());
+            lastMouseXY = point;
+        });
+
+        setOnMouseReleased(e -> dragCount = 0);
+
+        setOnMouseClicked(e -> {
+            Coordinate point = new Coordinate((int) e.getX(), (int) e.getY());
+            Coordinate clicked = Drawer.TileDrawer.getGridPoint(point, getOffset(), getTileDiameter());
+            handleClick(clicked);
+        });
+
+        setOnScroll(e -> {
+            handleScroll(e);
+        });
     }
+
+    public abstract void handleClick(Coordinate clicked);
 
     public void draw() {
         int width = (int) getWidth();
@@ -106,4 +131,29 @@ public abstract class SimulationCanvas extends Canvas {
     public FXGraphics2D getGraphics() {
         return cg2d;
     }
+
+    public void zoomInDraw() {
+        int tileDiameter = getTileDiameter();
+        if (tileDiameter < getWidth()) {
+            setTileDiameter((int) (tileDiameter * 1.5));
+        } else return;
+
+    }
+
+    public void zoomOutDraw() {
+        int tileDiameter = getTileDiameter();
+        if (tileDiameter > 2) {
+            setTileDiameter((int) (tileDiameter * .75));
+        } else return;
+    }
+
+    public void handleScroll(ScrollEvent e) {
+        boolean rotation = e.getDeltaY() > 0.0;
+        if (rotation) {
+            zoomInDraw();
+        } else {
+            zoomOutDraw();
+        }
+    }
+
 }

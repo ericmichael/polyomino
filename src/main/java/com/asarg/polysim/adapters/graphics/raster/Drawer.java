@@ -319,8 +319,6 @@ public class Drawer {
         }
 
         public static void drawTileSelection(Graphics2D g, Coordinate location, int diameter, Coordinate offset, Color color) {
-            clearGraphics(g);
-
             g.setColor(color);
             Stroke dashed = new BasicStroke(diameter / 25, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{4}, 0);
             g.setStroke(dashed);

@@ -10,7 +10,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -46,8 +45,6 @@ public class TileEditorController implements Initializable {
     final SimpleBooleanProperty updateable = new SimpleBooleanProperty(false);
     @FXML
     AnchorPane ptAnchorPane;
-    @FXML
-    SwingNode swingNodeCanvas;
     @FXML
     AnchorPane inspectorPane;
     @FXML
@@ -180,9 +177,12 @@ public class TileEditorController implements Initializable {
     MenuItem menu_clear_glues;
     @FXML
     MenuItem menu_close;
+    @FXML
+    EditorCanvas canvas;
+
     ObservableList<Glue> glueData = FXCollections.observableArrayList();
     private TileConfiguration tc;
-    private EditorCanvas canvas;
+
     final ChangeListener<String> listener_west_glue = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
@@ -224,15 +224,15 @@ public class TileEditorController implements Initializable {
             caret_new = caret;
 
         if (newValue != null) {
-            Tile selected = canvas.getSelectedTileProperty().get();
+            Tile selected = canvas.getSelectedTile();
             if (selected != null) {
-                if (target == "label") canvas.getSelectedTileProperty().get().setLabel(newValue);
-                else if (target == "north") canvas.getSelectedTileProperty().get().setGlueN(newValue);
-                else if (target == "south") canvas.getSelectedTileProperty().get().setGlueS(newValue);
-                else if (target == "east") canvas.getSelectedTileProperty().get().setGlueE(newValue);
-                else if (target == "west") canvas.getSelectedTileProperty().get().setGlueW(newValue);
+                if (target == "label") selected.setLabel(newValue);
+                else if (target == "north") selected.setGlueN(newValue);
+                else if (target == "south") selected.setGlueS(newValue);
+                else if (target == "east") selected.setGlueE(newValue);
+                else if (target == "west") selected.setGlueW(newValue);
 
-                redrawPolyTile(selected);
+                redrawPolyTile();
                 updateable.set(true);
 
                 Platform.runLater(new Runnable() {
@@ -256,36 +256,17 @@ public class TileEditorController implements Initializable {
             }
         });
 
-        canvas = new EditorCanvas(800, 600);
+//        canvas = new EditorCanvas();
 
-        ptAnchorPane.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if (canvas.getHeight() > 0)
-                    canvas.resize(newValue.intValue(), canvas.getHeight());
-                else
-                    canvas.resize(newValue.intValue(), 600);
-            }
-        });
+        canvas.widthProperty().bind(ptAnchorPane.widthProperty());
+        canvas.heightProperty().bind(ptAnchorPane.heightProperty());
 
-        ptAnchorPane.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if (canvas.getWidth() > 0)
-                    canvas.resize(canvas.getWidth(), newValue.intValue());
-                else
-                    canvas.resize(400, newValue.intValue());
-            }
-        });
+//        ptAnchorPane.getChildren().add(canvas);
+//        ptAnchorPane.setTopAnchor(canvas, 0.0);
+//        ptAnchorPane.setLeftAnchor(canvas, 0.0);
+//        ptAnchorPane.setRightAnchor(canvas, 0.0);
+//        ptAnchorPane.setBottomAnchor(canvas, 0.0);
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                canvas.resize((int) ptAnchorPane.getWidth(), (int) ptAnchorPane.getHeight());
-            }
-        });
-
-        swingNodeCanvas.setContent(canvas);
         menu_delete.setDisable(true);
         btn_update_assembly.managedProperty().bind(btn_update_assembly.visibleProperty());
         btn_update_assembly.visibleProperty().bind(updateable);
@@ -476,20 +457,13 @@ public class TileEditorController implements Initializable {
         field_west_glue.textProperty().removeListener(listener_west_glue);
     }
 
-    private void redrawPolyTile(Tile selected) {
-        canvas.drawPolyTile();
+    private void redrawPolyTile() {
+        canvas.draw();
         int index = listview_polytiles.getSelectionModel().getSelectedIndex();
         PolyTile pt = canvas.getPolyTile();
         listview_polytiles.getItems().remove(index);
         listview_polytiles.getItems().add(index, pt);
         listview_polytiles.getSelectionModel().select(index);
-        if (selected != null) {
-            canvas.selectTile(selected);
-            removeTileListeners();
-            setTileData(selected);
-            enableTileData();
-            addTileListeners();
-        }
     }
 
     public void deleteSelectedPolyTile() {
@@ -574,7 +548,7 @@ public class TileEditorController implements Initializable {
                             (int) (color.getRed() * 255),
                             (int) (color.getGreen() * 255),
                             (int) (color.getBlue() * 255)));
-                    redrawPolyTile(canvas.getSelectedTileProperty().get());
+                    redrawPolyTile();
                     updateable.set(true);
 
                     Platform.runLater(new Runnable() {
@@ -590,11 +564,12 @@ public class TileEditorController implements Initializable {
         btn_delete_tile.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Tile selectedTile = canvas.getSelectedTileProperty().get();
+                Tile selectedTile = canvas.getSelectedTile();
                 PolyTile pt = canvas.getPolyTile();
                 if (pt.tiles.size() > 1) {
                     pt.removeTile(selectedTile.getLocation().getX(), selectedTile.getLocation().getY());
-                    redrawPolyTile(null);
+                    canvas.clear();
+                    canvas.setPolyTile(pt);
                 } else {
                     listview_polytiles.getItems().remove(pt);
                 }
@@ -698,7 +673,7 @@ public class TileEditorController implements Initializable {
             public void handle(ActionEvent event) {
                 removeTileListeners();
                 listview_polytiles.getItems().clear();
-                canvas.resetBlank(canvas.getWidth(), canvas.getHeight());
+                canvas.clear();
                 updateable.set(true);
             }
         });

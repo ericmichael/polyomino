@@ -36,10 +36,7 @@ public class SimulationNode extends SimulationCanvas implements Observer {
     private ArrayList<FrontierElement> frontierAttachments;
     private int frontierIndex = 0;
     private Coordinate frontierClickPoint = null;
-    private Coordinate lastMouseXY = new Coordinate(800, 600);
-    private int dragCount = 0;
     private File file;
-    private Coordinate selected;
 
     public SimulationNode(Assembly asm) {
         super(asm.Grid);
@@ -48,68 +45,6 @@ public class SimulationNode extends SimulationCanvas implements Observer {
         assembly.addObserver(this);
         frontier = assembly.getFrontier();
         placeFrontierOnGrid();
-
-        setOnMouseClicked(e -> {
-            Coordinate point = new Coordinate((int) e.getX(), (int) e.getY());
-            Coordinate clicked = Drawer.TileDrawer.getGridPoint(point, getOffset(), getTileDiameter());
-            Tile clicked_tile = assembly.Grid.get(clicked);
-            if (clicked_tile != null) {
-                if (clicked_tile.getParent().isFrontier()) {
-                    selected = null;
-                    processFrontierClick(clicked, clicked_tile);
-                } else {
-                    getGrid().select(clicked);
-                }
-            } else {
-                getGrid().deselect();
-            }
-        });
-        setOnMousePressed(e -> {
-            Coordinate point = new Coordinate((int) e.getX(), (int) e.getY());
-            lastMouseXY = point;
-        });
-        setOnMouseReleased(e -> dragCount = 0);
-        setOnScroll(e -> {
-            //Point point = new Point((int)e.getX(), (int)e.getY());
-            boolean rotation = e.getDeltaY() > 0.0;
-            if (stopped) {
-                if (rotation) {
-                    if (frontierClick) {
-                        removeCurrentFrontierAttachment();
-                        if (currentFrontierAttachment == null) {
-                            frontierIndex = 0;
-                            addFrontierAttachment(frontierIndex);
-
-                        } else if (frontierIndex > 0) {
-                            frontierIndex -= 1;
-                            addFrontierAttachment(frontierIndex);
-                        } else {
-                            frontierIndex = frontierAttachments.size() - 1;
-                            addFrontierAttachment(frontierIndex);
-                        }
-
-                        return;
-                    }
-                    zoomInDraw();
-                } else {
-                    if (frontierClick) {
-                        removeCurrentFrontierAttachment();
-                        if (currentFrontierAttachment == null) {
-                            frontierIndex = 0;
-                            addFrontierAttachment(frontierIndex);
-                        } else if (frontierIndex + 1 < frontierAttachments.size()) {
-                            frontierIndex += 1;
-                            addFrontierAttachment(frontierIndex);
-                        } else {
-                            frontierIndex = 0;
-                            addFrontierAttachment(0);
-                        }
-                        return;
-                    }
-                    zoomOutDraw();
-                }
-            }
-        });
 
         setOnMouseDragged(e -> {
             Coordinate point = new Coordinate((int) e.getX(), (int) e.getY());
@@ -198,8 +133,59 @@ public class SimulationNode extends SimulationCanvas implements Observer {
         this.file = file;
     }
 
-    public void resize(int w, int h) {
-        assembly.Grid.getCanvas().resize(w, h);
+    public void handleClick(Coordinate clicked){
+        Tile clicked_tile = grid.get(clicked);
+        if (clicked_tile != null) {
+            if (clicked_tile.getParent().isFrontier()) {
+                selected = null;
+                processFrontierClick(clicked, clicked_tile);
+            } else {
+                grid.select(clicked);
+            }
+        } else {
+            grid.deselect();
+        }
+    }
+
+    public void handleScroll(ScrollEvent e){
+        boolean rotation = e.getDeltaY() > 0.0;
+        if (stopped) {
+            if (rotation) {
+                if (frontierClick) {
+                    removeCurrentFrontierAttachment();
+                    if (currentFrontierAttachment == null) {
+                        frontierIndex = 0;
+                        addFrontierAttachment(frontierIndex);
+
+                    } else if (frontierIndex > 0) {
+                        frontierIndex -= 1;
+                        addFrontierAttachment(frontierIndex);
+                    } else {
+                        frontierIndex = frontierAttachments.size() - 1;
+                        addFrontierAttachment(frontierIndex);
+                    }
+
+                    return;
+                }
+                zoomInDraw();
+            } else {
+                if (frontierClick) {
+                    removeCurrentFrontierAttachment();
+                    if (currentFrontierAttachment == null) {
+                        frontierIndex = 0;
+                        addFrontierAttachment(frontierIndex);
+                    } else if (frontierIndex + 1 < frontierAttachments.size()) {
+                        frontierIndex += 1;
+                        addFrontierAttachment(frontierIndex);
+                    } else {
+                        frontierIndex = 0;
+                        addFrontierAttachment(0);
+                    }
+                    return;
+                }
+                zoomOutDraw();
+            }
+        }
     }
 
     public File getFile() {
@@ -449,21 +435,12 @@ public class SimulationNode extends SimulationCanvas implements Observer {
     }
 
     public void zoomInDraw() {
-        int tileDiameter = getTileDiameter();
-        if (tileDiameter < getWidth()) {
-            System.out.println(getWidth() + " " + tileDiameter);
-            setTileDiameter((int) (tileDiameter * 1.5));
-        } else return;
-
+        super.zoomInDraw();
         placeFrontierOnGrid();
     }
 
     public void zoomOutDraw() {
-        int tileDiameter = getTileDiameter();
-        if (tileDiameter > 2) {
-            setTileDiameter((int) (tileDiameter * .75));
-        } else return;
-
+        super.zoomOutDraw();
         placeFrontierOnGrid();
     }
 
@@ -567,9 +544,5 @@ public class SimulationNode extends SimulationCanvas implements Observer {
         System.out.println("Frontier size: " + frontier.size());
         removeSelection();
         placeFrontierOnGrid();
-    }
-
-    public ActiveGrid getGrid() {
-        return assembly.Grid;
     }
 }

@@ -1,112 +1,63 @@
 package com.asarg.polysim.adapters.graphics.raster;
 
+import com.asarg.polysim.models.base.ActiveGrid;
 import com.asarg.polysim.models.base.Coordinate;
 import com.asarg.polysim.models.base.PolyTile;
 import com.asarg.polysim.models.base.Tile;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.util.Pair;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.image.BufferedImage;
 
 /**
  * Created by ericmartinez on 1/12/15.
  */
-public class EditorCanvas extends JPanel {
-    private final SimpleObjectProperty<Tile> selectedTile = new SimpleObjectProperty<Tile>(null);
-    //the current canvas display info
-    private Coordinate canvasCenteredOffset = new Coordinate(0, 0);
-    private int tileDiameter = 1;
+public class EditorCanvas extends SimulationCanvas {
+
     private PolyTile pt;
-    //canvas stuff
-    private BufferedImage polyTileCanvas;
-    private Graphics2D polyTileCanvasGFX;
-    private BufferedImage overLayer;
-    private Graphics2D overLayerGFX;
+    private Coordinate lastMouseXY = new Coordinate(800, 600);
+    private final SimpleObjectProperty<Tile> selectedTile = new SimpleObjectProperty<Tile>(null);
 
-    //Canvas panning
-    private Coordinate lastXY = null;
+    public EditorCanvas() {
+        super(new ActiveGrid());
+        grid.setCanvas(this);
 
-    public EditorCanvas(double width, double height) {
-        super();
-        double height1 = height;
-        double width1 = width;
+        int width = (int) getWidth();
+        int height = (int) getHeight();
+        center = new Coordinate(width / 2, height / 2);
+        cg2d.setClip(0, 0, width, height);
 
-        resize((int) width, (int) height);
-        MouseAdapter gridListener = new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                lastXY = new Coordinate((int) e.getPoint().getX(), (int) e.getPoint().getY());
+        setOnMousePressed(e -> {
+            Coordinate point = new Coordinate((int) e.getX(), (int) e.getY());
+            lastMouseXY = point;
+        });
+    }
+
+    public void handleClick(Coordinate gridPoint){
+        if (pt != null) {
+            Tile tile = grid.get(gridPoint);
+            if (tile != null) {
+                grid.select(gridPoint);
+                selectedTile.set(tile);
+                drawGrid();
+            } else if (pt.adjacentExits(gridPoint)) {
+                Tile newTile = new Tile();
+                newTile.setTileLocation(gridPoint.getX(), gridPoint.getY());
+
+                pt.addTile(newTile);
+                setPolyTile(pt);
+                grid.select(gridPoint);
+                selectedTile.set(tile);
+                drawGrid();
             }
+        }
+    }
 
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                super.mouseWheelMoved(e);
-
-                if (e.getWheelRotation() == 1 && tileDiameter > 1) {
-                    tileDiameter = (int) Math.floor(tileDiameter * .95);
-
-                    Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX, pt, tileDiameter, canvasCenteredOffset);
-                    //   canvasCenteredOffset = ofnt.getKey();
-                    if (selectedTile.get() != null)
-                        Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.get().getLocation(), tileDiameter, canvasCenteredOffset, Color.decode("#007AFF"));
-                    repaint();
-
-                } else if (e.getWheelRotation() == -1 && tileDiameter * 3 < getWidth() && tileDiameter * 3 < getHeight()) {
-                    tileDiameter = (int) Math.ceil(tileDiameter * 1.05);
-                    Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX, pt, tileDiameter, canvasCenteredOffset);
-                    //  canvasCenteredOffset = ofnt.getKey();
-                    if (selectedTile.get() != null)
-                        Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.get().getLocation(), tileDiameter, canvasCenteredOffset, Color.decode("#007AFF"));
-                    repaint();
-
-                }
-            }
-
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                canvasCenteredOffset = canvasCenteredOffset.translate(e.getX() - lastXY.getX(), e.getY() - lastXY.getY());
-                lastXY = new Coordinate((int) e.getPoint().getX(), (int) e.getPoint().getY());
-                clearPolyTile();
-                Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX, pt, tileDiameter, canvasCenteredOffset);
-                if (selectedTile.get() != null)
-                    Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.get().getLocation(), tileDiameter, canvasCenteredOffset, Color.decode("#007AFF"));
-                repaint();
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                if (pt != null) {
-                    Coordinate gridPoint = Drawer.TileDrawer.getGridPoint(new Coordinate((int) e.getPoint().getX(), (int) e.getPoint().getY()), canvasCenteredOffset, tileDiameter);
-                    Tile tile = pt.getTile(gridPoint.getX(), gridPoint.getY());
-                    if (tile != null) {
-                        selectTile(tile);
-                    } else if (pt.adjacentExits(gridPoint)) {
-                        Tile newTile = new Tile();
-                        newTile.setTileLocation(gridPoint.getX(), gridPoint.getY());
-
-                        pt.addTile(newTile);
-                        selectedTile.set(newTile);
-                        Drawer.TileDrawer.drawPolyTile(polyTileCanvasGFX, pt, tileDiameter, canvasCenteredOffset);  // Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX,polytile, tileDiameter);
-                        Drawer.clearGraphics(overLayerGFX);
-                        //  canvasCenteredOffset = newOffDia.getKey();
-                        // tileDiameter = newOffDia.getValue();
-                        Drawer.TileDrawer.drawTileSelection(overLayerGFX, Drawer.TileDrawer.getGridPoint(new Coordinate((int) e.getPoint().getX(), (int) e.getPoint().getY()), canvasCenteredOffset, tileDiameter), tileDiameter, canvasCenteredOffset, Color.decode("#007AFF"));
-                        repaint();
-
-                    }
-                }
-            }
-        };
-        addMouseListener(gridListener);
-        addMouseWheelListener(gridListener);
-        addMouseMotionListener(gridListener);
+    public void drawGrid() {
+        Drawer.TileDrawer.drawTiles(this);
+        Tile selectedTile = getSelectedTile();
+        if (selectedTile != null) {
+            Drawer.TileDrawer.drawTileSelection(cg2d, selectedTile.getLocation(), tileDiameter, center, Color.decode("#007AFF"));
+        }
     }
 
     public PolyTile getPolyTile() {
@@ -114,80 +65,25 @@ public class EditorCanvas extends JPanel {
     }
 
     public void setPolyTile(PolyTile pt) {
-        if (this.pt != pt) {
-            this.pt = pt;
-            selectedTile.set(null);
-            if (pt != null) drawPolyTile();
-            else clearPolyTile();
+        clear();
+        if (pt != null) {
+            grid.placePolytile(pt, 0,0);
         }
+        this.pt = pt;
     }
 
-    public SimpleObjectProperty<Tile> getSelectedTileProperty() {
+    public void clear(){
+        grid.deselect();
+        this.pt=null;
+        grid.clear();
+        selectedTile.set(null);
+    }
+
+    public Tile getSelectedTile(){
+        return selectedTile.get();
+    }
+
+    public SimpleObjectProperty getSelectedTileProperty(){
         return selectedTile;
-    }
-
-    public void selectTile(Tile tile) {
-        selectTileHelper(tile);
-        selectedTile.set(tile);
-    }
-
-    private void selectTileHelper(Tile tile) {
-        Drawer.clearGraphics(overLayerGFX);
-        Drawer.TileDrawer.drawTileSelection(overLayerGFX, tile.getLocation(), tileDiameter, canvasCenteredOffset, Color.decode("#007AFF"));
-        repaint();
-    }
-
-    public void drawPolyTile() {
-
-        Drawer.clearGraphics(overLayerGFX);
-        Pair<Coordinate, Integer> ppi = Drawer.TileDrawer.drawCenteredPolyTile(polyTileCanvasGFX, pt);
-        canvasCenteredOffset = ppi.getKey();
-        tileDiameter = ppi.getValue();
-        Drawer.clearGraphics(overLayerGFX);
-
-        if (selectedTile.get() != null) {
-            Drawer.TileDrawer.drawTileSelection(overLayerGFX, selectedTile.get().getLocation(), tileDiameter, canvasCenteredOffset, Color.decode("#007AFF"));
-        }
-
-        repaint();
-    }
-
-    public void clearPolyTile() {
-        Drawer.clearGraphics(overLayerGFX);
-        Drawer.clearGraphics(polyTileCanvasGFX);
-        repaint();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        resetBlank(width, height);
-        if (pt != null) drawPolyTile();
-    }
-
-    public void reset() {
-        Drawer.clearGraphics(overLayerGFX);
-        Drawer.clearGraphics(polyTileCanvasGFX);
-        repaint();
-    }
-
-
-    public void resetBlank(int width, int height) {
-        polyTileCanvas = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        polyTileCanvasGFX = polyTileCanvas.createGraphics();
-        polyTileCanvasGFX.setClip(0, 0, width, height);
-        overLayer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        overLayerGFX = overLayer.createGraphics();
-        overLayerGFX.setClip(0, 0, width, height);
-        repaint();
-    }
-
-
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
-        this.setBackground(Color.WHITE);
-        g2.drawImage(polyTileCanvas, 0, 0, null);
-        g2.drawImage(overLayer, 0, 0, null);
     }
 }
