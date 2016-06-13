@@ -20,6 +20,12 @@ public class ActiveGrid extends HashMap<Coordinate, Tile> {
         this.canvas = canvas;
     }
 
+    public ActiveGrid(SimulationCanvas canvas, PolyTile pt) {
+        this();
+        this.placePolytile(pt, 0,0);
+    }
+
+
     //Check if a PolyTile could fit without overlaps when translated by x, y
     public boolean geometryCheckSuccess(PolyTile p, int x, int y) {
         for (Tile t : p.tiles) {
