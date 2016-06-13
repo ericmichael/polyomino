@@ -4,7 +4,6 @@ import com.asarg.polysim.models.base.ActiveGrid;
 import com.asarg.polysim.models.base.Coordinate;
 import com.asarg.polysim.models.base.FrontierElement;
 import com.asarg.polysim.models.base.Tile;
-import javafx.event.Event;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.ScrollEvent;
 import org.jfree.fx.FXGraphics2D;
@@ -12,14 +11,13 @@ import org.jfree.fx.FXGraphics2D;
 public abstract class SimulationCanvas extends Canvas {
 
 
+    public Coordinate selected;
     protected FXGraphics2D cg2d;
     protected int tileDiameter = 50;
     protected Coordinate center;
     protected ActiveGrid grid;
     protected Coordinate lastMouseXY = new Coordinate(800, 600);
     protected int dragCount = 0;
-    public Coordinate selected;
-
 
 
     public SimulationCanvas(ActiveGrid grid) {

@@ -6,8 +6,9 @@ import com.asarg.polysim.controllers.SimulationController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
-import javafx.scene.input.*;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.ScrollEvent;
+import javafx.scene.input.TransferMode;
 import javafx.util.Pair;
 
 import javax.xml.bind.JAXBContext;
@@ -93,7 +94,7 @@ public class SimulationNode extends SimulationCanvas implements Observer {
             event.consume();
         });
 
-        setOnDragOver(event ->  {
+        setOnDragOver(event -> {
             System.out.println("over");
 
             /* the drag-and-drop gesture entered the target */
@@ -133,7 +134,7 @@ public class SimulationNode extends SimulationCanvas implements Observer {
         this.file = file;
     }
 
-    public void handleClick(Coordinate clicked){
+    public void handleClick(Coordinate clicked) {
         Tile clicked_tile = grid.get(clicked);
         if (clicked_tile != null) {
             if (clicked_tile.getParent().isFrontier()) {
@@ -147,7 +148,7 @@ public class SimulationNode extends SimulationCanvas implements Observer {
         }
     }
 
-    public void handleScroll(ScrollEvent e){
+    public void handleScroll(ScrollEvent e) {
         boolean rotation = e.getDeltaY() > 0.0;
         if (stopped) {
             if (rotation) {

@@ -22,7 +22,7 @@ public class ActiveGrid extends HashMap<Coordinate, Tile> {
 
     public ActiveGrid(SimulationCanvas canvas, PolyTile pt) {
         this();
-        this.placePolytile(pt, 0,0);
+        this.placePolytile(pt, 0, 0);
     }
 
 

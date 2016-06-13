@@ -13,9 +13,9 @@ import java.awt.*;
  */
 public class EditorCanvas extends SimulationCanvas {
 
+    private final SimpleObjectProperty<Tile> selectedTile = new SimpleObjectProperty<Tile>(null);
     private PolyTile pt;
     private Coordinate lastMouseXY = new Coordinate(800, 600);
-    private final SimpleObjectProperty<Tile> selectedTile = new SimpleObjectProperty<Tile>(null);
 
     public EditorCanvas() {
         super(new ActiveGrid());
@@ -32,7 +32,7 @@ public class EditorCanvas extends SimulationCanvas {
         });
     }
 
-    public void handleClick(Coordinate gridPoint){
+    public void handleClick(Coordinate gridPoint) {
         if (pt != null) {
             Tile tile = grid.get(gridPoint);
             if (tile != null) {
@@ -67,23 +67,23 @@ public class EditorCanvas extends SimulationCanvas {
     public void setPolyTile(PolyTile pt) {
         clear();
         if (pt != null) {
-            grid.placePolytile(pt, 0,0);
+            grid.placePolytile(pt, 0, 0);
         }
         this.pt = pt;
     }
 
-    public void clear(){
+    public void clear() {
         grid.deselect();
-        this.pt=null;
+        this.pt = null;
         grid.clear();
         selectedTile.set(null);
     }
 
-    public Tile getSelectedTile(){
+    public Tile getSelectedTile() {
         return selectedTile.get();
     }
 
-    public SimpleObjectProperty getSelectedTileProperty(){
+    public SimpleObjectProperty getSelectedTileProperty() {
         return selectedTile;
     }
 }

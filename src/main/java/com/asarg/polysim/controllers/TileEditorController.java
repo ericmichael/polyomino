@@ -179,10 +179,6 @@ public class TileEditorController implements Initializable {
     MenuItem menu_close;
     @FXML
     EditorCanvas canvas;
-
-    ObservableList<Glue> glueData = FXCollections.observableArrayList();
-    private TileConfiguration tc;
-
     final ChangeListener<String> listener_west_glue = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
@@ -213,6 +209,8 @@ public class TileEditorController implements Initializable {
             fieldHelper(oldValue, newValue, field_tile_label, "label");
         }
     };
+    ObservableList<Glue> glueData = FXCollections.observableArrayList();
+    private TileConfiguration tc;
     private SimulationNode current;
 
     private void fieldHelper(final String oldValue, final String newValue, final TextField field, String target) {
