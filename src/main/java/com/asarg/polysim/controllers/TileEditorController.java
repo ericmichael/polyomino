@@ -10,7 +10,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -25,7 +24,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import javafx.util.Pair;
 
 import javax.xml.bind.JAXBContext;
@@ -66,6 +64,7 @@ public class TileEditorController implements Initializable {
     @FXML
     TextField field_concentration;
     //Listeners
+
     final ChangeListener<String> listener_concentration = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, final String newValue) {
@@ -85,12 +84,9 @@ public class TileEditorController implements Initializable {
                     }
                     updateable.set(true);
 
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            field_concentration.requestFocus();
-                            field_concentration.positionCaret(newValue.length());
-                        }
+                    Platform.runLater(() -> {
+                        field_concentration.requestFocus();
+                        field_concentration.positionCaret(newValue.length());
                     });
                 }
             }
@@ -130,12 +126,9 @@ public class TileEditorController implements Initializable {
                     }
                     updateable.set(true);
 
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            field_count.requestFocus();
-                            field_count.positionCaret(newValue.length());
-                        }
+                    Platform.runLater(() -> {
+                        field_count.requestFocus();
+                        field_count.positionCaret(newValue.length());
                     });
                 }
             }
@@ -233,12 +226,9 @@ public class TileEditorController implements Initializable {
                 redrawPolyTile();
                 updateable.set(true);
 
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        field.requestFocus();
-                        field.positionCaret(caret_new);
-                    }
+                Platform.runLater(() -> {
+                    field.requestFocus();
+                    field.positionCaret(caret_new);
                 });
             }
         }
@@ -246,24 +236,13 @@ public class TileEditorController implements Initializable {
 
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        listview_polytiles.setCellFactory(new Callback<ListView<PolyTile>, ListCell<PolyTile>>() {
-            @Override
-            public ListCell<PolyTile> call(ListView<PolyTile> list) {
-                final ListCell<PolyTile> ptCell = new PolyTileCell();
-                return ptCell;
-            }
+        listview_polytiles.setCellFactory(list -> {
+            final ListCell<PolyTile> ptCell = new PolyTileCell();
+            return ptCell;
         });
-
-//        canvas = new EditorCanvas();
 
         canvas.widthProperty().bind(ptAnchorPane.widthProperty());
         canvas.heightProperty().bind(ptAnchorPane.heightProperty());
-
-//        ptAnchorPane.getChildren().add(canvas);
-//        ptAnchorPane.setTopAnchor(canvas, 0.0);
-//        ptAnchorPane.setLeftAnchor(canvas, 0.0);
-//        ptAnchorPane.setRightAnchor(canvas, 0.0);
-//        ptAnchorPane.setBottomAnchor(canvas, 0.0);
 
         menu_delete.setDisable(true);
         btn_update_assembly.managedProperty().bind(btn_update_assembly.visibleProperty());
@@ -290,9 +269,9 @@ public class TileEditorController implements Initializable {
                     public void handle(TableColumn.CellEditEvent<Glue, String> t) {
                         Glue g = t.getTableView().getItems().get(
                                 t.getTablePosition().getRow());
-                        tc.getGlueFunction().remove(new Pair<String, String>(g.getGlueA(), g.getGlueB()));
+                        tc.getGlueFunction().remove(new Pair<>(g.getGlueA(), g.getGlueB()));
                         g.setGlueA(t.getNewValue());
-                        Pair<String, String> p = new Pair<String, String>(g.getGlueA(), g.getGlueB());
+                        Pair<String, String> p = new Pair<>(g.getGlueA(), g.getGlueB());
                         tc.getGlueFunction().put(p, Integer.parseInt(g.getStrength()));
                         updateable.set(true);
                     }
@@ -305,9 +284,9 @@ public class TileEditorController implements Initializable {
                     public void handle(TableColumn.CellEditEvent<Glue, String> t) {
                         Glue g = t.getTableView().getItems().get(
                                 t.getTablePosition().getRow());
-                        tc.getGlueFunction().remove(new Pair<String, String>(g.getGlueA(), g.getGlueB()));
+                        tc.getGlueFunction().remove(new Pair<>(g.getGlueA(), g.getGlueB()));
                         g.setGlueB(t.getNewValue());
-                        Pair<String, String> p = new Pair<String, String>(g.getGlueA(), g.getGlueB());
+                        Pair<String, String> p = new Pair<>(g.getGlueA(), g.getGlueB());
                         tc.getGlueFunction().put(p, Integer.parseInt(g.getStrength()));
                         updateable.set(true);
                     }
@@ -320,9 +299,9 @@ public class TileEditorController implements Initializable {
                     public void handle(TableColumn.CellEditEvent<Glue, String> t) {
                         Glue g = t.getTableView().getItems().get(
                                 t.getTablePosition().getRow());
-                        tc.getGlueFunction().remove(new Pair<String, String>(g.getGlueA(), g.getGlueB()));
+                        tc.getGlueFunction().remove(new Pair<>(g.getGlueA(), g.getGlueB()));
                         g.setStrength(t.getNewValue());
-                        Pair<String, String> p = new Pair<String, String>(g.getGlueA(), g.getGlueB());
+                        Pair<String, String> p = new Pair<>(g.getGlueA(), g.getGlueB());
                         tc.getGlueFunction().put(p, Integer.parseInt(g.getStrength()));
                         updateable.set(true);
                     }
@@ -333,14 +312,11 @@ public class TileEditorController implements Initializable {
 
         btn_delete_row.visibleProperty().set(false);
 
-        table_gluetable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Glue>() {
-            @Override
-            public void changed(ObservableValue<? extends Glue> observable, Glue oldValue, Glue newValue) {
-                if (newValue != null) {
-                    btn_delete_row.visibleProperty().set(true);
-                } else {
-                    btn_delete_row.visibleProperty().set(false);
-                }
+        table_gluetable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                btn_delete_row.visibleProperty().set(true);
+            } else {
+                btn_delete_row.visibleProperty().set(false);
             }
         });
     }
@@ -475,26 +451,23 @@ public class TileEditorController implements Initializable {
     private void addListeners() {
         addTileListeners();
 
-        listview_polytiles.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<PolyTile>() {
-            @Override
-            public void changed(ObservableValue<? extends PolyTile> observable, PolyTile oldValue, PolyTile newValue) {
-                if (newValue != null) {
-                    canvas.setPolyTile(newValue);
-                    menu_delete.setDisable(false);
-                    context_menu_delete.setDisable(false);
-                    removePolyTileListeners();
-                    disableTileData();
-                    setPolyTileData(newValue);
-                    enablePolyTileData();
-                    addPolyTileListeners();
-                } else {
-                    canvas.setPolyTile(null);
-                    menu_delete.setDisable(true);
-                    removePolyTileListeners();
-                    removeTileListeners();
-                    disableTileData();
-                    disablePolyTileData();
-                }
+        listview_polytiles.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                canvas.setPolyTile(newValue);
+                menu_delete.setDisable(false);
+                context_menu_delete.setDisable(false);
+                removePolyTileListeners();
+                disableTileData();
+                setPolyTileData(newValue);
+                enablePolyTileData();
+                addPolyTileListeners();
+            } else {
+                canvas.setPolyTile(null);
+                menu_delete.setDisable(true);
+                removePolyTileListeners();
+                removeTileListeners();
+                disableTileData();
+                disablePolyTileData();
             }
         });
 
@@ -515,222 +488,163 @@ public class TileEditorController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Tile> observable, Tile oldValue, final Tile newValue) {
                 if (newValue == null) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            disableTileData();
-                        }
-                    });
+                    Platform.runLater(() -> disableTileData());
                 } else {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            removeTileListeners();
-                            setTileData(newValue);
-                            enableTileData();
-                            addTileListeners();
-                        }
+                    Platform.runLater(() -> {
+                        removeTileListeners();
+                        setTileData(newValue);
+                        enableTileData();
+                        addTileListeners();
                     });
 
                 }
             }
         });
 
-        colorpicker_color.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                PolyTile pt = listview_polytiles.getSelectionModel().getSelectedItem();
-                if (pt != null) {
-                    Color color = colorpicker_color.getValue();
-                    pt.setColor(String.format("%02X%02X%02X",
-                            (int) (color.getRed() * 255),
-                            (int) (color.getGreen() * 255),
-                            (int) (color.getBlue() * 255)));
-                    redrawPolyTile();
+        colorpicker_color.setOnAction(event -> {
+            PolyTile pt = listview_polytiles.getSelectionModel().getSelectedItem();
+            if (pt != null) {
+                Color color = colorpicker_color.getValue();
+                pt.setColor(String.format("%02X%02X%02X",
+                        (int) (color.getRed() * 255),
+                        (int) (color.getGreen() * 255),
+                        (int) (color.getBlue() * 255)));
+                redrawPolyTile();
+                updateable.set(true);
+
+                Platform.runLater(() -> colorpicker_color.requestFocus());
+            }
+        });
+
+        btn_delete_tile.setOnAction(event -> {
+            Tile selectedTile = canvas.getSelectedTile();
+            PolyTile pt = canvas.getPolyTile();
+            if (pt.tiles.size() > 1) {
+                pt.removeTile(selectedTile.getLocation().getX(), selectedTile.getLocation().getY());
+                canvas.clear();
+                canvas.setPolyTile(pt);
+            } else {
+                listview_polytiles.getItems().remove(pt);
+            }
+            updateable.set(true);
+        });
+
+        btn_delete_polytile.setOnAction(event -> {
+            PolyTile selected = listview_polytiles.getSelectionModel().getSelectedItem();
+            if (selected != null) listview_polytiles.getItems().remove(selected);
+            updateable.set(true);
+        });
+
+        btn_add_glue.setOnAction(event -> {
+            String glue1 = field_glue_1.getText().trim();
+            String glue2 = field_glue_2.getText().trim();
+            if (!glue1.isEmpty() && !glue2.isEmpty()) {
+                Glue g = new Glue(glue1, glue2, field_strength.getText().trim());
+                Pair<String, String> p = new Pair<>(g.getGlueA(), g.getGlueB());
+                Pair<String, String> p2 = new Pair<>(g.getGlueB(), g.getGlueA());
+                if (!tc.getGlueFunction().containsKey(p) && !tc.getGlueFunction().containsKey(p2)) {
+                    table_gluetable.getItems().add(g);
+                    tc.getGlueFunction().put(p, Integer.parseInt(g.getStrength()));
                     updateable.set(true);
 
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            colorpicker_color.requestFocus();
-                        }
-                    });
                 }
+                field_glue_1.clear();
+                field_glue_2.clear();
+                field_strength.clear();
             }
+
         });
 
-        btn_delete_tile.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Tile selectedTile = canvas.getSelectedTile();
-                PolyTile pt = canvas.getPolyTile();
-                if (pt.tiles.size() > 1) {
-                    pt.removeTile(selectedTile.getLocation().getX(), selectedTile.getLocation().getY());
-                    canvas.clear();
-                    canvas.setPolyTile(pt);
-                } else {
-                    listview_polytiles.getItems().remove(pt);
-                }
-                updateable.set(true);
-            }
+        btn_delete_row.setOnAction(event -> {
+            int index = table_gluetable.getSelectionModel().getSelectedIndex();
+            Glue g = table_gluetable.getItems().get(index);
+            table_gluetable.getItems().remove(index);
+            Pair<String, String> p = new Pair<>(g.getGlueA(), g.getGlueB());
+            tc.getGlueFunction().remove(p);
+            updateable.set(true);
         });
 
-        btn_delete_polytile.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                PolyTile selected = listview_polytiles.getSelectionModel().getSelectedItem();
-                if (selected != null) listview_polytiles.getItems().remove(selected);
-                updateable.set(true);
-            }
+
+        menu_delete.setOnAction(event -> deleteSelectedPolyTile());
+
+        context_menu_new.setOnAction(event -> {
+            PolyTile toAdd = new PolyTile();
+            listview_polytiles.getItems().add(0, toAdd);
+            canvas.setPolyTile(toAdd);
+            menu_delete.setDisable(false);
+            context_menu_delete.setDisable(false);
+            removePolyTileListeners();
+            disableTileData();
+            setPolyTileData(toAdd);
+            enablePolyTileData();
+            addPolyTileListeners();
         });
 
-        btn_add_glue.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                String glue1 = field_glue_1.getText().trim();
-                String glue2 = field_glue_2.getText().trim();
-                if (!glue1.isEmpty() && !glue2.isEmpty()) {
-                    Glue g = new Glue(glue1, glue2, field_strength.getText().trim());
-                    Pair<String, String> p = new Pair<String, String>(g.getGlueA(), g.getGlueB());
-                    Pair<String, String> p2 = new Pair<String, String>(g.getGlueB(), g.getGlueA());
-                    if (!tc.getGlueFunction().containsKey(p) && !tc.getGlueFunction().containsKey(p2)) {
-                        table_gluetable.getItems().add(g);
-                        tc.getGlueFunction().put(p, Integer.parseInt(g.getStrength()));
-                        updateable.set(true);
-
-                    }
-                    field_glue_1.clear();
-                    field_glue_2.clear();
-                    field_strength.clear();
-                }
-
-            }
+        menu_new.setOnAction(event -> {
+            PolyTile toAdd = new PolyTile();
+            listview_polytiles.getItems().add(0, toAdd);
+            canvas.setPolyTile(toAdd);
+            menu_delete.setDisable(false);
+            context_menu_delete.setDisable(false);
+            removePolyTileListeners();
+            disableTileData();
+            setPolyTileData(toAdd);
+            enablePolyTileData();
+            addPolyTileListeners();
         });
 
-        btn_delete_row.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                int index = table_gluetable.getSelectionModel().getSelectedIndex();
-                Glue g = table_gluetable.getItems().get(index);
-                table_gluetable.getItems().remove(index);
-                Pair<String, String> p = new Pair<String, String>(g.getGlueA(), g.getGlueB());
+        context_menu_delete.setOnAction(event -> deleteSelectedPolyTile());
+
+        menu_clear.setOnAction(event -> {
+            removeTileListeners();
+            listview_polytiles.getItems().clear();
+            canvas.clear();
+            updateable.set(true);
+        });
+
+        menu_clear_glues.setOnAction(event -> {
+            for (Iterator<Glue> iterator = table_gluetable.getItems().iterator(); iterator.hasNext(); ) {
+                Glue g = iterator.next();
+                iterator.remove();
+                Pair<String, String> p = new Pair<>(g.getGlueA(), g.getGlueB());
                 tc.getGlueFunction().remove(p);
-                updateable.set(true);
             }
+            updateable.set(true);
         });
 
+        menu_export.setOnAction(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Export Tile Configuration...");
+            fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("XML", "*.xml"));
 
-        menu_delete.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                deleteSelectedPolyTile();
-            }
-        });
+            File selectedFile = fileChooser.showSaveDialog(null);
+            if (selectedFile != null) {
+                try {
+                    JAXBContext jaxbContext = JAXBContext.newInstance(TileConfiguration.class);
+                    Marshaller marshaller = jaxbContext.createMarshaller();
+                    marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                    marshaller.marshal(tc, selectedFile);
+                } catch (JAXBException ignored) {
 
-        context_menu_new.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                PolyTile toAdd = new PolyTile();
-                listview_polytiles.getItems().add(0, toAdd);
-                canvas.setPolyTile(toAdd);
-                menu_delete.setDisable(false);
-                context_menu_delete.setDisable(false);
-                removePolyTileListeners();
-                disableTileData();
-                setPolyTileData(toAdd);
-                enablePolyTileData();
-                addPolyTileListeners();
-            }
-        });
-
-        menu_new.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                PolyTile toAdd = new PolyTile();
-                listview_polytiles.getItems().add(0, toAdd);
-                canvas.setPolyTile(toAdd);
-                menu_delete.setDisable(false);
-                context_menu_delete.setDisable(false);
-                removePolyTileListeners();
-                disableTileData();
-                setPolyTileData(toAdd);
-                enablePolyTileData();
-                addPolyTileListeners();
-            }
-        });
-
-        context_menu_delete.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                deleteSelectedPolyTile();
-            }
-        });
-
-        menu_clear.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                removeTileListeners();
-                listview_polytiles.getItems().clear();
-                canvas.clear();
-                updateable.set(true);
-            }
-        });
-
-        menu_clear_glues.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                for (Iterator<Glue> iterator = table_gluetable.getItems().iterator(); iterator.hasNext(); ) {
-                    Glue g = iterator.next();
-                    iterator.remove();
-                    Pair<String, String> p = new Pair<String, String>(g.getGlueA(), g.getGlueB());
-                    tc.getGlueFunction().remove(p);
                 }
-                updateable.set(true);
             }
+
         });
 
-        menu_export.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Export Tile Configuration...");
-                fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("XML", "*.xml"));
-
-                File selectedFile = fileChooser.showSaveDialog(null);
-                if (selectedFile != null) {
-                    try {
-                        JAXBContext jaxbContext = JAXBContext.newInstance(TileConfiguration.class);
-                        Marshaller marshaller = jaxbContext.createMarshaller();
-                        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                        marshaller.marshal(tc, selectedFile);
-                    } catch (JAXBException ignored) {
-
-                    }
-                }
-
-            }
+        menu_close.setOnAction(event -> {
+            Stage stage = (Stage) ptAnchorPane.getScene().getWindow();
+            // do what you have to do
+            stage.close();
         });
 
-        menu_close.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Stage stage = (Stage) ptAnchorPane.getScene().getWindow();
-                // do what you have to do
-                stage.close();
-            }
-        });
-
-        btn_update_assembly.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                TileSystem ts = current.getTileSystem();
-                ts.getTileTypes().clear();
-                ts.getGlueFunction().clear();
-                ts.loadTileConfiguration(tc);
-                current.removeFrontierFromGrid();
-                current.changeTileSystem(ts);
-                updateable.set(false);
-            }
+        btn_update_assembly.setOnAction(event -> {
+            TileSystem ts = current.getTileSystem();
+            ts.getTileTypes().clear();
+            ts.getGlueFunction().clear();
+            ts.loadTileConfiguration(tc);
+            current.removeFrontierFromGrid();
+            current.changeTileSystem(ts);
+            updateable.set(false);
         });
 
     }

@@ -121,119 +121,94 @@ public class SimulationController implements Initializable {
         btn_settings.setDisable(true);
         choice_weight.setItems(FXCollections.observableArrayList("Uniform", "Concentration", "Count"));
 
-        listview_polytiles.setCellFactory(new Callback<ListView<PolyTile>, ListCell<PolyTile>>() {
-                                              @Override
-                                              public ListCell<PolyTile> call(ListView<PolyTile> list) {
-                                                  final ListCell<PolyTile> ptCell = new PolyTileCell();
-                                                  ptCell.setOnDragDetected(new EventHandler<MouseEvent>() {
-                                                      public void handle(MouseEvent event) {
-                      /* drag was detected, start a drag-and-drop gesture*/
-                      /* allow any transfer mode */
-                                                          Dragboard db = ptCell.startDragAndDrop(TransferMode.ANY);
-
-                      /* Put a string on a dragboard */
-                                                          ClipboardContent content = new ClipboardContent();
-                                                          //content.putString(ptCell.getGraphic());
-                                                          ImageView temp = (ImageView) ptCell.getGraphic();
-                                                          content.put(polyTileFormat, ptCell.getIndex());
-                                                          db.setContent(content);
-                                                          db.setDragView(temp.getImage());
-                                                          event.consume();
-                                                      }
-                                                  });
-                                                  return ptCell;
-                                              }
-                                          }
+        listview_polytiles.setCellFactory(list -> {
+            final ListCell<PolyTile> ptCell = new PolyTileCell();
+            ptCell.setOnDragDetected(event -> {
+                Dragboard db = ptCell.startDragAndDrop(TransferMode.ANY);
+                ClipboardContent content = new ClipboardContent();
+                ImageView temp = (ImageView) ptCell.getGraphic();
+                content.put(polyTileFormat, ptCell.getIndex());
+                db.setContent(content);
+                db.setDragView(temp.getImage());
+                event.consume();
+            });
+            return ptCell;
+        }
         );
 
-        field_temperature.focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue) {
-                if (!newPropertyValue) {
-                    try {
-                        int temperature = (Integer.parseInt(field_temperature.getText()));
-                        if (temperature > 0) {
-                            currentSimulationNode().setTemperature(temperature);
-                        }
-                        return;
-                    } catch (Exception ignored) {
-
+        field_temperature.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
+            if (!newPropertyValue) {
+                try {
+                    int temperature = (Integer.parseInt(field_temperature.getText()));
+                    if (temperature > 0) {
+                        currentSimulationNode().setTemperature(temperature);
                     }
-                    field_temperature.setText("" + currentSimulationNode().getTemperature());
+                    return;
+                } catch (Exception ignored) {
+
                 }
+                field_temperature.setText("" + currentSimulationNode().getTemperature());
             }
         });
 
         choice_weight.getSelectionModel().selectedIndexProperty().addListener(
-                new ChangeListener<Number>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                        currentSimulationNode().setWeightOption(newValue.intValue());
-                        choice_weight.getSelectionModel().select(currentSimulationNode().getWeightOption());
-                    }
+                (observable, oldValue, newValue) -> {
+                    currentSimulationNode().setWeightOption(newValue.intValue());
+                    choice_weight.getSelectionModel().select(currentSimulationNode().getWeightOption());
                 }
         );
         tabPane.getSelectionModel().selectedItemProperty().addListener(
-                new ChangeListener<Tab>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
-                        if (t1 != null) {
-                            showHelp.setValue(false);
-                            tabPane.setDisable(false);
+                (ov, t, t1) -> {
+                    if (t1 != null) {
+                        showHelp.setValue(false);
+                        tabPane.setDisable(false);
 
-                            menu_import_tile_config.setDisable(false);
-                            menu_save.setDisable(false);
-                            menu_save_as.setDisable(false);
-                            menu_tile_editor.setDisable(false);
+                        menu_import_tile_config.setDisable(false);
+                        menu_save.setDisable(false);
+                        menu_save_as.setDisable(false);
+                        menu_tile_editor.setDisable(false);
 
-                            btn_settings.setDisable(false);
+                        btn_settings.setDisable(false);
 
-                            SimulationNode current = (SimulationNode) t1.getContent();
-                            if (current != null) {
-                                lbl_left_status.textProperty().bind(current.left_status);
-                                lbl_right_status.textProperty().bind(current.right_status);
-                                field_temperature.setText("" + currentSimulationNode().getTemperature());
-                                choice_weight.getSelectionModel().select(current.getWeightOption());
-                                listview_polytiles.setItems(current.getTileSet());
-                                listview_polytiles.getSelectionModel().selectedItemProperty().removeListener(new ChangeListener<PolyTile>() {
-                                    @Override
-                                    public void changed(ObservableValue<? extends PolyTile> observable, PolyTile oldValue, PolyTile newValue) {
-                                        if (newValue != null) {
-                                            currentSimulationNode().clearAssemblyReseed(newValue);
-                                        }
+                        SimulationNode current = (SimulationNode) t1.getContent();
+                        if (current != null) {
+                            lbl_left_status.textProperty().bind(current.left_status);
+                            lbl_right_status.textProperty().bind(current.right_status);
+                            field_temperature.setText("" + currentSimulationNode().getTemperature());
+                            choice_weight.getSelectionModel().select(current.getWeightOption());
+                            listview_polytiles.setItems(current.getTileSet());
+                            listview_polytiles.getSelectionModel().selectedItemProperty().removeListener((observable, oldValue, newValue) -> {
+                                if (newValue != null) {
+                                    currentSimulationNode().clearAssemblyReseed(newValue);
+                                }
+                            });
+
+                            if (current.getClass() == TwoHAMSimulationNode.class) {
+                                menu_export_2ham_terminal_tileset.setDisable(false);
+
+                                listview_polytiles.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                                    if (newValue != null) {
+                                        currentSimulationNode().clearAssemblyReseed(newValue);
                                     }
                                 });
-
-                                if (current.getClass() == TwoHAMSimulationNode.class) {
-                                    menu_export_2ham_terminal_tileset.setDisable(false);
-
-                                    listview_polytiles.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<PolyTile>() {
-                                        @Override
-                                        public void changed(ObservableValue<? extends PolyTile> observable, PolyTile oldValue, PolyTile newValue) {
-                                            if (newValue != null) {
-                                                currentSimulationNode().clearAssemblyReseed(newValue);
-                                            }
-                                        }
-                                    });
-                                }
-
-                                if (current.getFile() == null) {
-                                    menu_save.setDisable(true);
-                                } else menu_save.setDisable(false);
                             }
-                        } else {
-                            tabPane.setDisable(true);
-                            showHelp.setValue(true);
 
-                            btn_settings.setDisable(true);
-
-                            menu_import_tile_config.setDisable(true);
-                            menu_save.setDisable(true);
-                            menu_save_as.setDisable(true);
-                            menu_tile_editor.setDisable(true);
-                            menu_export_2ham_terminal_tileset.setDisable(true);
-
+                            if (current.getFile() == null) {
+                                menu_save.setDisable(true);
+                            } else menu_save.setDisable(false);
                         }
+                    } else {
+                        tabPane.setDisable(true);
+                        showHelp.setValue(true);
+
+                        btn_settings.setDisable(true);
+
+                        menu_import_tile_config.setDisable(true);
+                        menu_save.setDisable(true);
+                        menu_save_as.setDisable(true);
+                        menu_tile_editor.setDisable(true);
+                        menu_export_2ham_terminal_tileset.setDisable(true);
+
                     }
                 }
         );
@@ -291,15 +266,11 @@ public class SimulationController implements Initializable {
             }
         });
 
-        hyperlink_website.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent t) {
-                try {
-                    Desktop.getDesktop().browse(new URI(hyperlink_website.getText()));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        hyperlink_website.setOnAction(t -> {
+            try {
+                Desktop.getDesktop().browse(new URI(hyperlink_website.getText()));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
