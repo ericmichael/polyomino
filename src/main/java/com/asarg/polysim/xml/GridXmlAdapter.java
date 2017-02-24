@@ -1,5 +1,6 @@
 package com.asarg.polysim.xml;
 
+import com.asarg.polysim.models.base.ActiveGrid;
 import com.asarg.polysim.models.base.Coordinate;
 import com.asarg.polysim.models.base.PolyTile;
 import com.asarg.polysim.models.base.Tile;
@@ -16,13 +17,15 @@ import java.util.Map;
 public class GridXmlAdapter extends XmlAdapter<GridXmlAdapter.HashMapXml, HashMap<Coordinate, Tile>> {
 
     @Override
-    public HashMap<Coordinate, Tile> unmarshal(HashMapXml v) throws Exception {
-        HashMap<Coordinate, Tile> hashMap = new HashMap<Coordinate, Tile>();
+    public ActiveGrid unmarshal(HashMapXml v) throws Exception {
+        ActiveGrid ag = new ActiveGrid();
+        System.out.println("In GRIDXML");
+        System.out.println(v.GridTile.size());
         for (EntryXml entry : v.GridTile) {
             entry.tile.setParent(entry.parent);
-            hashMap.put(entry.point, entry.tile);
+            ag.put(entry.point, entry.tile);
         }
-        return hashMap;
+        return ag;
     }
 
     @Override

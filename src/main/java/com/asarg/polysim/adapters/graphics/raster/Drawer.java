@@ -312,7 +312,7 @@ public class Drawer {
                 int diameter = sc.getTileDiameter();
 
                 drawTile(sc.getGraphics(), tile, pt.getX() * diameter + offset.getX() - diameter / 2, -pt.getY() * diameter + offset.getY() - diameter / 2, diameter, hasNorth, hasEast, hasSouth, hasWest);
-                drawStringsOnTiles(sc.getGraphicsContext2D(), sc.getGraphics(), tile, pt.getX() * diameter + offset.getX() - diameter / 2, -pt.getY() * diameter + offset.getY() - diameter / 2, diameter, hasNorth, hasEast, hasSouth, hasWest);
+                drawStringsOnTiles(sc.getGraphics(), tile, pt.getX() * diameter + offset.getX() - diameter / 2, -pt.getY() * diameter + offset.getY() - diameter / 2, diameter, hasNorth, hasEast, hasSouth, hasWest);
             }
 
         }
@@ -333,11 +333,8 @@ public class Drawer {
                 boolean hasEast = pt.getTile(unitLocation.getEast()) != null;
                 boolean hasSouth = pt.getTile(unitLocation.getSouth()) != null;
                 boolean hasWest = pt.getTile(unitLocation.getWest()) != null;
-                System.out.println("Location: " + location);
-                System.out.println("Unit location: " + unitLocation);
                 int x = (location.getX() + unitLocation.getX()) * diameter + offset.getX() - diameter / 2;
                 int y = -(location.getY() + unitLocation.getY()) * diameter + offset.getY() - diameter / 2;
-                System.out.println("(" + x + "," + y + ")");
                 drawTileOutline(g, t, x, y, diameter, hasNorth, hasEast, hasSouth, hasWest, true);
             }
         }
