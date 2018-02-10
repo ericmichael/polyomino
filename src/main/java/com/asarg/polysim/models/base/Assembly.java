@@ -52,6 +52,7 @@ public class Assembly extends Observable {
     public Assembly() {
         tileSystem = new TileSystem(2, 0);
         frontier = new Frontier(tileSystem);
+
     }
 
     public Assembly(TileSystem ts) {

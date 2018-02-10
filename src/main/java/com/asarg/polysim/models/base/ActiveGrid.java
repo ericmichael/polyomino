@@ -43,6 +43,7 @@ public class ActiveGrid extends HashMap<Coordinate, Tile> {
             tmp = tmp.translate(x, y);
             this.put(tmp, t);
         }
+
     }
 
     //If PolyTile p when translated by (x,y) matches the PolyTile at the destination, delete it from Grid
