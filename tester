@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TileConfiguration>
+    <GlueFunction>
+        <Function>
+            <Labels L1="a" L2="a"/>
+            <Strength>1</Strength>
+        </Function>
+    </GlueFunction>
+    <TileType Label="New" Color="e6e6e6">
+        <Tile>
+            <Location x="0" y="0"/>
+            <Color>e6e6e6</Color>
+            <label>s</label>
+        </Tile>
+        <Tile>
+            <Location x="1" y="0"/>
+            <Color>e6e6e6</Color>
+            <label>t</label>
+        </Tile>
+        <Tile>
+            <Location x="2" y="0"/>
+            <Color>e6e6e6</Color>
+            <label>u</label>
+        </Tile>
+        <Tile>
+            <Location x="2" y="1"/>
+            <Color>e6e6e6</Color>
+            <label>d</label>
+        </Tile>
+        <Tile>
+            <Location x="2" y="2"/>
+            <Color>e6e6e6</Color>
+            <label>c</label>
+        </Tile>
+        <Tile>
+            <Location x="2" y="3"/>
+            <Color>e6e6e6</Color>
+            <label>b</label>
+        </Tile>
+        <Tile>
+            <Location x="1" y="3"/>
+            <Color>e6e6e6</Color>
+            <label>f</label>
+        </Tile>
+        <Tile>
+            <Location x="0" y="3"/>
+            <Color>e6e6e6</Color>
+            <label>g</label>
+        </Tile>
+        <Tile>
+            <Location x="3" y="1"/>
+            <Color>e6e6e6</Color>
+            <label>e</label>
+        </Tile>
+        <Tile>
+            <Location x="2" y="4"/>
+            <Color>e6e6e6</Color>
+            <label>a</label>
+        </Tile>
+        <Tile>
+            <Location x="2" y="5"/>
+            <Color>e6e6e6</Color>
+            <label>h</label>
+        </Tile>
+        <Tile>
+            <Location x="1" y="5"/>
+            <Color>e6e6e6</Color>
+            <label>i</label>
+        </Tile>
+        <Tile>
+            <Location x="0" y="5"/>
+            <Color>e6e6e6</Color>
+            <label>j</label>
+        </Tile>
+        <Tile>
+            <Location x="-1" y="5"/>
+            <Color>e6e6e6</Color>
+            <label>k</label>
+        </Tile>
+        <Tile>
+            <Location x="-2" y="5"/>
+            <Color>e6e6e6</Color>
+            <label>l</label>
+        </Tile>
+        <Tile>
+            <Location x="-2" y="4"/>
+            <Color>e6e6e6</Color>
+            <label>m</label>
+        </Tile>
+        <Tile>
+            <Location x="-2" y="3"/>
+            <Color>e6e6e6</Color>
+            <label>n</label>
+        </Tile>
+        <Tile>
+            <Location x="-2" y="2"/>
+            <Color>e6e6e6</Color>
+            <label>o</label>
+        </Tile>
+        <Tile>
+            <Location x="-2" y="1"/>
+            <Color>e6e6e6</Color>
+            <label>p</label>
+        </Tile>
+        <Tile>
+            <Location x="-2" y="0"/>
+            <Color>e6e6e6</Color>
+            <label>q</label>
+        </Tile>
+        <Tile>
+            <Location x="-1" y="0"/>
+            <Color>e6e6e6</Color>
+            <label>r</label>
+        </Tile>
+        <Tile>
+            <Location x="-2" y="-1"/>
+            <Color>e6e6e6</Color>
+            <label>v</label>
+        </Tile>
+        <Tile>
+            <Location x="3" y="5"/>
+            <Color>e6e6e6</Color>
+            <label>y</label>
+        </Tile>
+        <Tile>
+            <Location x="4" y="5"/>
+            <Color>e6e6e6</Color>
+            <label>1</label>
+        </Tile>
+        <Tile>
+            <Location x="4" y="6"/>
+            <Color>e6e6e6</Color>
+            <label>z</label>
+        </Tile>
+        <Tile>
+            <Location x="3" y="6"/>
+            <Color>e6e6e6</Color>
+            <label>x</label>
+        </Tile>
+        <Tile>
+            <Location x="3" y="7"/>
+            <Color>e6e6e6</Color>
+            <label>2</label>
+        </Tile>
+        <Tile>
+            <Location x="4" y="7"/>
+            <Color>e6e6e6</Color>
+            <label>3</label>
+        </Tile>
+        <Tile>
+            <Location x="4" y="8"/>
+            <Color>e6e6e6</Color>
+            <label>5</label>
+        </Tile>
+        <Tile>
+            <Location x="3" y="8"/>
+            <Color>e6e6e6</Color>
+            <label>4</label>
+        </Tile>
+        <concentration>-1.0</concentration>
+        <count>-1</count>
+    </TileType>
+</TileConfiguration>
