@@ -106,6 +106,7 @@ public class Assembly extends Observable {
         }
         bondGraph.printVertices();
         bondGraph.makeDualGraph();
+        bondGraph.printAmount();
     }
     //change tile system stub
     public void changeTileSystem(TileSystem newTS) {
