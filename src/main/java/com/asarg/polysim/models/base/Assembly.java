@@ -52,6 +52,7 @@ public class Assembly extends Observable {
     public Assembly() {
         tileSystem = new TileSystem(2, 0);
         frontier = new Frontier(tileSystem);
+
     }
 
     public Assembly(TileSystem ts) {
@@ -67,6 +68,46 @@ public class Assembly extends Observable {
         frontier = new Frontier(tileSystem);
     }
 
+    public void makeBondGraph(){
+        Set<Map.Entry<Coordinate, Tile>> tiles = Grid.entrySet();
+        Graph bondGraph = new Graph();
+
+        //get all vertices
+        for (Map.Entry<Coordinate, Tile> mep : tiles) {
+            Coordinate pt = mep.getKey();
+            Tile tile = mep.getValue();
+            bondGraph.addVertex(tile.getLabel(), pt, tile.getGlueN(),
+                    tile.getGlueS(), tile.getGlueW(), tile.getGlueE());
+        }
+        for (Graph.Vertex v : bondGraph.vertices){
+            for (Graph.Vertex vertex : bondGraph.vertices){
+                if (v == vertex){
+
+                }
+                else{
+                    if (v.location.getEast().equals(vertex.location)){
+                        int strength = tileSystem.getStrength(v.E, vertex.W);
+                        v.addEdge(vertex, strength, "E");
+                    }
+                    else if (v.location.getWest().equals(vertex.location)){
+                        int strength = tileSystem.getStrength(v.W, vertex.E);
+                        v.addEdge(vertex, strength, "W");
+                    }
+                    else if (v.location.getNorth().equals(vertex.location)){
+                        int strength = tileSystem.getStrength(v.N, vertex.S);
+                        v.addEdge(vertex, strength, "N");
+                    }
+                    else if (v.location.getSouth().equals(vertex.location)){
+                        int strength = tileSystem.getStrength(v.S, vertex.N);
+                        v.addEdge(vertex, strength, "S");
+                    }
+                }
+            }
+        }
+        bondGraph.printVertices();
+        bondGraph.makeDualGraph();
+        bondGraph.printAmount();
+    }
     //change tile system stub
     public void changeTileSystem(TileSystem newTS) {
         System.out.println("WARNING: CHANGING THE TILE SYSTEM, PREPARE FOR ERRORS!");
@@ -84,6 +125,7 @@ public class Assembly extends Observable {
     public void changeTemperature(int temperature) {
         tileSystem.setTemperature(temperature);
         changeTileSystem(tileSystem);
+        makeBondGraph();
     }
 
     public void changeTileConfiguration(TileConfiguration tc) {
